@@ -3,4 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.AddressMapper">
 
+
+
 </mapper>
