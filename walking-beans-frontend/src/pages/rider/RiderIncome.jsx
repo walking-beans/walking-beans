@@ -4,6 +4,7 @@ const RiderIncome = () => {
         <div>
             <h1>RiderIncome</h1>
 
+
         </div>
     )
 }
