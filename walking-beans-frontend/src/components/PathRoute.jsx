@@ -23,6 +23,7 @@ function PathRoute () {
                 {/* 4. admin  */}
                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
+
             </Route>
         </BrowserRouter>
     )
