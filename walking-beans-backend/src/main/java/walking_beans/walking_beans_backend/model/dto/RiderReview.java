@@ -1,5 +1,8 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @ToString
@@ -8,4 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RiderReview {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int riderReviewId;
+
+    private int riderId;
+
+    private int orderId;
+
+    private int riderReviewerRating;
 }
