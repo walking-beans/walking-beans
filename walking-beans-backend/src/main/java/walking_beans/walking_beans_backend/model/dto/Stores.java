@@ -11,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stores {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long storeId;
     private long userId;
@@ -30,5 +32,6 @@ public class Stores {
     private int storeDeliveryTip;
     private String storeDeliveryAddress; // storeDeliveryArea 로 변경요청
     private String storeAddress;
-
+    private double storeLatitude; // decimal(10,6)
+    private double storeLongitude; // decimal(10,6)
 }
