@@ -1,0 +1,27 @@
+.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #5A3D21;
+    padding: 10px 20px;
+    border-radius: 20px 20px 0 0;
+}
+
+.left-icons,
+.right-icons {
+    display: flex;
+    align-items: center;
+}
+
+.header-icon {
+    width: 30px; /* 아이콘 크기 */
+    height: 30px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.logo-img {
+    width: 120px; /* 로고 크기 */
+    height: auto;
+}
+

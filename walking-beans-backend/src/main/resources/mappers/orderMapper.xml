@@ -2,6 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.OrderMapper">
+    <!-- 주문상태 가져오기 -->
+    <select id="orderSelectByIdToOrder">
+        SELECT order_status
+        FROM Orders
+        WHERE order_id = #{id}
+    </select>
+
+    <!-- 매장정보 가져오기 -->
+    <select id="orderSelectByIdToStore">
+        SELECT
+            Stores.store_id,
+            Stores.store_name,
+            Orders.order_number,
+            Orders.order_total_price,
+            option_id,
+            SUM(Carts.cart_quantity) AS total_quantity
+        FROM
+            Orders
+                JOIN
+            Stores ON Orders.store_id = Stores.store_id
+                JOIN
+            Carts ON Orders.order_id = Carts.order_id
+        WHERE
+            Stores.store_id = 1
+        GROUP BY
+            Stores.store_id, Stores.store_name, Orders.order_number, Orders.order_total_price, option_id;
+    </select>
 
     <select id="getOrderByOrderId">
         SELECT *
