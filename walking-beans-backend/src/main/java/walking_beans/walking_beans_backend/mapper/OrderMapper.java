@@ -11,4 +11,6 @@ public interface OrderMapper {
     Orders getOrderByOrderId(long orderId);
 
     List<Orders> getOrdersByNullOfRiderIdInDuty();
+
+    Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId);
 }

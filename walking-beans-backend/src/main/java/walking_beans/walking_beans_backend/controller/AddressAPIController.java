@@ -11,7 +11,7 @@ import walking_beans.walking_beans_backend.service.AddressService.AddressService
 import java.util.List;
 
 @RestController
-@RequestMapping("api/addresses")
+@RequestMapping("/api/addresses")
 public class AddressAPIController {
     @Autowired
     private AddressService addressService;
