@@ -20,9 +20,13 @@ public class MenuOption {
 	private long menuId; //FK
 
     private String optionName;
+
 	private String optionContent;
+
 	private String optionPrice;
+
 	private Timestamp optionCreateDate;
+
 	private Timestamp optionModifiedDate;
 
 }
