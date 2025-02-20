@@ -12,19 +12,18 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Alarms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int messageId;
-
-    private int roomId;
+    private int alarmId;
 
     private int userId;
 
-    private int messageRole;
+    private String alarmContent;
 
-    private String messageContent;
+    private boolean alarmStatus;
 
-    private Timestamp messageTime;
+    private Timestamp alarmCreateDate;
 
+    private Timestamp alarmSenderId;
 }

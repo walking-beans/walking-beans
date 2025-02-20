@@ -1,5 +1,8 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @ToString
@@ -8,12 +11,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chattigroom {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int roomId;
 
-    /*
 
-    `room_id` bigint(20) NOT NULL AUTO_INCREMENT,
-	`order_id` bigint(20) NOT NULL,
-	`room_last_message`	varchar(100) NULL,
-    PRIMARY KEY (`room_id`),
-     */
+    private int orderId;
+
+    private String roomLastMessage;
 }

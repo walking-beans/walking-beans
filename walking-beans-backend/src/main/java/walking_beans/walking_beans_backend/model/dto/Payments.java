@@ -1,5 +1,8 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @ToString
@@ -8,12 +11,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payments {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int paymentId;
+    private int orderId;
+    private String paymentMethod;
+    private String paymentStatus;
 
-    /*
-      `payment_id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `order_id` bigint(20) NOT NULL,
-    `payment_method` varchar(255) NOT NULL,
-    `payment_status` varchar(255) NOT NULL,
-    PRIMARY KEY (`payment_id`),
-     */
 }

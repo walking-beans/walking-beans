@@ -1,5 +1,7 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -11,20 +13,16 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuOption {
-
 	@Id
-    private long optionId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long optionId; //PK
 
-	private long menuId;
+	private long menuId; //FK
 
     private String optionName;
-
 	private String optionContent;
-
 	private String optionPrice;
-
 	private Timestamp optionCreateDate;
-
 	private Timestamp optionModifiedDate;
 
 }

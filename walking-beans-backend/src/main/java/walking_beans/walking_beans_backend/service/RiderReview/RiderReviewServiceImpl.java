@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.RiderReviewMapper;
 
+import java.util.List;
+
 @Service
 public class RiderReviewServiceImpl implements RiderReviewService{
 
@@ -11,13 +13,13 @@ public class RiderReviewServiceImpl implements RiderReviewService{
     RiderReviewMapper riderReviewMapper;
 
     @Override
-    public float getRiderReviewRatingAverage(int userId) {
-        int[] riderAllStars = riderReviewMapper.getRiderReviewRatingAverage(userId);
+    public float getRiderReviewRatingAverage(int riderId) {
+        List<Integer> riderAllStars = riderReviewMapper.getRiderReviewRatingAverage(riderId);
         float ratingAverage = 0;
-        for (int i = 0; i < riderAllStars.length; i++) {
-            ratingAverage += riderAllStars[i];
+        for (int star : riderAllStars) {
+            ratingAverage += star;
         }
-        ratingAverage /= riderAllStars.length;
+        ratingAverage /= riderAllStars.size();
         return ratingAverage;
     }
 }

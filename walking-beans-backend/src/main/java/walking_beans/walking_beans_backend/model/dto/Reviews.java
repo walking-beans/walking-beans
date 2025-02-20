@@ -1,6 +1,11 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
+
+import java.security.Timestamp;
 
 @ToString
 @Getter
@@ -8,15 +13,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reviews {
-    /*
-     `review_id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `user_id` bigint(20) NOT NULL,
-    `store_id` bigint(20) NOT NULL,
-    `review_star_rating` int NOT NULL,
-    `review_content` varchar(255) NOT NULL,
-    `review_created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `review_modified_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `review_picture_url` text NULL,
-    PRIMARY KEY (`review_id`),
-     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int reviewId;
+    private int userId;
+    private int storeId;
+    private int reviewStarRating;
+    private String reviewContent;
+    private Timestamp reviewCreatedDate;
+    private Timestamp reviewModifiedDate;
+    private String reviewPictureUrl;
+
 }

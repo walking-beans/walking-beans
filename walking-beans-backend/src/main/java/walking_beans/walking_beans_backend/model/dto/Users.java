@@ -13,22 +13,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Users {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private long userId; //PK
 
     private int userRole;
-
     private String userEmail;
-
     private String userPassword;
-
     private String userName;
-
     private String userPhone;
-
     private Date userBirthday;
-
     private String userPictureUrl;
 }

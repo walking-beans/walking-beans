@@ -1,5 +1,7 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -11,24 +13,13 @@ import lombok.*;
 public class Address {
 
     @Id
-    private long addressId;
-    private long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int addressId;
+    private int userId;
     private String address;
     private String addressName;
-    private double latitude;
-    private double longitude;
-    private short addressRole;
+    private double addressLatitude;
+    private double addressLongitude;
+    private int addressRole;
 
-
-
-    /*
-     `address_id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `user_id` bigint(20) NOT NULL,
-    `address` varchar(255) NOT NULL,
-    `address_name` varchar(255) NOT NULL,
-    `address_latitude` decimal(10,6) NOT NULL,
-    `address_longitude` decimal(10,6) NOT NULL,
-    `address_role` TINYINT NOT NULL, -- '사용할 주소(선택 시 1번)'
-     PRIMARY KEY (`address_id`),
-     */
 }

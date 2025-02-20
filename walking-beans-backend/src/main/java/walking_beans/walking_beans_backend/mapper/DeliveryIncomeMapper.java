@@ -7,5 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface DeliveryIncomeMapper {
-    List<DeliveryIncome> getDeliveryIncomeByOrderId(int userId, int orderId);
+    List<DeliveryIncome> getDeliveryIncomeByRiderId(int riderId);
+
 }
