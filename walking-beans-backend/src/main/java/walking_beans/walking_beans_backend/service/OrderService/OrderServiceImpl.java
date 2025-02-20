@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
+import walking_beans.walking_beans_backend.model.dto.Orders;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,4 +50,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public Orders getOrderByOrderId(long orderId) {
+        return orderMapper.getOrderByOrderId(orderId);
+    }
 }

@@ -3,4 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.OrderMapper">
 
+    <select id="getOrderByOrderId">
+        SELECT *
+        FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="getOrdersByNullOfRiderIdInDuty">
+        SELECT *
+        FROM orders
+        WHERE rider_id_in_duty = NULL
+    </select>
 </mapper>
