@@ -2,5 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.MenuOptionMapper">
+    <!--메뉴에서 옵션보기-->
+    <select id="">
+        SELECT option_name, option_content, option_price, option_create_date, option_modified_date
+        FROM menuoption
+        WHERE menuId =#{menuId}
+    </select>
+    <!--매장에 등록된 옵션 보기-->
+    <!--옵션 수정하기-->
+    <update id="">
+        UPDATE option_name, option_content, option_price, option_create_date , option_modified_date
+        FROM menuoption
+        WHERE menuId =#{menuId}
+    </update>
 
 </mapper>
