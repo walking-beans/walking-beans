@@ -11,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stores {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long storeId;
     private long userId;
