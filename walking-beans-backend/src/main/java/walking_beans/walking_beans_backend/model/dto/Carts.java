@@ -5,6 +5,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @ToString
 @Getter
 @Setter
@@ -13,15 +15,20 @@ import lombok.*;
 public class Carts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long cartId; //PK
+    private int cartId;
 
-    private long optionId; //FK
-    private long orderId; //FK
-    private long storeId; //FK
-    private long userId; //FK
+    private int optionId;
 
-    private String cartQuantity;
-    private String cartCreateDate;
-    private String cartModifiedDate;
+    private int orderId;
+
+    private int storeId;
+
+    private int userId;
+
+    private int cartQuantity;
+
+    private Timestamp cartCreateDate;
+
+    private Timestamp cartModifiedDate;
 
 }

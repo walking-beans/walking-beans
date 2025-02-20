@@ -13,20 +13,19 @@ import lombok.*;
 public class Stores {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long storeId; //PK
 
-    private long userId; //FK
-
+    private long storeId;
+    private long userId;
     private String storeName;
     private String storeDescription;
     private String storeMainMenu;
-    private String storeBusinessNumber;
+    private long storeBusinessNumber;
     private String storePhone;
     private String storePictureUrl;
     private String storeOperationHours;
     private String storeClosedDates;
     private String storeStatus;
-    private String storeReviewCount;
+    private int storeReviewCount;
     private String storeRating;
     private short storeMinDeliveryTime;
     private short storeMaxDeliveryTime;

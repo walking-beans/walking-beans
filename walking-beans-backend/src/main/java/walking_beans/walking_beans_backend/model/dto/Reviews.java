@@ -5,6 +5,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.security.Timestamp;
+
 @ToString
 @Getter
 @Setter
@@ -13,6 +15,13 @@ import lombok.*;
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private int reviewId;
+    private int userId;
+    private int storeId;
+    private int reviewStarRating;
+    private String reviewContent;
+    private Timestamp reviewCreatedDate;
+    private Timestamp reviewModifiedDate;
+    private String reviewPictureUrl;
 
 }
