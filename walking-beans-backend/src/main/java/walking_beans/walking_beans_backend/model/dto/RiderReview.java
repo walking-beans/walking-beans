@@ -16,7 +16,7 @@ public class RiderReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int riderReviewId;
 
-    private int userId;
+    private int riderId;
 
     private int orderId;
 

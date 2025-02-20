@@ -32,6 +32,7 @@ public class Stores {
     private short storeMaxDeliveryTime;
     private String storeDeliveryTip;
     private String storeDeliveryAddress; // storeDeliveryArea 로 변경요청
-    private String storeAddress; // decimal(10,6)
+    private String storeAddress;
     private double storeLatitude; // decimal(10,6)
+    private double storeLongitude; // decimal(10,6)
 }

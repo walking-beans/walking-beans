@@ -23,4 +23,5 @@ public class Carts {
     private String cartQuantity;
     private String cartCreateDate;
     private String cartModifiedDate;
+
 }

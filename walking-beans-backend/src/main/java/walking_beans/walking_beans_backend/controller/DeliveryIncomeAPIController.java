@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,14 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveryIncome")
+@Slf4j
 public class DeliveryIncomeAPIController {
 
     @Autowired
     private DeliveryIncomeServiceImpl deliveryIncomeService;
 
-    @GetMapping("/")
-    public List<DeliveryIncome> getDeliveryIncome(@RequestParam("userId") int userId,
-                                                  @RequestParam("orderId") int orderId) {
-        return deliveryIncomeService.getDeliveryIncomeByOrderId(userId, orderId);
+    @GetMapping
+    public List<DeliveryIncome> getDeliveryIncomeList(@RequestParam("riderId") int riderId) {
+        log.info("=== /api/deliveryIncome?riderId={} ===", riderId);
+        return deliveryIncomeService.getDeliveryIncomeByRiderId(riderId);
     }
 }
