@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,14 +19,22 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId; //PK
 
-    private int userId; //FK
-    private int storeId; //FK
-    private int addressId; //FK
+    private long userId; //FK
 
+    private long storeId; //FK
+
+    private long addressId; //FK
+
+    @Column(unique = true)
     private String orderNumber;
+
     private String orderStatus;
+
     private String orderRequests;
+
     private String orderTotalPrice;
+
     private Date orderCreateDate;
+
     private Date orderModifiedDate;
 }

@@ -16,11 +16,11 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int menuId;
+    private long menuId;
 
-    private int storeId;
+    private long storeId;
 
-    private int userId;
+    private long userId;
 
     private String menuPrice;
 
