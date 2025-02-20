@@ -4,7 +4,7 @@
 <mapper namespace="walking_beans.walking_beans_backend.mapper.CartMapper">
 
     <!-- 장바구니 메뉴 정보 저장 -->
-    <insert id="addToCart" parameterType="walking_beans.walking_beans_backend.model.dto.Carts">
+    <insert id="addToCart" parameterType="walking_beans.walking_beans_backend.model.dto.OrderCart">
         <!-- Orders 테이블에 데이터 추가 -->
         INSERT INTO Orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
         VALUES (
