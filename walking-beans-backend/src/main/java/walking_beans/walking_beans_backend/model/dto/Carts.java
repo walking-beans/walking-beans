@@ -15,15 +15,15 @@ import java.sql.Timestamp;
 public class Carts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cartId;
+    private long cartId;
 
-    private int optionId;
+    private long optionId;
 
-    private int orderId;
+    private long orderId;
 
-    private int storeId;
+    private long storeId;
 
-    private int userId;
+    private long userId;
 
     private int cartQuantity;
 

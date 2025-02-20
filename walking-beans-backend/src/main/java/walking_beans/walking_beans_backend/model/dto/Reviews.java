@@ -15,13 +15,20 @@ import java.security.Timestamp;
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reviewId;
-    private int userId;
-    private int storeId;
+    private long reviewId;
+
+    private long userId;
+
+    private long storeId;
+
     private int reviewStarRating;
+
     private String reviewContent;
+
     private Timestamp reviewCreatedDate;
+
     private Timestamp reviewModifiedDate;
+
     private String reviewPictureUrl;
 
 }
