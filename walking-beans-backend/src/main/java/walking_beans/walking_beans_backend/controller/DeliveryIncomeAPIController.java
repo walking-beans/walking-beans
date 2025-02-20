@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/deliveryIncome")
-public class DeiliveryIncomeAPIController {
+public class DeliveryIncomeAPIController {
 
     @Autowired
     private DeliveryIncomeServiceImpl deliveryIncomeService;
