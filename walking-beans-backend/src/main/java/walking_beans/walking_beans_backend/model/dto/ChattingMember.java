@@ -5,26 +5,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.sql.Timestamp;
-
 @ToString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int messageId;
+public class ChattingMember {
 
     private int roomId;
 
     private int userId;
 
-    private int messageRole;
+    private int roomReceiverId;
 
-    private String messageContent;
-
-    private Timestamp messageTime;
-
+    private int receiverRelation;
 }

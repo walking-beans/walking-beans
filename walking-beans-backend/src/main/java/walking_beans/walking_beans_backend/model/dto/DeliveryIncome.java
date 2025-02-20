@@ -5,7 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @ToString
 @Getter
@@ -17,11 +17,11 @@ public class DeliveryIncome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int incomeIndex;
 
-    private int userId;
+    private int riderId;
 
     private int orderId;
 
-    private Date incomeDate;
+    private Timestamp incomeDate;
 
     private int incomeAmount;
 }
