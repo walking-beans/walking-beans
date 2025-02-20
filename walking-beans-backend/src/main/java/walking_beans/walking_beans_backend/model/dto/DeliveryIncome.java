@@ -5,7 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @ToString
 @Getter
@@ -21,7 +21,7 @@ public class DeliveryIncome {
 
     private int orderId;
 
-    private Date incomeDate;
+    private Timestamp incomeDate;
 
     private int incomeAmount;
 }
