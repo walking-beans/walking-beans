@@ -16,24 +16,16 @@ public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private long orderId; //PK
 
-    private int userId;
-
-    private int storeId;
-
-    private int addressId;
+    private int userId; //FK
+    private int storeId; //FK
+    private int addressId; //FK
 
     private String orderNumber;
-
     private String orderStatus;
-
     private String orderRequests;
-
-    private int orderTotalPrice;
-
+    private String orderTotalPrice;
     private Date orderCreateDate;
-
     private Date orderModifiedDate;
-
 }

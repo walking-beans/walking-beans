@@ -13,6 +13,15 @@ import lombok.*;
 public class Carts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private long cartId; //PK
+
+    private long optionId; //FK
+    private long orderId; //FK
+    private long storeId; //FK
+    private long userId; //FK
+
+    private String cartQuantity;
+    private String cartCreateDate;
+    private String cartModifiedDate;
 
 }
