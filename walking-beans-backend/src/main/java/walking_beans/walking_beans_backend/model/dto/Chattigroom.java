@@ -13,10 +13,10 @@ import lombok.*;
 public class Chattigroom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roomId;
+    private long roomId;
 
 
-    private int orderId;
+    private long orderId;
 
     private String roomLastMessage;
 }
