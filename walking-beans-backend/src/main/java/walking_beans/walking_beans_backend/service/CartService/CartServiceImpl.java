@@ -16,4 +16,9 @@ public class CartServiceImpl implements CartService {
     public Carts addToCart(Orders orders, Carts carts) {
         return cartMapper.addToCart(orders, carts);
     }
+
+    @Override
+    public Carts deleteToCart(long cartId) {
+        return cartMapper.deleteToCart(cartId);
+    }
 }
