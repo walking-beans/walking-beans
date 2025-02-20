@@ -2,5 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.DeliveryIncomeMapper">
-
+    <select id="getDeliveryIncomeByOrderId">
+        SELECT *
+        FROM deliveryincome
+        WHERE user_id = #{userId} AND order_id = #{orderId}
+    </select>
 </mapper>
