@@ -13,9 +13,12 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuOption {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long optionId; //PK
 
-    private long optionId;
-	private long menuId;
+	private long menuId; //FK
+
     private String optionName;
 	private String optionContent;
 	private String optionPrice;
