@@ -30,15 +30,24 @@
             Stores.store_id, Stores.store_name, Orders.order_number, Orders.order_total_price, option_id;
     </select>
 
+    <!-- 주문 정보 가져오기 by orderId -->
     <select id="getOrderByOrderId">
         SELECT *
         FROM orders
         WHERE order_id = #{orderId}
     </select>
 
+    <!-- untaken 된 주문들 조회 -->
     <select id="getOrdersByNullOfRiderIdInDuty">
         SELECT *
         FROM orders
-        WHERE rider_id_in_duty = NULL
+        WHERE rider_id_on_duty IS NULL
     </select>
+
+    <!-- 라이더가 take 시 다른 라이더들이 가져가지 못하도록 설정 변경 -->
+    <update id="updateRiderIdOnDutyOfOrders">
+        UPDATE orders
+        SET rider_id_on_duty = #{riderId}
+        WHERE order_id = #{orderId};
+    </update>
 </mapper>
