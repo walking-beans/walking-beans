@@ -5,6 +5,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @ToString
 @Getter
 @Setter
@@ -12,8 +14,16 @@ import lombok.*;
 @NoArgsConstructor
 public class Menu {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private long menuId;
+    private long storeId;
+    private long userId;
+    private String menuPrice;
+    private String menuPictureUrl;
+    private String menuName;
+    private String menuCategory;
+    private String menuDescription;
+    private Timestamp menuCreateDate;
+    private Timestamp menuModifiedDate;
+
 
 }
