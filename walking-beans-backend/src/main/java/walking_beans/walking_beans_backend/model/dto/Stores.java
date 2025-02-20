@@ -1,5 +1,8 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @ToString
@@ -8,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stores {
+
     private long storeId;
     private long userId;
     private String storeName;
@@ -26,4 +30,5 @@ public class Stores {
     private int storeDeliveryTip;
     private String storeDeliveryAddress; // storeDeliveryArea 로 변경요청
     private String storeAddress;
+
 }

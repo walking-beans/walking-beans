@@ -6,6 +6,6 @@
     <select id="getRiderReviewRatingAverage">
         SELECT rider_review_rating
         FROM riderreview
-        WHERE user_id = #{userId}
+        WHERE rider_id = #{riderId}
     </select>
 </mapper>

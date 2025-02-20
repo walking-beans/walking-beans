@@ -17,7 +17,7 @@ public class DeliveryIncome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int incomeIndex;
 
-    private int userId;
+    private int riderId;
 
     private int orderId;
 
