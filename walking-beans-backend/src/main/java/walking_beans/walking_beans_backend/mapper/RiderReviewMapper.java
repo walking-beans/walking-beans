@@ -2,8 +2,10 @@ package walking_beans.walking_beans_backend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface RiderReviewMapper {
 
-    int[] getRiderReviewRatingAverage(int userId);
+    List<Integer> getRiderReviewRatingAverage(int riderId);
 }
