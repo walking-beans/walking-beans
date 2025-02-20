@@ -14,11 +14,11 @@ public class RiderReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int riderReviewId;
+    private long riderReviewId;
 
-    private int riderId;
+    private long riderId;
 
-    private int orderId;
+    private long orderId;
 
     private int riderReviewerRating;
 }
