@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +25,16 @@ public class Orders {
 
     private int addressId;
 
+    /*
+     * 주문 번호 생성 로직
+     * 포맷은 TYYMMDDXXXXXX 이다.
+     * T : Type (S : Subscribe, O : 구매, R : 판매)
+     * YY : 년도
+     * MM : 월
+     * DD : 일
+     * XXXXX : 5자리 영문자 + 숫자
+     */
+    @Column(unique = true)
     private String orderNumber;
 
     private String orderStatus;
