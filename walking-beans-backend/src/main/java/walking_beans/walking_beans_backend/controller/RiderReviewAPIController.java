@@ -17,7 +17,7 @@ public class RiderReviewAPIController {
     private RiderReviewServiceImpl riderReviewService;
 
     @GetMapping("/star")
-    public float getStarRating(@RequestParam("riderId") int riderId) {
+    public float getStarRating(@RequestParam("riderId") long riderId) {
         log.info("=== /api/riderReview/star?riderId={} ===", riderId);
         return riderReviewService.getRiderReviewRatingAverage(riderId);
     }

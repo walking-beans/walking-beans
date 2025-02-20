@@ -30,4 +30,15 @@
             Stores.store_id, Stores.store_name, Orders.order_number, Orders.order_total_price, option_id;
     </select>
 
+    <select id="getOrderByOrderId">
+        SELECT *
+        FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="getOrdersByNullOfRiderIdInDuty">
+        SELECT *
+        FROM orders
+        WHERE rider_id_in_duty = NULL
+    </select>
 </mapper>

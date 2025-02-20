@@ -20,8 +20,15 @@ public class DeliveryIncomeAPIController {
     private DeliveryIncomeServiceImpl deliveryIncomeService;
 
     @GetMapping
-    public List<DeliveryIncome> getDeliveryIncomeList(@RequestParam("riderId") int riderId) {
+    public List<DeliveryIncome> getDeliveryIncomeList(@RequestParam("riderId") long riderId) {
         log.info("=== /api/deliveryIncome?riderId={} ===", riderId);
         return deliveryIncomeService.getDeliveryIncomeByRiderId(riderId);
+    }
+    
+    @GetMapping("/detail")
+    public DeliveryIncome getDeliveryIncomeDetail(@RequestParam("riderId") long riderId,
+                                                  @RequestParam("orderId") long orderId) {
+        log.info("=== /api/deliveryIncome?riderId={}&orderId={} ===", riderId, orderId);
+        return deliveryIncomeService.getDeliveryIncomeByOrderId(riderId, orderId);
     }
 }
