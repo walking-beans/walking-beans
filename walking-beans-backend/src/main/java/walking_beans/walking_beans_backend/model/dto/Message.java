@@ -15,11 +15,11 @@ import java.sql.Timestamp;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int messageId;
+    private long messageId;
 
-    private int roomId;
+    private long roomId;
 
-    private int userId;
+    private long userId;
 
     private int messageRole;
 
