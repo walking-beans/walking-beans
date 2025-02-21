@@ -2,25 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.OrderMapper">
-    <!-- 배달 현황: 주문상태 가져오기 -->
-    <select id="selectStatusByOrderId">
-        SELECT order_status
-        FROM Orders
-        WHERE order_id = #{orderId}
-    </select>
 
-    <!-- 배달 현황: 매장정보 가져오기 -->
-    <select id="selectOrdersByStoreId" resultType="map" parameterType="int">
-        SELECT Stores.store_id,
+    <!-- 배달 현황: 주문상태&매장정보 가져오기 -->
+    <select id="selectOrdersByOrderId">
+        SELECT Orders.order_id,
+               Stores.store_id,
                Stores.store_name,
                Orders.order_number,
                Orders.order_total_price,
-               Carts.option_id,
+               Orders.order_status,
+               Carts.option_id
         FROM Orders
                  JOIN Stores ON Orders.store_id = Stores.store_id
                  JOIN Carts ON Orders.order_id = Carts.order_id
-        WHERE Stores.store_id = #{storeId}
-        GROUP BY Stores.store_id, Stores.store_name, Orders.order_number, Orders.order_total_price, Carts.option_id;
+        WHERE Orders.order_id = #{orderId}
     </select>
 
     <!-- 주문 정보 가져오기 by orderId -->
@@ -45,13 +40,14 @@
     </update>
 
     <!-- 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기 -->
-    <select id="selectOrderByStoreId">
+    <select id="selectOrderDetailByOrderId">
         SELECT Stores.store_id,
                Stores.store_name,
                Orders.order_number,
+               Orders.order_id,
                Orders.order_total_price,
                Orders.order_requests,
-               Orders.order_date,
+               Orders.order_create_date,
                Carts.option_id,
                Carts.cart_quantity,
                Address.address,
@@ -62,13 +58,15 @@
                  JOIN Carts ON Orders.order_id = Carts.order_id
                  JOIN Address ON Orders.address_id = Address.address_id
                  JOIN Users ON Orders.user_id = Users.user_id
-                 JOIN Menu ON Carts.menu_id = Menu.menu_id
-        WHERE Stores.store_id = #{storeId}
+                 JOIN Menuoption ON Carts.option_id = Menuoption.option_id
+                 JOIN Menu ON Menuoption.menu_id = Menu.menu_id
+        WHERE Orders.order_id = #{orderId}
     </select>
 
     <!-- 주문 내역 : 유저 주문 내역 리스트 가져오기 -->
-    <select id="selectOrderByUserId">
-        SELECT Orders.order_status,
+    <select id="selectOrderByUserId" resultType="Orders">
+        SELECT Orders.order_id,
+               Orders.order_status,
                Orders.order_create_date,
                Orders.order_total_price,
                Stores.store_picture_url,
@@ -78,7 +76,7 @@
         FROM Orders
                  JOIN Stores ON Orders.store_id = Stores.store_id
                  JOIN Carts ON Orders.order_id = Carts.order_id
-                 JOIN Menu ON Carts.menu_id = Menu.menu_id
+                 JOIN Menu ON Menu.menu_id = MenuOption.menu_id
                  JOIN Users ON Orders.user_id = Users.user_id
         WHERE Users.user_id = #{userId}
     </select>

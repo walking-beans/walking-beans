@@ -1,16 +1,13 @@
-package walking_beans.walking_beans_backend.mapper;
+package walking_beans.walking_beans_backend.service.orderService;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
-import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.Users;
 
 import java.util.List;
 
-@Mapper
-public interface OrderMapper {
+public interface OrderService {
 
     Orders getOrderByOrderId(long orderId);
 
@@ -18,7 +15,7 @@ public interface OrderMapper {
 
     Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId);
 
-    // 배달현황 : 주문상태&매장정보 가져오기
+    // 배달현황 : 주문상태 가져오기
     void selectOrdersByOrderId(long orderId);
 
     // 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
