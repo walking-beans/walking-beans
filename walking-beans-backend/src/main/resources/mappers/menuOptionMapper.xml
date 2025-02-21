@@ -2,18 +2,87 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.MenuOptionMapper">
-    <!--메뉴에서 옵션보기-->
+
+    <!--메뉴옵션 전체 검색-->
     <select id="">
-        SELECT option_name, option_content, option_price, option_create_date, option_modified_date
+        SELECT *
         FROM menuoption
-        WHERE menuId =#{menuId}
     </select>
-    <!--매장에 등록된 옵션 보기-->
-    <!--옵션 수정하기-->
-    <update id="">
-        UPDATE option_name, option_content, option_price, option_create_date , option_modified_date
+
+    <!--메뉴옵션 검색 , 매장에 등록된 옵션 보기-->
+    <select id="searchMenuOption">
+        SELECT *
+        FROM menuoption o
+                 JOIN menu m
+                      ON o.menuId = m.menuId
+        WHERE store_id = #{storeId}
+
+    </select>
+
+    <!-- ID 로 메뉴 찾기-->
+    <select id="findMenuOptionById">
+        SELECT *
         FROM menuoption
-        WHERE menuId =#{menuId}
+        WHERE menu_id =#{menuId}
+    </select>
+
+
+    <!-- 메뉴에 속한 메뉴옵션 찾기, 메뉴에서 옵션보기-->
+    <select id="findMenuOptionByMenuId">
+        SELECT (option_id,
+                menu_id,
+                option_name,
+                option_content,
+                option_price,
+                option_create_date,
+                option_modified_date)
+        FROM menuoption
+        WHERE menu_id =#{menuId}
+    </select>
+
+
+    <!--메뉴옵션 수정하기-->
+    <update id="updateMenuOption">
+        UPDATE Menu
+        SET (
+                menu_price = #{menuPrice},
+                menu_picture_url = #{menuPictureUrl},
+                menu_name = #{menuName},
+                menu_category = #{menuCategory},
+                menu_description = #{menuDescription},
+                menu_modified_date = NOW())
+        WHERE menu_id = #{menuId}
     </update>
+
+    <!--메뉴옵션 추가하기-->
+    <update id="addMenuOption">
+        INSERT INTO MenuOption (
+                                option_id,
+                                menu_id,
+                                option_name,
+                                option_content,
+                                option_price,
+                                option_create_date,
+                                option_modified_date)
+        VALUES
+            (
+             #{optionId},
+             #{menuId},
+             #{optionName},
+             #{optionContent},
+             #{optionPrice},
+             NOW(),
+             NOW()
+            )
+
+    </update>
+
+    <!--메뉴옵션 삭제하기 , 조건 menuId-->
+    <delete id="deleteMenuOption">
+        DELETE *
+        FROM menuoption
+        WHERE menu_id =#{menuId}
+    </delete>
+
 
 </mapper>
