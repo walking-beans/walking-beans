@@ -28,8 +28,6 @@
     </select>
 
     <!-- 회원 정보 조회 -->
-
-
     <select id="selectUserInfo">
 
         SELECT user_id, user_name, user_email, user_phone, user_birthday, user_role,  user_picture_url

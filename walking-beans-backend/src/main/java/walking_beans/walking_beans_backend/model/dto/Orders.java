@@ -20,21 +20,15 @@ public class Orders {
     private long orderId; //PK
 
     private long userId; //FK
-
     private long storeId; //FK
-
     private long addressId; //FK
 
     @Column(unique = true)
     private String orderNumber;
-
     private String orderStatus;
-
     private String orderRequests;
-
     private String orderTotalPrice;
-
     private Date orderCreateDate;
-
     private Date orderModifiedDate;
+    private String RiderIdOnDuty;
 }

@@ -27,6 +27,4 @@ public interface MenuService {
 
     // 메뉴 삭제하기
     void deleteMenu(Menu menu);
-
-
 }

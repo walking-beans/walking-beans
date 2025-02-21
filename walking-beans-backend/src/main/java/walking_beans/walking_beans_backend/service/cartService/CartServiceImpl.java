@@ -13,10 +13,8 @@ public class CartServiceImpl implements CartService {
     private CartMapper cartMapper;
 
     @Override
-
-    public void addToCart(Orders orders, Carts carts) {
-        cartMapper.addToCart(orders, carts);
-
+    public Carts addToCart(Orders orders, Carts carts) {
+        return cartMapper.addToCart(orders, carts);
     }
 
     @Override

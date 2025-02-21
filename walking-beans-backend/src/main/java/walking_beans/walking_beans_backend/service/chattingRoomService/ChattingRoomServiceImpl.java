@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.chattingRoomService;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.ChattingRoomMapper;

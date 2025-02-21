@@ -1,6 +1,5 @@
 package walking_beans.walking_beans_backend.service.chattingRoomService;
 
-
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
 
 import java.util.List;
