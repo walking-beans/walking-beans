@@ -5,7 +5,8 @@
 
     <!-- 모든 주소 조회 -->
     <select id="getAllAddresses">
-        SELECT * FROM Address;
+        SELECT *
+        FROM Address
     </select>
 
 </mapper>
