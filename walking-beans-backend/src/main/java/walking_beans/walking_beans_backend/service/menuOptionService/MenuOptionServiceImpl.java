@@ -1,11 +1,12 @@
 package walking_beans.walking_beans_backend.service.menuOptionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.MenuOptionMapper;
 import walking_beans.walking_beans_backend.model.dto.MenuOption;
 
 import java.util.List;
-
+@Service
 public class MenuOptionServiceImpl implements MenuOptionService {
 
     @Autowired
