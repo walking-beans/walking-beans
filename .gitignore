@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 walking-beans-backend/src/main/resources/config.properties
 
+
 ### STS ###
 .apt_generated
 .classpath

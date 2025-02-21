@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.UserMapper;
 
+
+import walking_beans.walking_beans_backend.model.dto.Users;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,5 +40,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePw(String userEmail) {
         userMapper.updatePw(userEmail);
+    }
+
+    @Override
+    public Users selectUserInfo(Long userId) {
+        return userMapper.selectUserInfo(userId); // DB에서 유저 정보 가져오기
+    }
+
+    @Override
+    public void updateUserInfo(Long userId, String userPhone) {
+        userMapper.updateUserInfo(userId, userPhone); // DB에서 유저 정보 수정
+    }
+
+    @Override
+    public void deleteUserAccount(Long userId) {
+        userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
     }
 }
