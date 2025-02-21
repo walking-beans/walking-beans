@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
-import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
+import walking_beans.walking_beans_backend.service.ChattingRoomService.ChattingRoomServiceImpl;
+import walking_beans.walking_beans_backend.service.MessageService.MessageServiceImpl;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class ChattingRoomAPIController {
 
     @Autowired
     private ChattingRoomServiceImpl chattingRoomService;
+
+    @Autowired
+    private MessageServiceImpl messageService;
 
     /**
      * List of Chatting Room by the receiver's role
@@ -31,6 +35,12 @@ public class ChattingRoomAPIController {
         return ResponseEntity.ok(chattingRoomService.getAllChattingRoomByReceiverRelation(userId, receiverRelation));
     }
 
+    /**
+     * Updating Last Message
+     * @param roomId : room Id
+     * @param roomLastMessage : Last Message
+     * @return
+     */
     @PutMapping
     public ResponseEntity<ChattingRoom> updateLastMessageOfChattingRoom(@RequestParam("roomId") long roomId,
                                                                         @RequestParam("roomLastMessage") String roomLastMessage) {
