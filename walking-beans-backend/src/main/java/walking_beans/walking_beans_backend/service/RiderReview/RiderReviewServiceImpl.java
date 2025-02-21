@@ -13,7 +13,7 @@ public class RiderReviewServiceImpl implements RiderReviewService{
     RiderReviewMapper riderReviewMapper;
 
     @Override
-    public float getRiderReviewRatingAverage(int riderId) {
+    public float getRiderReviewRatingAverage(long riderId) {
         List<Integer> riderAllStars = riderReviewMapper.getRiderReviewRatingAverage(riderId);
         float ratingAverage = 0;
         for (int star : riderAllStars) {
