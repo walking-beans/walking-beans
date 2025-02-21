@@ -1,13 +1,10 @@
-package walking_beans.walking_beans_backend.mapper;
+package walking_beans.walking_beans_backend.service.userService;
 
 import walking_beans.walking_beans_backend.model.dto.Users;
-import org.apache.ibatis.annotations.Mapper;
-
 import java.util.Map;
 
-@Mapper
-public interface UserMapper {
-    Map<String, Object> loginUser (String userEmail, String userPassword);
+public interface UserService {
+    Map<String, Object> loginUser(String userEmail, String userPassword);
 
     String findId (String userName, String userPhone);
 
@@ -21,5 +18,6 @@ public interface UserMapper {
 
     // 마이페이지 사용자 회원 탈퇴
     void deleteUserAccount(Long userId);
+
 
 }
