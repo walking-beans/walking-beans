@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
-import walking_beans.walking_beans_backend.service.CartService.CartService;
+import walking_beans.walking_beans_backend.service.cartService.CartService;
 
 @RestController
 @RequestMapping("/api/carts")

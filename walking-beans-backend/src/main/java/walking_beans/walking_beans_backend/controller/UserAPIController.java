@@ -4,8 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import walking_beans.walking_beans_backend.service.UserService.UserService;
-import walking_beans.walking_beans_backend.service.UserService.UserServiceImpl;
+import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
