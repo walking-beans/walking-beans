@@ -10,11 +10,10 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Chattigroom {
+public class ChattingRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roomId;
-
 
     private long orderId;
 

@@ -28,7 +28,7 @@ public class Orders {
     @Column(unique = true)
     private String orderNumber;
 
-    private String orderStatus;
+    private int orderStatus;
 
     private String orderRequests;
 

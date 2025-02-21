@@ -32,4 +32,9 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
     }
 
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        return orderMapper.updateOrderStatus(orderId, orderStatus);
+    }
+
 }
