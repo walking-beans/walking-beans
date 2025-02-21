@@ -27,4 +27,7 @@ public interface OrderService {
     // 주문하기 : 주문 등록하기 insertOrder && insertCart
     void insertOrder (@RequestBody Orders order);
     void insertCart (@RequestBody Carts cart);
+
+    Integer updateOrderStatus(long orderId, int orderStatus);
+
 }

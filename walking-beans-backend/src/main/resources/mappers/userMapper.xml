@@ -26,10 +26,10 @@
         WHERE user_name = #{userName}
           AND user_phone = #{userPhone}
     </select>
-  
-    <!-- 회원 정보 조회 -->
 
+    <!-- 회원 정보 조회 -->
     <select id="selectUserInfo">
+
         SELECT user_id, user_name, user_email, user_phone, user_birthday, user_role,  user_picture_url
         FROM users
         WHERE user_id = #{userId}
@@ -42,7 +42,7 @@
 
     <update id="updateUserInfo" >
         UPDATE users
-        SET phone_number = #{phone}
+        SET phone_number = #{userPhone}
         WHERE user_id = #{userId}
     </update>
 

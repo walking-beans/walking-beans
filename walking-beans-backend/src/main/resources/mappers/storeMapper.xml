@@ -2,5 +2,142 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.StoreMapper">
+    <!--매장 전체 불러오기 -->
+    <select id="findAllStores">
+        SELECT *
+        FROM stores
+
+    </select>
+
+    <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
+    <select id="searchStores">
+        SELECT *
+        FROM stores
+        WHERE store_name = #{keyword}
+        OR store_description = #{keyword}
+        OR store_mainMenu = #{keyword}
+    </select>
+
+    <!--//특정 매장 불러오기, ID -->
+    <select id="findStoresById">
+        SELECT *
+        FROM stores
+        WHERE store_id = #{storeId}
+    </select>
+
+    <!--회원(업주) ID로 매장 불러오기 -->
+    <select id="findStoresByuserId">
+        SELECT *
+        FROM stores
+        WHERE
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--신규매장 등록하기
+     `store_id` bigint(19) NOT NULL AUTO_INCREMENT,
+`user_id` bigint(19) NOT NULL,
+`store_name` varchar(255) NOT NULL,
+`store_description` varchar(255) NULL,
+`store_main_menu` varchar(255) NOT NULL,
+`store_business_number` int(11) NOT NULL,
+`store_phone` varchar(20) NOT NULL,
+`store_picture_url` text NULL, - '매장로고'
+`store_operation_hours` varchar(255) NOT NULL,
+`store_closed_dates` varchar(255) NOT NULL,
+`store_status` varchar(50) NULL, - '휴무, 운영 중'
+`store_review_count` int(5) NOT NULL,
+`store_rating` decimal(2,1) NOT NULL,
+`store_min_delivery_time` int(3) NULL,
+`store_max_delivery_time` int(3) NULL,
+`store_delivery_tip` int(5) NOT NULL,
+`store_delivery_address` varchar(255) NULL,
+`store_address` varchar(255) NOT NULL,
+`store_latitude` decimal(10,6) NOT NULL,
+`store_longitude` decimal(10,6)	NOT NULL,
+PRIMARY KEY (`store_id`),
+CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`)
+     -->
+    <insert id="addStores">
+        INSERT INTO Stores (store_id,
+                            user_id,
+                            store_name,
+                            store_description,
+                            store_main_menu,
+                            store_business_number,
+                            store_phone,
+                            store_picture_url,
+                            store_operation_hours,
+                            store_closed_dates,
+                            store_status,
+                            store_review_count,
+                            store_rating,
+                            store_min_delivery_time,
+                            store_max_delivery_time,
+                            store_delivery_tip,
+                            store_delivery_address,
+                            store_address,
+                            store_latitude,
+                            store_longitude)
+        VALUES
+            (
+             #{storeId},
+             #{userId},
+             #{storeName},
+             #{storeDescription},
+             #{storeMainMenu},
+             #{storeBusinessNumber},
+             #{storePhone},
+             #{storePictureUrl},
+             #{storeOperationHours},
+             #{storeClosedDates},
+             #{storeStatus},
+             #{storeReviewCount},
+             #{storeRating},
+             #{storeMinDeliveryTime},
+             #{storeMaxDeliveryTime},
+             #{storeDeliveryTip},
+             #{storeDeliveryAddress},
+             #{storeAddress},
+             #{storeLatitude},
+             #{storeLongitude}
+
+            )
+    </insert>
+
+    <!--매장정보 수정하기 -->
+    <update id="updateStores">
+        UPDATE stores
+        SET (
+                user_id = #{userId}
+                store_name = #{storeName}
+                store_description = #{storeDescription}
+                store_main_menu = #{storeMainMenu}
+                store_business_number = #{storeBusinessNumber}
+                store_phone = #{storePhone}
+                store_picture_url = #{storePictureUrl}
+                store_operation_hours = #{storeOperationHours}
+                store_closed_dates = #{storeClosedDates}
+                store_status = #{storeStatus}
+                store_review_count = #{storeReviewCount}
+                store_rating = #{storeRating}
+                store_min_delivery_time = #{storeMinDeliveryTime}
+                store_max_delivery_time = #{storeMaxDeliveryTime}
+                store_delivery_tip = #{storeDeliveryTip}
+                store_delivery_address = #{storeDeliveryAddress}
+                store_address = #{storeAddress}
+                store_latitude = #{storeLatitude}
+                store_longitude = #{storeLongitude}
+                )
+        WHERE store_id = #{storeId}
+
+    </update>
+
+    <!--매장정보 삭제하기 -->
+    <delete id="deleteStores">
+        DELETE
+        *
+        FROM stores
+
+    </delete>
 
 </mapper>

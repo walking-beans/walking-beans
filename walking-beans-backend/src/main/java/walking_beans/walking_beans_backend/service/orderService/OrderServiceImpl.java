@@ -8,7 +8,6 @@ import walking_beans.walking_beans_backend.model.dto.Orders;
 
 import java.util.List;
 
-
 @Service
 public class OrderServiceImpl implements OrderService {
   
@@ -29,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     public Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId) {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
     }
+
 
     @Override
     public void selectOrdersByOrderId(long orderId) {
@@ -53,6 +53,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertCart(Carts cart) {
         orderMapper.insertCart(cart);
+    }
+
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
 }

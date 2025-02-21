@@ -101,4 +101,10 @@
                 #{optionId})
     </insert>
 
+    <!-- 주문 상태 변경 -->
+    <update id="updateOrderStatus">
+        UPDATE orders
+        SET order_status = #{orderStatus}
+        WHERE order_id = #{orderId}
+    </update>
 </mapper>

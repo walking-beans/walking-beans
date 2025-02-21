@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 walking-beans-backend/src/main/resources/config.properties
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -58,3 +59,5 @@ out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.env
