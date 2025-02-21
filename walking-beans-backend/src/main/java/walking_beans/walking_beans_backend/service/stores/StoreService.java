@@ -1,12 +1,10 @@
-package walking_beans.walking_beans_backend.mapper;
+package walking_beans.walking_beans_backend.service.stores;
 
-import org.apache.ibatis.annotations.Mapper;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 
 import java.util.List;
 
-@Mapper
-public interface StoreMapper {
+public interface StoreService {
 
     //매장 전체 불러오기
     List<Stores> findAllStores();

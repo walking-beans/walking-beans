@@ -9,9 +9,12 @@ import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-  
+
+
     @Autowired
     private OrderMapper orderMapper;
+
+
 
     @Override
     public Orders getOrderByOrderId(long orderId) {
@@ -28,4 +31,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
     }
 
+
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        return orderMapper.updateOrderStatus(orderId, orderStatus);
+    }
+
 }
+

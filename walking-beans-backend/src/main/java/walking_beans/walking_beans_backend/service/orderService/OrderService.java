@@ -11,4 +11,8 @@ public interface OrderService {
     List<Orders> getOrdersByNullOfRiderIdInDuty();
 
     Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId);
+
+
+    Integer updateOrderStatus(long orderId, int orderStatus);
+
 }

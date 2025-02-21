@@ -1,14 +1,10 @@
-package walking_beans.walking_beans_backend.mapper;
-
-import org.apache.ibatis.annotations.Mapper;
+package walking_beans.walking_beans_backend.service.menuOptionService;
 
 import walking_beans.walking_beans_backend.model.dto.MenuOption;
 
 import java.util.List;
 
-@Mapper
-public interface MenuOptionMapper {
-
+public interface MenuOptionService {
 
     // 메뉴옵션 전체 검색
     List<MenuOption> findAllMenuOption();
@@ -30,7 +26,6 @@ public interface MenuOptionMapper {
 
     // 메뉴옵션 삭제하기
     void deleteMenuOption(MenuOption menuOption);
-
 
 
 }

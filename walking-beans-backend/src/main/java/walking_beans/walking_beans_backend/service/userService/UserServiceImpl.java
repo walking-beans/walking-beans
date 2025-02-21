@@ -3,7 +3,9 @@ package walking_beans.walking_beans_backend.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.UserMapper;
+
 import walking_beans.walking_beans_backend.model.dto.Users;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
 
 
+
     @Override
     public Users selectUserInfo(Long userId) {
         return userMapper.selectUserInfo(userId); // DB에서 유저 정보 가져오기
@@ -56,4 +59,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUserAccount(Long userId) {
         userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
     }
+
 }

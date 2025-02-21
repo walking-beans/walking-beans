@@ -2,10 +2,13 @@ package walking_beans.walking_beans_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
+
 
 import java.util.List;
 
@@ -13,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderAPIController {
-
     @Autowired
     private OrderServiceImpl orderService;
 
@@ -49,4 +51,18 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
 
+    /**
+     * 상태 변경 orderId && orderStatus
+     * @param orderId : order Id
+     * @param orderStatus : order status
+     * @return ResponseEntity.ok(Integer) : 변경 갯수
+     */
+    @PutMapping("/orderStatus")
+    public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
+                                                     @RequestParam("orderStatus") int orderStatus) {
+
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
+    }
+
+    //
 }
