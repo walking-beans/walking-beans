@@ -1,12 +1,10 @@
-package walking_beans.walking_beans_backend.mapper;
+package walking_beans.walking_beans_backend.service.menuService;
 
-import org.apache.ibatis.annotations.Mapper;
 import walking_beans.walking_beans_backend.model.dto.Menu;
 
 import java.util.List;
 
-@Mapper
-public interface MenuMapper {
+public interface MenuService {
 
     // 메뉴 전체 검색
     List<Menu> findAllMenu();
@@ -28,6 +26,5 @@ public interface MenuMapper {
 
     // 메뉴 삭제하기
     void deleteMenu(Menu menu);
-
 
 }

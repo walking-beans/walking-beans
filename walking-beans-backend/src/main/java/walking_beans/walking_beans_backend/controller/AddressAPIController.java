@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.Address;
-import walking_beans.walking_beans_backend.service.AddressService.AddressService;
+import walking_beans.walking_beans_backend.service.addressService.AddressService;
 
 import java.util.List;
 
