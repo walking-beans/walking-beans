@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.service.stores;
+package walking_beans.walking_beans_backend.service.storesService;
 
 import walking_beans.walking_beans_backend.model.dto.Stores;
 
