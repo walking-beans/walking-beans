@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
-import walking_beans.walking_beans_backend.service.ChattingRoomService.ChattingRoomServiceImpl;
-import walking_beans.walking_beans_backend.service.MessageService.MessageServiceImpl;
+import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
+import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
 
 import java.util.List;
 
