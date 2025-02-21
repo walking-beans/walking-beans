@@ -10,12 +10,12 @@
     </select>
 
     <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
-    <select id="searchStores">
-        SELECT *
+    <select id="searchStore">
+        SELECT store_name,store_picture_url,store_min_delivery_time
         FROM stores
-        WHERE store_name = #{keyword}
-        OR store_description = #{keyword}
-        OR store_mainMenu = #{keyword}
+        WHERE store_name  LIKE concat ('%',#{keyword},'%')
+        OR store_description LIKE concat ('%',#{keyword},'%')
+        OR store_main_menu LIKE concat ('%',#{keyword},'%')
     </select>
 
     <!--//특정 매장 불러오기, ID -->
