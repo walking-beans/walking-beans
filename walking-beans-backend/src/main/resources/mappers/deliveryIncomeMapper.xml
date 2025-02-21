@@ -7,4 +7,11 @@
         FROM deliveryIncome
         WHERE rider_id = #{riderId}
     </select>
+
+    <select id="getDeliveryIncomeByOrderId">
+        SELECT *
+        FROM deliveryIncome
+        WHERE rider_id = #{riderId}
+          AND order_id = #{orderId}
+    </select>
 </mapper>

@@ -15,23 +15,41 @@ public class Stores {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long storeId;
+
     private long userId;
+
     private String storeName;
+
     private String storeDescription;
+
     private String storeMainMenu;
+
     private long storeBusinessNumber;
+
     private String storePhone;
+
     private String storePictureUrl;
+
     private String storeOperationHours;
+
     private String storeClosedDates;
+
     private String storeStatus;
+
     private int storeReviewCount;
+
     private String storeRating;
+
     private short storeMinDeliveryTime;
+
     private short storeMaxDeliveryTime;
-    private int storeDeliveryTip;
-    private String storeDeliveryAddress; // storeDeliveryArea 로 변경요청
+
+    private String storeDeliveryTip;
+
+    private String storeDeliveryAddress;
+
     private String storeAddress;
+
     private double storeLatitude; // decimal(10,6)
     private double storeLongitude; // decimal(10,6)
 }

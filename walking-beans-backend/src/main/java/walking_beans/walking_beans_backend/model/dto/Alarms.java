@@ -12,16 +12,18 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryIncome {
+public class Alarms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long incomeIndex;
+    private long alarmId;
 
-    private long riderId;
+    private long userId;
 
-    private long orderId;
+    private String alarmContent;
 
-    private Timestamp incomeDate;
+    private boolean alarmStatus;
 
-    private int incomeAmount;
+    private Timestamp alarmCreateDate;
+
+    private Timestamp alarmSenderId;
 }

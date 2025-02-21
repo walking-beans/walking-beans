@@ -3,6 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.AddressMapper">
 
-
+    <!-- 모든 주소 조회 -->
+    <select id="getAllAddresses">
+        SELECT * FROM Address;
+    </select>
 
 </mapper>

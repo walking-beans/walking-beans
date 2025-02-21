@@ -17,11 +17,17 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId; //PK
 
-    private int userRole;
+    private byte userRole;
+
     private String userEmail;
+
     private String userPassword;
+
     private String userName;
+
     private String userPhone;
+
     private Date userBirthday;
+
     private String userPictureUrl;
 }

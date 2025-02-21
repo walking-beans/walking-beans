@@ -10,9 +10,13 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Alarm {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+public class ChattingMember {
 
+    private long roomId;
+
+    private long userId;
+
+    private long roomReceiverId;
+
+    private int receiverRelation;
 }

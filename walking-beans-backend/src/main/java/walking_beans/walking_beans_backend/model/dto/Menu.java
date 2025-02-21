@@ -14,15 +14,26 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Menu {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long menuId;
+
     private long storeId;
+
     private long userId;
+
     private String menuPrice;
+
     private String menuPictureUrl;
+
     private String menuName;
+
     private String menuCategory;
+
     private String menuDescription;
+
     private Timestamp menuCreateDate;
+
     private Timestamp menuModifiedDate;
 
 

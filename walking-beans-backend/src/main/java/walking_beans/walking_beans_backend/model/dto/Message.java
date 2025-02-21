@@ -5,6 +5,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @ToString
 @Getter
 @Setter
@@ -13,6 +15,16 @@ import lombok.*;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
+    private long messageId;
+
+    private long roomId;
+
+    private long userId;
+
+    private int messageRole;
+
+    private String messageContent;
+
+    private Timestamp messageTime;
 
 }

@@ -14,7 +14,12 @@ public class DeliveryIncomeServiceImpl implements DeliveryIncomeService {
     private DeliveryIncomeMapper deliveryIncomeMapper;
 
     @Override
-    public List<DeliveryIncome> getDeliveryIncomeByRiderId(int riderId) {
+    public List<DeliveryIncome> getDeliveryIncomeByRiderId(long riderId) {
         return deliveryIncomeMapper.getDeliveryIncomeByRiderId(riderId);
+    }
+
+    @Override
+    public DeliveryIncome getDeliveryIncomeByOrderId(long riderId, long orderId) {
+        return deliveryIncomeMapper.getDeliveryIncomeByOrderId(riderId, orderId);
     }
 }

@@ -11,13 +11,21 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
-  
-    private int addressId;
-    private int userId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long addressId;
+
+    private long userId;
+
     private String address;
+
     private String addressName;
+
     private double addressLatitude;
+
     private double addressLongitude;
-    private int addressRole;
+
+    private byte addressRole;
 
 }
