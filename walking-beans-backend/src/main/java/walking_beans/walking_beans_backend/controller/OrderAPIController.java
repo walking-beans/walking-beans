@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderAPIController {
-
     @Autowired
     private OrderServiceImpl orderService;
 
@@ -59,4 +58,18 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
 
+    /**
+     * 상태 변경 orderId && orderStatus
+     * @param orderId : order Id
+     * @param orderStatus : order status
+     * @return ResponseEntity.ok(Integer) : 변경 갯수
+     */
+    @PutMapping("/orderStatus")
+    public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
+                                                     @RequestParam("orderStatus") int orderStatus) {
+
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
+    }
+
+    //
 }
