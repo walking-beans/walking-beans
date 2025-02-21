@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
+// 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
+// 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
+// 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
+const KAKAO_MAP_API_KEY_LEO = "492c9f6730659740d55e1ade843d2b43"; // 본인 카카오 API 키
 
+// 가게 데이터 (JSON 형식 => 추후 DB 저장된 가게로 변경)
+// localhost:8080/api/가게목록 불러오기
 const storeData = [
     { name: "강남커피하우스", lat: 37.498095, lng: 127.027610 },
     { name: "테헤란로 맛집", lat: 37.500184, lng: 127.035407 },
@@ -28,9 +34,7 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
     return R * c; // 거리 (km)
 };
 
-const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 API 키 입력
-
-const UserHome = () => {
+const KakaoMap = () => {
     const [userLocation, setUserLocation] = useState(null);
     const [filteredStores, setFilteredStores] = useState([]);
 
@@ -45,7 +49,7 @@ const UserHome = () => {
 
                     // 반경 10km 내 가게 필터링
                     const filtered = storeData.filter((store) =>
-                        getDistance(lat, lng, store.lat, store.lng) <= 10
+                        getDistance(lat, lng, store.lat, store.lng) <= 5
                     );
                     setFilteredStores(filtered);
                 },
@@ -63,7 +67,7 @@ const UserHome = () => {
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY_LEO}&libraries=services&autoload=false`;
         script.async = true;
         document.head.appendChild(script);
 
@@ -122,5 +126,4 @@ const UserHome = () => {
     );
 };
 
-
-export default UserHome;
+export default KakaoMap;

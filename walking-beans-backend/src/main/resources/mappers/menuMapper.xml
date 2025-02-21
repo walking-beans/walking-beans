@@ -2,10 +2,85 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.MenuMapper">
-            <select id="">
-                SELECT *
-                FROM MENU
-                WHERE store_id = #{storeid}
 
-            </select>
+    <!-- 메뉴 전체 검색 -->
+    <select id="findAllMenu">
+        SELECT *
+        FROM MENU
+
+    </select>
+
+    <!-- 메뉴 검색 , keyword -->
+    <select id="searchMenu">
+        SELECT *
+        FROM MENU
+        WHERE  menu_name = #{keyword}
+    </select>
+
+    <!-- ID 로 메뉴 찾기 , long menuId-->
+    <select id="findMenuById">
+        SELECT *
+        FROM MENU
+        WHERE menu_id = #{menuId}
+
+    </select>
+
+    <!-- 가게에 속한 메뉴 찾기 -->
+    <select id="findMenuByStoreId">
+        SELECT *
+        FROM MENU
+        WHERE store_id = #{storeId}
+    </select>
+
+    <!-- 메뉴 수정하기 -->
+    <update id="updateMenu">
+        UPDATE Menu
+            SET (
+                menu_price = #{menuPrice},
+                menu_picture_url = #{menuPictureUrl},
+                menu_name = #{menuName},
+                menu_category = #{menuCategory},
+                menu_description = #{menuDescription},
+                menu_modified_date = NOW())
+        WHERE menu_id = #{menuId}
+
+    </update>
+
+    <!-- 메뉴 추가하기 -->
+    <insert id="addMenu">
+        INSERT INTO Menu (
+                          menu_id,
+                          store_id,
+                          user_id,
+                          menu_price,
+                          menu_picture_url,
+                          menu_name,
+                          menu_category,
+                          menu_description,
+                          menu_create_date,
+                          menu_modified_date)
+        VALUES
+            (
+             #{menuId},
+             #{storeId},
+             #{userId},
+             #{menuPrice},
+             #{menuPictureUrl},
+             #{menuName},
+             #{menuCategory},
+             #{menuDescription},
+             NOW(),
+             NOW()
+            )
+
+    </insert>
+
+    <!-- 메뉴 삭제하기 -->
+    <delete id="deleteMenu">
+        DELETE *
+        FROM MENU
+        WHERE menu_id = #{menuId}
+    </delete>
+
+
 </mapper>

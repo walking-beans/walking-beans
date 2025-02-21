@@ -1,12 +1,11 @@
 package walking_beans.walking_beans_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.DeliveryIncome;
-import walking_beans.walking_beans_backend.service.DeliveryIncomeService.DeliveryIncomeServiceImpl;
+import walking_beans.walking_beans_backend.service.deliveryIncomeService.DeliveryIncomeServiceImpl;
 
 import java.util.List;
 
