@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-  
+
     @Autowired
     private OrderMapper orderMapper;
 
@@ -30,6 +30,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId) {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
+    }
+
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
 }

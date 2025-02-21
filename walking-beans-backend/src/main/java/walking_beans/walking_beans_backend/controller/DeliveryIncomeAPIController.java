@@ -40,8 +40,9 @@ public class DeliveryIncomeAPIController {
      */
     @GetMapping("/detail")
     public ResponseEntity<DeliveryIncome> getDeliveryIncomeDetail(@RequestParam(value = "riderId") long riderId,
-                                                  @RequestParam(value = "orderId") long orderId) {
+                                                                  @RequestParam(value = "orderId") long orderId) {
         log.info("=== /api/deliveryIncome?riderId={}&orderId={} ===", riderId, orderId);
         return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByOrderId(riderId, orderId));
     }
+
 }
