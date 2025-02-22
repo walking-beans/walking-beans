@@ -13,7 +13,7 @@
     <!-- ========= Leo ========= -->
     <!-- -->
     <select id="getUserMainAddress">
-        SELECT A.address, A.address_latitude, A.address_longitude
+        SELECT A.address_id, A.user_id, A.address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
         FROM address A
         JOIN orders O
         ON A.user_id = O.user_id
