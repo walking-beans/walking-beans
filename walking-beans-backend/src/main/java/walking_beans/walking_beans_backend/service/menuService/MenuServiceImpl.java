@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.menuService;
 
 import org.springframework.stereotype.Service;
+
 import walking_beans.walking_beans_backend.model.dto.Menu;
 
 import java.util.List;

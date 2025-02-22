@@ -10,4 +10,5 @@ public interface ChattingRoomService {
 
     int updateLastMessageOfChattingRoom(long roomId, String roomLastMessage);
 
+
 }

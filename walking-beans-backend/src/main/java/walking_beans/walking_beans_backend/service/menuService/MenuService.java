@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.menuService;
 
+
 import walking_beans.walking_beans_backend.model.dto.Menu;
 
 import java.util.List;
@@ -26,5 +27,4 @@ public interface MenuService {
 
     // 메뉴 삭제하기
     void deleteMenu(Menu menu);
-
 }
