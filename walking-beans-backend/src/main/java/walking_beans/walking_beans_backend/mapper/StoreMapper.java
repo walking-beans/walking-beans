@@ -12,7 +12,7 @@ public interface StoreMapper {
     List<Stores> findAllStores();
 
     //매장 검색
-    List<Stores> searchStores();
+    List<Stores> searchStore(String keyword);
 
     //특정 매장 불러오기, ID
     Stores findStoresById(long storeId);
