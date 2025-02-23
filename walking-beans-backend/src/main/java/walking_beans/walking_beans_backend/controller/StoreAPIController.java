@@ -25,7 +25,11 @@ public class StoreAPIController {
     }
 
     /**************************************** Leo ****************************************/
-    // 매장 주소 가져오기 by order id
+    /**
+     * 매장 주소 가져오기 by order id
+     * @param orderId : order id
+     * @return : ResponseEntity.ok(Stores)
+     */
     @GetMapping("/address")
     public ResponseEntity<Stores> getStoreAddressByOrderId(@RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));

@@ -38,7 +38,7 @@ public class AddressAPIController {
      * @return : ResponseEntity.ok(Address)
      */
     @GetMapping("/userAddress/orderId")
-    public ResponseEntity<Address> getUserMainAddress(@RequestParam("orderId") long orderId,
+    public ResponseEntity<Address> getUserMainAddressByOrderId(@RequestParam("orderId") long orderId,
                                                       @RequestParam("userId") long userId){
         log.info("=== /api/addresses/userMainByOrderId?orderId={}&userId={} ===", orderId, userId);
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
