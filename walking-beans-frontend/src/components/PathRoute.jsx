@@ -18,6 +18,8 @@ import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import UserHeader from "../pages/layout/UserHeader";
+import ProtectedRoute from "./ProtectedRoute";
+import HeaderRoute from "./HeaderRoute";
 
 
 function AdminChattingroom() {
@@ -33,18 +35,42 @@ function PathRoute () {
 
     return(
         <BrowserRouter>
-            <UserHeader/>
+            <HeaderRoute />
             <Routes>
                 {/**/}
                 <Route path="/" element={<UserHome/>}/>
 
                 {/* 2. rider  */}
-                <Route path="/rider" element={<RiderMain/>}/>
-                <Route path="/rider/ontheway" element={<RiderOntheway/>}/>
-                <Route path="/rider/result" element={<RiderResult/>}/>
-                <Route path="/rider/orderlist" element={<RiderOrderList/>}/>
-                <Route path="/rider/order" element={<RiderOrder/>}/>
-                <Route path="/rider/income" element={<RiderIncome/>}/>
+                <Route path="/rider" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderMain/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/rider/ontheway" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderOntheway/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/rider/result" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderResult/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/rider/orderlist" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderOrderList/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/rider/order" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderOrder/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/rider/income" element={
+                    <ProtectedRoute allowedRoles={[2]}>
+                        <RiderIncome/>
+                    </ProtectedRoute>}
+                />
 
                 {/* 3. owner  */}
                 <Route path="/owner" element={<StoreMain />}/>
