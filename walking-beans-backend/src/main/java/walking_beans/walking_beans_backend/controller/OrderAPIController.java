@@ -19,6 +19,8 @@ public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
 
+    /**************************************** LEO ****************************************/
+
     /**
      * 주문 번호에 따른 주문 정보
      * @param orderId : order Id
@@ -63,8 +65,9 @@ public class OrderAPIController {
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
+    
 
-    //
+    /****************************************  ****************************************/
 
     /**
      *  배달 현황 : 주문상태&매장정보 가져오기
@@ -113,6 +116,4 @@ public class OrderAPIController {
     public void insertCart(@RequestBody Carts carts) {
         orderService.insertCart(carts);
     }
-
-
 }

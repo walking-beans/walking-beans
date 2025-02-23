@@ -26,4 +26,8 @@ public interface StoreService {
 
     // 매장정보 삭제하기
     void deleteStores(long storeId);
+
+    /**************************************** Leo ****************************************/
+    // 매장 주소 가져오기 by order id
+    Stores getStoreAddressByOrderId(long orderId);
 }

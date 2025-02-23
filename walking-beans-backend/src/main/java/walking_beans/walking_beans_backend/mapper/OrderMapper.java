@@ -11,12 +11,16 @@ import java.util.List;
 
 @Mapper
 public interface OrderMapper {
-
+    /**************************************** LEO ****************************************/
     Orders getOrderByOrderId(long orderId);
 
     List<Orders> getOrdersByNullOfRiderIdInDuty();
 
     Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId);
+
+    Integer updateOrderStatus(long orderId, int orderStatus);
+
+    /****************************************  ****************************************/
 
     // 배달현황 : 주문상태&매장정보 가져오기
     void selectOrdersByOrderId(long orderId);
@@ -31,6 +35,5 @@ public interface OrderMapper {
     void insertOrder (@RequestBody Orders order);
     void insertCart (@RequestBody Carts cart);
 
-    Integer updateOrderStatus(long orderId, int orderStatus);
 
 }
