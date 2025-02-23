@@ -29,12 +29,20 @@ public class AddressAPIController {
 
 
 
-    /********** LEO **********/
-    // 유저 대표 주소 가져오기 by order_id
-    @GetMapping("/userMainByOrderId")
+    /**************************************** LEO ****************************************/
+
+    /**
+     * 유저 대표 주소 가져오기 by order_id
+     * @param orderId : order id
+     * @param userId : user id
+     * @return : ResponseEntity.ok(Address)
+     */
+    @GetMapping("/userAddress/orderId")
     public ResponseEntity<Address> getUserMainAddress(@RequestParam("orderId") long orderId,
                                                       @RequestParam("userId") long userId){
         log.info("=== /api/addresses/userMainByOrderId?orderId={}&userId={} ===", orderId, userId);
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
     }
+
+
 }

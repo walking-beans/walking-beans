@@ -57,4 +57,11 @@ public class StoreServiceImpl implements StoreService {
     public void deleteStores(long storeId) {
 
     }
+
+    /**************************************** Leo ****************************************/
+    // 매장 주소 가져오기 by order id
+    @Override
+    public Stores getStoreAddressByOrderId(long orderId) {
+        return storeMapper.getStoreAddressByOrderId(orderId);
+    }
 }
