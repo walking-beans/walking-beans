@@ -19,6 +19,8 @@ public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
 
+    /**************************************** LEO ****************************************/
+
     /**
      * 주문 번호에 따른 주문 정보
      * @param orderId : order Id
@@ -50,6 +52,20 @@ public class OrderAPIController {
                                                             @RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
+
+    /**
+     * 상태 변경 orderId && orderStatus
+     * @param orderId : order Id
+     * @param orderStatus : order status
+     * @return ResponseEntity.ok(Integer) : 변경 갯수
+     */
+    @PutMapping("/orderStatus")
+    public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
+                                                     @RequestParam("orderStatus") int orderStatus) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
+    }
+
+    /****************************************  ****************************************/
 
     /**
      *  배달 현황 : 주문상태&매장정보 가져오기
@@ -99,18 +115,4 @@ public class OrderAPIController {
         orderService.insertCart(carts);
     }
 
-  /**
-     * 상태 변경 orderId && orderStatus
-     * @param orderId : order Id
-     * @param orderStatus : order status
-     * @return ResponseEntity.ok(Integer) : 변경 갯수
-     */
-    @PutMapping("/orderStatus")
-    public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
-                                                     @RequestParam("orderStatus") int orderStatus) {
-
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
-    }
-
-    //
 }

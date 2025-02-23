@@ -16,4 +16,15 @@ public class AddressServiceImpl implements AddressService {
     public List<Address> getAllAddresses() {
         return addressMapper.getAllAddresses();
     }
+
+
+
+
+
+
+
+    @Override
+    public Address getUserMainAddress(long orderId, long userId) {
+        return addressMapper.getUserMainAddress(orderId, userId);
+    }
 }
