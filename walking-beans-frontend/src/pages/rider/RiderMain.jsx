@@ -1,4 +1,4 @@
-import KakaoMap from "./KakaoMap";
+import KakaoMap from "../../components/rider/KakaoMap";
 
 const RiderMain = () => {
 
