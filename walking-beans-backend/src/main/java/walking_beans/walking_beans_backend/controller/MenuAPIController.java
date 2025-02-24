@@ -26,14 +26,12 @@ public class MenuAPIController {
 
     /**메뉴 검색
      *
-     * keyword
+     * keyword 메뉴이름과 상세설명에서 검색
      */
     @GetMapping("/search")
     public List<Menu> searchMenu(@RequestParam String keyword) {
         return menuService.searchMenu(keyword);
     }
-
-
 
     /** ID 로 메뉴 찾기
      *
@@ -45,4 +43,12 @@ public class MenuAPIController {
         return menuService.findMenuById(menuId);
     }
 
+    /**가게에 속한 메뉴 찾기
+     *
+     */
+    @GetMapping("/storemenu/{storeId}")
+    public List<Menu> findMenuByStoreId(@PathVariable long storeId, Menu menu) {
+        menu.setStoreId(storeId);
+        return menuService.findMenuByStoreId(menu);
+    }
 }

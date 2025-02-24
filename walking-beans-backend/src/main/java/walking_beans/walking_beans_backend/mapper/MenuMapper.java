@@ -18,7 +18,7 @@ public interface MenuMapper {
     Menu findMenuById(long menuId);
 
     // 가게에 속한 메뉴 찾기
-    Menu findMenuByStoreId(long StoreId);
+    Menu findMenuByStoreId(long StoreId, Menu menu);
 
     // 메뉴 수정하기
     void updateMenu(Menu menu);
