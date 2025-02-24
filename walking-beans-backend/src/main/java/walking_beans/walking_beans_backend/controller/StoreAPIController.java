@@ -2,10 +2,7 @@ package walking_beans.walking_beans_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.service.stores.StoreServiceImpl;
 
@@ -30,8 +27,8 @@ public class StoreAPIController {
      * @param orderId : order id
      * @return : ResponseEntity.ok(Stores)
      */
-    @GetMapping("/address")
-    public ResponseEntity<Stores> getStoreAddressByOrderId(@RequestParam("orderId") long orderId) {
+    @GetMapping("/address/orderId/{orderId}")
+    public ResponseEntity<Stores> getStoreAddressByOrderId(@PathVariable("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
     }
 }

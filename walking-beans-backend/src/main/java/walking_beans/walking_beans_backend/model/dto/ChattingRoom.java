@@ -17,5 +17,5 @@ public class ChattingRoom {
 
     private long orderId;
 
-    private String roomLastMessage;
+    private String lastMessage;
 }
