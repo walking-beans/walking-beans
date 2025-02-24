@@ -1,9 +1,13 @@
 package walking_beans.walking_beans_backend.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MenuAPIController {
+@RequestMapping
+public class StoreAPIController {
+
+
 
 
 }
