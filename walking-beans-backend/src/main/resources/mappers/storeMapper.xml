@@ -108,7 +108,6 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     <update id="updateStores">
         UPDATE stores
         SET (
-                user_id = #{userId}
                 store_name = #{storeName}
                 store_description = #{storeDescription}
                 store_main_menu = #{storeMainMenu}

@@ -21,8 +21,8 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
     }
 
     @Override
-    public int updateLastMessageOfChattingRoom(long roomId, String roomLastMessage) {
-        return chattingRoomMapper.updateLastMessageOfChattingRoom(roomId, roomLastMessage);
+    public int updateLastMessageOfChattingRoom(long roomId, String lastMessage) {
+        return chattingRoomMapper.updateLastMessageOfChattingRoom(roomId, lastMessage);
     }
 
 }

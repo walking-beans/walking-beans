@@ -11,7 +11,7 @@ public interface UserMapper {
 
     String findId (String userName, String userPhone);
 
-    void updatePw(String userEmail);
+    void updatePw(String userEmail, String userPassword);
 
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
