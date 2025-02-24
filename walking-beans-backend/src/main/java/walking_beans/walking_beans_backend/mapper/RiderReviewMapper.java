@@ -7,5 +7,6 @@ import java.util.List;
 @Mapper
 public interface RiderReviewMapper {
 
-    List<Integer> getRiderReviewRatingAverage(int riderId);
+    List<Integer> getRiderReviewRatingAverage(long riderId);
+
 }
