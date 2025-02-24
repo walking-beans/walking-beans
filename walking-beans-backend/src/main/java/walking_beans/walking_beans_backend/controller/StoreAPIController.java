@@ -2,12 +2,9 @@ package walking_beans.walking_beans_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.service.stores.StoreServiceImpl;
+import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.List;
 
@@ -17,6 +14,41 @@ public class StoreAPIController {
 
     @Autowired
     private StoreServiceImpl storeService;
+
+    /**매장 전체정보 불러오기
+     * List<Stores>
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<List<Stores>> findAllStores() {
+        return ResponseEntity.ok(storeService.findAllStores());
+    }
+
+    /**특정 매장 불러오기
+     *
+     * @param storeId
+     * @return 매장 아이디로 조회
+     */
+    @GetMapping("/{storeId}")
+    public Stores findStoresById(@PathVariable long storeId) {
+        return storeService.findStoresById(storeId);
+    }
+
+    /**회원(업주) ID로 매장 불러오기
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping("/mystore/{userId}")
+    public Stores findStoresByuserId(@PathVariable long userId) {
+        return storeService.findStoresByuserId(userId);
+    }
+
+    @PostMapping("/addstore")
+    public Stores addStore(@RequestBody Stores stores) {
+        storeService.addStore(stores);
+    }
+
 
     // 메인메뉴에서 매장 검색
     @GetMapping("/search")

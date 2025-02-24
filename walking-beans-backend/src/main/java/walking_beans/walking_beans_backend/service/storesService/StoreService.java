@@ -19,7 +19,7 @@ public interface StoreService {
     Stores findStoresByuserId(long userId);
 
     // 신규매장 등록하기
-    void addStores(Stores stores);
+    void addStore(Stores stores);
 
     // 매장정보 수정하기
     void updateStores(Stores stores);
