@@ -44,12 +44,25 @@ public class StoreAPIController {
         return storeService.findStoresByuserId(userId);
     }
 
+    /**신규매장 등록하기
+     *  유저 정보 추가후 재검증 필요 외래키 부족
+     * @param stores
+     */
     @PostMapping("/addstore")
-    public Stores addStore(@RequestBody Stores stores) {
+    public void addStore(@RequestBody Stores stores) {
         storeService.addStore(stores);
     }
 
-
+    /**매장정보 수정하기
+     *
+     * @param storeId
+     * @return
+     */
+    @PutMapping("/update/{storeId}")
+    public void updateStore(@PathVariable long storeId, @RequestBody Stores stores) {
+        stores.setStoreId(storeId);
+        storeService.updateStores(stores);
+    }
     // 메인메뉴에서 매장 검색
     @GetMapping("/search")
     public List<Stores> searchStore(@RequestParam String keyword) {
