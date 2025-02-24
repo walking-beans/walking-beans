@@ -25,5 +25,4 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
         return chattingRoomMapper.updateLastMessageOfChattingRoom(roomId, roomLastMessage);
     }
 
-
 }

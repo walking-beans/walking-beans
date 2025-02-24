@@ -1,5 +1,4 @@
 import {Link, useNavigate} from "react-router-dom";
-import userHome from "../components/UserHome";
 import {useState} from "react";
 
 const RiderHeader = () => {
@@ -8,13 +7,6 @@ const RiderHeader = () => {
     const navigate = useNavigate();
 
     {/* sessiong 정보 삭제 후 로그아웃 */}
-    const handleLogOut = () => {
-        // invalidate session
-
-
-        // main 으로 돌아가기
-        navigate("/");
-    }
 
     return (
         <header>
@@ -31,7 +23,7 @@ const RiderHeader = () => {
                    <li><Link to="/rider">고객센터 문의하기</Link></li>
                </ul>
             </nav>
-            <button onClick={handleLogOut}>로그아웃</button>
+            <button>로그아웃</button>
         </header>
     )
 }

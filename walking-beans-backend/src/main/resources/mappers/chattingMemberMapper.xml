@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="walking_beans.walking_beans_backend.mapper.ChattingRoomMapper">
+<mapper namespace="walking_beans.walking_beans_backend.mapper.ChattingMemberMapper">
 
     <select id="getAllChattingRoomByReceiverRelation">
         SELECT CR.room_id, CR.order_id, CR.room_last_message
@@ -11,9 +11,6 @@
         WHERE CM.user_id = #{userId}
           AND CM.receiver_relation  = #{receiverRelation}
     </select>
-
-
-
 
     <update id="updateLastMessageOfChattingRoom">
         UPDATE chattingroom

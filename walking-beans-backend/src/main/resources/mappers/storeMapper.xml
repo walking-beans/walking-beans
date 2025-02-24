@@ -140,4 +140,13 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
 
     </delete>
 
+    <!-- **************************************** LEO **************************************** -->
+    <select id="getStoreAddressByOrderId">
+        SELECT S.store_id, S.user_id, S.store_name, S.store_description, S.store_main_menu, S.store_business_number, S.store_phone, S.store_picture_url, S.store_operation_hours, S.store_closed_dates, S.store_review_count, S.store_rating, S.store_min_delivery_time, S.store_max_delivery_time, S.store_delivery_tip, S.store_delivery_address, S.store_address, S.store_latitude, S.store_longitude
+        FROM stores S
+                 JOIN orders O
+                      on S.store_id = O.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+    <!-- ************************************************************************************* -->
 </mapper>
