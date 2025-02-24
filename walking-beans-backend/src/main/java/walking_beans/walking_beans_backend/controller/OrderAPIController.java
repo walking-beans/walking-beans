@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
-
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
 
+    /**************************************** LEO ****************************************/
     /**
      * 주문 번호에 따른 주문 정보
      * @param orderId : order Id
@@ -60,9 +61,57 @@ public class OrderAPIController {
     @PutMapping("/orderStatus")
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
-
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
 
-    //
+    /****************************************  ****************************************/
+
+    /**
+     *  배달 현황 : 주문상태&매장정보 가져오기
+     * @param orderId
+     */
+    @GetMapping("/status/{orderId}")
+    public void selectOrdersByOrderId(@PathVariable long orderId) {
+        orderService.selectOrdersByOrderId(orderId);
+    }
+
+    /**
+     * 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/detail/{orderId}")
+    public Orders selectOrderDetailByOrderId(@PathVariable long orderId) {
+        return orderService.selectOrderDetailByOrderId(orderId);
+    }
+
+    /**
+     * 주문 내역 : 유저 주문 내역 리스트 가져오기
+     * @param userId
+     * @return
+     */
+    @GetMapping("/list/{userId}")
+    public List<Orders> selectOrderByUserId(@PathVariable("userId") long userId) {
+        return orderService.selectOrderByUserId(userId);
+    }
+
+
+    /**
+     * 주문하기 : 주문 등록하기 insertOrder
+     * @param orders
+     */
+    @RequestMapping(value = "", method = RequestMethod.POST, params = "action=insertOrder")  // action 파라미터로 구분
+    public void insertOrder(@RequestBody Orders orders) {
+        orderService.insertOrder(orders);
+    }
+
+    /**
+     * 주문하기 : 주문 등록하기 insertCart
+     * @param carts
+     */
+    @RequestMapping(value = "", method = RequestMethod.POST, params = "action=insertCart")  // action 파라미터로 구분
+    public void insertCart(@RequestBody Carts carts) {
+        orderService.insertCart(carts);
+    }
+
 }
