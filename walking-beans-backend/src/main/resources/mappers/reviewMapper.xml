@@ -3,4 +3,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.ReviewMapper">
 
+    <!-- 특정 매장의 리뷰 조회 -->
+    <select id="getReviewsByStore">
+        SELECT * FROM Reviews WHERE store_id = #{storeId}
+    </select>
+
+    <!-- 리뷰 추가 -->
+    <insert id="insertReview">
+        INSERT INTO Reviews (user_id, store_id, review_star_rating, review_content, review_picture_url)
+        SELECT #{userId}, #{storeId}, #{reviewStarRating}, #{reviewContent}, #{reviewPictureUrl}
+        FROM Stores
+        WHERE store_id = #{storeId}
+    </insert>
+
+    <!-- 리뷰 수정 -->
+    <update id="updateReview" >
+        UPDATE Reviews
+        SET review_star_rating = #{reviewStarRating},
+            review_content = #{reviewContent},
+            review_picture_url = #{reviewPictureUrl},
+            review_modified_date = CURRENT_TIMESTAMP
+        WHERE review_id = #{reviewId}
+    </update>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="deleteReview" >
+        DELETE FROM Reviews WHERE review_id = #{reviewId}
+    </delete>
+
 </mapper>

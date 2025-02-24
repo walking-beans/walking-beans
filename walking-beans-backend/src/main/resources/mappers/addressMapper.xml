@@ -9,6 +9,21 @@
         FROM Address
     </select>
 
+    <!-- 주소 추가 -->
+    <insert id="insertAddress">
+        INSERT INTO Address (address_id,user_id, address, address_name, address_latitude, address_longitude, address_role)
+        VALUES (#{addressId},#{userId}, #{address}, #{addressName}, #{addressLatitude}, #{addressLongitude}, #{addressRole})
+    </insert>
+
+    <!-- 특정 id로 주소 검색 -->
+    <select id="getAddressByUserId">
+        SELECT * FROM Address WHERE user_id = #{userId}
+    </select>
+
+    <!-- 대표 주소 지정 -->
+    <select id="getPrimaryAddressByUserId">
+        SELECT * FROM Address WHERE user_id = #{userId} AND address_role = 1 LIMIT 1
+    </select>
 
     <!-- ========= Leo ========= -->
     <!-- -->
