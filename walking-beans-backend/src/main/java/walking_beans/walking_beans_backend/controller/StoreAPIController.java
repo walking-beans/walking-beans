@@ -75,8 +75,8 @@ public class StoreAPIController {
      * @param orderId : order id
      * @return : ResponseEntity.ok(Stores)
      */
-    @GetMapping("/address")
-    public ResponseEntity<Stores> getStoreAddressByOrderId(@RequestParam("orderId") long orderId) {
+    @GetMapping("/address/orderId/{orderId}")
+    public ResponseEntity<Stores> getStoreAddressByOrderId(@PathVariable("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
     }
 }
