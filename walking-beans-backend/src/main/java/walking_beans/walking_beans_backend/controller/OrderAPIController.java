@@ -61,8 +61,10 @@ public class OrderAPIController {
     @PutMapping("/orderStatus")
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
+
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
+    
 
     /****************************************  ****************************************/
 
@@ -113,5 +115,4 @@ public class OrderAPIController {
     public void insertCart(@RequestBody Carts carts) {
         orderService.insertCart(carts);
     }
-
 }
