@@ -19,10 +19,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    /*
+
     @Autowired
     private JavaMailSender mailSender;
-     */
+
 
     /******************************로그인***************************/
     @Override
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
 
     /************************이메일 인증**************************/
-    /*
+
     private Map<String, String> verificationCodes = new HashMap<String, String>();
 
     //랜덤 난수 생성
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
         return saveCode.equals(vertification.getCode());
     }
-*/
+
 
 
     /***********************마이 페이지*****************************/
