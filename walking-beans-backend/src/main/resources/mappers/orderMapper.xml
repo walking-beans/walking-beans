@@ -90,23 +90,25 @@
         WHERE Users.user_id = #{userId}
     </select>
 
-    <!-- 주문하기 : 주문 등록하기 insertOrder && insertCart-->
-    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO Orders (order_total_price,
-                            order_requests,
-                            user_id,
-                            store_id,
-                            address_id)
-        VALUES (#{orderTotalPrice}, #{orderRequests}, #{userId}, #{storeId}, #{addressId})
+    <!-- 주문 데이터 저장 Orders-->
+    <insert id="insertOrder" parameterType="walking_beans.walking_beans_backend.model.dto.Orders" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO orders
+        (user_id, store_id, address_id, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
+        VALUES
+            (#{userId}, #{storeId}, #{addressId}, #{orderStatus}, #{orderRequests}, #{orderTotalPrice}, #{riderIdOnDuty}, NOW(), NOW());
     </insert>
-    <insert id="insertCart">
-        INSERT INTO Carts (order_id, -- 위에서 삽입된 주문의 ID
-                           menu_id,
-                           cart_quantity,
-                           option_id)
-        VALUES (#{orderId}, -- insertOrder에서 얻은 orderId
-                #{menuId},
-                #{cartQuantity},
-                #{optionId})
-    </insert>
+
+    <!-- 주문정보 가져오기 -->
+    <select id="findOrderById" resultType="walking_beans.walking_beans_backend.model.dto.Orders">
+        SELECT *
+        FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 주문자 정보 가져오기 -->
+    <select id="findOrdersByUserId" resultType="walking_beans.walking_beans_backend.model.dto.Orders">
+        SELECT *
+        FROM orders
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
