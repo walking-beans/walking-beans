@@ -11,4 +11,6 @@ public interface CartMapper {
 
     // 장바구니 메뉴 1개 삭제
     public Carts deleteToCart(long cartId);
+
+    void insertCart(Carts cart);
 }
