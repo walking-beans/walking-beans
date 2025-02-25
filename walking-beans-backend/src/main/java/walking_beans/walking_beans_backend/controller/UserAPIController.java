@@ -55,6 +55,4 @@ public class UserAPIController {
     public void updatePassword(@RequestParam("userEmail") String userEmail) {
         userService.updatePw(userEmail);
     }
-    // user
-
 }
