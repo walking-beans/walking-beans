@@ -3,20 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.UserMapper">
 
+
+    <!-- 로그인해서 세션에 넣을 데이터 가져오기-->
     <select id="loginUser">
-        SELECT user_role, user_name, user_email
+        SELECT user_role, user_name, user_email, user_id
         FROM Users
         WHERE user_email = #{userEmail}
           AND user_password = #{userPassword}
     </select>
 
     <!-- 비밀번호 변경하기-->
-    <select id="updatePw">
+    <update id="updatePw">
         Update Users
         SET
             user_password = #{userPassword}
         WHERE user_email = #{userEmail}
-    </select>
+    </update>
 
     <!-- 아이디 찾기-->
     <select id="findId">
@@ -25,4 +27,34 @@
         WHERE user_name = #{userName}
           AND user_phone = #{userPhone}
     </select>
+
+    <!-- 회원 정보 조회 -->
+    <select id="selectUserInfo">
+
+        SELECT user_id, user_name, user_email, user_phone, user_birthday, user_role,  user_picture_url
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+
+
+
+    <!-- 회원 정보 수정 -->
+
+    <update id="updateUserInfo" >
+        UPDATE users
+        SET phone_number = #{userPhone}
+        WHERE user_id = #{userId}
+    </update>
+
+
+
+
+    <!-- 회원탈퇴 -->
+
+    <delete id="deleteUserAccount" >
+        DELETE FROM users
+        WHERE user_id = #{userId};
+    </delete>
 </mapper>
+
