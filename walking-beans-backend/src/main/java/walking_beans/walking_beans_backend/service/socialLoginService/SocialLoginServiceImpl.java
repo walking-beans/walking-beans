@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
     /******************** 카카오 로그인 *******************************/
-
+ /*
     @Value("${kakao.client-id}")
     private String kakaoClientId;
 
@@ -78,7 +78,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
         return userData;
     }
-
+*/
 
 
 }
