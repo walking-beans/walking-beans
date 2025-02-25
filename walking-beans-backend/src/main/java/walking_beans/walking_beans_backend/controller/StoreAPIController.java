@@ -34,5 +34,6 @@ public class StoreAPIController {
     public ResponseEntity<Stores> getStoreAddressByOrderId(@RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
     }
+    // 테슻트
 }
 
