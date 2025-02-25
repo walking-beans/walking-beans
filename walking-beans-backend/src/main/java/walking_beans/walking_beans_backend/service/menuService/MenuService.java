@@ -11,7 +11,7 @@ public interface MenuService {
     List<Menu> findAllMenu();
 
     // 메뉴 검색
-    List<Menu> searchMenu();
+    List<Menu> searchMenu(String keyword);
 
     // ID 로 메뉴 찾기
     Menu findMenuById(long menuId);
