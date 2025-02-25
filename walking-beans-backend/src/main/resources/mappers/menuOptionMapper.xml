@@ -4,7 +4,7 @@
 <mapper namespace="walking_beans.walking_beans_backend.mapper.MenuOptionMapper">
 
     <!--메뉴옵션 전체 검색-->
-    <select id="">
+    <select id="findAllMenuOption">
         SELECT *
         FROM menuoption
     </select>
