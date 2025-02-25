@@ -10,5 +10,5 @@ public interface ChattingRoomMapper {
 
     List<ChattingRoom> getAllChattingRoomByReceiverRelation(long userId, int receiverRelation);
 
-    int updateLastMessageOfChattingRoom(long roomId, String roomLastMessage);
+    int updateLastMessageOfChattingRoom(long roomId, String lastMessage);
 }
