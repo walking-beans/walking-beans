@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import walking_beans.walking_beans_backend.model.vo.Vertification;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
@@ -17,8 +16,9 @@ public class UserAPIController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
-    /**************************** 로그인 ****************************/
     //로그인
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginData,
@@ -29,10 +29,6 @@ public class UserAPIController {
 
         if ("success".equals(loginResult.get("status"))) {
             session.setAttribute("user", loginResult.get("user"));
-
-            Object userInfo = session.getAttribute("user");
-            System.out.println("세션에 저장된 사용자 정보: " + userInfo);
-
             return ResponseEntity.ok(loginResult);
         }else{
             return ResponseEntity.status(401).body(loginResult);
@@ -54,14 +50,12 @@ public class UserAPIController {
         return userService.findId(userName, userPhone);
     }
 
-    // 비밀번호 변경 (이메일 입력)
+    // 비밀번호 변경
     @PutMapping("/find-pw")
-    public void updatePassword(@RequestBody Map<String, String> request) {
-        String userEmail = request.get("userEmail");
-        String userPassword = request.get("newPassword");
-        System.out.println(userEmail+"님의 비밀번호가 변경되었습니다: "+userPassword);
-        userService.updatePw(userEmail, userPassword);
+    public void updatePassword(@RequestParam("userEmail") String userEmail) {
+        userService.updatePw(userEmail);
     }
+
 
     // 세션에서 데이터 가져가기
     @GetMapping("/getSessionData")
