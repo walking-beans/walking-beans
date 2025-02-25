@@ -55,5 +55,46 @@ public class UserAPIController {
     public void updatePassword(@RequestParam("userEmail") String userEmail) {
         userService.updatePw(userEmail);
     }
-    //user 테스트
+
+
+    // 세션에서 데이터 가져가기
+    @GetMapping("/getSessionData")
+    public ResponseEntity<Map<String, Object>> getSessionData(HttpSession session) {
+        Object userInfo = session.getAttribute("user");
+
+        if (userInfo == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "사용자가 로그인하지 않았습니다."));
+        }else {
+            return ResponseEntity.ok(Map.of("user", userInfo));
+        }
+    }
+
+    /************************* 이메일 인증 ****************************/
+
+    @PostMapping("/sendCode")
+    public String sendCode(@RequestBody Vertification vr) {
+        String email = vr.getEmail();
+        System.out.println("Controller - email: "+email);
+
+        String code = userService.randomCode();
+        System.out.println("Controller - code: "+code);
+
+        userService.saveEmailCode(email, code);
+        System.out.println("Controller - Save method: " + email+ " -> " +code);
+        userService.sendEmail(email, code);
+        System.out.println("Controller - 이메일을 성공적으로 보냄: " +code);
+        return "이메일을 성공적으로 보냈습니다." + email;
+    }
+
+    @PostMapping("/checkCode")
+    public String checkCode(@RequestBody Vertification vr) {
+        boolean isValid = userService.verifyCodeWithVo(vr);
+        System.out.println("Controller - checkCode method isValid: "+isValid);
+
+        if (isValid) {
+            return "인증번호가 일치합니다.";
+        }else {
+            return "인증번호가 일치하지 않습니다.";
+        }
+    }
 }
