@@ -18,8 +18,8 @@ public class MenuOptionServiceImpl implements MenuOptionService {
     }
 
     @Override
-    public List<MenuOption> searchMenuOption() {
-        return menuOptionMapper.searchMenuOption();
+    public List<MenuOption> searchMenuOption(String keyword) {
+        return menuOptionMapper.searchMenuOption(keyword);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class MenuOptionServiceImpl implements MenuOptionService {
     }
 
     @Override
-    public MenuOption findMenuOptionByMenuId(long menuId) {
+    public List<MenuOption>  findMenuOptionByMenuId(long menuId) {
         return menuOptionMapper.findMenuOptionByMenuId(menuId);
     }
 
@@ -45,8 +45,8 @@ public class MenuOptionServiceImpl implements MenuOptionService {
     }
 
     @Override
-    public void deleteMenuOption(MenuOption menuOption) {
-        menuOptionMapper.deleteMenuOption(menuOption);
+    public void deleteMenuOption(long optionId) {
+        menuOptionMapper.deleteMenuOption(optionId);
 
     }
 

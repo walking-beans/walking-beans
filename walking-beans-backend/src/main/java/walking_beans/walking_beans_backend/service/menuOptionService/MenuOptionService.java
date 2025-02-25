@@ -10,13 +10,13 @@ public interface MenuOptionService {
     List<MenuOption> findAllMenuOption();
 
     // 메뉴옵션 검색
-    List<MenuOption> searchMenuOption();
+    List<MenuOption> searchMenuOption(String keyword);
 
     // ID 로 메뉴 찾기
     MenuOption findMenuOptionById(long optionId);
 
     // 메뉴에 속한 메뉴옵션 찾기
-    MenuOption findMenuOptionByMenuId(long menuId);
+    List<MenuOption>  findMenuOptionByMenuId(long menuId);
 
     // 메뉴옵션 수정하기
     void updateMenuOption(MenuOption menuOption);
@@ -25,7 +25,7 @@ public interface MenuOptionService {
     void addMenuOption(MenuOption menuOption);
 
     // 메뉴옵션 삭제하기
-    void deleteMenuOption(MenuOption menuOption);
+    void deleteMenuOption(long optionId);
 
 
 }

@@ -17,7 +17,7 @@ public interface MenuService {
     Menu findMenuById(long menuId);
 
     // 가게에 속한 메뉴 찾기
-    Menu findMenuByStoreId(long StoreId);
+    List<Menu> findMenuByStoreId(long StoreId);
 
     // 메뉴 수정하기
     void updateMenu(Menu menu);
@@ -26,5 +26,5 @@ public interface MenuService {
     void addMenu(Menu menu);
 
     // 메뉴 삭제하기
-    void deleteMenu(Menu menu);
+    void deleteMenu(long menuId);
 }
