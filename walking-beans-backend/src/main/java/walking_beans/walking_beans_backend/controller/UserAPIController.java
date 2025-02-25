@@ -76,6 +76,7 @@ public class UserAPIController {
     }
 
     /************************* 이메일 인증 ****************************/
+    /*
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
         String email = vr.getEmail();
@@ -102,4 +103,5 @@ public class UserAPIController {
             return "인증번호가 일치하지 않습니다.";
         }
     }
+     */
 }
