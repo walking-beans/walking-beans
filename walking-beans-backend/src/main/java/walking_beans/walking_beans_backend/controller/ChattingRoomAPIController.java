@@ -3,9 +3,12 @@ package walking_beans.walking_beans_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
+import walking_beans.walking_beans_backend.service.messageService.MessageService;
 import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
 
 import java.util.List;
@@ -27,7 +30,7 @@ public class ChattingRoomAPIController {
      * @param receiverRelation : receiver's role
      * @return ResponseEntity.ok(List<ChattingRoom>)
      */
-    @GetMapping
+    @MessageMapping("/lists")
     public ResponseEntity<List<ChattingRoom>> getChattingRooms(@RequestParam("userId") long userId,
                                                                @RequestParam("receiverRelation") int receiverRelation) {
         log.info("=== /api/chattingroom?userId=" + userId + "&receiverRelation=" + receiverRelation);
@@ -37,16 +40,20 @@ public class ChattingRoomAPIController {
 
     /**
      * Updating Last Message
-     * @param roomId : room Id
-     * @param roomLastMessage : Last Message
      * @return
      */
-    @PutMapping
-    public ResponseEntity<ChattingRoom> updateLastMessageOfChattingRoom(@RequestParam("roomId") long roomId,
-                                                                        @RequestParam("roomLastMessage") String roomLastMessage) {
-        log.info("=== /api/chattingroom?roomId=" + roomId + "&roomLastMessage=" + roomLastMessage);
-
-        return null;
+    @MessageMapping()// Put : 1개만 적용 && Post : 여러 개 적용시
+    public ResponseEntity<Integer> updateLastMessageOfChattingRoom(@RequestParam("roomId") long roomId,
+                                                                        @RequestParam("userId") long userId,
+                                                                        @RequestParam("messageRole") int messageRole,
+                                                                        @RequestParam("messageContent") String messageContent) {
+        log.info("=== /api/chattingroom?roomId=" + roomId + "&roomLastMessage=" + messageContent);
+        int messageInsert = messageService.insertMessageByRoomId(roomId, userId, messageRole, messageContent);
+        int chattingInsert = chattingRoomService.updateLastMessageOfChattingRoom(roomId, messageContent);
+        if (messageInsert != 0 && chattingInsert != 0) {
+            return ResponseEntity.ok(1);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
