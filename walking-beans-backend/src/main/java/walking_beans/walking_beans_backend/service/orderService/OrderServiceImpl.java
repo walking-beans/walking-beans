@@ -38,15 +38,6 @@ public class OrderServiceImpl implements OrderService {
 
     /****************************************  ****************************************/
 
-    @Override
-    public void selectOrdersByOrderId(long orderId) {
-        orderMapper.selectOrdersByOrderId(orderId);
-    }
-
-    @Override
-    public List<Orders> selectOrderByUserId(long userId) {
-        return orderMapper.selectOrderByUserId(userId);
-    }
 
     @Autowired
     private CartMapper cartMapper; // CartMapper 추가

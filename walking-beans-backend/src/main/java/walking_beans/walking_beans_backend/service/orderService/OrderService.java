@@ -19,12 +19,6 @@ public interface OrderService {
 
     /****************************************  ****************************************/
 
-    // 배달현황 : 주문상태 가져오기
-    void selectOrdersByOrderId(long orderId);
-
-    // 주문 내역 : 유저 주문 내역 리스트 가져오기
-    List<Orders> selectOrderByUserId(long userId);
-
     // 주문 데이터 저장
     void insertOrder(Orders order, List<Carts> cartList);
 
