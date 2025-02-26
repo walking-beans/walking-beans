@@ -17,6 +17,9 @@ import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
+import UserHeader from "../pages/layout/UserHeader";
+import ProtectedRoute from "./ProtectedRoute";
+import HeaderRoute from "./HeaderRoute";
 
 
 function AdminChattingroom() {
@@ -32,17 +35,32 @@ function PathRoute () {
 
     return(
         <BrowserRouter>
+            <HeaderRoute />
             <Routes>
                 {/**/}
                 <Route path="/" element={<UserHome/>}/>
 
                 {/* 2. rider  */}
-                <Route path="/rider" element={<RiderMain/>}/>
-                <Route path="/rider/ontheway" element={<RiderOntheway/>}/>
-                <Route path="/rider/result" element={<RiderResult/>}/>
-                <Route path="/rider/orderlist" element={<RiderOrderList/>}/>
-                <Route path="/rider/order" element={<RiderOrder/>}/>
-                <Route path="/rider/income" element={<RiderIncome/>}/>
+                <Route path="/rider" element={
+                    <RiderMain/>}
+                /*<ProtectedRoute allowedRoles={[2]}>
+                    </ProtectedRoute>*/
+                />
+                <Route path="/rider/ontheway" element={
+                    <RiderOntheway/>}
+                />
+                <Route path="/rider/result" element={
+                    <RiderResult/>}
+                />
+                <Route path="/rider/orderlist" element={
+                    <RiderOrderList/>}
+                />
+                <Route path="/rider/order" element={
+                    <RiderOrder/>}
+                />
+                <Route path="/rider/income" element={
+                    <RiderIncome/>}
+                />
 
                 {/* 3. owner  */}
                 <Route path="/owner" element={<StoreMain />}/>

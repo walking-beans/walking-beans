@@ -15,11 +15,11 @@ import java.sql.Timestamp;
 public class DeliveryIncome {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int incomeIndex;
+    private long incomeIndex;
 
-    private int riderId;
+    private long riderId;
 
-    private int orderId;
+    private long orderId;
 
     private Timestamp incomeDate;
 

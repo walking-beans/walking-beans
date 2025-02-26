@@ -15,9 +15,9 @@ import java.sql.Timestamp;
 public class Alarms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int alarmId;
+    private long alarmId;
 
-    private int userId;
+    private long userId;
 
     private String alarmContent;
 

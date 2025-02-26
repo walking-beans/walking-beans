@@ -19,24 +19,16 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderId; //PK
 
-    private int userId; //FK
-    private int storeId; //FK
-    private int addressId; //FK
+    private long userId; //FK
+    private long storeId; //FK
+    private long addressId; //FK
 
-    /*
-     * 주문 번호 생성 로직
-     * 포맷은 TYYMMDDXXXXXX 이다.
-     * T : Type (S : Subscribe, O : 구매, R : 판매)
-     * YY : 년도
-     * MM : 월
-     * DD : 일
-     * XXXXX : 5자리 영문자 + 숫자
-     */
     @Column(unique = true)
     private String orderNumber;
-    private String orderStatus;
+    private int orderStatus;
     private String orderRequests;
     private String orderTotalPrice;
     private Date orderCreateDate;
     private Date orderModifiedDate;
+    private String RiderIdOnDuty;
 }

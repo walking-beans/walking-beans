@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="walking_beans.walking_beans_backend.mapper.ChattingRoomMapper">
+    <!-- 유저아이디, 찾는 user role relation 에 따라 목록들 보여주기 -->
+    <select id="getAllChattingRoomByReceiverRelation">
+        SELECT CR.room_id, CR.order_id, CR.last_message
+        FROM chattingroom CR
+        JOIN chattingmember CM
+        ON CR.room_id = CM.room_id
+        WHERE CM.user_id = #{userId}
+        AND CM.receiver_relation  = #{receiverRelation}
+    </select>
+
+    <!-- 채팅창 메세지 입력 될 때 마지막 메세지 update -->
+    <update id="updateLastMessageOfChattingRoom">
+        UPDATE chattingroom
+        SET last_message = #{lastMessage}
+        WHERE room_id = #{roomId}
+    </update>
+</mapper>

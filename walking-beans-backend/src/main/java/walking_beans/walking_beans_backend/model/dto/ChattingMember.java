@@ -12,11 +12,11 @@ import lombok.*;
 @NoArgsConstructor
 public class ChattingMember {
 
-    private int roomId;
+    private long roomId;
 
-    private int userId;
+    private long userId;
 
-    private int roomReceiverId;
+    private long receiverId;
 
     private int receiverRelation;
 }
