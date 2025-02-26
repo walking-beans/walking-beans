@@ -5,11 +5,15 @@ const API_URL = "http://localhost:7070/api";
 const apiRiderService = {
 
     // get all rider income
-    getAllRiderIncomeList : function (riderId, callback, errCallback, todaysMonth, todaysYear) {
+    getAllRiderIncomeList : function (riderId, callback, errCallback, todaysMonth, todaysYear, setTotalPrice) {
         axios
             .get(`${API_URL}/deliveryIncome?riderId=${riderId}&todaysMonth=${todaysMonth}&todaysYear=${todaysYear}`)
             .then(
-                (res) => callback(res.data)
+                (res) => {
+                    callback(res.data);
+                    setTotalPrice(res.data.reduce((sum, income) => sum + income.incomeAmount, 0));
+                }
+
             )
             .catch(
                 (err) => {

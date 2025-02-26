@@ -16,11 +16,40 @@ const RiderOrderList = () => {
     const [todaysYear, setTodaysYear] = useState(`${new Date().getFullYear()}`);
 
     useEffect(() => {
-        apiRiderService.getAllRiderIncomeList(2, setIncomeList, setErrorMessage, todaysMonth, todaysYear);
-    }, [todaysMonth]);
+        apiRiderService.getAllRiderIncomeList(2,
+            setIncomeList,
+            setErrorMessage,
+            todaysMonth,
+            todaysYear,
+            setTotalPrice);
+    }, [todaysMonth, todaysYear]);
+
+    const MonthUp = () => {
+        if (todaysMonth === 12) {
+            setTodaysMoth(1);
+            setTodaysYear(parseInt(todaysYear) + 1);
+            return;
+        }
+        setTodaysMoth(parseInt(todaysMonth) + 1);
+    }
+
+    const MonthDown = () => {
+        if (todaysMonth === 1) {
+            setTodaysMoth(12);
+            setTodaysYear(parseInt(todaysYear) - 1);
+            return;
+        }
+        setTodaysMoth(parseInt(todaysMonth) - 1);
+    }
 
     return (
         <div>
+            <div>
+                <span onClick={MonthDown}>&lt;--</span><span> {todaysYear}년 {todaysMonth}월 </span><span onClick={MonthUp}>--&gt;</span>
+
+            </div>
+            <button>&lt;</button>
+            <button>&gt;</button>
             <h5>내 수입</h5>
             <div>{totalPrice}</div>
             <div>{todaysMonth}</div>
@@ -38,19 +67,17 @@ const RiderOrderList = () => {
                     {
                         (incomeList.length > 0 && incomeList) ? (
                             incomeList.map((income, index) => {
-
                                 return (
                                     <tr key={income.incomeIndex}>
                                         <td>{income.incomeIndex}</td>
                                         <td>{income.incomeDate}</td>
                                         <td>{(income.incomeAmount).toLocaleString()}원</td>
                                     </tr>
-
                                 )
                             })
                         ) : (
                             <tr>
-                                <td colSpan="3" style={{ textAlign: 'center' }}>데이터를 불러올 수 없습니다.</td>
+                                <td colSpan="3" style={{textAlign: 'center'}}>데이터를 불러올 수 없습니다.</td>
                             </tr>
                         )
                     }
