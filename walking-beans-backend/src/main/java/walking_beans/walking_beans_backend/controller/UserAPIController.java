@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
@@ -69,7 +70,9 @@ public class UserAPIController {
         }
     }
 
-    /************************* 이메일 인증 ****************************/
+    */
+/************************* 이메일 인증 ****************************//*
+
 
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
@@ -98,3 +101,4 @@ public class UserAPIController {
         }
     }
 }
+*/
