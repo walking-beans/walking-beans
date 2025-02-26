@@ -84,5 +84,18 @@
         WHERE menu_id =#{menuId}
     </delete>
 
+    <!-- 장바구니에 등록할 메뉴, 메뉴옵션 가져오기 -->
+    <select id="selectMenuInfoToCart">
+        SELECT mo.option_id,
+               mo.option_name,
+               mo.option_content,
+               mo.option_price,
+               m.menu_id,
+               m.menu_price,
+               m.menu_name
+        FROM menuoption mo
+        JOIN menu m ON mo.menu_id = m.menu_id
+        WHERE mo.option_id = #{optionId}
+    </select>
 
 </mapper>
