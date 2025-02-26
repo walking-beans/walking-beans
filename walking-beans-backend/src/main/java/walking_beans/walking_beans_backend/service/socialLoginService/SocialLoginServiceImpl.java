@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.service.socialLoginService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,9 @@ import java.util.Map;
 
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
-    /******************** 카카오 로그인 *******************************/
+
+/******************** 카카오 로그인 *******************************/
+
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
@@ -82,3 +85,4 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
 }
+

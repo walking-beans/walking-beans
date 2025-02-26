@@ -7,14 +7,14 @@
     <!-- 로그인해서 세션에 넣을 데이터 가져오기-->
     <select id="loginUser">
         SELECT user_role, user_name, user_email, user_id
-        FROM Users
+        FROM users
         WHERE user_email = #{userEmail}
           AND user_password = #{userPassword}
     </select>
 
     <!-- 비밀번호 변경하기-->
     <update id="updatePw">
-        Update Users
+        Update users
         SET
             user_password = #{userPassword}
         WHERE user_email = #{userEmail}
@@ -23,7 +23,7 @@
     <!-- 아이디 찾기-->
     <select id="findId">
         SELECT user_email
-        FROM Users
+        FROM users
         WHERE user_name = #{userName}
           AND user_phone = #{userPhone}
     </select>
