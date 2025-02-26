@@ -14,11 +14,11 @@ public class CartAPIController {
 
     // 메뉴 정보 저장
     @PostMapping
-    public void addToCart(
+    public void insertCart(
             @RequestBody Orders orders,
             @RequestBody Carts carts
     ) {
-        cartService.addToCart(orders, carts);
+        cartService.insertCart(orders, carts);
     }
 
     // 장바구니 내 메뉴 삭제

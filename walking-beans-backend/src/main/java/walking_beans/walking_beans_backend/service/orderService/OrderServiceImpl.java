@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
         // 주문에 대한 장바구니 데이터 삽입
         for (Carts cart : cartList) {
             cart.setOrderId(order.getOrderId());  // 장바구니에 주문 ID를 설정
-            cartMapper.insertCart(cart);  // 장바구니 삽입
+            cartMapper.insertCart(order, cart);  // 장바구니 삽입
         }
     }
 
