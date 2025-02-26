@@ -33,8 +33,8 @@
 
     <!-- ****************************************  **************************************** -->
 
-    <!-- 배달 현황: 주문상태&매장정보 가져오기 -->
-    <select id="selectOrdersByOrderId">
+    <!-- 배달 현황: 주문상태&매장정보 가져오기
+    <select id="getOrdersByOrderId">
         SELECT Orders.order_id,
                Stores.store_id,
                Stores.store_name,
@@ -48,7 +48,7 @@
         WHERE Orders.order_id = #{orderId}
     </select>
 
-    <!-- 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
+ 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
     <select id="selectOrderDetailByOrderId">
         SELECT Stores.store_id,
                Stores.store_name,
@@ -91,10 +91,23 @@
     </select>
 -->
 
-    <!-- 주문 데이터 저장 Orders -->
+    <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가)-->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO orders (user_id, store_id, order_status, order_total_price, order_create_date, order_modified_date)
+        VALUES (#{userId}, #{storeId}, 0, #{orderTotalPrice}, NOW(), NOW());
+    </insert>
+
+    <!-- 주문 최종 데이터 저장 (주문 상태는 1로 설정, 결제 완료 후 실행) 수정 예정 -->
+    <update id="updateOrderStatus">
+        UPDATE orders
+        SET order_status = 1, order_modified_date = NOW()
+        WHERE order_id = #{orderId};
+    </update>
+
+    <!-- 주문 최종 데이터 저장 (주문 상태는 2로 설정 address_id, order_requests, 등 추가 정보 저장) 수정 예정 -->
+    <insert id="insertOrderFinal">
         INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderStatus}, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
+        VALUES (#{userId}, #{storeId}, #{addressId}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
     </insert>
 
     <!-- 주문정보 가져오기 -->
@@ -110,8 +123,4 @@
         FROM orders
         WHERE user_id = #{userId}
     </select>
-
-
-
-
 </mapper>
