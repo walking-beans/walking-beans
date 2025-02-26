@@ -4,15 +4,16 @@
 <mapper namespace="walking_beans.walking_beans_backend.mapper.CartMapper">
 
     <!-- 장바구니 메뉴 등록 -->
-    <insert id="insertCart" parameterType="walking_beans.walking_beans_backend.model.dto.Carts">
+    <insert id="insertCart">
         INSERT INTO carts (option_id, order_id, store_id, user_id, cart_quantity, cart_create_date, cart_modified_date)
         VALUES (#{optionId}, #{orderId}, #{storeId}, #{userId}, #{cartQuantity}, NOW(), NOW());
     </insert>
-
 
     <!-- 장바구니 메뉴 1개 삭제 -->
     <delete id="deleteToCart">
         DELETE FROM Carts
         WHERE cart_id = #{cartId}
     </delete>
+
+
 </mapper>

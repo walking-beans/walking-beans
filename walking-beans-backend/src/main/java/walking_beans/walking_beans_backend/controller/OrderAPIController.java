@@ -69,14 +69,6 @@ public class OrderAPIController {
 
     /* ***************************************  *************************************** */
 
-    /**
-     *  배달 현황 : 주문상태&매장정보 가져오기
-     * @param orderId
-     */
-    @GetMapping("/status/{orderId}")
-    public void selectOrdersByOrderId(@PathVariable long orderId) {
-        orderService.selectOrdersByOrderId(orderId);
-    }
 
 
     // 주문 및 장바구니를 생성하는 API
