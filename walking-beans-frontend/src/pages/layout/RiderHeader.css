@@ -1,0 +1,29 @@
+.rider-header {
+    display: flex;
+    align-items: center;
+    background-color: #99D6F0;
+    padding: 10px 20px;
+    border-radius: 0 0 40px 40px;
+}
+
+.left-icons,
+.right-icons {
+    display: flex;
+    align-items: center;
+}
+
+.header-icon {
+    width: 30px; /* 아이콘 크기 */
+    height: 30px;
+    justify-content: center;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.logo-img {
+    width: 120px; /* 로고 크기 */
+    height: auto;
+}
+
+/* Rectangle 259 */
+
