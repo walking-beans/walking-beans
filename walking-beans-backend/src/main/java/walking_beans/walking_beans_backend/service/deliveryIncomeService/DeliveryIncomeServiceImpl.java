@@ -20,7 +20,6 @@ public class DeliveryIncomeServiceImpl implements DeliveryIncomeService {
         for (DeliveryIncome income : incomeList) {
             income.changeDateFormat();
         }
-
         return incomeList;
     }
 
