@@ -28,6 +28,20 @@
           AND user_phone = #{userPhone}
     </select>
 
+    <!--  소셜 회원가입 -->
+    <insert id="insertSocialUser">
+        INSERT INTO users (user_role,user_email,user_name, user_phone)
+        VALUES (#{userRole}, #{userEmail}, #{userName}, #{userPhone})
+    </insert>
+
+    <!-- 회원 가입 유무 확인 -->
+    <select id="checkEmailExists">
+        SELECT COUNT(*)
+        FROM testingusers2
+        WHERE user_email = #{userEmail}
+    </select>
+
+
     <!-- 회원 정보 조회 -->
     <select id="selectUserInfo">
 
@@ -56,5 +70,7 @@
         DELETE FROM users
         WHERE user_id = #{userId};
     </delete>
+
+
 </mapper>
 
