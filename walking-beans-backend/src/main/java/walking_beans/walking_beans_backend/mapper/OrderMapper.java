@@ -22,16 +22,6 @@ public interface OrderMapper {
 
     /****************************************  ****************************************/
 
-    // 배달현황 : 주문상태&매장정보 가져오기
-    void selectOrdersByOrderId(long orderId);
-
-    // 주문 상세 내역 : 상세 내역 가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
-    Orders selectOrderDetailByOrderId(long orderId);
-
-    // 주문 내역 : 유저 주문 내역 리스트 가져오기
-    List<Orders> selectOrderByUserId(long userId);
-
-
     // 주문 등록하기
     void insertOrder(Orders order);
 
