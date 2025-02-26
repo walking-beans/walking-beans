@@ -9,6 +9,7 @@
         VALUES (#{optionId}, #{orderId}, #{storeId}, #{userId}, #{cartQuantity}, NOW(), NOW());
     </insert>
 
+
     <!-- 장바구니 메뉴 1개 삭제 -->
     <delete id="deleteToCart">
         DELETE FROM Carts
