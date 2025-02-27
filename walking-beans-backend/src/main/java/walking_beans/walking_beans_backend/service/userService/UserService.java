@@ -14,7 +14,7 @@ public interface UserService {
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
-
+/*
     //랜덤 난수 생성
     String randomCode();
 
@@ -26,7 +26,7 @@ public interface UserService {
 
     //일치 여부 확인
     boolean verifyCodeWithVo(Vertification vertification);
-
+*/
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
 
