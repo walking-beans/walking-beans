@@ -37,5 +37,4 @@
         AND A.user_id = #{userId}
         AND A.address_role = 1
     </select>
-
 </mapper>
