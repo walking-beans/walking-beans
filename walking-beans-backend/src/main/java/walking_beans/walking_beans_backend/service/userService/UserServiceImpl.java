@@ -21,9 +21,10 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
 
+    /*
     @Autowired
     private JavaMailSender mailSender;
-
+    */
 
 
 /******************************로그인***************************/
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         } else {
             result.put("status", "fail");
-            result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+            //result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
         System.out.println("result: " + result);
         return result;
