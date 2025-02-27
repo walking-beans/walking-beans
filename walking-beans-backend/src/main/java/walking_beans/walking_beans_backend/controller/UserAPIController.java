@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
@@ -54,5 +55,29 @@ public class UserAPIController {
     @PutMapping("/find-pw")
     public void updatePassword(@RequestParam("userEmail") String userEmail) {
         userService.updatePw(userEmail);
+    }
+
+
+    // 회원정보 수정
+    @PutMapping("/infoCorrection")
+    public void updateInfoCorrection(@RequestParam("userId") long userId,
+                                     @RequestParam("userPhone") String userPhone) {
+        userService.updateUserInfo(userId,userPhone);
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/delete/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUserAccount(userId);
+    }
+
+    // 회원정보 조회
+    @GetMapping("/mypage/{userId}")
+    public ResponseEntity<Users> getUserInfo(@PathVariable Long userId) {
+        Users user = userService.selectUserInfo(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // user 가 없으면 404 반환
+        }
+        return ResponseEntity.ok(user); // user 가 있으면 200 ok
     }
 }
