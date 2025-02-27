@@ -1,0 +1,125 @@
+/* 전체 화면 스타일 */
+.login-container {
+    max-width: 420px;
+    width: 100%;
+    margin: auto;
+    background-color: #f8f1e4;
+    padding: 20px;
+}
+
+.login-container .login-box {
+    max-width: 420px;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    flex-grow: 1;
+}
+
+.login-container .login-header {
+    margin-bottom: 20px;
+}
+
+.login-container .login-logo {
+    width: 80px;
+    margin-bottom: 8px;
+}
+
+.login-container .login-header h3 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #5a3e2b;
+}
+
+.login-container .form-control {
+    border-radius: 8px;
+    border: 1px solid #d3b38e;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #fcf8f2;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.login-container .login-btn {
+    background-color: #9c774d;
+    color: white;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.login-container .login-btn:hover {
+    background-color: #7d5a3b;
+}
+
+.login-container .social-login {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.login-container .kakao-login, .naver-login {
+    display: flex;
+    align-items: center;
+    width: 48%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.login-container .kakao-login {
+    background-color: #ffeb00;
+    color: #3c1e1e;
+}
+
+.login-container .naver-login {
+    background-color: #03c75a;
+    color: white;
+}
+
+.login-container .kakao-login img,
+.login-container .naver-login img {
+    width: 20px;
+    margin-right: 8px;
+}
+
+.login-container .login-footer {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-container .login-footer a {
+    color: #7d5a3b;
+    text-decoration: none;
+}
+
+.login-container .login-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .login-container .login-box {
+        padding: 16px;
+    }
+
+    .login-container  .form-control {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .login-container  .login-btn {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
