@@ -9,4 +9,43 @@
         FROM Address
     </select>
 
+    <!-- 주소 추가 -->
+    <insert id="insertAddress">
+        INSERT INTO Address (address_id,user_id, address, address_name, address_latitude, address_longitude, address_role)
+        VALUES (#{addressId},#{userId}, #{address}, #{addressName}, #{addressLatitude}, #{addressLongitude}, #{addressRole})
+    </insert>
+
+    <!-- 특정 id로 주소 검색 -->
+    <select id="getAddressByUserId">
+        SELECT * FROM Address WHERE user_id = #{userId}
+    </select>
+
+    <!-- 대표 주소 지정 -->
+    <select id="getPrimaryAddressByUserId">
+        SELECT * FROM Address WHERE user_id = #{userId} AND address_role = 1 LIMIT 1
+    </select>
+
+    <!-- ========= Leo ========= -->
+
+    <!-- -->
+    <select id="getUserMainAddress">
+        SELECT A.address_id, A.user_id, A.address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
+        FROM address A
+        JOIN orders O
+        ON A.user_id = O.user_id
+        WHERE O.order_id = #{orderId}
+        AND A.user_id = #{userId}
+        AND A.address_role = 1
+    </select>
+
+    <!-- 주문자 배달주소 가져오기 --> <!-- 위에 거 같이 써도 될지 확인 필요 -->
+    <select id="getUserAddressByOrderId">
+        SELECT o.order_id, a.address_id, a.user_id, a.address, address_role
+        FROM address a
+                 JOIN orders o
+                      ON a.user_id = o.user_id
+        WHERE o.order_id = #{order_id}
+          AND a.user_id = #{userId}
+          AND a.address_role = 1
+    </select>
 </mapper>

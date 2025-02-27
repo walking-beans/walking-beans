@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.service.stores;
+package walking_beans.walking_beans_backend.service.storesService;
 
 import walking_beans.walking_beans_backend.model.dto.Stores;
 
@@ -10,7 +10,7 @@ public interface StoreService {
     List<Stores> findAllStores();
 
     //매장 검색
-    List<Stores> searchStores();
+    List<Stores> searchStore(String keyword);
 
     //특정 매장 불러오기, ID
     Stores findStoresById(long storeId);
@@ -19,11 +19,15 @@ public interface StoreService {
     Stores findStoresByuserId(long userId);
 
     // 신규매장 등록하기
-    void addStores(Stores stores);
+    void addStore(Stores stores);
 
     // 매장정보 수정하기
     void updateStores(Stores stores);
 
     // 매장정보 삭제하기
     void deleteStores(long storeId);
+
+    /**************************************** Leo ****************************************/
+    // 매장 주소 가져오기 by order id
+    Stores getStoreAddressByOrderId(long orderId);
 }

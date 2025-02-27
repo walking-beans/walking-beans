@@ -3,10 +3,7 @@ package walking_beans.walking_beans_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.DeliveryIncome;
 import walking_beans.walking_beans_backend.service.deliveryIncomeService.DeliveryIncomeServiceImpl;
 
@@ -26,9 +23,11 @@ public class DeliveryIncomeAPIController {
      * @return ResponseEntity.ok(List<DeliveryIncome>)
      */
     @GetMapping
-    public ResponseEntity<List<DeliveryIncome>> getDeliveryIncomeList(@RequestParam("riderId") long riderId) {
-        log.info("=== /api/deliveryIncome?riderId={} ===", riderId);
-        return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByRiderId(riderId));
+    public ResponseEntity<List<DeliveryIncome>> getDeliveryIncomeList(@RequestParam("riderId") long riderId,
+                                                                      @RequestParam("todaysMonth") int todaysMonth,
+                                                                      @RequestParam("todaysYear") int todaysYear) {
+        log.info("=== /api/deliveryIncome?riderId={}&todaysMonth={} ===", riderId, todaysMonth);
+        return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByRiderId(riderId, todaysMonth, todaysYear));
     }
 
     /**

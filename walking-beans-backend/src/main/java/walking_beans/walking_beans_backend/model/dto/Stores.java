@@ -1,10 +1,10 @@
 package walking_beans.walking_beans_backend.model.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
+//@Entity
+//@Table(name="Stores")
 @ToString
 @Getter
 @Setter

@@ -1,7 +1,7 @@
 import {useState} from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./UserHeader.css";
+import "../../css/User.css";
 
 import logoImg from "../../images/walkingBeans.svg";
 import userIcon from "../../images/user.svg";
@@ -9,7 +9,7 @@ import storeIcon from "../../images/store.svg";
 import riderIcon from "../../images/rider.svg";
 import alarmIcon from "../../images/alarm.svg";
 import searchIcon from "../../images/search.svg";
-import toggleIcon from "../../images/togle.svg";
+import toggleIcon from "../../images/toggle.svg";
 
 
 const UserHeader = ({ user }) => {
