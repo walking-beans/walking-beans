@@ -28,7 +28,7 @@ public class Orders {
     private int orderStatus;
     private String orderRequests;
     private String orderTotalPrice;
-    private Date orderCreateDate;
-    private Date orderModifiedDate;
+    private String orderCreateDate;
+    private String orderModifiedDate;
     private String RiderIdOnDuty;
 }

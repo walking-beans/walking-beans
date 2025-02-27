@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -71,10 +72,10 @@ public class OrderAPIController {
 
 
 
-    // 주문 및 장바구니를 생성하는 API
-    @PostMapping
+    // 주문 저장
+    @PostMapping("/create")
     public String insertOrder(@RequestBody OrderRequest request) {
-        orderService.insertOrder(request.getOrders(), request.getCartList());  // 주문과 장바구니 정보 처리
+        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getMenuOptionList());  // 주문과 장바구니 정보 처리
         return "주문 등록 완료";
     }
 

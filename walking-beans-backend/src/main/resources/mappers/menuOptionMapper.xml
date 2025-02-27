@@ -98,4 +98,10 @@
         WHERE mo.option_id = #{optionId}
     </select>
 
+    <!-- 사용자가 선택한 옵션 확인하기 -->
+    <select id="selectOptionByMenuIdAndName" resultType="Integer">
+        SELECT option_id FROM menuOption
+        WHERE menu_id = #{menuId} AND option_name = #{optionName}
+            LIMIT 1;
+    </select>
 </mapper>
