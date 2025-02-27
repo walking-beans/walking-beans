@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderRequest {
-    private Orders order;  // 주문 정보를 저장하는 필드
+    private Orders orders;  // 주문 정보를 저장하는 필드
     private List<Carts> cartList;
 }

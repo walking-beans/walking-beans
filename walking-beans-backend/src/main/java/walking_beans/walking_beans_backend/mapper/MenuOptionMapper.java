@@ -8,8 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface MenuOptionMapper {
-
-
     // 메뉴옵션 전체 검색
     List<MenuOption> findAllMenuOption();
 
@@ -31,6 +29,6 @@ public interface MenuOptionMapper {
     // 메뉴옵션 삭제하기
     void deleteMenuOption(long optionId);
 
-
-
+    // 장바구니에 등록할 메뉴, 메뉴옵션 가져오기
+    MenuOption selectMenuInfoToCart(long menuOption);
 }
