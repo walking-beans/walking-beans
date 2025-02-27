@@ -1,4 +1,4 @@
-/*
+
 package walking_beans.walking_beans_backend.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -48,4 +48,4 @@ public class MailConfig {
 
         return mailSender;
     }
-}*/
+}

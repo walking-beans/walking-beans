@@ -1,10 +1,11 @@
-/*
+
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.vo.Vertification;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
@@ -17,8 +18,6 @@ public class UserAPIController {
 
     @Autowired
     private UserServiceImpl userService;
-    @Autowired
-    private UserServiceImpl userServiceImpl;
 
     //로그인
     @PostMapping("/login")
@@ -53,8 +52,11 @@ public class UserAPIController {
 
     // 비밀번호 변경
     @PutMapping("/find-pw")
-    public void updatePassword(@RequestParam("userEmail") String userEmail) {
-        userService.updatePw(userEmail);
+    public void updatePassword(@RequestBody Map<String, String> request) {
+        String userEmail = request.get("userEmail");
+        String userPassword = request.get("newPassword");
+        System.out.println(userEmail+"님의 비밀번호가 변경되었습니다: "+userPassword);
+        userService.updatePw(userEmail, userPassword);
     }
 
 
@@ -70,10 +72,9 @@ public class UserAPIController {
         }
     }
 
-    */
-/************************* 이메일 인증 ****************************//*
 
-
+/************************* 이메일 인증 ****************************/
+/*
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
         String email = vr.getEmail();
@@ -100,5 +101,6 @@ public class UserAPIController {
             return "인증번호가 일치하지 않습니다.";
         }
     }
+    */
 }
-*/
+
