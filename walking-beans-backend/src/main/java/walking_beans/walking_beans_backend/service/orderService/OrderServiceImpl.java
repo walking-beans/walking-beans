@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
     /****************************************  ****************************************/
 
 
-    /*@Autowired
+    @Autowired
     private CartMapper cartMapper; // CartMapper 추가
 
 
@@ -82,5 +82,5 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> findOrdersByUserId(long userId) {
         return orderMapper.findOrdersByUserId(userId);
     }
-*/
+
 }

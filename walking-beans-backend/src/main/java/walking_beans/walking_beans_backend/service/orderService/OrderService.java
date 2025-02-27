@@ -32,5 +32,4 @@ public interface OrderService {
 
     // 주문자 정보 가져오기
     List<Orders> findOrdersByUserId(long userId);
-*/
 }
