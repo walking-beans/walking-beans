@@ -9,8 +9,8 @@ const HeaderRoute = () => {
     console.log("HeaderRoute users : " + user);
 
     if (!user) {
-        return <UserHeader />
-        // return <RiderHeader/>
+        // return <UserHeader />
+        return <RiderHeader/>
     } else {
         switch (user.userRole) {
             case 1, "1" :

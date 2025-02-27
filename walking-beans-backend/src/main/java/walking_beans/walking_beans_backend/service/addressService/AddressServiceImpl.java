@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
-    AddressMapper addressMapper;
+    private AddressMapper addressMapper;
 
     // 주소 조회
     @Override

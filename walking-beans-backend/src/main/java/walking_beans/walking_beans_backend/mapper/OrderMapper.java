@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
@@ -16,20 +17,22 @@ public interface OrderMapper {
 
     List<Orders> getOrdersByNullOfRiderIdInDuty();
 
-    Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId);
+    Integer updateRiderIdOnDutyOfOrders(@Param("riderId") long riderId, @Param("orderId") long orderId);
 
-    Integer updateOrderStatus(long orderId, int orderStatus);
+    Integer updateOrderStatus(@Param("orderId") long orderId, @Param("orderStatus") int orderStatus);
+
+    List<Orders> getOrdersByRiderIdOnDuty(@Param("riderIdOnDuty") long riderIdOnDuty);
 
     /****************************************  ****************************************/
 
-    // 주문 등록하기
+    /*// 주문 등록하기
     void insertOrder(Orders order);
 
     // 주문 정보 가져오기
     Orders findOrderById(long orderId);
 
     // 주문한 유저 정보 가져오기
-    List<Orders> findOrdersByUserId(long userId);
+    List<Orders> findOrdersByUserId(long userId);*/
 
 
 }

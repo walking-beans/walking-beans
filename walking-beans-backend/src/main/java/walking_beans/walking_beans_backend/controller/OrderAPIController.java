@@ -66,9 +66,14 @@ public class OrderAPIController {
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
-    
+
+    @GetMapping("/riderIdOnDuty")
+    public ResponseEntity<List<Orders>> getOrdersByRiderIdOnDuty(@RequestParam("riderIdOnDuty") long riderIdOnDuty) {
+        return ResponseEntity.ok(orderService.getOrdersByRiderIdOnDuty(riderIdOnDuty));
+    }
 
     /* ***************************************  *************************************** */
+
 
 
 
@@ -88,7 +93,7 @@ public class OrderAPIController {
     public List<Orders> findOrdersByUserId(@PathVariable long userId) {
         return orderService.findOrdersByUserId(userId);
     }
-
+*/
 
 
 }

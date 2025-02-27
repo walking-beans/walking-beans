@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.DeliveryIncomeMapper">
     <select id="getDeliveryIncomeByRiderId">
-        SELECT income_index, rider_id, order_id, income_amount, DATE_FORMAT(income_date, '%Y-%m-%d %W %h:%i %p') AS income_date
+        SELECT income_index, rider_id, order_id, income_amount, DATE_FORMAT(income_date, '%Y-%m-%d %W %p %h:%i') AS income_date
         FROM deliveryIncome
         WHERE rider_id = #{riderId}
         AND DATE_FORMAT(income_date, '%m') = #{todaysMonth}

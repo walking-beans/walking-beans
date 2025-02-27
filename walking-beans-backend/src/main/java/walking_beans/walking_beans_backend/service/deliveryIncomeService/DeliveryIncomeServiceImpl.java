@@ -16,7 +16,6 @@ public class DeliveryIncomeServiceImpl implements DeliveryIncomeService {
     @Override
     public List<DeliveryIncome> getDeliveryIncomeByRiderId(long riderId, int todaysMonth, int todaysYear) {
         List<DeliveryIncome> incomeList = deliveryIncomeMapper.getDeliveryIncomeByRiderId(riderId, todaysMonth, todaysYear);
-
         for (DeliveryIncome income : incomeList) {
             income.changeDateFormat();
         }
@@ -25,7 +24,9 @@ public class DeliveryIncomeServiceImpl implements DeliveryIncomeService {
 
     @Override
     public DeliveryIncome getDeliveryIncomeByOrderId(long riderId, long orderId) {
-        return deliveryIncomeMapper.getDeliveryIncomeByOrderId(riderId, orderId);
+        DeliveryIncome income = deliveryIncomeMapper.getDeliveryIncomeByOrderId(riderId, orderId);
+        income.changeDateFormat();
+        return income;
     }
 
 }

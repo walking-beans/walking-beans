@@ -37,10 +37,23 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
+    @Override
+    public List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty) {
+        List<Orders> orders = orderMapper.getOrdersByRiderIdOnDuty(riderIdOnDuty);
+        for (Orders order : orders) {
+            order.changeCreateDateFormat();
+            if (order.getOrderModifiedDate() != null) {
+                order.changeModifiedDateFormat();
+            }
+        }
+
+        return orders;
+    }
+
     /****************************************  ****************************************/
 
 
-    @Autowired
+    /*@Autowired
     private CartMapper cartMapper; // CartMapper 추가
 
 
@@ -69,5 +82,5 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> findOrdersByUserId(long userId) {
         return orderMapper.findOrdersByUserId(userId);
     }
-
+*/
 }
