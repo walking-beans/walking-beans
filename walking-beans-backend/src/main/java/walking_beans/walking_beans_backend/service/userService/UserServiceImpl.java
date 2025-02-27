@@ -21,9 +21,10 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
 
+    /*
     @Autowired
     private JavaMailSender mailSender;
-
+    */
 
 
 /******************************로그인***************************/
