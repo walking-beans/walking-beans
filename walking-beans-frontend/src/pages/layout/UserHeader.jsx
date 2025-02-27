@@ -1,7 +1,7 @@
 import {useState} from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./UserHeader.css";
+import "../../css/User.css";
 
 import logoImg from "../../images/walkingBeans.svg";
 import userIcon from "../../images/user.svg";
