@@ -31,7 +31,8 @@ public class UserAPIController {
             session.setAttribute("user", loginResult.get("user"));
             return ResponseEntity.ok(loginResult);
         }else{
-            return ResponseEntity.status(401).body(loginResult);
+            //return ResponseEntity.status(401).body(loginResult);
+            return ResponseEntity.ok(loginResult);
         }
     }
 
