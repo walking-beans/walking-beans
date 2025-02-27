@@ -55,7 +55,7 @@ function PathRoute () {
                 <Route path="/rider/orderlist" element={
                     <RiderOrderList/>}
                 />
-                <Route path="/rider/order" element={
+                <Route path="/rider/order/:orderId" element={
                     <RiderOrder/>}
                 />
                 <Route path="/rider/income" element={

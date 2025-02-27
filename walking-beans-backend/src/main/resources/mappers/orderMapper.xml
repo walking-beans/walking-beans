@@ -17,6 +17,23 @@
         WHERE rider_id_on_duty IS NULL
     </select>
 
+    <!-- rider_id_on_duty 로 주문 내역들 가져오기-->
+    <select id="getOrdersByRiderIdOnDuty">
+        SELECT order_id,
+               user_id,
+               store_id,
+               address_id,
+               order_number,
+               order_status,
+               order_requests,
+               order_total_price,
+               DATE_FORMAT(order_create_date, '%Y-%m-%d %W %p %h:%i') AS order_create_date,
+               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date
+        FROM orders
+        WHERE rider_id_on_duty = #{riderIdOnDuty}
+        ORDER BY order_id DESC
+    </select>
+
     <!-- 주문 상태 변경 -->
     <update id="updateOrderStatus">
         UPDATE orders
@@ -28,7 +45,7 @@
     <update id="updateRiderIdOnDutyOfOrders">
         UPDATE orders
         SET rider_id_on_duty = #{riderId}
-        WHERE order_id = #{orderId};
+        WHERE order_id = #{orderId}
     </update>
 
     <!-- ****************************************  **************************************** -->
@@ -91,36 +108,4 @@
     </select>
 -->
 
-    <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가)-->
-    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO orders (user_id, store_id, order_status, order_total_price, order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, 0, #{orderTotalPrice}, NOW(), NOW());
-    </insert>
-
-    <!-- 주문 최종 데이터 저장 (주문 상태는 1로 설정, 결제 완료 후 실행) 수정 예정 -->
-    <update id="updateOrderStatus">
-        UPDATE orders
-        SET order_status = 1, order_modified_date = NOW()
-        WHERE order_id = #{orderId};
-    </update>
-
-    <!-- 주문 최종 데이터 저장 (주문 상태는 2로 설정 address_id, order_requests, 등 추가 정보 저장) 수정 예정 -->
-    <insert id="insertOrderFinal">
-        INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
-    </insert>
-
-    <!-- 주문정보 가져오기 -->
-    <select id="findOrderById">
-        SELECT *
-        FROM orders
-        WHERE order_id = #{orderId}
-    </select>
-
-    <!-- 주문자 정보 가져오기 -->
-    <select id="findOrdersByUserId">
-        SELECT *
-        FROM orders
-        WHERE user_id = #{userId}
-    </select>
 </mapper>

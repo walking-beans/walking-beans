@@ -1,16 +1,13 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Address;
 import walking_beans.walking_beans_backend.model.dto.Users;
-import walking_beans.walking_beans_backend.service.addressService.AddressService;
+import walking_beans.walking_beans_backend.service.addressService.AddressServiceImpl;
 
 import java.util.List;
 
@@ -19,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/addresses")
 public class AddressAPIController {
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressService;
 
 
     @GetMapping
@@ -72,7 +69,7 @@ public class AddressAPIController {
     @GetMapping("/userAddress/orderId")
     public ResponseEntity<Address> getUserMainAddressByOrderId(@RequestParam("orderId") long orderId,
                                                       @RequestParam("userId") long userId){
-        log.info("=== /api/addresses/userMainByOrderId?orderId={}&userId={} ===", orderId, userId);
+        log.info("=== /api/addresses/userAddress?orderId={}&userId={} ===", orderId, userId);
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
     }
 

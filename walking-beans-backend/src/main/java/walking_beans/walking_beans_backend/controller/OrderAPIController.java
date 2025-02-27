@@ -65,13 +65,17 @@ public class OrderAPIController {
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
-    
+
+    @GetMapping("/riderIdOnDuty")
+    public ResponseEntity<List<Orders>> getOrdersByRiderIdOnDuty(@RequestParam("riderIdOnDuty") long riderIdOnDuty) {
+        return ResponseEntity.ok(orderService.getOrdersByRiderIdOnDuty(riderIdOnDuty));
+    }
 
     /* ***************************************  *************************************** */
 
 
 
-    // 주문 및 장바구니를 생성하는 API
+    /*// 주문 및 장바구니를 생성하는 API
     @PostMapping
     public String insertOrder(@RequestBody OrderRequest request) {
         orderService.insertOrder(request.getOrders(), request.getCartList());  // 주문과 장바구니 정보 처리
@@ -87,7 +91,7 @@ public class OrderAPIController {
     public List<Orders> findOrdersByUserId(@PathVariable long userId) {
         return orderService.findOrdersByUserId(userId);
     }
-
+*/
 
 
 }

@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
@@ -17,9 +18,11 @@ public interface OrderService {
 
     Integer updateOrderStatus(long orderId, int orderStatus);
 
+    List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty);
+
     /****************************************  ****************************************/
 
-    // 주문 데이터 저장
+    /*// 주문 데이터 저장
     void insertOrder(Orders order, List<Carts> cartList);
 
     // 주문정보 가져오기
@@ -27,5 +30,5 @@ public interface OrderService {
 
     // 주문자 정보 가져오기
     List<Orders> findOrdersByUserId(long userId);
-
+*/
 }
