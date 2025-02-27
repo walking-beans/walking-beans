@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.service.cartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,10 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartMapper cartMapper;
 
+
     @Override
-    public Carts addToCart(Orders orders, Carts carts) {
-        return cartMapper.addToCart(orders, carts);
+    public void insertCart(Carts carts) {
+        cartMapper.insertCart(carts);
     }
 
     @Override
@@ -22,3 +24,4 @@ public class CartServiceImpl implements CartService {
         return cartMapper.deleteToCart(cartId);
     }
 }
+*/

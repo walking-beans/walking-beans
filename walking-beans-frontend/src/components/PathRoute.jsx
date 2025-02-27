@@ -42,34 +42,24 @@ function PathRoute () {
 
                 {/* 2. rider  */}
                 <Route path="/rider" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderMain/>
-                    </ProtectedRoute>}
+                    <RiderMain/>}
+                /*<ProtectedRoute allowedRoles={[2]}>
+                    </ProtectedRoute>*/
                 />
                 <Route path="/rider/ontheway" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderOntheway/>
-                    </ProtectedRoute>}
+                    <RiderOntheway/>}
                 />
                 <Route path="/rider/result" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderResult/>
-                    </ProtectedRoute>}
+                    <RiderResult/>}
                 />
                 <Route path="/rider/orderlist" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderOrderList/>
-                    </ProtectedRoute>}
+                    <RiderOrderList/>}
                 />
                 <Route path="/rider/order" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderOrder/>
-                    </ProtectedRoute>}
+                    <RiderOrder/>}
                 />
                 <Route path="/rider/income" element={
-                    <ProtectedRoute allowedRoles={[2]}>
-                        <RiderIncome/>
-                    </ProtectedRoute>}
+                    <RiderIncome/>}
                 />
 
                 {/* 3. owner  */}

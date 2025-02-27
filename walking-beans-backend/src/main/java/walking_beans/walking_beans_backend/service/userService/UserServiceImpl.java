@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.service.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ public class UserServiceImpl implements UserService {
     private JavaMailSender mailSender;
 
 
-    /******************************로그인***************************/
+    */
+/******************************로그인***************************//*
+
     @Override
     public Map<String, Object> loginUser(String userEmail, String userPassword) {
         Map<String, Object> loggedInUser = userMapper.loginUser(userEmail, userPassword);
@@ -55,7 +58,9 @@ public class UserServiceImpl implements UserService {
 
 
 
-    /************************이메일 인증**************************/
+    */
+/************************이메일 인증**************************//*
+
 
     private Map<String, String> verificationCodes = new HashMap<String, String>();
 
@@ -101,7 +106,9 @@ public class UserServiceImpl implements UserService {
 
 
 
-    /***********************마이 페이지*****************************/
+    */
+/***********************마이 페이지*****************************//*
+
     @Override
     public Users selectUserInfo(Long userId) {
         return userMapper.selectUserInfo(userId); // DB에서 유저 정보 가져오기
@@ -116,4 +123,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUserAccount(Long userId) {
         userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
     }
-}
+}*/
