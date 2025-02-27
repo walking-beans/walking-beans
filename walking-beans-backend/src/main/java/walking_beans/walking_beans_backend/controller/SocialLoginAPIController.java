@@ -1,4 +1,4 @@
-/*
+
 package walking_beans.walking_beans_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 public class SocialLoginAPIController {
- /*
+
     @Value("${kakao.client-id}")
     private String kakaoClientId;
 
@@ -59,9 +59,8 @@ public class SocialLoginAPIController {
                 + "&birthday=" + birthday;
 
 
-        return null;
     }
-    */
+
 
 }
-*/
+

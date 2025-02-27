@@ -1,4 +1,4 @@
-/*
+
 package walking_beans.walking_beans_backend.service.socialLoginService;
 
 import org.springframework.beans.factory.annotation.Value;
