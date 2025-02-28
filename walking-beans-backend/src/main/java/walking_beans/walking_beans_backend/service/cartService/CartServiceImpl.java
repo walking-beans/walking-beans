@@ -11,8 +11,6 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartMapper cartMapper;
-    @Autowired
-    private OrderMapper orderMapper;
 
 
     @Override

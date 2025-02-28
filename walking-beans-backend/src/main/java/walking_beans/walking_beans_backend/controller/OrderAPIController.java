@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.controller;
 
+import jakarta.mail.Store;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
+import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
@@ -84,15 +86,27 @@ public class OrderAPIController {
         return "주문 등록 완료";
     }
 
+    // 주문 정보 가져오기
     @GetMapping("/{orderId}")
     public Orders findOrderById(@PathVariable long orderId) {
         return orderService.findOrderById(orderId);
     }
 
+    // 주문한 유저 정보 가져오기
     @GetMapping("/user/{userId}")
     public List<Orders> findOrdersByUserId(@PathVariable long userId) {
         return orderService.findOrdersByUserId(userId);
     }
 
+    // 주문한 가게 정보 가져오기
+    @GetMapping("/storeInfo/{orderId}")
+    public Stores findStoreByOrderId(@PathVariable("orderId") long orderId) {
+        return orderService.findStoreByOrderId(orderId);
+    }
 
+    // 주문내역 내 오더 정보 가져오기
+    @GetMapping("/info/{orderId}")
+    public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
+        return orderService.getOrderStatus(orderId);
+    }
 }

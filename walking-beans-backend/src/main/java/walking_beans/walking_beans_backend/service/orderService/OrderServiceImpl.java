@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import jakarta.mail.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.CartMapper;
@@ -7,6 +8,7 @@ import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.MenuOption;
 import walking_beans.walking_beans_backend.model.dto.Orders;
+import walking_beans.walking_beans_backend.model.dto.Stores;
 
 import java.util.List;
 
@@ -71,16 +73,30 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-
+    // 주문 정보 가져오기
     @Override
     public Orders findOrderById(long orderId) {
         return orderMapper.findOrderById(orderId);
     }
 
-
+    // 주문한 유저 정보 가져오기
     @Override
     public List<Orders> findOrdersByUserId(long userId) {
         return orderMapper.findOrdersByUserId(userId);
     }
+
+
+    // 주문한 가게 정보 가져오기
+    @Override
+    public Stores findStoreByOrderId(long orderId) {
+        return orderMapper.findStoreByOrderId(orderId);
+    }
+
+    // 주문내역 내 오더 정보 가져오기
+    @Override
+    public Orders getOrderStatus(long orderId) {
+        return orderMapper.getOrderStatus(orderId);
+    }
+
 
 }

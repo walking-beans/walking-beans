@@ -129,30 +129,28 @@
 
     <!-- 주문자 정보 가져오기 -->
     <select id="findOrdersByUserId">
-        SELECT *
+        SELECT user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price
         FROM orders
         WHERE user_id = #{userId}
     </select>
 
-    <!-- 주문내역, 주문상세 내역 : 주문한 가게 정보 가져오기 mapper 추가 필요
-    <select id="findStoreByOrderId" resultType="Store">
-        SELECT s.store_id,
-               s.store_name
+    <!-- 주문내역, 주문상세 내역 : 주문한 가게 정보 가져오기 -->
+    <select id="findStoreByOrderId">
+        SELECT s.store_id, s.store_name
         FROM stores s
-                 JOIN orders o ON o.store_id = s.store_id
-        WHERE o.order_id = #{orderId}
+        WHERE s.store_id = (SELECT o.store_id
+                            FROM orders o
+                            WHERE o.order_id = #{orderId})
     </select>
--->
 
-    <!-- 주문내역 : 오더 정보 가져오기 mapper 추가 필요
+    <!-- 주문내역 : 오더 정보 가져오기 -->
     <select id="getOrderStatus">
-        SELECT order_Create_Date,
+        SELECT order_create_Date,
                order_status,
                order_total_price,
                order_Requests
         FROM orders
         WHERE order_id = #{orderId}
     </select>
-    -->
 
 </mapper>

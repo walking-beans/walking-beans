@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.mapper;
 
+import jakarta.mail.Store;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,5 +35,9 @@ public interface OrderMapper {
     // 주문한 유저 정보 가져오기
     List<Orders> findOrdersByUserId(long userId);
 
+    // 주문한 가게 정보 가져오기
+    Stores findStoreByOrderId(@Param("orderId") long orderId);
 
+    // 주문내역 내 오더 정보 가져오기
+    Orders getOrderStatus(long orderId);
 }
