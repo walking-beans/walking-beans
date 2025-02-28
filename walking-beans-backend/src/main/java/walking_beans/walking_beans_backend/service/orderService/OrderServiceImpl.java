@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
+import walking_beans.walking_beans_backend.model.dto.MenuOption;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 
 import java.util.List;
@@ -36,6 +37,19 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
+    @Override
+    public List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty) {
+        List<Orders> orders = orderMapper.getOrdersByRiderIdOnDuty(riderIdOnDuty);
+        for (Orders order : orders) {
+            order.changeCreateDateFormat();
+            if (order.getOrderModifiedDate() != null) {
+                order.changeModifiedDateFormat();
+            }
+        }
+
+        return orders;
+    }
+
     /****************************************  ****************************************/
 
 
@@ -45,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
-    public void insertOrder(Orders order, List<Carts> cartList) {
+    public void insertOrder(Orders order, List<Carts> cartList, List<MenuOption> menuOptionList) {
         // 주문 데이터 삽입
         orderMapper.insertOrder(order);
 

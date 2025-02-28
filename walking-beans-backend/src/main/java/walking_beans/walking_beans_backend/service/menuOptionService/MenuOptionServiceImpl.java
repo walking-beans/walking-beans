@@ -55,5 +55,8 @@ public class MenuOptionServiceImpl implements MenuOptionService {
         return menuOptionMapper.selectMenuInfoToCart(optionId);
     }
 
-
+    @Override
+    public Integer selectOptionByMenuIdAndName(long menuId, String optionName) {
+        return menuOptionMapper.selectOptionByMenuIdAndName(menuId, optionName);
+    }
 }

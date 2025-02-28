@@ -1,11 +1,15 @@
-/*
+
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import walking_beans.walking_beans_backend.model.dto.Users;
+
 import walking_beans.walking_beans_backend.model.vo.Vertification;
+
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
@@ -18,8 +22,6 @@ public class UserAPIController {
 
     @Autowired
     private UserServiceImpl userService;
-    @Autowired
-    private UserServiceImpl userServiceImpl;
 
     //로그인
     @PostMapping("/login")
@@ -33,7 +35,8 @@ public class UserAPIController {
             session.setAttribute("user", loginResult.get("user"));
             return ResponseEntity.ok(loginResult);
         }else{
-            return ResponseEntity.status(401).body(loginResult);
+            //return ResponseEntity.status(401).body(loginResult);
+            return ResponseEntity.ok(loginResult);
         }
     }
 
@@ -61,6 +64,31 @@ public class UserAPIController {
         userService.updatePw(userEmail, userPassword);
     }
 
+
+
+    // 회원정보 수정
+    @PutMapping("/infoCorrection")
+    public void updateInfoCorrection(@RequestParam("userId") long userId,
+                                     @RequestParam("userPhone") String userPhone) {
+        userService.updateUserInfo(userId,userPhone);
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/delete/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUserAccount(userId);
+    }
+
+    // 회원정보 조회
+    @GetMapping("/mypage/{userId}")
+    public ResponseEntity<Users> getUserInfo(@PathVariable Long userId) {
+        Users user = userService.selectUserInfo(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // user 가 없으면 404 반환
+        }
+        return ResponseEntity.ok(user); // user 가 있으면 200 ok
+    }
+
     // 세션에서 데이터 가져가기
     @GetMapping("/getSessionData")
     public ResponseEntity<Map<String, Object>> getSessionData(HttpSession session) {
@@ -73,10 +101,9 @@ public class UserAPIController {
         }
     }
 
-    */
-/************************* 이메일 인증 ****************************//*
 
-
+/************************* 이메일 인증 ****************************/
+/*
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
         String email = vr.getEmail();
@@ -103,5 +130,7 @@ public class UserAPIController {
             return "인증번호가 일치하지 않습니다.";
         }
     }
+    */
+
 }
-*/
+

@@ -20,6 +20,7 @@ import RiderIncome from "../pages/rider/RiderIncome";
 import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
+import AdminLogin from "../pages/admin/AdminLogin";
 
 
 function AdminChattingroom() {
@@ -55,7 +56,7 @@ function PathRoute () {
                 <Route path="/rider/orderlist" element={
                     <RiderOrderList/>}
                 />
-                <Route path="/rider/order" element={
+                <Route path="/rider/order/:orderId" element={
                     <RiderOrder/>}
                 />
                 <Route path="/rider/income" element={
@@ -78,6 +79,7 @@ function PathRoute () {
                 {/* 4. admin  */}
                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                <Route path="/login" element={<AdminLogin />}/>
             </Routes>
         </BrowserRouter>
     )

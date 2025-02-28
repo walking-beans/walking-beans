@@ -27,7 +27,7 @@ const RiderHeader = () => {
         apiRiderService.getRiderStarRating(2, (newStar) => {
             setStar(newStar);
             starRatingPath.getStarPath(newStar, setStarPath);
-        }, setErrMessage);
+        });
     }, []);
 
     console.log("star 정보 : ", star)

@@ -1,4 +1,4 @@
-/*
+
 package walking_beans.walking_beans_backend.service.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
 
+    /*
     @Autowired
     private JavaMailSender mailSender;
-
-
     */
-/******************************로그인***************************//*
+
+
+/******************************로그인***************************/
 
     @Override
     public Map<String, Object> loginUser(String userEmail, String userPassword) {
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         } else {
             result.put("status", "fail");
-            result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+            //result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
         System.out.println("result: " + result);
         return result;
@@ -58,10 +59,9 @@ public class UserServiceImpl implements UserService {
 
 
 
-    */
-/************************이메일 인증**************************//*
 
-
+/************************이메일 인증**************************/
+/*
     private Map<String, String> verificationCodes = new HashMap<String, String>();
 
     //랜덤 난수 생성
@@ -103,11 +103,10 @@ public class UserServiceImpl implements UserService {
 
         return saveCode.equals(vertification.getCode());
     }
+*/
 
 
-
-    */
-/***********************마이 페이지*****************************//*
+/***********************마이 페이지*****************************/
 
     @Override
     public Users selectUserInfo(Long userId) {
@@ -123,4 +122,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUserAccount(Long userId) {
         userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
     }
-}*/
+}

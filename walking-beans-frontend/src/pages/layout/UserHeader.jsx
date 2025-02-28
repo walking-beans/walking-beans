@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/User.css";
@@ -10,11 +10,17 @@ import riderIcon from "../../images/rider.svg";
 import alarmIcon from "../../images/alarm.svg";
 import searchIcon from "../../images/search.svg";
 import toggleIcon from "../../images/toggle.svg";
+import apiUserService from "../../service/apiUserService";
 
 
-const UserHeader = ({ user }) => {
+const UserHeader = () => {
     const [isToggleOpen, setIsToggleOpen] = useState(false); // 상태 추가
     const navigate = useNavigate();
+    const [user, setUser] = useState("");
+
+    useEffect(() => {
+        apiUserService.sessionData(setUser);
+    }, []);
 
     // role에 따라 왼쪽 아이콘 변경
     const getRoleIcon = () => {

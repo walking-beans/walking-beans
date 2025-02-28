@@ -15,5 +15,13 @@
         WHERE cart_id = #{cartId}
     </delete>
 
-
+    <!-- 선택한 상품 개수 가져오기 mapper 추가 필요
+    <select id="getCartQuantityByOrderId">
+        SELECT o.order_id,
+               c.cart_quantity
+        FROM carts c
+                 JOIN orders o ON o.order_id = c.order_id
+        WHERE o.order_id = #{orderId}
+    </select>
+-->
 </mapper>
