@@ -10,7 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Address;
 import walking_beans.walking_beans_backend.model.dto.Users;
-import walking_beans.walking_beans_backend.service.addressService.AddressService;
+import walking_beans.walking_beans_backend.service.addressService.AddressServiceImpl;
 
 import java.util.List;
 
@@ -18,8 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressAPIController {
+
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressService;
 
 
     @GetMapping

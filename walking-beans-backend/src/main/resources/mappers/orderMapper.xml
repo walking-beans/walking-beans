@@ -90,37 +90,51 @@
         WHERE Users.user_id = #{userId}
     </select>
 -->
-
-    <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가)-->
+<!--
+    <!- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가)->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO orders (user_id, store_id, order_status, order_total_price, order_create_date, order_modified_date)
         VALUES (#{userId}, #{storeId}, 0, #{orderTotalPrice}, NOW(), NOW());
     </insert>
 
-    <!-- 주문 최종 데이터 저장 (주문 상태는 1로 설정, 결제 완료 후 실행) 수정 예정 -->
+    <!- 주문 최종 데이터 저장 (주문 상태는 1로 설정, 결제 완료 후 실행) 수정 예정 ->
     <update id="updateOrderStatus">
         UPDATE orders
         SET order_status = 1, order_modified_date = NOW()
         WHERE order_id = #{orderId};
     </update>
 
-    <!-- 주문 최종 데이터 저장 (주문 상태는 2로 설정 address_id, order_requests, 등 추가 정보 저장) 수정 예정 -->
+    <!- 주문 최종 데이터 저장 (주문 상태는 2로 설정 address_id, order_requests, 등 추가 정보 저장) 수정 예정 ->
     <insert id="insertOrderFinal">
         INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
         VALUES (#{userId}, #{storeId}, #{addressId}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
     </insert>
 
-    <!-- 주문정보 가져오기 -->
+    <!- 주문정보 가져오기 ->
     <select id="findOrderById">
         SELECT *
         FROM orders
         WHERE order_id = #{orderId}
     </select>
 
-    <!-- 주문자 정보 가져오기 -->
+    <!- 주문자 정보 가져오기->
     <select id="findOrdersByUserId">
         SELECT *
         FROM orders
         WHERE user_id = #{userId}
     </select>
+-->
+    <!-- 주문내역 join 문-->
+    <select id="">
+        select o.order_number, m.menu_id, mo.option_id, o.order_id, o.order_create_date, o.rider_id_on_duty, o.order_requests
+        from menuoption mo
+                 left join carts c
+                           on c.option_id = mo.option_id
+                 left join menu m
+                           on m.menu_id = mo.menu_id
+                 left join orders o
+                           on c.order_id = o.order_id;
+                where o.order_number = #{orderNumber}
+    </select>
+
 </mapper>

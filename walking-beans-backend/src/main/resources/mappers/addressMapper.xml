@@ -37,8 +37,8 @@
         AND A.user_id = #{userId}
         AND A.address_role = 1
     </select>
-
-    <!-- 주문자 배달주소 가져오기 --> <!-- 위에 거 같이 써도 될지 확인 필요 -->
+<!--
+    // 주문자 배달주소 가져오기 --> <!-- 위에 거 같이 써도 될지 확인 필요
     <select id="getUserAddressByOrderId">
         SELECT o.order_id, a.address_id, a.user_id, a.address, address_role
         FROM address a
@@ -48,4 +48,5 @@
           AND a.user_id = #{userId}
           AND a.address_role = 1
     </select>
+    -->
 </mapper>
