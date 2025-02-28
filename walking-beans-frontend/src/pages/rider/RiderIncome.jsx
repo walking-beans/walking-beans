@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import apiRiderService from "../../components/rider/apiRiderService";
+import RiderHeader from "../layout/RiderHeader";
 
 const RiderIncome = () => {
 //테스트
@@ -41,6 +42,7 @@ const RiderIncome = () => {
 
     return (
         <div>
+            <RiderHeader />
             <div>
                 <span onClick={MonthDown}>&lt;  </span><span> {todaysYear}년 {todaysMonth}월 </span><span onClick={MonthUp}>  &gt;</span>
 

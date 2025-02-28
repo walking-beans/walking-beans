@@ -9,6 +9,7 @@ import incomeList from "../../images/rider/incomeListIcon.svg";
 import income from "../../images/rider/incomeIcon.svg";
 import chatting from "../../images/rider/chattingIcon.svg";
 import customerService from "../../images/rider/customerServiceIcon.svg";
+import riderLogo from "../../images/rider/riderLogo.svg";
 
 
 import apiRiderService from "../../components/rider/apiRiderService";
@@ -37,13 +38,19 @@ const RiderHeader = () => {
         <header>
             <nav className="navbar bg-body-tertiary">
                 <div className="rider-header container-fluid">
-                    <div></div>
-                    <Link className="navbar-brand" to="/rider"><img src={riderLogoImg}  className="logo-img"/></Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
-                            aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
+                    <div>
+                        <Link to="/"><img src={riderLogo} className="logo-img"/></Link>
+                    </div>
+                    <div>
+                        <Link className="navbar-brand" to="/rider"><img src={riderLogoImg}  className="logo-img"/></Link>
+                    </div>
+                    <div>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+                                aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
                     <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasNavbar"
                          aria-labelledby="offcanvasNavbarLabel">
                         <div className="offcanvas-header">

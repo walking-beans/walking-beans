@@ -1,12 +1,25 @@
-import KakaoMap from "../../components/rider/KakaoMap";
+import KakaoMap from "../../components/rider/riderMain/KakaoMap";
+import RiderHeader from "../layout/RiderHeader";
+import {useState} from "react";
+import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
 
 const RiderMain = () => {
 
+    const [getReady, setGetReady] = useState(false);
+
+
+    const status = {
+        show : KakaoMap,
+        hide : BeforeKakaoMapStart
+    }
+
+    const KakaomapStatus = status[getReady ? "show" : "hide"];
 
     return (
         <div>
-            <h1>Rider Main</h1>
-            <KakaoMap />
+            {/* Rider Header */}
+            <RiderHeader />
+            <KakaomapStatus setGetReady={setGetReady}/>
         </div>
     )
 }
