@@ -31,7 +31,6 @@ const RiderHeader = () => {
         });
     }, []);
 
-    console.log("star 정보 : ", star)
     {/* sessiong 정보 삭제 후 로그아웃 */}
 
     return (
