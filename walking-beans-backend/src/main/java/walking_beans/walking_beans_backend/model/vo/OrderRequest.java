@@ -4,6 +4,7 @@ import lombok.*;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.MenuOption;
 import walking_beans.walking_beans_backend.model.dto.Orders;
+import walking_beans.walking_beans_backend.model.dto.Payments;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ import java.util.List;
 public class OrderRequest {
     private Orders orders;
     private List<Carts> cartList;
-    private List<MenuOption> menuOptionList;
+    private Payments payments;
 }

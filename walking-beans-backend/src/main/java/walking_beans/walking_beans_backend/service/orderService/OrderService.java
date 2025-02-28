@@ -23,7 +23,7 @@ public interface OrderService {
 
 
     // 주문 데이터 저장
-    void insertOrder(Orders order, List<Carts> cartList, List<MenuOption> menuOptionList);
+    void insertOrder(Orders order, List<Carts> cartList, Payments payments);
 
     // 주문정보 가져오기
     Orders findOrderById(long orderId);

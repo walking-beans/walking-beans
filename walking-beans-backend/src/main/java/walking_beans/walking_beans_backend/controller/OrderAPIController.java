@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
+import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
@@ -82,9 +84,14 @@ public class OrderAPIController {
     // 주문 저장
     @PostMapping("/create")
     public String insertOrder(@RequestBody OrderRequest request) {
-        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getMenuOptionList());  // 주문과 장바구니 정보 처리
-        return "주문 등록 완료";
+        if (request.getPayments() == null) {
+            return "결제 정보가 누락되었습니다.";
+        }
+
+        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
+        return "주문 등록 및 결제 정보 저장 완료";
     }
+
 
     // 주문 정보 가져오기
     @GetMapping("/{orderId}")

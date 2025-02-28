@@ -9,4 +9,7 @@ public interface CartService {
     // 장바구니 메뉴 1개 삭제
     void deleteToCart(long cartId);
 
+    // 장바구니 상품 개수 가져오기
+    Long getCartQuantityByOrderId (long orderId);
+
 }
