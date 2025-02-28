@@ -51,6 +51,11 @@ public class MenuAPIController {
     @Autowired
     private MenuOptionService menuOptionService;
 
+    /**
+     * 사용자가 선택한 옵션 확인하기 옵션명이 유니크한 경우
+     * @param optionId
+     * @return
+     */
     @GetMapping("/search/option/{optionId}")
     public MenuOption selectMenuInfoToCart(@PathVariable long optionId) {
         return menuOptionService.selectMenuInfoToCart(optionId);
