@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.StoreMapper;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.storesService.StoreService;
 
 import java.util.List;
@@ -65,5 +66,10 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Stores getStoreAddressByOrderId(long orderId) {
         return storeMapper.getStoreAddressByOrderId(orderId);
+    }
+
+    @Override
+    public List<RiderMainStoreInfo> getStoreInfoInRiderMain() {
+        return storeMapper.getStoreInfoInRiderMain();
     }
 }

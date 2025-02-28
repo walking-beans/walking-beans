@@ -36,7 +36,6 @@ function PathRoute () {
 
     return(
         <BrowserRouter>
-            <HeaderRoute />
             <Routes>
                 {/**/}
                 <Route path="/" element={<UserHome/>}/>
