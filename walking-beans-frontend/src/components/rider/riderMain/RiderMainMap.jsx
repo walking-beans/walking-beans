@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../apiRiderService";
+import {useNavigate} from "react-router-dom";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 카카오 API 키
 
-// 가게 데이터 (JSON 형식 => 추후 DB 저장된 가게로 변경)
-// localhost:8080/api/가게목록 불러오기
 
 // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
 const getDistance = (lat1, lng1, lat2, lng2) => {
@@ -31,10 +30,12 @@ const RiderMainMap = () => {
     const [filteredStores, setFilteredStores] = useState([]);
     const [stores, setStores] = useState([]);
 
+    // apiRiderService.getStoreInfoInRiderMain(setStores) 로 현재 주문 내역들 가져오기
     useEffect(() => {
         apiRiderService.getStoreInfoInRiderMain(setStores);
     }, []);
 
+    // userLocation 에 현재 위치 가져오기
     useEffect(() => {
         // 현재 위치 가져오기
         if (navigator.geolocation) {
@@ -55,6 +56,7 @@ const RiderMainMap = () => {
         }
     }, []);
 
+    // stores 에 저장되어 있는 내역들 현재 위치에 km 안으로 filter 하기
     useEffect(() => {
         if (!userLocation || stores.length === 0) return;
 
@@ -65,7 +67,7 @@ const RiderMainMap = () => {
         setFilteredStores(filtered);
     }, [userLocation, stores]);
 
-
+    // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
         if (!userLocation) return;
 
@@ -90,7 +92,6 @@ const RiderMainMap = () => {
                     new window.kakao.maps.Size(40, 42),
                     { offset: new window.kakao.maps.Point(20, 42) }
                 );
-
                 // 현재 위치 마커 생성 (추후 프로젝트에 맞게 수정바람)
                 new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -112,13 +113,27 @@ const RiderMainMap = () => {
                         image : storeMarkerImage,
                     });
 
+
                     // 마커 클릭 시 가게 이름 표시 (추후 프로젝트에 맞게 수정바람)
                     const infowindow = new window.kakao.maps.InfoWindow({
-                        content: `<div style="padding:5px; font-size:14px;">${store.storeName}</div>`,
+                        removable : true,
+                        content:
+                            `<div style="padding:5px; font-size:14px;">
+                                <p>${store.storeName}</p>
+                                <p>${store.incomeAmount}</p>
+                                <p>${store.orderCreateDate}</p>   
+                                <p>${getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1)}km</p>
+                                <button class="btn btn-dark">주문 받기</button> 
+                            </div>`,
                     });
 
                     window.kakao.maps.event.addListener(marker, "click", () => {
                         infowindow.open(map, marker);
+
+                    });
+
+                    window.kakao.maps.event.addListener(marker, "dbclick", () => {
+                        infowindow.close(map, marker);
                     });
                 });
             });
