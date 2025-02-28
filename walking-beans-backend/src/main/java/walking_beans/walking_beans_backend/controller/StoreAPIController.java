@@ -83,6 +83,7 @@ public class StoreAPIController {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
     }
 
+
     @GetMapping("/riderMain")
     public ResponseEntity<List<RiderMainStoreInfo>> getStoreInfoInRiderMain() {
         log.info("=== /api/store/riderMain ===");
