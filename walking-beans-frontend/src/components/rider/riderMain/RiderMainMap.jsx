@@ -26,7 +26,7 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
     return R * c; // 거리 (km)
 };
 
-const KakaoMap = () => {
+const RiderMainMap = () => {
     const [userLocation, setUserLocation] = useState(null);
     const [filteredStores, setFilteredStores] = useState([]);
     const [stores, setStores] = useState([]);
@@ -131,7 +131,6 @@ const KakaoMap = () => {
 
     return (
         <div>
-            <h2>내 위치 주변 가게 (반경 10km)</h2>
             <div id="map" style={{ width: "100%", height: "500px" }}></div>
         </div>
     );
@@ -139,7 +138,7 @@ const KakaoMap = () => {
 
 /*
 
-const KakaoMap = () => {
+const RiderMainMap = () => {
     const [userLocation, setUserLocation] = useState(null);
     const [filteredStores, setFilteredStores] = useState([]);
     const [untakenOrders, setUntakenOrders] = useState([]);
@@ -249,4 +248,4 @@ const KakaoMap = () => {
     );
 };*/
 
-export default KakaoMap;
+export default RiderMainMap;

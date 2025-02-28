@@ -1,4 +1,4 @@
-import KakaoMap from "../../components/rider/riderMain/KakaoMap";
+import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
 import RiderHeader from "../layout/RiderHeader";
 import {useState} from "react";
 import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
@@ -9,11 +9,11 @@ const RiderMain = () => {
 
 
     const status = {
-        show : KakaoMap,
-        hide : BeforeKakaoMapStart
+        after : RiderMainMap,
+        before : BeforeKakaoMapStart
     }
 
-    const KakaomapStatus = status[getReady ? "show" : "hide"];
+    const KakaomapStatus = status[getReady ? "after" : "before"];
 
     return (
         <div>
