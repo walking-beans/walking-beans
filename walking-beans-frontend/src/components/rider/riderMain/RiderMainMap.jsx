@@ -3,10 +3,11 @@ import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../apiRiderService";
 import {useNavigate} from "react-router-dom";
+import beforeKakaoMapStart from "./BeforeKakaoMapStart";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
-const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 카카오 API 키
+const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d"; // 본인 카카오 API 키
 
 
 // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
@@ -84,7 +85,8 @@ const RiderMainMap = () => {
                     center: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     level: 5,
                 };
-                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+
+                let map = new window.kakao.maps.Map(mapContainer, mapOption);
 
                 // 현재 위치 마커 아이콘 설정 (추후 프로젝트에 맞게 수정바람)
                 const userMarkerImage = new window.kakao.maps.MarkerImage(
@@ -114,7 +116,7 @@ const RiderMainMap = () => {
                     });
 
 
-                    // 마커 클릭 시 가게 이름 표시 (추후 프로젝트에 맞게 수정바람)
+                    /*// 마커 클릭 시 가게 이름 표시 (추후 프로젝트에 맞게 수정바람)
                     const infowindow = new window.kakao.maps.InfoWindow({
                         removable : true,
                         content:
@@ -123,18 +125,17 @@ const RiderMainMap = () => {
                                 <p>${store.incomeAmount}</p>
                                 <p>${store.orderCreateDate}</p>   
                                 <p>${getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1)}km</p>
-                                <button class="btn btn-dark">주문 받기</button> 
                             </div>`,
-                    });
+                    });*/
 
                     window.kakao.maps.event.addListener(marker, "click", () => {
-                        infowindow.open(map, marker);
+                        // map level 2로 바꾸기
+                        map.setLevel(2);
+                        // map 중심 가게 중심으로 바꾸기
+                        map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
 
                     });
 
-                    window.kakao.maps.event.addListener(marker, "dbclick", () => {
-                        infowindow.close(map, marker);
-                    });
                 });
             });
         };
