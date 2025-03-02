@@ -4,6 +4,7 @@ import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../apiRiderService";
 import {useNavigate} from "react-router-dom";
 import beforeKakaoMapStart from "./BeforeKakaoMapStart";
+import UntakenOrderDetail from "./UntakenOrderDetail";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
@@ -27,9 +28,18 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
 };
 
 const RiderMainMap = () => {
-    const [userLocation, setUserLocation] = useState(null);
-    const [filteredStores, setFilteredStores] = useState([]);
+    // 현재 유저 위치
+    const [riderLocation, setRiderLocation] = useState(null);
+    // untaken orders
     const [stores, setStores] = useState([]);
+    // 10 km 안에 위치한 untaken orders
+    const [filteredStores, setFilteredStores] = useState([]);
+    // rider 가 선택한 untaken order detail
+    const [selectedStore, setSelectedStore] = useState(null);
+    // rider 가 untaken order detail 선택했는지 확인
+    const [checkingSelectedStore, setCheckingSelectedStore] = useState(false);
+
+    const [userAddress, setUserAddress] = useState(null);
 
     // apiRiderService.getStoreInfoInRiderMain(setStores) 로 현재 주문 내역들 가져오기
     useEffect(() => {
@@ -44,7 +54,7 @@ const RiderMainMap = () => {
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    setUserLocation({ lat, lng });
+                    setRiderLocation({ lat, lng });
 
                     console.log("사용자 위치 : "+ lat + ", " + lng);
                 },
@@ -59,18 +69,18 @@ const RiderMainMap = () => {
 
     // stores 에 저장되어 있는 내역들 현재 위치에 km 안으로 filter 하기
     useEffect(() => {
-        if (!userLocation || stores.length === 0) return;
+        if (!riderLocation || stores.length === 0) return;
 
         const filtered = stores.filter((s) =>
-            getDistance(userLocation.lat, userLocation.lng, s.storeLatitude, s.storeLongitude) <= 100
+            getDistance(riderLocation.lat, riderLocation.lng, s.storeLatitude, s.storeLongitude) <= 100
         );
         console.log("filtered : ", filtered);
         setFilteredStores(filtered);
-    }, [userLocation, stores]);
+    }, [riderLocation, stores]);
 
     // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
-        if (!userLocation) return;
+        if (!riderLocation) return;
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -82,7 +92,7 @@ const RiderMainMap = () => {
             window.kakao.maps.load(() => {
                 const mapContainer = document.getElementById("map");
                 const mapOption = {
-                    center: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                    center: new window.kakao.maps.LatLng(riderLocation.lat, riderLocation.lng),
                     level: 5,
                 };
 
@@ -96,7 +106,7 @@ const RiderMainMap = () => {
                 );
                 // 현재 위치 마커 생성 (추후 프로젝트에 맞게 수정바람)
                 new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                    position: new window.kakao.maps.LatLng(riderLocation.lat, riderLocation.lng),
                     map: map,
                     image: userMarkerImage,
                 });
@@ -134,6 +144,7 @@ const RiderMainMap = () => {
                         // map 중심 가게 중심으로 바꾸기
                         map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
 
+                        setSelectedStore(store);
                     });
 
                 });
@@ -143,11 +154,24 @@ const RiderMainMap = () => {
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLocation, filteredStores]);
+    }, [riderLocation, filteredStores]);
+
+    useEffect(() => {
+        if (!selectedStore) return ;
+        console.log("getUserMainAddressByOrderId")
+        apiRiderService.getUserMainAddressByOrderId(selectedStore.orderId, selectedStore.userId, setUserAddress);
+        setCheckingSelectedStore(true);
+    }, [selectedStore]);
+
 
     return (
         <div>
             <div id="map" style={{ width: "100%", height: "500px" }}></div>
+            {
+                checkingSelectedStore && <UntakenOrderDetail userAddress={userAddress}
+                                                             selectedStore={selectedStore}
+                                                             riderLocation={riderLocation}/>
+            }
         </div>
     );
 };
