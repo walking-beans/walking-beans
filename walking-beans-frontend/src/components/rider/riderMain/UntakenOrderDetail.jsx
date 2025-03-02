@@ -9,8 +9,7 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
     }
 
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
-    const getDistance1 = (lat1, lng1, lat2, lng2) => {
-        if (!lat1 || !lng1 || !lat2 || !lng2) return;
+    const getDistance = (lat1, lng1, lat2, lng2) => {
         console.log("getdistance : ", {lat1, lng1, lat2, lng2});
         const R = 6371; // 지구 반지름(km)
         const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -29,18 +28,10 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
         <div>
             <p>{selectedStore?.storeName}</p>
             <p>배달 금액 : {selectedStore?.incomeAmount.toLocaleString()}원</p>
-            <p>현재 위치</p>
-            <p>{riderLocation?.lat}</p>
-            <p>{riderLocation?.lng}</p>
-            <p>가게 위치</p>
-            <p>{selectedStore?.storeLatitude}</p>
-            <p>{selectedStore?.storeLongitude}</p>
-            <p>유저 집</p>
-            <p>{userAddress?.address}</p>
-            <p>{userAddress?.addressLatitude}</p>
-            <p>{userAddress?.addressLongitude}</p>
-            <p>{selectedStore?.orderCreateDate}</p>
+            <p>주문 시간 : {selectedStore?.orderCreateDate}</p>
             <p>가게 이미지 : {selectedStore?.storePictureUrl}</p>
+            <p>라이더 - 가게 거리 : {(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>
+            <p>가게 - 유저 거리 : {(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</p>
             <button onClick={goToDetail}>주문 수락</button>
         </div>
     )
