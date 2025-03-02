@@ -9,7 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 public class RiderMainStoreInfo {
 
-    private int orderId;
+    private long orderId;
+
+    private long userId;
 
     private String storeName;
 
