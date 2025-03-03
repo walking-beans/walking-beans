@@ -38,7 +38,7 @@ const RiderOntheway = () => {
                     fontSize: "16px",
                     cursor: "pointer",
                 }}>
-                카카오내비 길안내
+                카카오내비
             </button>
         </div>
     );
