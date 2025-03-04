@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./UserHome.css";
 
 const storeData = [
     { name: "강남커피하우스", lat: 37.498095, lng: 127.027610 },
@@ -13,9 +14,8 @@ const storeData = [
     { name: "노포 국수집", lat: 37.492591, lng: 127.028789 }
 ];
 
-// 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
 const getDistance = (lat1, lng1, lat2, lng2) => {
-    const R = 6371; // 지구 반지름(km)
+    const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLng = (lng2 - lng1) * (Math.PI / 180);
     const a =
@@ -25,17 +25,16 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
         Math.sin(dLng / 2) *
         Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // 거리 (km)
+    return R * c;
 };
 
-const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 API 키 입력
+const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserHome = () => {
     const [userLocation, setUserLocation] = useState(null);
     const [filteredStores, setFilteredStores] = useState([]);
 
     useEffect(() => {
-        // 현재 위치 가져오기
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -43,7 +42,6 @@ const UserHome = () => {
                     const lng = position.coords.longitude;
                     setUserLocation({ lat, lng });
 
-                    // 반경 10km 내 가게 필터링
                     const filtered = storeData.filter((store) =>
                         getDistance(lat, lng, store.lat, store.lng) <= 10
                     );
@@ -61,7 +59,6 @@ const UserHome = () => {
     useEffect(() => {
         if (!userLocation) return;
 
-        // 카카오맵 스크립트 로드
         const script = document.createElement("script");
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
@@ -76,28 +73,17 @@ const UserHome = () => {
                 };
                 const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-                // 현재 위치 마커 아이콘 설정 (추후 프로젝트에 맞게 수정바람)
-                const userMarkerImage = new window.kakao.maps.MarkerImage(
-                    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 사용자 현재 위치 아이콘으로 구분지음
-                    new window.kakao.maps.Size(40, 42),
-                    { offset: new window.kakao.maps.Point(20, 42) }
-                );
-
-                // 현재 위치 마커 생성 (추후 프로젝트에 맞게 수정바람)
-                new window.kakao.maps.Marker({
+                const userMarker = new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     map: map,
-                    image: userMarkerImage,
                 });
 
-                // 가게 마커 추가 (추후 프로젝트에 맞게 수정바람)
                 filteredStores.forEach((store) => {
                     const marker = new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(store.lat, store.lng),
                         map: map,
                     });
 
-                    // 마커 클릭 시 가게 이름 표시 (추후 프로젝트에 맞게 수정바람)
                     const infowindow = new window.kakao.maps.InfoWindow({
                         content: `<div style="padding:5px; font-size:14px;">${store.name}</div>`,
                     });
@@ -115,12 +101,23 @@ const UserHome = () => {
     }, [userLocation, filteredStores]);
 
     return (
-        <div>
-            <h2>내 위치 주변 가게 (반경 10km)</h2>
-            <div id="map" style={{ width: "100%", height: "500px" }}></div>
+        <div className="user-home-container">
+            <h2 className="user-home-title text-center">내 위치 주변 가게</h2>
+
+            <div id="map"></div>
+
+            <ul className="store-list">
+                {filteredStores.map((store, index) => (
+                    <li key={index} className="store-item">
+                        <span className="store-name">{store.name}</span>
+                        <span className="store-distance">
+                            {getDistance(userLocation?.lat, userLocation?.lng, store.lat, store.lng).toFixed(1)} km
+                        </span>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
-
 
 export default UserHome;

@@ -1,26 +1,27 @@
+import {useEffect, useState} from "react";
+import {useLocation} from "react-router-dom";
 import UserHeader from "../pages/layout/UserHeader";
 import RiderHeader from "../pages/layout/RiderHeader";
 
-const HeaderRoute = () => {
+const HeaderRoute = ({user}) => {
+    const location = useLocation(); // 현재 URL 확인
+    const [currentHeader, setCurrentHeader] = useState(<UserHeader user={user}/>);
 
-    // session 에 저장되어있는 user 변수명에 저장된 로그인 정보 확인
-    const storedUser = localStorage.getItem("users");
-    const user = storedUser ? JSON.parse(storedUser) : null;
-    console.log("HeaderRoute users : " + user);
+    useEffect(() => {
+        //   console.log("현재 로그인된 사용자:", user);
+        //   console.log("현재 경로:", location.pathname);
 
-    if (!user) {
-        return <UserHeader />
-    } else {
-        switch (user.userRole) {
-            case 1, "1" :
-                return <UserHeader />
-            case 2, "2" :
-                return <RiderHeader />
-            case 3, "3" :
-            default :
-                return <UserHeader />
+        // 1. `/rider` 경로일 경우 RiderHeader로 변경
+        if (location.pathname.startsWith("/rider")) {
+            setCurrentHeader(<RiderHeader user={user}/>);
         }
-    }
+        // 2. `/`로 돌아오면 UserHeader로 변경
+        else {
+            setCurrentHeader(<UserHeader user={user}/>);
+        }
+    }, [location.pathname, user]); // URL 변경될 때마다 실행
+
+    return currentHeader;
 };
 
 export default HeaderRoute;

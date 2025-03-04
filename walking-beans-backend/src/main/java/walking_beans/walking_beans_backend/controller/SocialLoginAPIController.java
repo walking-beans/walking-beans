@@ -15,13 +15,13 @@ import java.util.Map;
 @RestController
 public class SocialLoginAPIController {
 
-    @Value("${kakao.client-id}")
+    @Value("${kakao.client.id}")
     private String kakaoClientId;
 
-    @Value("${kakao.redirect-url}")
+    @Value("${kakao.redirect.uri}")
     private String redirectUrl;
 
-    @Value("${kakao.client-secret}")
+    @Value("${kakao.client.secret}")
     private String kakaoClientSecret;
 
     @Autowired
