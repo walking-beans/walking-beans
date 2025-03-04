@@ -1,22 +1,24 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./RiderHeader.css";
 
-import chatBubble from "../../images/chat_bubble.svg";
-import closeIcon from "../../images/close_white.svg";
-import listAlt from "../../images/list_alt.svg";
-import logoImg from "../../images/walkingBeans_black.png";
-import monetizationOn from "../../images/monetization_on.svg";
-import person from "../../images/person.svg";
-import supportAgent from "../../images/support_agent.svg";
-import toggleIcon from "../../images/menu_black.svg";
+import list from "../../assert/svg/riderNav/list.svg";
+import logoImg from "../../assert/svg/riderNav/walkingBeansBlack.svg";
+import payment from "../../assert/svg/riderNav/payments.svg";
+import person from "../../assert/svg/riderNav/person_round_black.svg";
+import rider from "../../assert/svg/riderNav/delivery_dining.svg";
+import supportAgent from "../../assert/svg/riderNav/support_agent.svg";
+import textsms from "../../assert/svg/riderNav/textsms.svg";
+import toggleIcon from "../../assert/svg/menu_black.svg";
 
-const RiderHeader = ({ user }) => {
-    const [currentUser, setCurrentUser] = useState(user);
-    const [riderNavOpen, setRiderNavOpen] = useState(false);
+const RiderHeader = ({user}) => {
+    const location = useLocation();
     const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(user);
+    const [navOpen, setNavOpen] = useState(false);
 
+    // 유저 정보 로드
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -24,65 +26,129 @@ const RiderHeader = ({ user }) => {
         }
     }, [user]);
 
+    /**
+     * 네비게이션바 토글아이콘  함수
+     * toggleIcon from "../../assert/svg/togle.svg
+     */
     const handleToggleNav = () => {
-        if (!currentUser) {
+        if (!localStorage.getItem("user")) {
             alert("로그인이 필요합니다.");
             navigate("/login");
         } else {
-            setRiderNavOpen((prev) => !prev);
+            setNavOpen((prev) => !prev);
         }
     };
 
+    // 로그아웃 함수
     const handleLogout = () => {
         localStorage.removeItem("user");
-        setCurrentUser(null);
-        window.dispatchEvent(new Event("userChange"));
         alert("로그아웃 되었습니다.");
-        setRiderNavOpen(false);
+        setCurrentUser(null);
+        setNavOpen(false);
         navigate("/");
+    };
+
+    /**
+     * person from "../../assert/svg/riderNav/person_round_black.svg"
+     * 사용자 아이콘 클릭 시 이동
+     */
+    const handleUserIconClick = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+
+        const parsedUser = JSON.parse(storedUser);
+        const rolePaths = {
+            user: "/mypage",
+            rider: location.pathname === "/rider" ? "/" : "/rider",
+            store: "/owner",
+            admin: "/admin"
+        };
+
+        navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
     return (
         <div className="rider-header-wrapper">
-            <header className="rider-custom-header">
-                <div className="rider-custom-header-container d-flex justify-content-between align-items-center">
-                    <div className="rider-logo-container">
-                        <img src={logoImg} className="rider-logo-img" alt="rider-logo" />
+            <header className="rider-header">
+                <div className="rider-header-container">
+                    <div className="left-icons">
+                        <img src={rider}
+                             className="header-icon"
+                             alt="role-icon"
+                             onClick={handleUserIconClick}
+                        />
                     </div>
-
+                    <div className="center-logo">
+                        <img src={logoImg}
+                             className="logo-img"
+                             alt="logo"
+                             onClick={() => navigate("/rider")}
+                        />
+                    </div>
                     <div className="rider-menu-container">
-                        <img src={toggleIcon} className="rider-menu-icon" alt="rider-toggle" onClick={handleToggleNav} />
+                        {currentUser && (
+                            <>
+                                {/*
+                                알림 및 검색 아이콘을 필요하면 추가
+                                <img src={bellIcon} className="header-icon" alt="notifications" />
+                                <img src={searchIcon} className="header-icon" alt="search" />
+                             */}
+                            </>
+                        )}
+                        <img src={toggleIcon}
+                             className="header-icon"
+                             alt="toggle"
+                             onClick={handleToggleNav}/>
                     </div>
                 </div>
 
-                <div className={`rider-side-nav ${riderNavOpen ? "open" : ""}`}>
-                    <button className="rider-close-btn" onClick={handleToggleNav}>
-                        <img src={closeIcon} alt="닫기" />
-                    </button>
-
-                    <div className="rider-info">
-                        <div className="rider-name-container">
-                            <div className="d-flex align-items-center">
-                                <div className="rider-name">{currentUser?.user_name}</div>
-                                <div className="rider-role"> 라이더님</div>
+                <div className={`rider-side-nav ${navOpen ? "open" : ""}`}>
+                    <div className="rider-side-nav-content">
+                        <div className="rider-info">
+                            <div className="rider-name-container">
+                                <div className="d-flex align-items-center">
+                                    <div className="rider-name">
+                                        {currentUser?.user_name}
+                                    </div>
+                                    <div className="rider-role">
+                                        라이더님
+                                    </div>
+                                </div>
+                                <div className="rider-stars">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
                             </div>
-                            <div className="rider-stars">⭐⭐⭐⭐⭐</div>
+                            <button className="rider-status-btn">
+                                운행 중
+                            </button>
                         </div>
 
-                        <button className="rider-status-btn">운행 중</button>
+                        <ul className="rider-nav-menu list-unstyled">
+                            {[
+                                {icon: person, text: "마이페이지", path: "/"},
+                                {icon: payment, text: "내 수입", path: "/"},
+                                {icon: list, text: "배달기록", path: "/"},
+                                {icon: textsms, text: "채팅", path: "/"},
+                                {icon: supportAgent, text: "고객센터 문의하기", path: "/"}
+                            ].map(({icon, text, path}) => (
+                                <li key={text}>
+                                    <a href={path}>
+                                        <img src={icon} alt={text}/> {text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <button className="rider-nav-logout-btn"
+                                onClick={handleLogout}
+                        >
+                            로그아웃
+                        </button>
                     </div>
-
-                    <ul className="rider-nav-menu list-unstyled">
-                        <li><a href="/"> 마이페이지</a></li>
-                        <li><a href="/"> 내 수입</a></li>
-                        <li><a href="/"> 배달기록</a></li>
-                        <li><a href="/"> 채팅</a></li>
-                        <li><a href="/"> 고객센터 문의하기</a></li>
-                    </ul>
-
-                    <button className="rider-nav-logout-btn" onClick={handleLogout}>
-                        로그아웃
-                    </button>
                 </div>
             </header>
         </div>

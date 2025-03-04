@@ -26,12 +26,11 @@ public class UserAPIController {
         Map<String, Object> loginResult = userService.loginUser(userEmail, userPassword);
 
         if ("success".equals(loginResult.get("status"))) {
-            session.setAttribute("user", loginResult.get("user"));  // ✅ 세션 저장
+            session.setAttribute("user", loginResult.get("user"));
 
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
-            response.put("user", loginResult.get("user"));  // ✅ React에서 상태 업데이트 가능하도록 반환
-
+            response.put("user", loginResult.get("user"));
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(401).body(loginResult);
@@ -41,10 +40,10 @@ public class UserAPIController {
     // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
-        session.invalidate();  // ✅ 세션 삭제
+        session.invalidate();
         Map<String, Object> response = new HashMap<>();
         response.put("status", "logout success");
-        return ResponseEntity.ok(response);  // ✅ React에서 상태 업데이트 가능하도록 반환
+        return ResponseEntity.ok(response);
     }
 
     // 현재 로그인된 유저 데이터 반환
@@ -55,7 +54,7 @@ public class UserAPIController {
         if (userInfo == null) {
             return ResponseEntity.status(401).body(Map.of("message", "사용자가 로그인하지 않았습니다."));
         } else {
-            return ResponseEntity.ok(Map.of("user", userInfo));  // ✅ 유저 정보 반환
+            return ResponseEntity.ok(Map.of("user", userInfo));
         }
     }
 
