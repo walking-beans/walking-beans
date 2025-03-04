@@ -28,14 +28,9 @@ public interface OrderService {
     // 주문 내역 : 유저 주문 내역 리스트 가져오기
     List<Orders> selectOrderByUserId(long userId);
 
+    // 주문하기 : 주문 등록하기 insertOrder && insertCart
+    void insertOrder (@RequestBody Orders order);
+    void insertCart (@RequestBody Carts cart);
 
-    // 주문 데이터 저장
-    void insertOrder(Orders order, List<Carts> cartList);
-
-    // 주문정보 가져오기
-    Orders findOrderById(long orderId);
-
-    // 주문자 정보 가져오기
-    List<Orders> findOrdersByUserId(long userId);
 
 }

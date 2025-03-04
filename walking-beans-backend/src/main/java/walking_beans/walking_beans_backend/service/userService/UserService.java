@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface UserService {
     // 로그인 정보 가져오기
-     Map<String, Object> loginUser(String userEmail, String userPassword);
+    Map<String, Object> loginUser(String userEmail, String userPassword);
 
     //Map<String, Object> loginUser(String userEmail, String userPassword);
 
@@ -16,19 +16,19 @@ public interface UserService {
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
+    /*
+        //랜덤 난수 생성
+        String randomCode();
 
-    //랜덤 난수 생성
-    String randomCode();
+        // 보낼 이메일 내용 작성
+        void sendEmail(String email, String code);
 
-    // 보낼 이메일 내용 작성
-    void sendEmail(String email, String code);
+        // 보낸 이메일 & 인증코드 저장하는 메서드
+        void saveEmailCode(String email, String code);
 
-    // 보낸 이메일 & 인증코드 저장하는 메서드
-    void saveEmailCode(String email, String code);
-
-    //일치 여부 확인
-    boolean verifyCodeWithVo(Vertification vertification);
-
+        //일치 여부 확인
+        boolean verifyCodeWithVo(Vertification vertification);
+    */
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
 

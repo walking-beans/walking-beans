@@ -48,7 +48,7 @@ const Login = () => {
                     <div className="mb-3">
                         <label className="form-label">아이디(이메일)</label>
                         <input
-                            type="email"
+                            type="text"
                             className="form-control"
                             value={userEmail}
                             onChange={(e) => setUserEmail(e.target.value)}
