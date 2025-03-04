@@ -24,6 +24,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 
 import "./PathRoute.css";
+import UserSearchMap from "../pages/user/UserSearchMap";
 
 function AdminChattingroom() {
     return null;
@@ -77,6 +78,10 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<Login/>}/>
+
+                                {/* 라이더 관련 라우트 */}
+                                <Route path="user/search/map" element={<UserSearchMap/>}/>
+
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
