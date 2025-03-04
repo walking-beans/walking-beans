@@ -21,6 +21,13 @@ import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
+import HeaderRoute from "./HeaderRoute";
+import AdminLogin from "../pages/admin/AdminLogin";
+import UserOrder from "../pages/user/UserOrder";
+import UserCart from "../pages/user/UserCart";
+import UserOrderDetail from "../pages/user/UserOrderDetail";
+import UserPayment from "../pages/user/UserPayment";
+import UserOrderList from "../pages/user/UserOrderList";
 
 import "./PathRoute.css";
 
@@ -73,6 +80,13 @@ function PathRoute () {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<Login/>}/>
+                                  
+                                {/* 유저 관련 라우트 */}
+                                <Route path="/user/order/:orderid" element={<UserOrder/>}/>
+                                <Route path="/user/ordercart/:orderid/:cartId" element={<UserCart/>}/>
+                                <Route path="/user/orderlist" element={<UserOrderList/>}/>
+                                <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
+                                <Route path="/user/payment" element={<UserPayment/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
