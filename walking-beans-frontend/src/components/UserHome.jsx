@@ -286,6 +286,23 @@ const UserHome = () => {
                     </div>
                 ))}
             </div>
+
+            <div className="user-home-container">
+                <h2 className="user-home-title text-center">내 위치 주변 가게</h2>
+
+                <div id="map"></div>
+
+                <ul className="store-list">
+                    {filteredStores.map((store, index) => (
+                        <li key={index} className="store-item">
+                            <span className="store-name">{store.name}</span>
+                            <span className="store-distance">
+                            {getDistance(userLocation?.lat, userLocation?.lng, store.lat, store.lng).toFixed(1)} km
+                        </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
