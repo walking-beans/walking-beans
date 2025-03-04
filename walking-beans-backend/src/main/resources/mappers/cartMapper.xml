@@ -33,4 +33,37 @@
         WHERE cart_id = #{cartId}
     </update>
 
+    <!-- 장바구니 메뉴 데이터 가져오기 -->
+    <select id="getCartInfoByCartId">
+        SELECT c.cart_id,
+               mo.option_id,
+               m.menu_id,
+               m.user_id,
+               mo.option_name,
+               mo.option_price,
+               m.menu_name,
+               m.menu_price
+        FROM carts c
+                 JOIN menuOption mo ON c.option_id = mo.option_id
+                 JOIN menu m ON m.menu_id = mo.menu_id
+        WHERE c.cart_id = #{cartId};
+
+    </select>
+
+    <!-- 장바구니 주문자 기준 카트 데이터 가져오기 -->
+    <select id="getCartInfoByOrderId">
+        SELECT c.cart_id,
+               mo.option_id,
+               m.menu_id,
+               m.user_id,
+               mo.option_name,
+               mo.option_price,
+               m.menu_name,
+               m.menu_price
+        FROM carts c
+                 JOIN menuOption mo ON c.option_id = mo.option_id
+                 JOIN menu m ON m.menu_id = mo.menu_id
+        WHERE c.order_id = #{orderId};
+    </select>
+
 </mapper>
