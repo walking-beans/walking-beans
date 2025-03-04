@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
+import walking_beans.walking_beans_backend.model.vo.CartItemDTO;
+
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -28,5 +31,17 @@ public class CartServiceImpl implements CartService {
     @Override
     public Long getCartQuantityByOrderId(long orderId) {
         return cartMapper.getCartQuantityByOrderId(orderId);
+    }
+
+    // 장바구니 메뉴 데이터 가져오기
+    @Override
+    public CartItemDTO getCartInfoByCartId(long cartId) {
+        return cartMapper.getCartInfoByCartId(cartId);
+    }
+
+    // 장바구니 주문자 기준 카트 데이터 가져오기
+    @Override
+    public List<CartItemDTO> getCartInfoByOrderId(long orderId) {
+        return cartMapper.getCartInfoByOrderId(orderId);
     }
 }

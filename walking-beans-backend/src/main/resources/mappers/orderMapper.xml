@@ -50,49 +50,6 @@
 
     <!-- ****************************************  **************************************** -->
 
-    <!--
- 주문 상세 내역 : 상세 내역  가져오기 && 주문하기 : 유저 주소 및 메뉴 정보 가져오기
-    <select id="selectOrderDetailByOrderId">
-        SELECT Stores.store_id,
-               Stores.store_name,
-               Orders.order_number,
-               Orders.order_id,
-               Orders.order_total_price,
-               Orders.order_requests,
-               Orders.order_create_date,
-               Carts.option_id,
-               Carts.cart_quantity,
-               Address.address,
-               Users.user_phone,
-               Menu.menu_name
-        FROM Orders
-                 JOIN Stores ON Orders.store_id = Stores.store_id
-                 JOIN Carts ON Orders.order_id = Carts.order_id
-                 JOIN Address ON Orders.address_id = Address.address_id
-                 JOIN Users ON Orders.user_id = Users.user_id
-                 JOIN Menuoption ON Carts.option_id = Menuoption.option_id
-                 JOIN Menu ON Menuoption.menu_id = Menu.menu_id
-        WHERE Orders.order_id = #{orderId}
-    </select>
-
-  주문 내역 : 유저 주문 내역 리스트 가져오기
-    <select id="selectOrderByUserId" resultType="Orders">
-        SELECT Orders.order_id,
-               Orders.order_status,
-               Orders.order_create_date,
-               Orders.order_total_price,
-               Stores.store_picture_url,
-               Stores.store_name,
-               Carts.cart_quantity,
-               Menu.menu_name
-        FROM Orders
-                 JOIN Stores ON Orders.store_id = Stores.store_id
-                 JOIN Carts ON Orders.order_id = Carts.order_id
-                 JOIN Menu ON Menu.menu_id = MenuOption.menu_id
-                 JOIN Users ON Orders.user_id = Users.user_id
-        WHERE Users.user_id = #{userId}
-    </select>
--->
     <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price,

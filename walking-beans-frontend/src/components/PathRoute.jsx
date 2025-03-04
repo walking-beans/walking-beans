@@ -21,6 +21,11 @@ import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
+import UserOrder from "../pages/user/UserOrder";
+import UserCart from "../pages/user/UserCart";
+import UserOrderDetail from "../pages/user/UserOrderDetail";
+import UserPayment from "../pages/user/UserPayment";
+import UserOrderList from "../pages/user/UserOrderList";
 
 
 function AdminChattingroom() {
@@ -40,6 +45,13 @@ function PathRoute () {
             <Routes>
                 {/**/}
                 <Route path="/" element={<UserHome/>}/>
+
+                {/* 1. user */}
+                <Route path="/user/order/:orderid" element={<UserOrder/>}/>
+                <Route path="/user/ordercart/:orderid/:cartId" element={<UserCart/>}/>
+                <Route path="/user/orderlist" element={<UserOrderList/>}/>
+                <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
+                <Route path="/user/payment" element={<UserPayment/>}/>
 
                 {/* 2. rider  */}
                 <Route path="/rider" element={
