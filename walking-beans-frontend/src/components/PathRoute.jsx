@@ -21,8 +21,6 @@ import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
-import HeaderRoute from "./HeaderRoute";
-import AdminLogin from "../pages/admin/AdminLogin";
 import UserOrder from "../pages/user/UserOrder";
 import UserCart from "../pages/user/UserCart";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
