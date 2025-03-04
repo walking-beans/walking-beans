@@ -11,11 +11,12 @@
 
     <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
     <select id="searchStore">
-        SELECT store_name,store_picture_url,store_min_delivery_time
+        SELECT store_id, store_name, store_picture_url, store_min_delivery_time,
+               store_rating, store_review_count, store_latitude, store_longitude
         FROM stores
-        WHERE store_name  LIKE concat ('%',#{keyword},'%')
-        OR store_description LIKE concat ('%',#{keyword},'%')
-        OR store_main_menu LIKE concat ('%',#{keyword},'%')
+        WHERE store_name LIKE concat('%', #{keyword}, '%')
+           OR store_description LIKE concat('%', #{keyword}, '%')
+           OR store_main_menu LIKE concat('%', #{keyword}, '%')
     </select>
 
     <!--//특정 매장 불러오기, ID -->
