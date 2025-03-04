@@ -15,13 +15,22 @@
         WHERE cart_id = #{cartId}
     </delete>
 
-    <!-- 선택한 상품 개수 가져오기 mapper 추가 필요
+    <!-- 선택한 상품 개수 가져오기 mapper 추가 필요 -->
     <select id="getCartQuantityByOrderId">
-        SELECT o.order_id,
-               c.cart_quantity
-        FROM carts c
-                 JOIN orders o ON o.order_id = c.order_id
-        WHERE o.order_id = #{orderId}
+        SELECT count(cart_quantity) as total_quntity
+        FROM carts
+        WHERE order_id = #{orderId}
     </select>
--->
+
+    <!-- 최종 장바구니 항목 상태 업데이트 -->
+    <update id="updateCartToOrder">
+        UPDATE carts
+        SET
+            option_id = #{optionId},
+            store_id = #{storeId},
+            cart_quantity = #{cartQuantity},
+            cart_modified_date = NOW()
+        WHERE cart_id = #{cartId}
+    </update>
+
 </mapper>
