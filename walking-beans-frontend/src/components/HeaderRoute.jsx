@@ -1,7 +1,7 @@
 import UserHeader from "../pages/layout/UserHeader";
 import RiderHeader from "../pages/layout/RiderHeader";
 
-const HeaderRoute = () => {
+const HeaderRoute = ({headerPage}) => {
 
     // session 에 저장되어있는 user 변수명에 저장된 로그인 정보 확인
     const storedUser = localStorage.getItem("users");

@@ -1,13 +1,16 @@
 package walking_beans.walking_beans_backend.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/store")
 public class StoreAPIController {
@@ -78,6 +81,13 @@ public class StoreAPIController {
     @GetMapping("/address/orderId/{orderId}")
     public ResponseEntity<Stores> getStoreAddressByOrderId(@PathVariable("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
+    }
+
+
+    @GetMapping("/riderMain")
+    public ResponseEntity<List<RiderMainStoreInfo>> getStoreInfoInRiderMain() {
+        log.info("=== /api/store/riderMain ===");
+        return ResponseEntity.ok(storeService.getStoreInfoInRiderMain());
     }
 }
 

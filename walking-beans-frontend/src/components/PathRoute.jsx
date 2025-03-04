@@ -36,7 +36,6 @@ function PathRoute () {
 
     return(
         <BrowserRouter>
-            <HeaderRoute />
             <Routes>
                 {/**/}
                 <Route path="/" element={<UserHome/>}/>
@@ -47,7 +46,7 @@ function PathRoute () {
                 /*<ProtectedRoute allowedRoles={[2]}>
                     </ProtectedRoute>*/
                 />
-                <Route path="/rider/ontheway" element={
+                <Route path="/rider/ontheway/:orderId" element={
                     <RiderOntheway/>}
                 />
                 <Route path="/rider/result" element={
