@@ -11,12 +11,14 @@ import alarmIcon from "../../images/alarm.svg";
 import searchIcon from "../../images/search.svg";
 import toggleIcon from "../../images/toggle.svg";
 import apiUserService from "../../service/apiUserService";
+import AdminAlarmList from "../admin/AdminAlarmList";
 
 
 const UserHeader = () => {
     const [isToggleOpen, setIsToggleOpen] = useState(false); // 상태 추가
     const navigate = useNavigate();
     const [user, setUser] = useState("");
+    const [showAlarm, setShowAlarm] = useState(false);
 
     useEffect(() => {
         apiUserService.sessionData(setUser);
@@ -34,7 +36,6 @@ const UserHeader = () => {
                 return userIcon; // 기본 사용자 아이콘
         }
     };
-
     // 토글 버튼 클릭 이벤트
     const handleToggleClick = () => {
         if (!user) {
@@ -46,6 +47,9 @@ const UserHeader = () => {
     };
 
 
+    const AlarmClick = () => {
+        setShowAlarm(prevState => !prevState);
+    }
     return (
         <header className="user-header">
             {/*왼쪽 아이콘*/}
@@ -59,10 +63,18 @@ const UserHeader = () => {
 
             {/* 오른쪽 아이콘 */}
             <div className="user-right-icons">
-                <img src={alarmIcon}  className="header-icon" />
-                <img src={searchIcon}  className="header-icon" />
-                <img src={toggleIcon}  className="header-icon" onClick={handleToggleClick}  />
+                <img
+                    src={alarmIcon}
+                    className="header-icon"
+                    onClick={AlarmClick}  // 알람 클릭 시 상태 토글
+                    alt="알람 아이콘"
+                />
+                {showAlarm && <AdminAlarmList />}
+                <img src={searchIcon} className="header-icon"/>
+                <img src={toggleIcon} className="header-icon" onClick={handleToggleClick}/>
             </div>
+
+
         </header>
     );
 };
