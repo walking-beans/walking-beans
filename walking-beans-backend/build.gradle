@@ -47,5 +47,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}

@@ -1,5 +1,4 @@
 import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
-import RiderHeader from "../layout/RiderHeader";
 import {useState} from "react";
 import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
 
@@ -18,7 +17,6 @@ const RiderMain = () => {
     return (
         <div>
             {/* Rider Header */}
-            <RiderHeader />
             <KakaomapStatus setGetReady={setGetReady}/>
         </div>
     )

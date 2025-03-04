@@ -1,4 +1,3 @@
-import RiderHeader from "../layout/RiderHeader";
 import {useEffect, useState} from "react";
 
 const RiderOntheway = () => {
@@ -27,7 +26,6 @@ const RiderOntheway = () => {
 
     return (
         <div>
-            <RiderHeader />
             <button
                 onClick={handleNavigation}
                 style={{
