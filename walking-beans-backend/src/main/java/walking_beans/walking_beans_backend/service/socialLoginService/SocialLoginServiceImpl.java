@@ -21,13 +21,13 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 /******************** 카카오 로그인 *******************************/
 
 
-    @Value("${kakao.client-id}")
+    @Value("${kakao.client.id}")
     private String kakaoClientId;
 
-    @Value("${kakao.redirect-url}")
+    @Value("${kakao.redirect.uri}")
     private String redirectUrl;
 
-    @Value("${kakao.client-secret}")
+    @Value("${kakao.client.secret}")
     private String kakaoClientSecret;
 
     public Map<String, Object> handleCallback(String code) {

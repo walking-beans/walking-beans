@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
-const KAKAO_MAP_API_KEY_LEO = "492c9f6730659740d55e1ade843d2b43"; // 본인 카카오 API 키
+const KAKAO_MAP_API_KEY_LEO = "9302732d4f5922e076cdba0d49a8a2fc"; // 본인 카카오 API 키
 
 // 가게 데이터 (JSON 형식 => 추후 DB 저장된 가게로 변경)
 // localhost:8080/api/가게목록 불러오기

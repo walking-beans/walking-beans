@@ -7,7 +7,9 @@ import java.util.Map;
 
 public interface UserService {
     // 로그인 정보 가져오기
-    Map<String, Object> loginUser(String userEmail, String userPassword);
+     Map<String, Object> loginUser(String userEmail, String userPassword);
+
+    //Map<String, Object> loginUser(String userEmail, String userPassword);
 
     // 아이디 찾기
     String findId (String userName, String userPhone);

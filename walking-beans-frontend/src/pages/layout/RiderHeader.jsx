@@ -1,75 +1,158 @@
-import {Link, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./RiderHeader.css";
 
-import riderLogoImg from "../../images/rider/walkingBeans_rider.svg";
-import toggleIcon from "../../images/rider/toggle_rider.svg";
-import myPage from "../../images/rider/myPageIcon.svg";
-import incomeList from "../../images/rider/incomeListIcon.svg";
-import income from "../../images/rider/incomeIcon.svg";
-import chatting from "../../images/rider/chattingIcon.svg";
-import customerService from "../../images/rider/customerServiceIcon.svg";
+import list from "../../assert/svg/riderNav/list.svg";
+import logoImg from "../../assert/svg/riderNav/walkingBeansBlack.svg";
+import payment from "../../assert/svg/riderNav/payments.svg";
+import person from "../../assert/svg/riderNav/person_round_black.svg";
+import rider from "../../assert/svg/riderNav/delivery_dining.svg";
+import supportAgent from "../../assert/svg/riderNav/support_agent.svg";
+import textsms from "../../assert/svg/riderNav/textsms.svg";
+import toggleIcon from "../../assert/svg/menu_black.svg";
 
-
-import apiRiderService from "../../components/rider/apiRiderService";
-import starRatingPath from "../../components/star/starPath";
-
-const RiderHeader = () => {
+const RiderHeader = ({user}) => {
+    const location = useLocation();
     const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(user);
+    const [navOpen, setNavOpen] = useState(false);
 
-    const [user, setUser] = useState(null);
-    const [visible, setVisible] = useState(false);
-    const [star, setStar] = useState(0);
-    const [starPath, setStarPath] = useState("");
-    const [errMessage, setErrMessage] = useState("");
-
+    // 유저 정보 로드
     useEffect(() => {
-        apiRiderService.getRiderStarRating(2, (newStar) => {
-            setStar(newStar);
-            starRatingPath.getStarPath(newStar, setStarPath);
-        }, setErrMessage);
-    }, []);
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setCurrentUser(JSON.parse(storedUser));
+        }
+    }, [user]);
 
-    console.log("star 정보 : ", star)
-    {/* sessiong 정보 삭제 후 로그아웃 */}
+    /**
+     * 네비게이션바 토글아이콘  함수
+     * toggleIcon from "../../assert/svg/togle.svg
+     */
+    const handleToggleNav = () => {
+        if (!localStorage.getItem("user")) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+        } else {
+            setNavOpen((prev) => !prev);
+        }
+    };
+
+    // 로그아웃 함수
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        alert("로그아웃 되었습니다.");
+        setCurrentUser(null);
+        setNavOpen(false);
+        navigate("/");
+    };
+
+    /**
+     * person from "../../assert/svg/riderNav/person_round_black.svg"
+     * 사용자 아이콘 클릭 시 이동
+     */
+    const handleUserIconClick = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+
+        const parsedUser = JSON.parse(storedUser);
+        const rolePaths = {
+            user: "/mypage",
+            rider: location.pathname === "/rider" ? "/" : "/rider",
+            store: "/owner",
+            admin: "/admin"
+        };
+
+        navigate(rolePaths[parsedUser.user_role] || "/");
+    };
 
     return (
-        <header className="rider-header">
-            {/* main log */}
-            <div className="MainLogo">
-                <Link to="/rider">
-                    <img src={riderLogoImg}  className="logo-img"/>
-                </Link>
-            </div>
-
-            {/* toggleIcon */}
-            <div className="right-icons">
-                <button onClick={() => setVisible(!visible)} className="">
-                    <img src={toggleIcon}/>
-                </button>
-            </div>
-            {
-                visible? (
-                    <div className="nav-bar-toggle-icon">
-                        {/*<h5>{user.userName}</h5>*/}
-                        {/* 리뷰 별점 받기 */}
-                        <ul>
-                            <li><Link to="/admin/mypage"><img src={myPage}/>마이페이지</Link></li>
-                            <li><Link to="/rider/income"><img src={income}/>내 수입</Link></li>
-                            <li><Link to="/rider/orderlist"><img src={incomeList}/>배달기록</Link></li>
-                            <li><Link to="/admin/chatting/:userId"><img src={chatting}/>채팅</Link></li>
-                            <li><Link to="/rider"><img src={customerService}/>고객센터 문의하기</Link></li>
-                            <li><img src={starPath}/></li>
-                        </ul>
-                        <button>운행 종료</button>
-                        <button>로그아웃</button>
+        <div className="rider-header-wrapper">
+            <header className="rider-header">
+                <div className="rider-header-container">
+                    <div className="left-icons">
+                        <img src={rider}
+                             className="header-icon"
+                             alt="role-icon"
+                             onClick={handleUserIconClick}
+                        />
                     </div>
-                ) : (
-                    <div></div>
-                )
-            }
-        </header>
-    )
-}
+                    <div className="center-logo">
+                        <img src={logoImg}
+                             className="logo-img"
+                             alt="logo"
+                             onClick={() => navigate("/rider")}
+                        />
+                    </div>
+                    <div className="rider-menu-container">
+                        {currentUser && (
+                            <>
+                                {/*
+                                알림 및 검색 아이콘을 필요하면 추가
+                                <img src={bellIcon} className="header-icon" alt="notifications" />
+                                <img src={searchIcon} className="header-icon" alt="search" />
+                             */}
+                            </>
+                        )}
+                        <img src={toggleIcon}
+                             className="header-icon"
+                             alt="toggle"
+                             onClick={handleToggleNav}/>
+                    </div>
+                </div>
+
+                <div className={`rider-side-nav ${navOpen ? "open" : ""}`}>
+                    <div className="rider-side-nav-content">
+                        <div className="rider-info">
+                            <div className="rider-name-container">
+                                <div className="d-flex align-items-center">
+                                    <div className="rider-name">
+                                        {currentUser?.user_name}
+                                    </div>
+                                    <div className="rider-role">
+                                        라이더님
+                                    </div>
+                                </div>
+                                <div className="rider-stars">
+                                    ⭐⭐⭐⭐⭐
+                                </div>
+                            </div>
+                            <button className="rider-status-btn">
+                                운행 중
+                            </button>
+                        </div>
+
+                        <ul className="rider-nav-menu list-unstyled">
+                            {[
+                                {icon: person, text: "마이페이지", path: "/"},
+                                {icon: payment, text: "내 수입", path: "/"},
+                                {icon: list, text: "배달기록", path: "/"},
+                                {icon: textsms, text: "채팅", path: "/"},
+                                {icon: supportAgent, text: "고객센터 문의하기", path: "/"}
+                            ].map(({icon, text, path}) => (
+                                <li key={text}>
+                                    <a href={path}>
+                                        <img src={icon} alt={text}/> {text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <button className="rider-nav-logout-btn"
+                                onClick={handleLogout}
+                        >
+                            로그아웃
+                        </button>
+                    </div>
+                </div>
+            </header>
+        </div>
+    );
+};
 
 export default RiderHeader;
