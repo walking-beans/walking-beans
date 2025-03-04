@@ -1,5 +1,8 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Footer from "../pages/custom-login/Footer";
+import HeaderRoute from "./HeaderRoute";
+import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
@@ -17,11 +20,9 @@ import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
-import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
-import HeaderRoute from "./HeaderRoute";
-import AdminLogin from "../pages/admin/AdminLogin";
 
+import "./PathRoute.css";
 
 function AdminChattingroom() {
     return null;
@@ -32,55 +33,141 @@ function AdminMessage() {
 }
 
 function PathRoute () {
-    const [user,setUser] = useState(null);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                //  console.log("로컬스토리지에서 가져온 유저:", parsedUser);
+                setUser(parsedUser);
+            } catch (error) {
+                //  console.error("JSON 파싱 에러:", error);
+            }
+        }
+
+        const handleStorageChange = () => {
+            const updatedUser = localStorage.getItem("user");
+            setUser(updatedUser ? JSON.parse(updatedUser) : null);
+        };
+
+        window.addEventListener("userChange", handleStorageChange);
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("userChange", handleStorageChange);
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, []);
 
     return(
-        <BrowserRouter>
-            <Routes>
-                {/**/}
-                <Route path="/" element={<UserHome/>}/>
+        <div className="layout-container">
+            <BrowserRouter>
+                <HeaderRoute user={user}/>
+                <div className="content-wrapper">
+                    <div className="container d-flex justify-content-center">
+                        {/* <div className="col-md-8 col-12">*/}
+                        <div className=" col-12">
+                            <Routes>
+                                {/* 기본 페이지 및 로그인 */}
+                                <Route path="/" element={<UserHome/>}/>
+                                <Route path="/login" element={<Login/>}/>
 
-                {/* 2. rider  */}
-                <Route path="/rider" element={
-                    <RiderMain/>}
-                /*<ProtectedRoute allowedRoles={[2]}>
-                    </ProtectedRoute>*/
-                />
-                <Route path="/rider/ontheway/:orderId" element={
-                    <RiderOntheway/>}
-                />
-                <Route path="/rider/result" element={
-                    <RiderResult/>}
-                />
-                <Route path="/rider/orderlist" element={
-                    <RiderOrderList/>}
-                />
-                <Route path="/rider/order/:orderId" element={
-                    <RiderOrder/>}
-                />
-                <Route path="/rider/income" element={
-                    <RiderIncome/>}
-                />
+                                {/* 라이더 관련 라우트 */}
+                                <Route path="/rider" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderMain/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/ontheway" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOntheway/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/result" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderResult/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/orderlist" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOrderList/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/order" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOrder/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/income" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderIncome/>
+                                    </ProtectedRoute>
+                                }/>
 
-                {/* 3. owner  */}
-                <Route path="/owner" element={<StoreMain />}/>
-                <Route path="/owner/menu" element={<StoreMenu />}/>
-                <Route path="/owner/menudetail" element={<StoreMenuDetail />}/>
-                <Route path="/owner/menuform" element={<StoreMenuForm />}/>
-                <Route path="/owner/menuoption" element={<StoreMenuOption />}/>
-                <Route path="/owner/menuoptiondetail" element={<StoreMenuOptionDetail />}/>
-                <Route path="/owner/menuoptiondeform" element={<StoreMenuOptionForm />}/>
-                <Route path="/owner/mystore" element={<StoreMyStore />}/>
-                <Route path="/owner/order" element={<StoreOrder />}/>
-                <Route path="/owner/revenue" element={<StoreRevenue />}/>
+                                {/* 사장님 관련 라우트 */}
+                                <Route path="/owner" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMain/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menu" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenu/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menudetail" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuDetail/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuform" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuForm/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoption" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOption/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoptiondetail" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOptionDetail/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoptiondeform" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOptionForm/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/mystore" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMyStore/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/order" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreOrder/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/revenue" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreRevenue/>
+                                    </ProtectedRoute>
+                                }/>
 
-
-                {/* 4. admin  */}
-                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                <Route path="/message/:roomId" element={<AdminMessage/>}/>
-                <Route path="/login" element={<AdminLogin />}/>
-            </Routes>
-        </BrowserRouter>
+                                {/* 관리자 관련 라우트 */}
+                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
+                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                            </Routes>
+                        </div>
+                    </div>
+                </div>
+                {user?.user_role !== "rider" && <Footer/>}
+            </BrowserRouter>
+        </div>
     )
 }
 

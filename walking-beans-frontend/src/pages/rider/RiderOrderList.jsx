@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import apiRiderService from "../../components/rider/apiRiderService";
 import {Link} from "react-router-dom";
-import RiderHeader from "../layout/RiderHeader";
 
 const RiderOrderList = ({riderId}) => {
     const [orders, setOrders] = useState([]);
@@ -22,7 +21,6 @@ const RiderOrderList = ({riderId}) => {
 
     return (
         <div>
-            <RiderHeader />
             {
                 (orders.length > 0) ? (
                     <ul>

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-  
+
     @Autowired
     private OrderMapper orderMapper;
 
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     /****************************************  ****************************************/
 
 
-    @Autowired
+/*    @Autowired
     private CartMapper cartMapper; // CartMapper 추가
 
     @Autowired
@@ -82,8 +82,9 @@ public class OrderServiceImpl implements OrderService {
         // 결제 정보 삽입
         paymentMapper.insertPayments(payment);
 
-    }
+    }*/
 
+/*
     // 주문 정보 가져오기
     @Override
     public Orders findOrderById(long orderId) {
@@ -108,6 +109,7 @@ public class OrderServiceImpl implements OrderService {
     public Orders getOrderStatus(long orderId) {
         return orderMapper.getOrderStatus(orderId);
     }
+*/
 
 
 }
