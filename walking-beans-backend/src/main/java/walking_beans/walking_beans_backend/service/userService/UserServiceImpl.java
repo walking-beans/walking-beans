@@ -1,34 +1,52 @@
-
 package walking_beans.walking_beans_backend.service.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.UserMapper;
-
-
 import walking_beans.walking_beans_backend.model.dto.Users;
-import walking_beans.walking_beans_backend.model.vo.Vertification;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-
     /*
     @Autowired
     private JavaMailSender mailSender;
-    */
+     */
 
+    /******************************로그인***************************/
+    @Override
+    public Map<String, Object> loginUser(String userEmail, String userPassword) {
+        Map<String, Object> loggedInUser = userMapper.loginUser(userEmail, userPassword);
+        Map<String, Object> result = new HashMap<>();
 
-/******************************로그인***************************/
+        if (loggedInUser != null) {
+            result.put("status", "success");
 
+            // user_role을 문자열로 변환
+            int userRoleInt = (int) loggedInUser.get("user_role");
+            String userRoleStr = switch (userRoleInt) {
+                case 1 -> "user";     // 일반 사용자
+                case 2 -> "rider";    // 라이더
+                case 3 -> "owner";    // 매장 사장님
+                case 4 -> "admin";    // 관리자
+                default -> "unknown"; // 알 수 없는 권한
+            };
+            loggedInUser.put("user_role", userRoleStr);
+
+            result.put("user", loggedInUser);
+        } else {
+            result.put("status", "fail");
+            result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+        }
+        return result;
+    }
+
+    /*
     @Override
     public Map<String, Object> loginUser(String userEmail, String userPassword) {
         Map<String, Object> loggedInUser = userMapper.loginUser(userEmail, userPassword);
@@ -40,12 +58,12 @@ public class UserServiceImpl implements UserService {
 
         } else {
             result.put("status", "fail");
-            //result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+            result.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
         }
         System.out.println("result: " + result);
         return result;
     }
-
+    */
     @Override
     public String findId(String userName, String userPhone) {
         return userMapper.findId(userName, userPhone);
@@ -57,11 +75,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-/************************이메일 인증**************************/
-/*
+    /************************이메일 인증**************************/
+    /*
     private Map<String, String> verificationCodes = new HashMap<String, String>();
 
     //랜덤 난수 생성
@@ -106,8 +121,7 @@ public class UserServiceImpl implements UserService {
 */
 
 
-/***********************마이 페이지*****************************/
-
+    /***********************마이 페이지*****************************/
     @Override
     public Users selectUserInfo(Long userId) {
         return userMapper.selectUserInfo(userId); // DB에서 유저 정보 가져오기

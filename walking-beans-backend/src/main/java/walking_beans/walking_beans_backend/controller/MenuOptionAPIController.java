@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,9 @@ public class MenuOptionAPIController {
      *
      * @return
      */
-    @GetMapping
-    public List<MenuOption> findAllMenuOption() {
-        return menuOptionService.findAllMenuOption();
-    }
-
+    @RequestMapping("/api/option")
+    public class MenuOptionAPIController {
+   
     /** 메뉴옵션 검색
      *
       * @param keyword
@@ -84,12 +83,15 @@ public class MenuOptionAPIController {
         menuOptionService.deleteMenuOption(optionId);
     }
 
+
     /**
      * 사용자가 선택한 옵션 확인하기 옵션명이 유니크한 경우
      * @param optionId
      * @return
      */
-    @GetMapping("/search/option/{optionId}")
+
+    @GetMapping("/search/{optionId}")
+
     public MenuOption selectMenuInfoToCart(@PathVariable long optionId) {
         return menuOptionService.selectMenuInfoToCart(optionId);
     }

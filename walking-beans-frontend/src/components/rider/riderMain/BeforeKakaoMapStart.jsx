@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 
-const KAKAO_MAP_API_KEY_LEO = "1cfadb6831a47f77795a00c42017b581";
+const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
 
 const BeforeKakaoMapStart = ({setGetReady}) => {
 
@@ -31,7 +31,7 @@ const BeforeKakaoMapStart = ({setGetReady}) => {
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY_LEO}&libraries=services&autoload=false`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
         document.head.appendChild(script);
 
@@ -67,7 +67,7 @@ const BeforeKakaoMapStart = ({setGetReady}) => {
 
     return (
         <div>
-            <div id="map" style={{ width: "100%", height: "500px" }}></div>
+            <div id="map" style={{ width: "100%", height: "650px" }}></div>
             <button onClick={()=> {setGetReady(true)}} className="btn btn-info">운행 시작</button>
         </div>
     );

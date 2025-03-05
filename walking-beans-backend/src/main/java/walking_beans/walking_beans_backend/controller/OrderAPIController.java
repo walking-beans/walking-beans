@@ -80,7 +80,7 @@ public class OrderAPIController {
 
 
 
-
+/*
     // 주문 저장
     @PostMapping("/create")
     public String insertOrder(@RequestBody OrderRequest request) {
@@ -115,5 +115,5 @@ public class OrderAPIController {
     @GetMapping("/info/{orderId}")
     public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
         return orderService.getOrderStatus(orderId);
-    }
+    }*/
 }
