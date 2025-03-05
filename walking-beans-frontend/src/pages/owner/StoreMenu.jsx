@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import apiMenu from "./apiMenu";
+import apiMenu from "../../service/apiMenu";
 
 
 const StoreMenu = () => {
