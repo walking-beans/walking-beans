@@ -21,6 +21,7 @@ import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
+import Login from "../pages/custom-login/Login";
 
 
 function AdminChattingroom() {
@@ -79,7 +80,7 @@ function PathRoute () {
                 {/* 4. admin  */}
                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
-                <Route path="/login" element={<AdminLogin />}/>
+                <Route path="/login" element={<Login />}/>
             </Routes>
         </BrowserRouter>
     )
