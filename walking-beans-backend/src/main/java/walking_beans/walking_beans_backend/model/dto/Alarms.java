@@ -19,11 +19,15 @@ public class Alarms {
 
     private long userId;
 
+    //1 = 알림,2 = 채팅
+    private int alarmRole;
+
+    private long alarmSenderId;
+
     private String alarmContent;
 
+    // 읽지 않음 = false, 읽음 = true
     private boolean alarmStatus;
 
     private Timestamp alarmCreateDate;
-
-    private Timestamp alarmSenderId;
 }

@@ -22,8 +22,6 @@ public class MenuOptionAPIController {
      *
      * @return
      */
-    @RequestMapping("/api/option")
-    public class MenuOptionAPIController {
    
     /** 메뉴옵션 검색
      *
