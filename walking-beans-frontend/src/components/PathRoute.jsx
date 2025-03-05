@@ -31,6 +31,7 @@ import "./PathRoute.css";
 import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
+import AdminLogin from "../pages/admin/AdminLogin";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -72,7 +73,7 @@ function PathRoute () {
                             <Routes>
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
-                                <Route path="/login" element={<Login/>}/>
+                                <Route path="/login" element={<AdminLogin/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:orderid" element={<UserOrder/>}/>
