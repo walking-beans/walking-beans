@@ -21,8 +21,6 @@ import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
-import HeaderRoute from "./HeaderRoute";
-import AdminLogin from "../pages/admin/AdminLogin";
 import UserOrder from "../pages/user/UserOrder";
 import UserCart from "../pages/user/UserCart";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
@@ -30,6 +28,7 @@ import UserPayment from "../pages/user/UserPayment";
 import UserOrderList from "../pages/user/UserOrderList";
 
 import "./PathRoute.css";
+import UserSearchMap from "../pages/user/UserSerachMap";
 
 function AdminChattingroom() {
     return null;
@@ -87,6 +86,9 @@ function PathRoute () {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
                                 <Route path="/user/payment" element={<UserPayment/>}/>
+
+                                {/* 유저 관련 라우트 */}
+                                <Route path="user/search/map" element={<UserSearchMap/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
