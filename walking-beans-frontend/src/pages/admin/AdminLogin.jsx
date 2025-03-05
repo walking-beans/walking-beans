@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom";
 
@@ -25,39 +25,72 @@ const AdminLogin = () => {
         if (loginResult === "success") {
             // 로그인 성공 후의 처리
             console.log("로그인 성공!");
-            apiUserService.sessionData(setRole); // 세션 데이터 가져오기
+            //apiUserService.sessionData(setRole); // 세션 데이터 가져오기
+
+            apiUserService.sessionData((data) => {
+                // data를 콘솔에 출력
+                console.log("세션 데이터: ", data);
+                setRole(data.role); // 역할 설정 예시
+            });
+
+            // sessionStorage에서 직접 데이터 확인
+            const user = JSON.parse(localStorage.getItem("user"));
+            console.log("localStorage에서 가져온 사용자 데이터: ", user); // 콘솔에 출력
+
+            navigate("/");
         } else if (loginResult === "fail") {
             console.log("로그인 실패");
             setErrmessage("아이디나 비밀번호가 일치하지 않습니다");
         }
     }, [loginResult]); // loginResult가 변경될 때마다 실행
 
-    useEffect(() => { // role이 업데이트된 후에 실행되는 effect
-        console.log(role);
-        if (role.user_role === 1,"1"){
-            //navigate("/");
-        }else if(role.user_role === 2,"2"){
-
-        }
-    }, [role]); // role이 변경될 때마다 실행
-
     return (
-        <div>
-            <p>아이디</p>
-            <input
-                type="text"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-            />
+        <div className="login-container">
+            <div className="login-box">
+                <div className="login-header">
+                    <h3>로그인</h3>
+                </div>
+                <form>
+                    <div className="mb-3">
+                        <label className="form-label">아이디(이메일)</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={userEmail}
+                            onChange={(e) => setUserEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">비밀번호</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={userPassword}
+                            onChange={(e) => setUserPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="button" onClick={handleLongin} className="login-btn">
+                        로그인
+                    </button>
+                </form>
 
-            <p>비밀번호</p>
-            <input
-                type="text"
-                value={userPassword}
-                onChange={(e) => setUserPassword(e.target.value)}
-            />
-            <p>{errMessage}</p>
-            <button onClick={handleLongin}>로그인하기</button>
+                <div className="social-login">
+                    <button className="kakao-login">
+                        <img src="/images/kakao_icon.png" alt="Kakao"/>
+                        로그인
+                    </button>
+                    <button className="naver-login">
+                        <img src="/images/naver_icon.png" alt="Naver"/>
+                        로그인
+                    </button>
+                </div>
+
+                <div className="login-footer">
+                    <a href="/signup">회원 가입</a> | <a href="/find-account">아이디 / 비밀번호 찾기</a>
+                </div>
+            </div>
         </div>
     )
 }
