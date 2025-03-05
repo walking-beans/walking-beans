@@ -24,6 +24,24 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import Login from "../pages/custom-login/Login";
 
 
+
+import HeaderRoute from "./HeaderRoute";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypage from "../pages/admin/AdminMypage";
+
+
+import UserOrder from "../pages/user/UserOrder";
+import UserCart from "../pages/user/UserCart";
+import UserOrderDetail from "../pages/user/UserOrderDetail";
+import UserPayment from "../pages/user/UserPayment";
+import UserOrderList from "../pages/user/UserOrderList";
+
+
+
+import "./PathRoute.css";
+import UserSearchMap from "../pages/user/UserSerachMap";
+
 function AdminChattingroom() {
     return null;
 }
@@ -81,8 +99,24 @@ function PathRoute () {
                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
                 <Route path="/login" element={<Login />}/>
+                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+
             </Routes>
         </BrowserRouter>
+
+
+                                {/* 관리자 관련 라우트 */}
+                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
+                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                            </Routes>
+                        </div>
+                    </div>
+                </div>
+                {user?.user_role !== "rider" && <Footer/>}
+            </BrowserRouter>
+        </div>
+
     )
 }
 
