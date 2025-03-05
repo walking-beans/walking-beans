@@ -17,10 +17,7 @@ import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
-import UserHeader from "../pages/layout/UserHeader";
-import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
-import AdminLogin from "../pages/admin/AdminLogin";
 import Login from "../pages/custom-login/Login";
 
 
