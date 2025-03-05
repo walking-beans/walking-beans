@@ -1,8 +1,5 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Footer from "../pages/custom-login/Footer";
-import HeaderRoute from "./HeaderRoute";
-import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
@@ -20,41 +17,34 @@ import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
+import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
+import HeaderRoute from "./HeaderRoute";
+import AdminLogin from "../pages/admin/AdminLogin";
+import Login from "../pages/custom-login/Login";
+
+
+
+import HeaderRoute from "./HeaderRoute";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypage from "../pages/admin/AdminMypage";
+
+
+import UserOrder from "../pages/user/UserOrder";
+import UserCart from "../pages/user/UserCart";
+import UserOrderDetail from "../pages/user/UserOrderDetail";
+import UserPayment from "../pages/user/UserPayment";
+import UserOrderList from "../pages/user/UserOrderList";
 
 import "./PathRoute.css";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
+import UserSearchMap from "../pages/user/UserSerachMap";
 
 
 function PathRoute () {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            try {
-                const parsedUser = JSON.parse(storedUser);
-                //  console.log("로컬스토리지에서 가져온 유저:", parsedUser);
-                setUser(parsedUser);
-            } catch (error) {
-                //  console.error("JSON 파싱 에러:", error);
-            }
-        }
-
-        const handleStorageChange = () => {
-            const updatedUser = localStorage.getItem("user");
-            setUser(updatedUser ? JSON.parse(updatedUser) : null);
-        };
-
-        window.addEventListener("userChange", handleStorageChange);
-        window.addEventListener("storage", handleStorageChange);
-
-        return () => {
-            window.removeEventListener("userChange", handleStorageChange);
-            window.removeEventListener("storage", handleStorageChange);
-        };
-    }, []);
+    const [user,setUser] = useState(null);
 
     return(
         <div className="layout-container">

@@ -3,9 +3,6 @@ package walking_beans.walking_beans_backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Menu;
-import walking_beans.walking_beans_backend.model.dto.MenuOption;
-import walking_beans.walking_beans_backend.service.menuOptionService.MenuOptionService;
-import walking_beans.walking_beans_backend.service.menuService.MenuService;
 import walking_beans.walking_beans_backend.service.menuService.MenuServiceImpl;
 
 import java.util.List;
@@ -36,7 +33,6 @@ public class MenuAPIController {
     }
 
 
-
     /** ID 로 메뉴 찾기
      *
      * @param menuId
@@ -47,17 +43,41 @@ public class MenuAPIController {
         return menuService.findMenuById(menuId);
     }
 
-
-    @Autowired
-    private MenuOptionService menuOptionService;
-
-    /**
-     * 사용자가 선택한 옵션 확인하기 옵션명이 유니크한 경우
-     * @param optionId
-     * @return
+    /**가게에 속한 메뉴 찾기
+     *
      */
-    @GetMapping("/search/option/{optionId}")
-    public MenuOption selectMenuInfoToCart(@PathVariable long optionId) {
-        return menuOptionService.selectMenuInfoToCart(optionId);
+    @GetMapping("/storemenu/{storeId}")
+    public List<Menu> findMenuByStoreId(@PathVariable long storeId) {
+        return menuService.findMenuByStoreId(storeId);
     }
+
+    /**메뉴 수정하기
+     *
+     * @param menuId
+     */
+    @PutMapping("/update")
+    public void updateMenu(@PathVariable long menuId, @RequestBody Menu menu) {
+        menu.setMenuId(menuId);
+        menuService.updateMenu(menu);
+    }
+
+    /**추가하기
+     *
+     * @param menu
+     */
+    @PostMapping
+    public void addMenu(@RequestBody Menu menu) {
+        menuService.addMenu(menu);
+    }
+
+    /**삭제하기
+     *
+     * @param menuId
+     */
+    @DeleteMapping("/delete")
+    public void deleteMenu(@RequestBody long menuId) {
+        menuService.deleteMenu(menuId);
+    }
+
+
 }
