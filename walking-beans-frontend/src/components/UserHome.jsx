@@ -1,126 +1,143 @@
+import "./UserHome.css";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import apiStoreService from "../service/apiStoreService";
 
-const storeData = [
-    { name: "강남커피하우스", lat: 37.498095, lng: 127.027610 },
-    { name: "테헤란로 맛집", lat: 37.500184, lng: 127.035407 },
-    { name: "소문난 김밥", lat: 37.502392, lng: 127.030091 },
-    { name: "신사동 빵집", lat: 37.515115, lng: 127.020918 },
-    { name: "강남국밥", lat: 37.495901, lng: 127.032541 },
-    { name: "맛있는 스테이크", lat: 37.503753, lng: 127.025321 },
-    { name: "24시 편의점", lat: 37.499643, lng: 127.029382 },
-    { name: "테헤란 카페", lat: 37.497731, lng: 127.033859 },
-    { name: "수제버거 전문점", lat: 37.501523, lng: 127.037721 },
-    { name: "노포 국수집", lat: 37.492591, lng: 127.028789 }
-];
-
-// 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
-const getDistance = (lat1, lng1, lat2, lng2) => {
-    const R = 6371; // 지구 반지름(km)
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLng = (lng2 - lng1) * (Math.PI / 180);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) *
-        Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // 거리 (km)
-};
-
-const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 API 키 입력
+const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserHome = () => {
     const [userLocation, setUserLocation] = useState(null);
-    const [filteredStores, setFilteredStores] = useState([]);
+    const [store, setStore] = useState([]);
+    const [displayStores, setDisplayStores] = useState([]);
+    const [map, setMap] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [sortType, setSortType] = useState("rating");
+    const navigate = useNavigate();
+
+    const getDistance = (lat1, lng1, lat2, lng2) => {
+        if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
+        const R = 6371;
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLng = (lng2 - lng1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) *
+            Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    };
 
     useEffect(() => {
-        // 현재 위치 가져오기
+        apiStoreService.getStore(setStore);
+    }, []);
+
+    useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     setUserLocation({ lat, lng });
-
-                    // 반경 10km 내 가게 필터링
-                    const filtered = storeData.filter((store) =>
-                        getDistance(lat, lng, store.lat, store.lng) <= 10
-                    );
-                    setFilteredStores(filtered);
                 },
                 (error) => {
                     console.error("위치 정보를 가져올 수 없습니다:", error);
                 }
             );
-        } else {
-            console.error("Geolocation을 지원하지 않는 브라우저입니다.");
         }
     }, []);
 
     useEffect(() => {
-        if (!userLocation) return;
+        if (!userLocation || store.length === 0) return;
+        const filtered = store.filter((s) =>
+            getDistance(userLocation.lat, userLocation.lng, s.storeLatitude, s.storeLongitude) <= 10
+        );
+        setDisplayStores(filtered.sort(() => 0.5 - Math.random()).slice(0, 5));
+    }, [userLocation, store]);
 
-        // 카카오맵 스크립트 로드
+    useEffect(() => {
+        if (!userLocation) return;
         const script = document.createElement("script");
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
         document.head.appendChild(script);
 
         script.onload = () => {
             window.kakao.maps.load(() => {
                 const mapContainer = document.getElementById("map");
+                if (!mapContainer) return;
                 const mapOption = {
                     center: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     level: 5,
                 };
-                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+                const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
+                setMap(newMap);
 
-                // 현재 위치 마커 아이콘 설정 (추후 프로젝트에 맞게 수정바람)
-                const userMarkerImage = new window.kakao.maps.MarkerImage(
-                    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 사용자 현재 위치 아이콘으로 구분지음
-                    new window.kakao.maps.Size(40, 42),
-                    { offset: new window.kakao.maps.Point(20, 42) }
-                );
-
-                // 현재 위치 마커 생성 (추후 프로젝트에 맞게 수정바람)
+                // 내 위치 마커 추가
                 new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                    map: map,
-                    image: userMarkerImage,
-                });
-
-                // 가게 마커 추가 (추후 프로젝트에 맞게 수정바람)
-                filteredStores.forEach((store) => {
-                    const marker = new window.kakao.maps.Marker({
-                        position: new window.kakao.maps.LatLng(store.lat, store.lng),
-                        map: map,
-                    });
-
-                    // 마커 클릭 시 가게 이름 표시 (추후 프로젝트에 맞게 수정바람)
-                    const infowindow = new window.kakao.maps.InfoWindow({
-                        content: `<div style="padding:5px; font-size:14px;">${store.name}</div>`,
-                    });
-
-                    window.kakao.maps.event.addListener(marker, "click", () => {
-                        infowindow.open(map, marker);
-                    });
+                    map: newMap,
+                    title: "내 위치"
                 });
             });
         };
-
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLocation, filteredStores]);
+    }, [userLocation]);
+
+    const handleSearch = (e) => {
+        if (e.key === "Enter") {
+            axios.get(`http://localhost:7070/api/store/search?keyword=${searchKeyword}`)
+                .then((res) => {
+                    console.table(res.data);
+                    let sortedData = res.data.map(store => ({
+                        ...store,
+                        storeRating: store.storeRating ?? 0,
+                        storeReviewCount: store.storeReviewCount ?? 0,
+                        storeLatitude: store.storeLatitude ?? 0,
+                        storeLongitude: store.storeLongitude ?? 0
+                    }));
+                    if (sortType === "rating") {
+                        sortedData.sort((a, b) => b.storeRating - a.storeRating);
+                    } else if (sortType === "distance") {
+                        sortedData.sort((a, b) =>
+                            getDistance(userLocation.lat, userLocation.lng, a.storeLatitude, a.storeLongitude) -
+                            getDistance(userLocation.lat, userLocation.lng, b.storeLatitude, b.storeLongitude)
+                        );
+                    }
+                    setDisplayStores(sortedData);
+                })
+                .catch(() => alert("검색 데이터를 가져오지 못했습니다."));
+        }
+    };
+
+    const handleMapClick = () => {
+        navigate("user/search/map", { state: { userLocation, stores: displayStores } });
+    };
 
     return (
-        <div>
-            <h2>내 위치 주변 가게 (반경 10km)</h2>
-            <div id="map" style={{ width: "100%", height: "500px" }}></div>
+        <div className="user-home-container">
+            <input type="text" placeholder="가게 검색" value={searchKeyword}
+                   onChange={(e) => setSearchKeyword(e.target.value)}
+                   onKeyDown={handleSearch} />
+            <select onChange={(e) => setSortType(e.target.value)}>
+                <option value="rating">평점순</option>
+                <option value="distance">거리순</option>
+            </select>
+            <div id="map" onClick={handleMapClick}></div>
+            <ul className="store-list">
+                {displayStores.map((store) => (
+                    <li key={store.storeId} className="store-item">
+                        <span className="store-name">{store.storeName}</span>
+                        <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
+                        <span className="store-distance">{userLocation ? getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1) : "-"} km</span>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
-
 
 export default UserHome;

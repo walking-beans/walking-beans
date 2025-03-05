@@ -3,18 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.CartMapper">
 
-    <!-- 장바구니 메뉴 정보 저장 -->
-
-    <insert id="addToCart">
-        <!-- Orders 테이블에 데이터 추가 -->
-        INSERT INTO Orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price, order_create_date, order_modified_date)
-        VALUES (
-        #{user_id}, #{store_id}, #{address_id}, #{order_number}, #{order_status}, #{order_requests}, #{order_total_price}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-        <!-- Carts 테이블에 데이터 추가 -->
-        INSERT INTO Carts (option_id, order_id, store_id, user_id, cart_quantity, cart_create_date, cart_modified_date)
-        VALUES (#{option_id},(SELECT LAST_INSERT_ID()), -- 방금 삽입한 Orders의 ID를 사용
-        #{store_id}, #{user_id}, #{cart_quantity}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    <!-- 장바구니 메뉴 등록 -->
+    <insert id="insertCart">
+        INSERT INTO carts (option_id, order_id, store_id, user_id, cart_quantity, cart_create_date, cart_modified_date)
+        VALUES (#{optionId}, #{orderId}, #{storeId}, #{userId}, #{cartQuantity}, NOW(), NOW());
     </insert>
 
     <!-- 장바구니 메뉴 1개 삭제 -->
@@ -22,4 +14,56 @@
         DELETE FROM Carts
         WHERE cart_id = #{cartId}
     </delete>
+
+    <!-- 선택한 상품 개수 가져오기 mapper 추가 필요 -->
+    <select id="getCartQuantityByOrderId">
+        SELECT count(cart_quantity) as total_quntity
+        FROM carts
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 최종 장바구니 항목 상태 업데이트 -->
+    <update id="updateCartToOrder">
+        UPDATE carts
+        SET
+            option_id = #{optionId},
+            store_id = #{storeId},
+            cart_quantity = #{cartQuantity},
+            cart_modified_date = NOW()
+        WHERE cart_id = #{cartId}
+    </update>
+
+    <!-- 장바구니 메뉴 데이터 가져오기 -->
+    <select id="getCartInfoByCartId">
+        SELECT c.cart_id,
+               mo.option_id,
+               m.menu_id,
+               m.user_id,
+               mo.option_name,
+               mo.option_price,
+               m.menu_name,
+               m.menu_price
+        FROM carts c
+                 JOIN menuOption mo ON c.option_id = mo.option_id
+                 JOIN menu m ON m.menu_id = mo.menu_id
+        WHERE c.cart_id = #{cartId};
+
+    </select>
+
+    <!-- 장바구니 주문자 기준 카트 데이터 가져오기 -->
+    <select id="getCartInfoByOrderId">
+        SELECT c.cart_id,
+               mo.option_id,
+               m.menu_id,
+               m.user_id,
+               mo.option_name,
+               mo.option_price,
+               m.menu_name,
+               m.menu_price
+        FROM carts c
+                 JOIN menuOption mo ON c.option_id = mo.option_id
+                 JOIN menu m ON m.menu_id = mo.menu_id
+        WHERE c.order_id = #{orderId};
+    </select>
+
 </mapper>

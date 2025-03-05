@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.menuOptionService;
 
+import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.MenuOption;
 
 import java.util.List;
@@ -27,5 +28,9 @@ public interface MenuOptionService {
     // 메뉴옵션 삭제하기
     void deleteMenuOption(MenuOption menuOption);
 
+    // 장바구니에 등록할 메뉴, 메뉴옵션 가져오기
+    MenuOption selectMenuInfoToCart(long menuOption);
 
+    // 사용자가 선택한 옵션 확인하기
+    Integer selectOptionByMenuIdAndName(@Param("menuId") long menuId, @Param("optionName") String optionName);
 }

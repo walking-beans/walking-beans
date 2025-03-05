@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.menuService;
 
+
 import walking_beans.walking_beans_backend.model.dto.Menu;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface MenuService {
     List<Menu> findAllMenu();
 
     // 메뉴 검색
-    List<Menu> searchMenu();
+    List<Menu> searchMenu(String keyword);
 
     // ID 로 메뉴 찾기
     Menu findMenuById(long menuId);
@@ -26,5 +27,4 @@ public interface MenuService {
 
     // 메뉴 삭제하기
     void deleteMenu(Menu menu);
-
 }

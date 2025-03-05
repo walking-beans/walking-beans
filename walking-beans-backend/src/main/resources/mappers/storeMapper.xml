@@ -10,12 +10,13 @@
     </select>
 
     <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
-    <select id="searchStores">
-        SELECT *
+    <select id="searchStore">
+        SELECT store_id, store_name, store_picture_url, store_min_delivery_time,
+               store_rating, store_review_count, store_latitude, store_longitude
         FROM stores
-        WHERE store_name = #{keyword}
-        OR store_description = #{keyword}
-        OR store_mainMenu = #{keyword}
+        WHERE store_name LIKE concat('%', #{keyword}, '%')
+           OR store_description LIKE concat('%', #{keyword}, '%')
+           OR store_main_menu LIKE concat('%', #{keyword}, '%')
     </select>
 
     <!--//특정 매장 불러오기, ID -->
@@ -108,7 +109,6 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     <update id="updateStores">
         UPDATE stores
         SET (
-                user_id = #{userId}
                 store_name = #{storeName}
                 store_description = #{storeDescription}
                 store_main_menu = #{storeMainMenu}
@@ -140,4 +140,23 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
 
     </delete>
 
+    <!-- **************************************** LEO **************************************** -->
+    <select id="getStoreAddressByOrderId">
+        SELECT S.store_id, S.user_id, S.store_name, S.store_description, S.store_main_menu, S.store_business_number, S.store_phone, S.store_picture_url, S.store_operation_hours, S.store_closed_dates, S.store_review_count, S.store_rating, S.store_min_delivery_time, S.store_max_delivery_time, S.store_delivery_tip, S.store_delivery_address, S.store_address, S.store_latitude, S.store_longitude
+        FROM stores S
+                 JOIN orders O
+                      on S.store_id = O.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
+    <select id="getStoreInfoInRiderMain">
+        SELECT S.store_name, O.user_id, DI.income_amount, O.order_id, S.store_latitude, S.store_longitude, DATE_FORMAT(O.order_create_date, '%p %h:%i') AS order_create_date, S.store_picture_url
+        FROM stores S
+                 JOIN orders O
+                      on O.store_id = S.store_id
+                 JOIN deliveryIncome DI
+                      on DI.order_id = O.order_id
+        WHERE O.rider_id_on_duty IS NULL;
+    </select>
+    <!-- ************************************************************************************* -->
 </mapper>

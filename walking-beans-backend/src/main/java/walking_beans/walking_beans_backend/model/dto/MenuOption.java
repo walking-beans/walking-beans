@@ -28,5 +28,4 @@ public class MenuOption {
 	private Timestamp optionCreateDate;
 
 	private Timestamp optionModifiedDate;
-
 }

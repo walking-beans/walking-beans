@@ -1,14 +1,20 @@
 package walking_beans.walking_beans_backend.controller;
 
+import jakarta.mail.Store;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.mapper.PaymentMapper;
+import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
+import walking_beans.walking_beans_backend.model.dto.Payments;
+import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
-
 
 import java.util.List;
 
@@ -19,6 +25,7 @@ public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
 
+    /**************************************** LEO ****************************************/
     /**
      * 주문 번호에 따른 주문 정보
      * @param orderId : order Id
@@ -64,5 +71,49 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
 
-    //
+    @GetMapping("/riderIdOnDuty")
+    public ResponseEntity<List<Orders>> getOrdersByRiderIdOnDuty(@RequestParam("riderIdOnDuty") long riderIdOnDuty) {
+        return ResponseEntity.ok(orderService.getOrdersByRiderIdOnDuty(riderIdOnDuty));
+    }
+
+    /* ***************************************  *************************************** */
+
+
+
+/*
+    // 주문 저장
+    @PostMapping("/create")
+    public String insertOrder(@RequestBody OrderRequest request) {
+        if (request.getPayments() == null) {
+            return "결제 정보가 누락되었습니다.";
+        }
+
+        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
+        return "주문 등록 및 결제 정보 저장 완료";
+    }
+
+
+    // 주문 정보 가져오기
+    @GetMapping("/{orderId}")
+    public Orders findOrderById(@PathVariable long orderId) {
+        return orderService.findOrderById(orderId);
+    }
+
+    // 주문한 유저 정보 가져오기
+    @GetMapping("/user/{userId}")
+    public List<Orders> findOrdersByUserId(@PathVariable long userId) {
+        return orderService.findOrdersByUserId(userId);
+    }
+
+    // 주문한 가게 정보 가져오기
+    @GetMapping("/storeInfo/{orderId}")
+    public Stores findStoreByOrderId(@PathVariable("orderId") long orderId) {
+        return orderService.findStoreByOrderId(orderId);
+    }
+
+    // 주문내역 내 오더 정보 가져오기
+    @GetMapping("/info/{orderId}")
+    public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
+        return orderService.getOrderStatus(orderId);
+    }*/
 }
