@@ -33,10 +33,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu findMenuByStoreId(long StoreId) {
+    public List<Menu> findMenuByStoreId(long storeId) {
 
-        return menuMapper.findMenuByStoreId(StoreId);
+        return menuMapper.findMenuByStoreId(storeId);
     }
+
 
     @Override
     public void updateMenu(Menu menu) {
@@ -49,7 +50,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void deleteMenu(Menu menu) {
-        menuMapper.deleteMenu(menu);
+    public void deleteMenu(long menuId) {
+        menuMapper.deleteMenu(menuId);
     }
 }

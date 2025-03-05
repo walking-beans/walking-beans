@@ -21,7 +21,6 @@ import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
-import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
 
 function AdminChattingroom() {
