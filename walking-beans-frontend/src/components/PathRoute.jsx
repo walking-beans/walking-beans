@@ -37,78 +37,115 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserOrderList from "../pages/user/UserOrderList";
 
-
-
 import "./PathRoute.css";
+import AdminMessage from "../pages/admin/AdminMessage";
+import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import UserSearchMap from "../pages/user/UserSerachMap";
 
-function AdminChattingroom() {
-    return null;
-}
-
-function AdminMessage() {
-    return null;
-}
 
 function PathRoute () {
     const [user,setUser] = useState(null);
 
     return(
-        <BrowserRouter>
-            <HeaderRoute />
-            <Routes>
-                {/**/}
-                <Route path="/" element={<UserHome/>}/>
+        <div className="layout-container">
+            <BrowserRouter>
+                <HeaderRoute user={user}/>
+                <div className="content-wrapper">
+                    <div className="container d-flex justify-content-center">
+                        {/* <div className="col-md-8 col-12">*/}
+                        <div className=" col-12">
+                            <Routes>
+                                {/* 기본 페이지 및 로그인 */}
+                                <Route path="/" element={<UserHome/>}/>
+                                <Route path="/login" element={<Login/>}/>
 
-                {/* 2. rider  */}
-                <Route path="/rider" element={
-                    <RiderMain/>}
-                /*<ProtectedRoute allowedRoles={[2]}>
-                    </ProtectedRoute>*/
-                />
-                <Route path="/rider/ontheway" element={
-                    <RiderOntheway/>}
-                />
-                <Route path="/rider/result" element={
-                    <RiderResult/>}
-                />
-                <Route path="/rider/orderlist" element={
-                    <RiderOrderList/>}
-                />
-                <Route path="/rider/order" element={
-                    <RiderOrder/>}
-                />
-                <Route path="/rider/income" element={
-                    <RiderIncome/>}
-                />
+                                {/* 라이더 관련 라우트 */}
+                                <Route path="/rider" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderMain/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/ontheway" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOntheway/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/result" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderResult/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/orderlist" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOrderList/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/order" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderOrder/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/rider/income" element={
+                                    <ProtectedRoute allowedRoles={["rider"]}>
+                                        <RiderIncome/>
+                                    </ProtectedRoute>
+                                }/>
 
-                {/* 3. owner  */}
-                <Route path="/owner" element={<StoreMain />}/>
-                <Route path="/owner/menu" element={<StoreMenu />}/>
-                <Route path="/owner/menudetail" element={<StoreMenuDetail />}/>
-                <Route path="/owner/menuform" element={<StoreMenuForm />}/>
-                <Route path="/owner/menuoption" element={<StoreMenuOption />}/>
-                <Route path="/owner/menuoptiondetail" element={<StoreMenuOptionDetail />}/>
-                <Route path="/owner/menuoptiondeform" element={<StoreMenuOptionForm />}/>
-                <Route path="/owner/mystore" element={<StoreMyStore />}/>
-                <Route path="/owner/order" element={<StoreOrder />}/>
-                <Route path="/owner/revenue" element={<StoreRevenue />}/>
-
-
-                {/* 4. admin  */}
-                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                <Route path="/message/:roomId" element={<AdminMessage/>}/>
-                <Route path="/login" element={<Login />}/>
-                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
-                <Route path="/admin/mypage" element={<AdminMypage/>}/>
-
-            </Routes>
-        </BrowserRouter>
-
+                                {/* 사장님 관련 라우트 */}
+                                <Route path="/owner" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMain/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menu" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenu/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menudetail" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuDetail/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuform" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuForm/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoption" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOption/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoptiondetail" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOptionDetail/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/menuoptiondeform" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMenuOptionForm/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/mystore" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreMyStore/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/order" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreOrder/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/revenue" element={
+                                    <ProtectedRoute allowedRoles={["store"]}>
+                                        <StoreRevenue/>
+                                    </ProtectedRoute>
+                                }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/chat" element={<AdminChattingroom/>}/>
+                                <Route path="/message" element={<AdminMessage/>}/>
                             </Routes>
                         </div>
                     </div>
@@ -116,7 +153,6 @@ function PathRoute () {
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
         </div>
-
     )
 }
 
