@@ -47,7 +47,7 @@ public class ChattingRoomAPIController {
                                                                         @RequestParam("userId") long userId,
                                                                         @RequestParam("messageRole") int messageRole,
                                                                         @RequestParam("messageContent") String messageContent) {
-        log.info("=== /api/chattingroom?roomId=" + roomId + "&roomLastMessage=" + messageContent);
+        log.info("=== /api/chattingroom?roomId=" + roomId + "&roomLast  Message=" + messageContent);
         int messageInsert = messageService.insertMessageByRoomId(roomId, userId, messageRole, messageContent);
         int chattingInsert = chattingRoomService.updateLastMessageOfChattingRoom(roomId, messageContent);
         if (messageInsert != 0 && chattingInsert != 0) {
