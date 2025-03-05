@@ -1,0 +1,38 @@
+.user-cart-background {
+    background: #D2B595;
+    width: 470px;
+    padding: 30px;
+    display: block;
+    text-align: center;
+}
+
+.user-cart-title {
+    font-size: 33px;
+    font-weight: bold;
+    color: #5A3D21;
+}
+
+.user-cart-menuinfo {
+    margin-top: 30px;
+}
+
+.user-order-btn {
+    width: 411px;
+    height: 60px;
+    border-radius: 30px;
+    background: #AB7A44;
+    color: #F4EDDF;
+    border: none;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.user-order-hr {
+    border: none;
+    border-top : 2px #5A3D21 solid;
+    margin: 30px;
+}
+
+.user-order-totalprice {
+
+}

@@ -76,10 +76,10 @@ function PathRoute () {
                                 <Route path="/login" element={<AdminLogin/>}/>
 
                                 {/* 유저 관련 라우트 */}
-                                <Route path="/user/order/:orderid" element={<UserOrder/>}/>
-                                <Route path="/user/ordercart/:orderid/:cartId" element={<UserCart/>}/>
+                                <Route path="/user/order/:orderId/:cartId" element={<UserOrder/>}/>
+                                <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
-                                <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
+                                <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                 <Route path="/user/payment" element={<UserPayment/>}/>
 
                                 {/* 유저 관련 라우트 */}
