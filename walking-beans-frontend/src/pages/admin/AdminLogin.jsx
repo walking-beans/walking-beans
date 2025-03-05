@@ -34,10 +34,10 @@ const AdminLogin = () => {
             });
 
             // sessionStorage에서 직접 데이터 확인
-            const sessionData = sessionStorage.getItem("role");
-            console.log("sessionStorage에서 가져온 데이터: ", sessionData);
+            const user = JSON.parse(localStorage.getItem("user"));
+            console.log("localStorage에서 가져온 사용자 데이터: ", user); // 콘솔에 출력
 
-            //navigate("/");
+            navigate("/");
         } else if (loginResult === "fail") {
             console.log("로그인 실패");
             setErrmessage("아이디나 비밀번호가 일치하지 않습니다");
