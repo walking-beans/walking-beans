@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import {useNavigate, useParams} from "react-router-dom";
-import UserCart from "./UserCart";
+import UserCart from "../user/UserCart";
+import "../../css/Order.css"
+import "../../css/Cart.css"
 
 const UserOrder = () => {
     const [carts, setCarts] = useState([]);
@@ -53,17 +55,19 @@ const UserOrder = () => {
 
     return (
         <div className="userorder-container">
+            {/* menu */}
 
 
 
 
+            {/* cart */}
+            <div className="user-cart-background">
+            <div className="user-cart-title">장바구니</div>
+            <div className="user-cart-menuinfo">
 
-            <div className="user-cart-container">
-            <div>주문 내역</div>
-            <div>
             {
                 carts.map((cart, index) => (
-                    <UserCart orderId={index}
+                    <UserCart key={cart.cartId}
                               menuName={cart.menuName}
                               menuPrice={cart.menuPrice}
                               optionName={cart.optionName}
@@ -74,7 +78,14 @@ const UserOrder = () => {
                 ))
             }
             </div>
-                <button>주문하기</button>
+
+                <hr className="user-order-hr"/>
+                <div className="user-cart-grid">
+                <div className="user-cart-bordtext">
+                    최종 결제 금액</div>
+                <div className="user-cart-title">총금액</div>
+                </div>
+                <button className="user-order-btn">주문하기</button>
             </div>
         </div>
     );

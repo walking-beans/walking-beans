@@ -1,5 +1,4 @@
 import orderCartDeleteBtnIcon from "../../images/user/orderCartDeleteBtn.svg"
-import {Link, useNavigate, useParams} from "react-router-dom";
 import "../../css/Cart.css"
 
 const UserCart = ({cartId, menuName, menuPrice, optionName, optionPrice, onDelete}) => {
