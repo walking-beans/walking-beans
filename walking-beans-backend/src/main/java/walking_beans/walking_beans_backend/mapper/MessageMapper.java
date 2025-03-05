@@ -12,8 +12,5 @@ public interface MessageMapper {
 
     List<Message> getAllMessages(@Param("roomId") long roomId);
 
-    Integer insertMessageByRoomId(@Param("roomId") long roomId,
-                                  @Param("userId") long userId,
-                                  @Param("messageRole") int messageRole,
-                                  @Param("messageContent") String messageContent);
+    Integer insertMessageByRoomId(Message message);
 }

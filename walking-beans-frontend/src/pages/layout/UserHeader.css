@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 420px;
+    max-width: 600px;
     background-color: #f8f1e4;
     width: 100%;
     margin: 0 auto;
@@ -16,7 +16,7 @@
     padding: 20px 16px;
     min-height: 120px;
     border-bottom: 1px solid #3a2d22;
-    max-width: 420px;
+    max-width: 600px;
     width: 100%;
     margin: 0 auto;
     position: relative;
@@ -80,7 +80,7 @@
 .user-header-wrapper .side-nav {
     position: absolute;
     top: 0;
-    left: 420px;
+    left: 600px;
     width: 260px;
     background-color: #d2b595;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);

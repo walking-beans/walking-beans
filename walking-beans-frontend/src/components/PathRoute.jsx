@@ -23,14 +23,9 @@ import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
 
 import "./PathRoute.css";
+import AdminMessage from "../pages/admin/AdminMessage";
+import AdminChattingroom from "../pages/admin/AdminChattingroom";
 
-function AdminChattingroom() {
-    return null;
-}
-
-function AdminMessage() {
-    return null;
-}
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -159,8 +154,8 @@ function PathRoute () {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/chat" element={<AdminChattingroom/>}/>
+                                <Route path="/message" element={<AdminMessage/>}/>
                             </Routes>
                         </div>
                     </div>
