@@ -12,7 +12,6 @@ import halfStar from "../../images/star/halfStar.svg";
 const starPath  = {
 
     getStarPath : function (star, setStarPath) {
-        console.log("===getStarPath===");
         if (star === 0) {
             setStarPath(null);
         } else if (star > 0 && star < 1) {
@@ -30,7 +29,6 @@ const starPath  = {
         } else if (star > 3 && star < 4) {
             setStarPath(threeHalfStar);
         } else if (star === 4 || star === "4") {
-            console.log("getStarPath : star ", star)
             setStarPath(fourStar);
         } else if (star > 4 && star < 5) {
             setStarPath(fourHalfStar);

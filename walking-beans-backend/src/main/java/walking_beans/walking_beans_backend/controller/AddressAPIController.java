@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressAPIController {
+
     @Autowired
     private AddressServiceImpl addressService;
 
