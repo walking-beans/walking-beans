@@ -21,6 +21,8 @@ import UserHeader from "../pages/layout/UserHeader";
 import ProtectedRoute from "./ProtectedRoute";
 import HeaderRoute from "./HeaderRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypage from "../pages/admin/AdminMypage";
 
 
 function AdminChattingroom() {
@@ -80,6 +82,9 @@ function PathRoute () {
                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
                 <Route path="/login" element={<AdminLogin />}/>
+                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+
             </Routes>
         </BrowserRouter>
     )
