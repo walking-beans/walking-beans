@@ -19,20 +19,18 @@ const StoreMenu = () => {
     const handleDelete = () => {
 
         if(window.confirm("정말 삭제하시겠습니까?")){
-            // API 자리
+
+            //API자리
+
             navigate("/clothes");
         }
     }
-    const handleRow = () =>{
-
+    const handleRow = () =>{// 1열 3열 변경 핸들러
         if(barrel){
             setBarrel(false)
-
         } else {
             setBarrel(true)
-
         }
-
     }
 
 
