@@ -4,6 +4,10 @@
     padding: 30px;
     display: block;
     text-align: center;
+    position: fixed;
+    left: 55%;
+    top: 10%;
+    transform: translateX(50%);
 }
 
 .user-cart-title {
@@ -30,9 +34,18 @@
 .user-order-hr {
     border: none;
     border-top : 2px #5A3D21 solid;
-    margin: 30px;
+    margin: 30px 0;
 }
 
-.user-order-totalprice {
+.userorder-container {
+    margin: 30px 0;
+}
 
+.user-order-menu{
+    max-width: 600px;
+    float: left;
+}
+
+.user-order-menuinfo {
+    text-align: center;
 }

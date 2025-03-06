@@ -1,45 +1,38 @@
 import React, {useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import UserCart from "../user/UserCart";
+import StoreMenuForm from "../owner/StoreMenuForm";
 import "../../css/Order.css"
 import "../../css/Cart.css"
+import oneStar from "../../images/star/oneStar.svg"
+import detailBtn from "../../images/user/detailbtn.svg"
+
 
 const UserOrder = () => {
     const [carts, setCarts] = useState([]);
-    const {orderId, cartId} = useParams();
+    const {orderId, cartId, storeId} = useParams();
     const navigate = useNavigate();
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [storeName, setStoreName] = useState(null);
+    const [menu, setMenu] = useState([]);
+    const [store, setStore] = useState(null);
 
+    // carts 데이터 가져오기
     useEffect(() => {
         const fetchCart = async () => {
-            console.log("cartId:", cartId); // ✅ cartId 값 확인
-            if (cartId) {
-                const data = await apiUserOrderService.getUserOrderByCartId(cartId);
-                console.log("받아온 데이터:", data); // ✅ 응답 데이터 확인
-                if (data) {
-                    setCarts(data);
-                }
-            }
+            apiUserOrderService.getUserOrderByCartId(cartId);
         };
-        fetchCart();
+
     }, [cartId]);
 
+    // 메뉴 삭제하기
     const handleDelete = () => {
-        apiUserOrderService.deleteUserOrderCart(cartId)
-            .then((res) => {
-                if (res) {
-                    console.log("삭제 성공", res);
-                    setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== cartId));
-                }
-            })
-            .catch((err) => {
-                console.error("삭제 실패", err);
-                alert("메뉴 삭제에 실패하였습니다. 다시 시도해 주세요.");
-            });
+        apiUserOrderService.deleteUserOrderCart(cartId, setCarts)
+        window.location.reload(); // 새로고침
     };
 
-
-
+    // option 데이터 가져오기
     useEffect(() => {
         if (orderId) {
             apiUserOrderService.getUserOrderByOrderId(orderId)
@@ -53,37 +46,103 @@ const UserOrder = () => {
         }
     }, [orderId]);
 
+    // 총 금액 계산하기
+    useEffect(() => {
+        const total = carts.reduce((sum, cart) => {
+            const menuPrice = Number(cart.menuPrice) || 0;
+            const optionPrice = Number(cart.optionPrice) || 0;
+            return sum + menuPrice + optionPrice;
+        }, 0);
+        setTotalAmount(total);
+    }, [carts]);
+
+    // 가게 데이터 가져오기
+    useEffect(() => {
+        apiUserOrderService.getStoreByOrderId(storeId, setStore);
+    }, []);
+
+    // 메뉴 데이터 가져오기
+    useEffect(() => {
+        apiUserOrderService.getMenuByStoreId(storeId, setMenu);
+    }, []);
+
+
     return (
         <div className="userorder-container">
             {/* menu */}
+            <div className="user-cart-title">{store?.storeName}</div>
+            <div><img src={oneStar} alt="별점 아이콘"/>
+                별점 평균(평점 개수)
+                <Link to={`/review/${storeId}`}><img src={detailBtn} alt="가게 평점 자세히보기"/></Link>
+            </div>
 
+            <div className="user-order-hr" alt="구분선"></div>
+            <div className="user-cart-bordtext">대표메뉴</div>
 
+            <div>
+                <p>이미지</p>
+                <div>
+                    메뉴명
+                    가격
+                </div>
+            </div>
 
+            <div className="user-order-hr" alt="구분선"></div>
+            <div className="user-cart-bordtext">카테고리</div>
+
+            <div>
+                <div className="user-order-menu">
+                    <div className="user-order-menuinfo">
+                        {
+                            menu.map((menu) => (
+                                <StoreMenuForm key={menu.storeId}
+                                               menuName={menu.menuName}
+                                               menuPrice={menu.menuPrice}
+
+                                               onAddToCart={menu.onAddToCart}
+                                />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div className="user-order-hr" alt="구분선"></div>
+            <div className="user-cart-bordtext">에이드</div>
+
+            <div>
+                <p>이미지</p>
+                <div>
+                    메뉴명
+                    가격
+                </div>
+            </div>
 
             {/* cart */}
             <div className="user-cart-background">
-            <div className="user-cart-title">장바구니</div>
-            <div className="user-cart-menuinfo">
+                <div className="user-cart-title">장바구니</div>
+                <div className="user-cart-menuinfo">
 
-            {
-                carts.map((cart, index) => (
-                    <UserCart key={cart.cartId}
-                              menuName={cart.menuName}
-                              menuPrice={cart.menuPrice}
-                              optionName={cart.optionName}
-                              optionPrice={cart.optionPrice}
+                    {
+                        carts.map((cart) => (
+                            <UserCart key={cart.cartId}
+                                      menuName={cart.menuName}
+                                      menuPrice={cart.menuPrice}
+                                      optionName={cart.optionName}
+                                      optionPrice={cart.optionPrice}
 
-                              onDelete={handleDelete}
-                    />
-                ))
-            }
-            </div>
+                                      onDelete={handleDelete}
+                            />
+                        ))
+                    }
+                </div>
 
-                <hr className="user-order-hr"/>
+                <div className="user-order-hr"></div>
                 <div className="user-cart-grid">
-                <div className="user-cart-bordtext">
-                    최종 결제 금액</div>
-                <div className="user-cart-title">총금액</div>
+                    <div className="user-cart-bordtext">
+                        최종 결제 금액
+                    </div>
+                    <div className="user-cart-title">{totalAmount.toLocaleString()}원</div>
                 </div>
                 <button className="user-order-btn">주문하기</button>
             </div>
