@@ -13,6 +13,7 @@ import searchIcon from "../../assert/svg/userNav/search.svg";
 import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import userIcon from "../../assert/svg/user.svg";
+import apiUserService from "../../service/apiUserService";
 
 const UserHeader = ({user}) => {
     const location = useLocation();
@@ -25,6 +26,7 @@ const UserHeader = ({user}) => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             setCurrentUser(JSON.parse(storedUser));
+            console.log(currentUser);
         }
     }, [user]);
 
@@ -43,8 +45,11 @@ const UserHeader = ({user}) => {
 
     // 로그아웃 함수
     const handleLogout = () => {
+        /*
         localStorage.removeItem("user");
         alert("로그아웃 되었습니다.");
+         */
+        apiUserService.logout();
         setCurrentUser(null);
         setNavOpen(false);
         navigate("/");
@@ -66,7 +71,7 @@ const UserHeader = ({user}) => {
         const rolePaths = {
             user: "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            store: "/owner",
+            owner: "/owner",
             admin: "/admin"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
