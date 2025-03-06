@@ -29,7 +29,7 @@ const MenuCard = ({id,name,price,handleDelete,barrel}) => {
                                 <div className="d-flex">
                                     <input className="form-control text-center me-3" id="inputQuantity" type="num" value="1"
                                            style={{maxWidth: 3 + 'rem'}}/>
-                                    <Link to={`/clothes/${id}`}>
+                                    <Link to={`/owner/menu/${id}`}>
                                         <button className="btn btn-outline-warning">자세히보기</button>
                                     </Link>
                                     {/* ✅ 삭제 버튼 */}

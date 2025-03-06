@@ -43,7 +43,7 @@ const StoreMenu = () => {
                     {menus.map((menus)=>(
                         <MenuCard key={menus.id}
                             {...menus}
-                            price={menus.price.toLocaleString()}
+                            price={menus.price}
                             handleDelete={handleDelete}
                             barrel={barrel}/>
 

@@ -1,5 +1,6 @@
 import styles from "./HorizentalCategory.modul.css";
 import {useEffect, useRef, useState} from "react";
+import styled from "styled-components";
 
 
 
@@ -37,10 +38,13 @@ const HorizentalCategory = () => {
         sliderRef.current.scrollLeft = scrollLeft - walk; // 스크롤 위치 업데이트
 
     };
-    // styles 적용중
+    // styled-components 적용중
+
+    // 필터 작성 필요!!
     return (
-        <div
-            className={styles.scroll__wrap}
+        <>
+        <ScrollWrap
+
             ref={sliderRef}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
@@ -48,23 +52,49 @@ const HorizentalCategory = () => {
             onMouseMove={handleMouseMove}
         >
 
-            <div className={styles.scrollElement}>신메뉴</div>
-            <div className={styles.scrollElement}>추천메뉴</div>
-            <div className={styles.scrollElement}>커피</div>
-            <div className={styles.scrollElement}>라떼</div>
-            <div className={styles.scrollElement}>콜드브루</div>
-            <div className={styles.scrollElement}>음료</div>
-            <div className={styles.scrollElement}>티</div>
-            <div className={styles.scrollElement}>푸드</div>
-            <div className={styles.scrollElement}>상품</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
+            <ScrollElement>신메뉴</ScrollElement>
+            <ScrollElement>추천메뉴</ScrollElement>
+            <ScrollElement>커피</ScrollElement>
+            <ScrollElement>라떼</ScrollElement>
+            <ScrollElement>콜드브루</ScrollElement>
+            <ScrollElement>음료</ScrollElement>
+            <ScrollElement>티</ScrollElement>
+            <ScrollElement>푸드</ScrollElement>
+            <ScrollElement>상품</ScrollElement>
+            <ScrollElement>아이템 1</ScrollElement>
+            <ScrollElement>아이템 1</ScrollElement>
+            <ScrollElement>아이템 1</ScrollElement>
 
 
-        </div>
+        </ScrollWrap>
+        </>
     );
 
 }
 
 export default HorizentalCategory;
+const ScrollWrap = styled.div`
+    
+    overflow-x:auto; 
+    overflow-y: hidden; 
+    white-space:nowrap; 
+    font-size:0;
+    -ms-overflow-style: none;       /* 인터넷 익스플로러 */
+    scrollbar-width: none;          /* 파이어폭스 */
+`;
+
+const ScrollElement = styled.div`
+    display:inline-block; 
+    width:150px; 
+    height:50px; 
+    border:2px solid #222;
+    border-radius: 10px;
+    background:#fff; 
+    font-size:16px; 
+    line-height:50px; 
+    text-align:center;
+    margin-left:15px;
+    ::-webkit-scrollbar{   /* 크롬, 사파리, 오페라, 엣지 */
+        display: none;
+    }
+    `;
