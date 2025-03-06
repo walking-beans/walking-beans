@@ -14,9 +14,8 @@ const UserOrder = () => {
     const {orderId, cartId, storeId} = useParams();
     const navigate = useNavigate();
     const [totalAmount, setTotalAmount] = useState(0);
-    const [storeName, setStoreName] = useState(null);
     const [menu, setMenu] = useState([]);
-    const [store, setStore] = useState(null);
+    const [store, setStore] = useState([]);
 
     // carts 데이터 가져오기
     useEffect(() => {
@@ -68,6 +67,7 @@ const UserOrder = () => {
 
 
     return (
+        <div className="user-order-background">
         <div className="userorder-container">
             {/* menu */}
             <div className="user-cart-title">{store?.storeName}</div>
@@ -88,7 +88,7 @@ const UserOrder = () => {
             </div>
 
             <div className="user-order-hr" alt="구분선"></div>
-            <div className="user-cart-bordtext">카테고리</div>
+            <div className="user-cart-bordtext">{store?.menuCategory}</div>
 
             <div>
                 <div className="user-order-menu">
@@ -107,17 +107,7 @@ const UserOrder = () => {
                 </div>
             </div>
 
-            <div className="user-order-hr" alt="구분선"></div>
-            <div className="user-cart-bordtext">에이드</div>
-
-            <div>
-                <p>이미지</p>
-                <div>
-                    메뉴명
-                    가격
-                </div>
-            </div>
-
+        </div>
             {/* cart */}
             <div className="user-cart-background">
                 <div className="user-cart-title">장바구니</div>

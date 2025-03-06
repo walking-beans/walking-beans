@@ -7,7 +7,16 @@
     position: fixed;
     left: 55%;
     top: 10%;
-    transform: translateX(50%);
+    transform: translateX(60%);
+}
+
+.user-order-background {
+    background: #F4EDDF;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
 }
 
 .user-cart-title {
@@ -43,9 +52,14 @@
 
 .user-order-menu{
     max-width: 600px;
-    float: left;
+    display: flex;
+    justify-content: center;
 }
 
 .user-order-menuinfo {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 30px;
     text-align: center;
+
 }
