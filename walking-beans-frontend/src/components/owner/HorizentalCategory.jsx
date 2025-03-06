@@ -48,15 +48,15 @@ const HorizentalCategory = () => {
             onMouseMove={handleMouseMove}
         >
 
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
-            <div className={styles.scrollElement}>아이템 1</div>
+            <div className={styles.scrollElement}>신메뉴</div>
+            <div className={styles.scrollElement}>추천메뉴</div>
+            <div className={styles.scrollElement}>커피</div>
+            <div className={styles.scrollElement}>라떼</div>
+            <div className={styles.scrollElement}>콜드브루</div>
+            <div className={styles.scrollElement}>음료</div>
+            <div className={styles.scrollElement}>티</div>
+            <div className={styles.scrollElement}>푸드</div>
+            <div className={styles.scrollElement}>상품</div>
             <div className={styles.scrollElement}>아이템 1</div>
             <div className={styles.scrollElement}>아이템 1</div>
             <div className={styles.scrollElement}>아이템 1</div>

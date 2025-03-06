@@ -6,7 +6,7 @@ import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
-import StoreMenuEdit from "../pages/owner/StoreMenuEdit";
+import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
 import StoreMenuOptionForm from "../pages/owner/StoreMenuOptionForm";
@@ -135,7 +135,7 @@ function PathRoute () {
                                 }/>
                                 <Route path="/owner/menuform" element={
                                     <ProtectedRoute allowedRoles={["store"]}>
-                                        <StoreMenuEdit/>
+                                        <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoption" element={
