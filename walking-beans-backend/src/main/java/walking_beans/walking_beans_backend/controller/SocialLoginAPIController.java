@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 public class SocialLoginAPIController {
-
+/*
     @Autowired
     SocialLoginServiceImpl socialLoginService;
 
@@ -35,9 +35,9 @@ public class SocialLoginAPIController {
 
     @Value("${naver.redirect-url}")
     private String naverRedirectUrl;
-
+*/
     /******************** 카카오 로그인 **************************/
-
+/*
     @GetMapping("/oauth/kakao/login")
     public ResponseEntity<?> getKakaoLoginUrl() {
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
@@ -72,9 +72,9 @@ public class SocialLoginAPIController {
             return null; // 이미 가입된 계정 이라는 알림 수정
         }
     }
-
+*/
     /**************** 네이버 로그인 *******************************/
-
+/*
     @GetMapping("/oauth/naver/login")
     public ResponseEntity<?> getNaverLoginUrl() {
         String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code" +
@@ -119,4 +119,5 @@ public class SocialLoginAPIController {
             return "redirect:/error?message=네이버 로그인 오류 발생";
         }
     }
+    */
 }
