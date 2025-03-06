@@ -2,16 +2,18 @@ import axios from "axios";
 
 const API_ORDER_URL = "http://localhost:7070/api/orders"
 const API_CART_URL = "http://localhost:7070/api/carts"
+const API_MENU_URL = "http://localhost:7070/api/menu"
+const API_STORE_URL = "http://localhost:7070/api/store"
 
 const apiUserOrderService = {
 
     // 장바구니 메뉴 삭제
-    deleteUserOrderCart: function (cartId) {
-        return axios
+    deleteUserOrderCart: function (cartId, setCarts) {
+        axios
             .delete(`${API_CART_URL}/${cartId}`)
             .then((res) => {
                 console.log("백엔드 연결 성공", res.data);
-                return res.data;
+                setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== cartId));
             })
             .catch((err) => {
                 console.error("DeleteUserOrderCart 에러 발생", err);
@@ -22,7 +24,7 @@ const apiUserOrderService = {
     // cart 데이터 가져오기
     getUserOrderByCartId:
         function (cartId) {
-           return axios
+           axios
                 .get(`${API_CART_URL}/${cartId}`)
                 .then(
                     (res) => {
@@ -39,9 +41,10 @@ const apiUserOrderService = {
                 )
         },
 
+    // option 데이터 가져오기
     getUserOrderByOrderId:
-    function (orderId) {
-        return axios
+    function (orderId, setCarts) {
+       return axios
             .get(`${API_CART_URL}/order/${orderId}`)
             .then(
                 (res) => {
@@ -54,7 +57,45 @@ const apiUserOrderService = {
                     console.log("getUserOrderByOrderId 오류 발생 : ", err);
                 }
             )
+    },
+
+    // 가게 데이터 가져오기
+    getStoreByOrderId:
+    function (storeId, setStore) {
+        axios
+            .get(`${API_STORE_URL}/${storeId}`)
+            .then(
+                (res) => {
+                    console.log("가게 데이터 가져오기 성공 : ", res.data);
+                    return setStore(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("가게 데이터 가져오기 실패 : ", err);
+                }
+            )
+    },
+
+    // 메뉴 데이터 가져오기
+    getMenuByStoreId:
+    function (storeId, callback){
+        axios
+            .get(`${API_MENU_URL}/storemenu/${storeId}`)
+            .then(
+                (res) => {
+                    console.log("메뉴 데이터 가져오기 성공 : ", res.data)
+                    return callback(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("메뉴 데이터 가져오기 실패 : ", err)
+                }
+            )
     }
+
+
 
 }
 
