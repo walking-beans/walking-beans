@@ -33,7 +33,7 @@ public class StoreAPIController {
      * @return 매장 아이디로 조회
      */
     @GetMapping("/{storeId}")
-    public Stores findStoresById(@PathVariable long storeId) {
+    public Stores findStoresById(@PathVariable("storeId") long storeId) {
         return storeService.findStoresById(storeId);
     }
 
@@ -51,7 +51,7 @@ public class StoreAPIController {
      *  유저 정보 추가후 재검증 필요 외래키 부족
      * @param stores
      */
-    @PostMapping("/addstore")
+    @PostMapping()
     public void addStore(@RequestBody Stores stores) {
         storeService.addStore(stores);
     }
@@ -66,7 +66,12 @@ public class StoreAPIController {
         stores.setStoreId(storeId);
         storeService.updateStores(stores);
     }
-    // 메인메뉴에서 매장 검색
+
+    /** 메인메뉴에서 매장 검색
+     *
+     * @param keyword
+     * @return
+     */
     @GetMapping("/search")
     public List<Stores> searchStore(@RequestParam String keyword) {
         return storeService.searchStore(keyword);

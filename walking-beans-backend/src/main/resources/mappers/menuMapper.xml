@@ -14,7 +14,8 @@
     <select id="searchMenu">
         SELECT *
         FROM MENU
-        WHERE  menu_name = #{keyword}
+        WHERE  menu_name LIKE CONCAT('%',#{keyword},'%')
+        or menu_description LIKE CONCAT('%',#{keyword},'%');
     </select>
 
     <!-- ID 로 메뉴 찾기 , long menuId-->
