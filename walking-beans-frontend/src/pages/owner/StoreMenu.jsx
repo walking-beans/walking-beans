@@ -19,7 +19,7 @@ const StoreMenu = () => {
     const handleDelete = () => {
 
         if(window.confirm("정말 삭제하시겠습니까?")){
-            apiClothesService.deleteClothes(clothes.cid);
+            //API자리
             navigate("/clothes");
         }
     }
