@@ -10,13 +10,14 @@ const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 const UserSearchMap = () => {
     const orderId = useParams();
     const cartId = useParams();
-    const storeId = useParams();
+    const storeId = useParams(1);
     const location = useLocation();
     const { userLocation, stores } = location.state || {};
     const [map, setMap] = useState(null);
     const [selectedStore, setSelectedStore] = useState(null);
     const [storeList, setStoreList] = useState([]);
     const navigate = useNavigate();
+
 
     // 거리 계산 함수 추가
     const getDistance = (lat1, lng1, lat2, lng2) => {
@@ -99,19 +100,26 @@ const UserSearchMap = () => {
         };
 
 
-
         return () => {
             document.head.removeChild(script);
         };
     }, [userLocation, storeList]);
+    // const storeId = 1;
+    const handleStore = () =>{
+        navigate(`/user/order/${selectedStore.storeId}`);
+        console.log( "storeId 값 : " ,storeId);
+    }
 
     return (
         <div>
             <div id="search-map" style={{ width: "100%", height: "500px" }}></div>
             {selectedStore && (
                 <div className="store-info">
-                   <Link to={`/user/order/${storeId}`}> <h3>{selectedStore.storeName}</h3> </Link>
+                    <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
+                        {selectedStore.storeName}
+                    </h3>
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
+                    <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
                     <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
                 </div>
             )}

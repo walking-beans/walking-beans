@@ -19,7 +19,9 @@ const StoreMenu = () => {
     const handleDelete = () => {
 
         if(window.confirm("정말 삭제하시겠습니까?")){
+
             //API자리
+
             navigate("/clothes");
         }
     }
