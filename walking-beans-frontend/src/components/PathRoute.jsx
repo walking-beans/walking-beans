@@ -67,7 +67,7 @@ function PathRoute () {
             <BrowserRouter>
                 <HeaderRoute user={user}/>
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center">
+                    <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
@@ -82,7 +82,7 @@ function PathRoute () {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                 <Route path="/user/payment" element={<UserPayment/>}/>
-                                <Route path="/user/order/:storId" element={<StoreMenuForm/>}/>
+                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="user/search/map" element={<UserSearchMap/>}/>
