@@ -26,6 +26,7 @@ const UserHeader = ({user}) => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             setCurrentUser(JSON.parse(storedUser));
+            console.log(currentUser);
         }
     }, [user]);
 
@@ -70,7 +71,7 @@ const UserHeader = ({user}) => {
         const rolePaths = {
             user: "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            store: "/owner",
+            owner: "/owner",
             admin: "/admin"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");

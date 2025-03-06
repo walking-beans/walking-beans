@@ -106,10 +106,10 @@ const AdminLoginNomal = () => {
 }
 
 const AdminLoginSocial = () => {
-
+    const [callback, setCallback] = useState("");
 
     const kakaoLogin = () => {
-
+        apiUserService.kakaoLogin(callback);
     }
 
     return (
@@ -119,6 +119,7 @@ const AdminLoginSocial = () => {
                 <div className="social-login">
                     <button className="kakao-login">
                         <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                        <p>{callback}</p>
                     </button>
                     <button className="naver-login">
                         <img src={require('../../images/naverLoginButton.png')}/>
