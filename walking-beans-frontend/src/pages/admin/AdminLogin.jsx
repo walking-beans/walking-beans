@@ -3,6 +3,16 @@ import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom";
 
 const AdminLogin = () => {
+    return (
+        <div>
+            <AdminLoginNomal /> {/*아이디 비밀번호 로그인*/}
+            {/*<AdminLoginSocial/>*/} {/*소셜 로그인*/}
+        </div>
+    )
+
+}
+
+const AdminLoginNomal = () => {
     const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
@@ -15,7 +25,7 @@ const AdminLogin = () => {
         apiUserService.login(userEmail, userPassword, (response => {
             if (response === "success") { // 로그인 결과에 따른 값
                 setLoginresult("success");
-            }else {
+            } else {
                 setLoginresult("fail");
             }
         }));
@@ -94,5 +104,30 @@ const AdminLogin = () => {
         </div>
     )
 }
+
+const AdminLoginSocial = () => {
+
+
+    const kakaoLogin = () => {
+
+    }
+
+    return (
+        <div>
+            <div className="login-container">
+                <h3>로그인</h3>
+                <div className="social-login">
+                    <button className="kakao-login">
+                        <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                    </button>
+                    <button className="naver-login">
+                        <img src={require('../../images/naverLoginButton.png')}/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default AdminLogin;
