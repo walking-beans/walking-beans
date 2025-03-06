@@ -1,27 +1,19 @@
-/*
-- <MenuOption/> - 상품 옵션 리스트 div (옵션명, 추가가격, 장바구니추가 버튼, 주문하기 버튼)
-
-- <OrderBtn/> - 주문하기 버튼 클릭 시 장바구니 데이터를 서버로 전송하는 버튼
-- <DeliveryAddress/> - 배달 주소 div (배달주소) (표시)
-- <OrderDetails/> - 주문 상세 내역 div (메뉴명, 옵션, 가격)
-- <PaymentTotal/> - 결제 금액 div (결제금액, 주문금액, 배달팁)
-- <OrderList/> - 주문내역 리스트 div (매장명, 주문일자, 주문일시, 제품명, 가격, 상세보기버튼)
-*/
-
 import axios from "axios";
 
 const API_ORDER_URL = "http://localhost:7070/api/orders"
 const API_CART_URL = "http://localhost:7070/api/carts"
+const API_MENU_URL = "http://localhost:7070/api/menu"
+const API_STORE_URL = "http://localhost:7070/api/store"
 
 const apiUserOrderService = {
 
     // 장바구니 메뉴 삭제
-    deleteUserOrderCart: function (cartId) {
-        return axios
+    deleteUserOrderCart: function (cartId, setCarts) {
+        axios
             .delete(`${API_CART_URL}/${cartId}`)
             .then((res) => {
                 console.log("백엔드 연결 성공", res.data);
-                return res.data;
+                setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== cartId));
             })
             .catch((err) => {
                 console.error("DeleteUserOrderCart 에러 발생", err);
@@ -32,7 +24,7 @@ const apiUserOrderService = {
     // cart 데이터 가져오기
     getUserOrderByCartId:
         function (cartId) {
-           return axios
+           axios
                 .get(`${API_CART_URL}/${cartId}`)
                 .then(
                     (res) => {
@@ -48,10 +40,11 @@ const apiUserOrderService = {
                     }
                 )
         },
-/*
+
+    // option 데이터 가져오기
     getUserOrderByOrderId:
-    function (orderId) {
-        return axios
+    function (orderId, setCarts) {
+       return axios
             .get(`${API_CART_URL}/order/${orderId}`)
             .then(
                 (res) => {
@@ -64,9 +57,46 @@ const apiUserOrderService = {
                     console.log("getUserOrderByOrderId 오류 발생 : ", err);
                 }
             )
+    },
+
+    // 가게 데이터 가져오기
+    getStoreByOrderId:
+    function (storeId, setStore) {
+        axios
+            .get(`${API_STORE_URL}/${storeId}`)
+            .then(
+                (res) => {
+                    console.log("가게 데이터 가져오기 성공 : ", res.data);
+                    return setStore(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("가게 데이터 가져오기 실패 : ", err);
+                }
+            )
+    },
+
+    // 메뉴 데이터 가져오기
+    getMenuByStoreId:
+    function (storeId, callback){
+        axios
+            .get(`${API_MENU_URL}/storemenu/${storeId}`)
+            .then(
+                (res) => {
+                    console.log("메뉴 데이터 가져오기 성공 : ", res.data)
+                    return callback(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("메뉴 데이터 가져오기 실패 : ", err)
+                }
+            )
     }
 
-*/
+
+
 }
 
 export default apiUserOrderService;

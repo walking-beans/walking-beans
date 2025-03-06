@@ -33,7 +33,7 @@ public class StoreAPIController {
      * @return 매장 아이디로 조회
      */
     @GetMapping("/{storeId}")
-    public Stores findStoresById(@PathVariable long storeId) {
+    public Stores findStoresById(@PathVariable("storeId") long storeId) {
         return storeService.findStoresById(storeId);
     }
 

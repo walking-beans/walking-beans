@@ -3,6 +3,16 @@ import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom";
 
 const AdminLogin = () => {
+    return (
+        <div>
+            <AdminLoginNomal /> {/*아이디 비밀번호 로그인*/}
+            {/*<AdminLoginSocial/>*/} {/*소셜 로그인*/}
+        </div>
+    )
+
+}
+
+const AdminLoginNomal = () => {
     const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
@@ -15,7 +25,7 @@ const AdminLogin = () => {
         apiUserService.login(userEmail, userPassword, (response => {
             if (response === "success") { // 로그인 결과에 따른 값
                 setLoginresult("success");
-            }else {
+            } else {
                 setLoginresult("fail");
             }
         }));
@@ -34,10 +44,10 @@ const AdminLogin = () => {
             });
 
             // sessionStorage에서 직접 데이터 확인
-            const sessionData = sessionStorage.getItem("role");
-            console.log("sessionStorage에서 가져온 데이터: ", sessionData);
+            const user = JSON.parse(localStorage.getItem("user"));
+            console.log("localStorage에서 가져온 사용자 데이터: ", user); // 콘솔에 출력
 
-            //navigate("/");
+            navigate("/");
         } else if (loginResult === "fail") {
             console.log("로그인 실패");
             setErrmessage("아이디나 비밀번호가 일치하지 않습니다");
@@ -94,5 +104,31 @@ const AdminLogin = () => {
         </div>
     )
 }
+
+const AdminLoginSocial = () => {
+    const [callback, setCallback] = useState("");
+
+    const kakaoLogin = () => {
+        apiUserService.kakaoLogin(callback);
+    }
+
+    return (
+        <div>
+            <div className="login-container">
+                <h3>로그인</h3>
+                <div className="social-login">
+                    <button className="kakao-login">
+                        <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                        <p>{callback}</p>
+                    </button>
+                    <button className="naver-login">
+                        <img src={require('../../images/naverLoginButton.png')}/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default AdminLogin;

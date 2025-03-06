@@ -47,9 +47,9 @@
 
 .login-container .kakao-login,
 .login-container .naver-login {
-    display: flex;
+    /*display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
     width: 48%;
     padding: 10px;
     border: none;
@@ -71,7 +71,7 @@
 
 .login-container .kakao-login img,
 .login-container .naver-login img {
-    width: 20px;
+    width: 200px;
     margin-right: 8px;
 }
 

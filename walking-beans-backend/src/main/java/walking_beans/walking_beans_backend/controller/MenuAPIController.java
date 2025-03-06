@@ -47,7 +47,7 @@ public class MenuAPIController {
      *
      */
     @GetMapping("/storemenu/{storeId}")
-    public List<Menu> findMenuByStoreId(@PathVariable long storeId) {
+    public List<Menu> findMenuByStoreId(@PathVariable("storeId") long storeId) {
         return menuService.findMenuByStoreId(storeId);
     }
 

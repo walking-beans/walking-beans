@@ -31,6 +31,7 @@ import "./PathRoute.css";
 import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
+import AdminLogin from "../pages/admin/AdminLogin";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -66,23 +67,26 @@ function PathRoute () {
             <BrowserRouter>
                 <HeaderRoute user={user}/>
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center">
+                    <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
-                                <Route path="/login" element={<Login/>}/>
+                                <Route path="/login" element={<AdminLogin/>}/>
 
                                 {/* 유저 관련 라우트 */}
-                                <Route path="/user/order/:orderid" element={<UserOrder/>}/>
-                                <Route path="/user/ordercart/:orderid/:cartId" element={<UserCart/>}/>
+
+                                <Route path="/user/order/:storeId" element={<UserOrder/>}/>
+                                {/*<Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>*/}
+                                <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
+
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
-                                <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
+                                <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                 <Route path="/user/payment" element={<UserPayment/>}/>
+                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
+                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
-                                {/* 유저 관련 라우트 */}
-                                <Route path="user/search/map" element={<UserSearchMap/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
@@ -118,52 +122,52 @@ function PathRoute () {
 
                                 {/* 사장님 관련 라우트 */}
                                 <Route path="/owner" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menu" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoption" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/mystore" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/order" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/revenue" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>
                                 }/>
