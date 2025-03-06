@@ -23,16 +23,12 @@ const StoreMenu = () => {
             navigate("/clothes");
         }
     }
-    const handleRow = () =>{
-
+    const handleRow = () =>{// 1열 3열 변경 핸들러
         if(barrel){
             setBarrel(false)
-
         } else {
             setBarrel(true)
-
         }
-
     }
 
 
