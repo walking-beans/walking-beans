@@ -1,6 +1,9 @@
 import {Link} from "react-router-dom"
+import {useState} from "react";
 
-const MenuCard = ({id,name,price,handleDelete,barrel}) => {
+const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
+
+
 
     //id,name,price,
     //handleDelete 삭제버튼용 핸들러
@@ -16,23 +19,25 @@ const MenuCard = ({id,name,price,handleDelete,barrel}) => {
                         <div className="row gx-4 gx-lg-5 align-items-center">
                             <div className="col-md-6">
                                 <img className="card-img-top mb-5 mb-md-0"
-                                     src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..."/>
+                                     src={menuPictureUrl} alt={menuName}/>
                             </div>
                             <div className="col-md-6">
-                                <div className="small mb-1">{name}</div>
+                                <div className="small mb-1">{menuName}</div>
                                 <h1 className="display-5 fw-bolder"></h1>
                                 <div className="fs-5 mb-5">
-                                    <span>{price}</span>
+                                    <span>{price}원</span>
                                 </div>
                                 <p className="lead">
                                 </p>
                                 <div className="d-flex">
-                                    <input className="form-control text-center me-3" id="inputQuantity" type="num" value="1"
+                                    <input className="form-control text-center me-3" id="inputQuantity" type="num"
+                                           value="1"
                                            style={{maxWidth: 3 + 'rem'}}/>
-                                    <Link to={`/owner/menu/${id}`}>
-                                        <button className="btn btn-outline-warning">자세히보기</button>
+                                    <Link to={`/owner/menu/${menuId}`}>
+                                        <button className="btn btn-outline-warning">수정하기</button>
                                     </Link>
                                     {/* ✅ 삭제 버튼 */}
+                                        <button className="btn btn-outline-danger">삭제하기</button>
                                 </div>
                             </div>
                         </div>
@@ -40,17 +45,17 @@ const MenuCard = ({id,name,price,handleDelete,barrel}) => {
                 </section>
 
                 :
-                <div class={"col-4 mb-5"} key={id}>
+                <div class={"col-4 mb-5"} key={menuId}>
                     {/* false 일때, 3열뷰 */}
-                    <Link to={`/clothes/${id}`}>
+                    <Link to={`/clothes/${menuId}`}>
 
                         <div class="card h-100">
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                            <img class="card-img-top" src={menuPictureUrl}
                                  alt="Fancy Product"/>
                             <div class="card-body p-4 text-center">
                                 <h5 class="fw-bolder">
 
-                                    <p class="text-decoration-none">{name}</p>
+                                    <p class="text-decoration-none">{menuName}</p>
                                 </h5>
                                 {price}원
                             </div>
@@ -58,11 +63,14 @@ const MenuCard = ({id,name,price,handleDelete,barrel}) => {
                     </Link>
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
-                            <button class="btn btn-outline-dark mt-auto" onClick={handleDelete}>삭제</button>
+
+                            <button class="btn btn-outline-warning" onClick={handleDelete}>수정</button>
+                            <button class="btn btn-outline-danger" onClick={handleDelete}>삭제</button>
                         </div>
                     </div>
                 </div>
             }
+
         </>
     )
 }

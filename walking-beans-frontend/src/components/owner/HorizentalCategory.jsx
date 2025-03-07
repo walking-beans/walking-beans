@@ -4,12 +4,29 @@ import styled from "styled-components";
 
 
 
-const HorizentalCategory = () => {
+const HorizentalCategory = ({gettingValue}) => {
 
     const sliderRef = useRef(null); // Ref로 슬라이드 요소를 참조
     const [isMouseDown, setIsMouseDown] = useState(false); // 마우스 눌림 상태
     const [startX, setStartX] = useState(0); // 드래그 시작 X 좌표
     const [scrollLeft, setScrollLeft] = useState(0); // 초기 스크롤 위치
+
+    const [ value , setValue] = useState("");
+    const postingValue = () => {
+        gettingValue(value);
+        console.log("자식 -> 부모로 보내는 값:", value);
+    }
+    const handleChange = (e)=> {
+        setValue(e.target.value)
+        if(value == ""){
+            return;
+        } else {
+            postingValue();
+            setValue("");
+        }
+
+    }
+
 
     // 마우스 누를 때
     const handleMouseDown = (e) => {
@@ -41,6 +58,32 @@ const HorizentalCategory = () => {
     // styled-components 적용중
 
     // 필터 작성 필요!!
+    /*
+    // props = searchResult,menus
+    const [select, setSelect] = useState([]); // 유저 입력 검색어
+
+    const handleChange = (e) => {
+        setSelect(e.target.value);
+        postData();
+    }
+    // 카테고리 이름으로 필터
+    const filterMenus = menus.filter((menus)=>{
+        return menus.menuCategory.trim().includes(select.trim());
+    });
+
+    const postData = () => {
+        searchResult(filterMenus);
+    };
+
+
+ */
+
+
+
+
+
+
+
     return (
         <>
         <ScrollWrap
@@ -52,18 +95,18 @@ const HorizentalCategory = () => {
             onMouseMove={handleMouseMove}
         >
 
-            <ScrollElement>신메뉴</ScrollElement>
-            <ScrollElement>추천메뉴</ScrollElement>
-            <ScrollElement>커피</ScrollElement>
-            <ScrollElement>라떼</ScrollElement>
-            <ScrollElement>콜드브루</ScrollElement>
-            <ScrollElement>음료</ScrollElement>
-            <ScrollElement>티</ScrollElement>
-            <ScrollElement>푸드</ScrollElement>
-            <ScrollElement>상품</ScrollElement>
-            <ScrollElement>아이템 1</ScrollElement>
-            <ScrollElement>아이템 1</ScrollElement>
-            <ScrollElement>아이템 1</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"신메뉴"}>신메뉴</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"추천메뉴"}>추천메뉴</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"커피"} >커피</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"라떼"}>라떼</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"콜드브루"}>콜드브루</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"음료"}>음료</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"티"}>티</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"푸드"}>푸드</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"상품"}>상품</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
+            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
 
 
         </ScrollWrap>
@@ -81,9 +124,10 @@ const ScrollWrap = styled.div`
     font-size:0;
     -ms-overflow-style: none;       /* 인터넷 익스플로러 */
     scrollbar-width: none;          /* 파이어폭스 */
+    
 `;
 
-const ScrollElement = styled.div`
+const ScrollElement = styled.button`
     display:inline-block; 
     width:150px; 
     height:50px; 

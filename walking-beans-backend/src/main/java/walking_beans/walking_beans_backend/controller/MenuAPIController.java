@@ -51,16 +51,6 @@ public class MenuAPIController {
         return menuService.findMenuByStoreId(storeId);
     }
 
-    /**메뉴 수정하기
-     *
-     * @param menuId
-     */
-    @PutMapping("/update")
-    public void updateMenu(@PathVariable long menuId, @RequestBody Menu menu) {
-        menu.setMenuId(menuId);
-        menuService.updateMenu(menu);
-    }
-
     /**추가하기
      *
      * @param menu
@@ -70,11 +60,22 @@ public class MenuAPIController {
         menuService.addMenu(menu);
     }
 
+
+    /**메뉴 수정하기
+     *
+     * @param menuId
+     */
+    @PutMapping("/{menuId}")
+    public void updateMenu(@PathVariable long menuId, @RequestBody Menu menu) {
+        menu.setMenuId(menuId);
+        menuService.updateMenu(menu);
+    }
+
     /**삭제하기
      *
      * @param menuId
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{menuId}")
     public void deleteMenu(@RequestBody long menuId) {
         menuService.deleteMenu(menuId);
     }
