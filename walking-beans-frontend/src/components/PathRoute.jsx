@@ -32,6 +32,7 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+import AdminSignUp from "../pages/admin/AdminSignUp";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
