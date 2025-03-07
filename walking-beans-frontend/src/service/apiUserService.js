@@ -60,8 +60,6 @@ const apiUserService = {
                 .get("/oauth/kakao/login")
                 .then(
                     (res)=>{
-                        alert(res.data);
-                        //window.location.href=res.data;
                         callback(res.data);
                     }
                 )
@@ -73,6 +71,25 @@ const apiUserService = {
                 )
         },
 
+    kakaoCallback:
+        function (code){
+            axios
+                .get(`/oauth/kakao/callback?code=${code}`)
+                .then(
+                    (res) => {
+                        if (res.data){
+                            window.location.href = res.data.redirectUrl;
+                        }else {
+                            console.log("리다이렉트 url 불러오기 실패");
+                        }
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert("백엔드에서 오류가 발생했습니다.");
+                    }
+                )
+        },
 }
 
 export default apiUserService;
