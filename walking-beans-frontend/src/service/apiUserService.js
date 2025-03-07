@@ -1,4 +1,5 @@
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 const USER_API_URL = "http://localhost:7070/api/users"
 
@@ -53,6 +54,43 @@ const apiUserService = {
             }
         },
 
+    kakaoLogin:
+        function (callback) {
+            axios
+                .get("/oauth/kakao/login")
+                .then(
+                    (res)=>{
+                        callback(res.data);
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert("백엔드와의 연결에 실패했습니다.");
+                        console.log("err: ", err);
+                    }
+                )
+        },
+
+    kakaoCallback:
+        function (code){
+            axios
+                .get(`/oauth/kakao/callback?code=${code}`)
+                .then(
+                    (res) => {
+                        if (res.data){
+                            window.location.href = res.data.redirectUrl;
+                            // DB에 저장까지 끝내고 리엑트 페이지로 돌아오기 해결
+                        }else {
+                            console.log("리다이렉트 url 불러오기 실패");
+                        }
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert("백엔드에서 오류가 발생했습니다.");
+                    }
+                )
+        },
 }
 
 export default apiUserService;

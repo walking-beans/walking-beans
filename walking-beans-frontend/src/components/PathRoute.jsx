@@ -34,6 +34,10 @@ import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
 import UserMenuOption from "../pages/user/UserMenuOption";
 import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
+import UserInsertAddress from "../pages/user/UserInsertAddress";
+import AdminSignUp from "../pages/admin/AdminSignUp";
+
+
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -69,7 +73,7 @@ function PathRoute () {
             <BrowserRouter>
                 <HeaderRoute user={user}/>
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center p-0">
+                    <div className="container d-flex justify-content-center">
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
@@ -90,8 +94,11 @@ function PathRoute () {
                                 <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
 
                                 <Route path="/user/payment" element={<UserPayment/>}/>
-                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
+                                <Route path="/user/order/:storId" element={<StoreMenuForm/>}/>
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
+
+
 
 
                                 {/* 라이더 관련 라우트 */}

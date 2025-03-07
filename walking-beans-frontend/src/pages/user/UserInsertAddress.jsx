@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
-const UserInsertAddress = () => {
-    const [userId, setUserId] = useState(null); // 로그인된 사용자 ID 저장
-    const [postcode, setPostcode] = useState("");
-    const [address, setAddress] = useState("");
-    const [detailAddress, setDetailAddress] = useState("");
-    const [extraAddress, setExtraAddress] = useState("");
+const UserInsertAddress = ({ user }) => {
+    const [address, setAddress] = useState(""); // 주소
+    const [addressName, setAddressName] = useState(""); // 주소 별칭
+    const [currentUser, setCurrentUser] = useState(user);
 
     useEffect(() => {
-        // 로그인된 사용자 정보 가져오기
-        axios
-            .get("http://localhost:7070/api/users/login", { withCredentials: true }) // 쿠키 포함 요청
-            .then((response) => {
-                setUserId(response.data.userId);
-            })
-            .catch((error) => {
-                console.error("로그인 정보 가져오기 실패:", error);
-            });
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setCurrentUser(JSON.parse(storedUser));
+            console.log(currentUser);
+        }
+    }, [user]);
 
+    useEffect(() => {
         // 카카오 주소 API 스크립트 추가
         const script = document.createElement("script");
         script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -26,83 +22,51 @@ const UserInsertAddress = () => {
         document.body.appendChild(script);
     }, []);
 
-    // 카카오 주소 검색 API 실행
+    //  카카오 주소 검색 함수
     const handleSearchAddress = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
-                let fullAddress = data.address; // 기본 주소
-                let extraAddr = ""; // 참고항목
-
-                if (data.addressType === "R") {
-                    if (data.bname) extraAddr += data.bname;
-                    if (data.buildingName) extraAddr += (extraAddr ? ", " : "") + data.buildingName;
-                }
-
-                setPostcode(data.zonecode);
-                setAddress(fullAddress);
-                setExtraAddress(extraAddr);
-
-                // 카카오 지도 API를 이용해 좌표 정보 가져오기
-                const geocoder = new window.kakao.maps.services.Geocoder();
-                geocoder.addressSearch(fullAddress, function (result, status) {
-                    if (status === window.kakao.maps.services.Status.OK) {
-                        setLatitude(result[0].y); // 위도 저장
-                        setLongitude(result[0].x); // 경도 저장
-                    } else {
-                        console.error("좌표 변환 실패");
-                    }
-                });
+                setAddress(data.roadAddress); // 선택한 도로명 주소 저장
             },
         }).open();
     };
 
-    // 주소 데이터 백엔드로 전송
-    const handleAddressSubmit = async () => {
-        if (!userId) {
-            alert("로그인이 필요합니다.");
+    //  주소 저장 API (POST 요청)
+    const handleSaveAddress = async () => {
+        if (!address || !addressName) {
+            alert("주소와 별칭을 입력해주세요!");
             return;
         }
 
-        const fullAddress = `${address} ${detailAddress} ${extraAddress}`.trim();
-
-        const addressData = {
-            userId: userId, // ✅ 로그인된 사용자 ID 사용
-            address: address, // 기본 주소
-            addressName: fullAddress, // 주소 + 상세주소 + 참고항목
-            addressLatitude: latitude, // ✅ 카카오 API에서 가져온 위도
-            addressLongitude: longitude, // ✅ 카카오 API에서 가져온 경도
-            addressRole: 1, // 기본 주소 설정 (0: 서브, 1: 메인)
-        };
-
         try {
-            const response = await axios.post("http://localhost:7070/api/addresses/UserInsertAddress", addressData, {
-                withCredentials: true, // 쿠키 포함
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (response.status === 200) {
-                alert("주소가 성공적으로 저장되었습니다!");
-            }
+            const res = await axios.post("http://localhost:7070/api/addresses/UserInsertAddress", { addressName, address }); // 서버에 데이터 전송
+            console.log("응답 데이터 : " ,res.data)
+            alert("주소가 저장되었습니다!");
+            setAddress(""); // 입력 필드 초기화
+            setAddressName("");
+            user(); // 저장 후 주소 목록 갱신
         } catch (error) {
-            console.error("주소 저장 실패", error);
-            alert("주소 저장 중 오류가 발생했습니다.");
+            console.error("주소 저장 오류:", error);
+            alert("주소 저장에 실패했습니다.");
         }
     };
 
     return (
         <div>
-            <p>로그인된 사용자 ID: {userId}</p>
-            <input type="text" id="sample6_postcode" placeholder="우편번호" value={postcode} readOnly />
-            <button onClick={handleSearchAddress}>우편번호 찾기</button>
-            <br />
-            <input type="text" id="sample6_address" placeholder="주소" value={address} readOnly />
-            <br />
-            <input type="text" id="sample6_detailAddress" placeholder="상세주소" value={detailAddress} onChange={(e) => setDetailAddress(e.target.value)} />
-            <input type="text" id="sample6_extraAddress" placeholder="참고항목" value={extraAddress} readOnly />
-            <br />
-            <button onClick={handleAddressSubmit}>주소 저장</button>
+            <button onClick={handleSearchAddress}>주소 검색</button>
+            <input
+                type="text"
+                value={address}
+                readOnly
+                placeholder="선택한 주소"
+            />
+            <input
+                type="text"
+                value={addressName}
+                onChange={(e) => setAddressName(e.target.value)}
+                placeholder="주소 별칭 (예: 우리 집, 회사)"
+            />
+            <button onClick={handleSaveAddress}>저장</button>
         </div>
     );
 };

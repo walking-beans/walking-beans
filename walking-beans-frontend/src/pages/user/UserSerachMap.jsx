@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import "../../components/UserHome.css";
+import  "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
 import axios from "axios";
 import apiStoreService from "../../service/apiStoreService";
@@ -118,6 +118,7 @@ const UserSearchMap = () => {
                     <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
                         {selectedStore.storeName}
                     </h3>
+                    <img className="store-picture" src={selectedStore.storePictureUrl}/>
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
                     <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
                     <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
