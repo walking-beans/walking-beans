@@ -32,6 +32,8 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+import UserMenuOption from "../pages/user/UserMenuOption";
+import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -83,6 +85,9 @@ function PathRoute () {
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
+
+                                <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
+
                                 <Route path="/user/payment" element={<UserPayment/>}/>
                                 {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>

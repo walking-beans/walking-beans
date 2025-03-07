@@ -4,6 +4,7 @@ const API_ORDER_URL = "http://localhost:7070/api/orders"
 const API_CART_URL = "http://localhost:7070/api/carts"
 const API_MENU_URL = "http://localhost:7070/api/menu"
 const API_STORE_URL = "http://localhost:7070/api/store"
+const API_OPTION_URL = "http://localhost:7070/api/option"
 
 const apiUserOrderService = {
 
@@ -41,7 +42,7 @@ const apiUserOrderService = {
                 )
         },
 
-    // option 데이터 가져오기
+    // 선택한 option 데이터 가져오기
     getUserOrderByOrderId:
     function (orderId, setCarts) {
        return axios
@@ -49,7 +50,7 @@ const apiUserOrderService = {
             .then(
                 (res) => {
                     console.log("백엔드 연결 성공 : ", res.data);
-                    return res.data;
+                    return setCarts(res.data);
                 }
             )
             .catch(
@@ -93,9 +94,30 @@ const apiUserOrderService = {
                     console.error("메뉴 데이터 가져오기 실패 : ", err)
                 }
             )
-    }
+    },
 
+    // 메뉴 Id로 옵션 가져오기
+    getOptionsByMenuId:
+    function (menuId, setOptions) {
+        if (!menuId) {
+            console.error("getOptionsByMenuId 오류 menuId가 없음")
+            return;
+        }
 
+        axios
+            .get(`${API_OPTION_URL}/optionmenu/${menuId}`)
+            .then(
+                (res) => {
+                    console.log("메뉴 id 로 옵션 가져오기 성공 : ", res.data);
+                    return setOptions(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("메뉴 id 로 옵션 가져오기 실패 : ", err)
+                }
+            )
+    },
 
 }
 
