@@ -48,7 +48,7 @@ public class SocialLoginAPIController {
     }
 
     @GetMapping("/oauth/kakao/callback")
-    public ResponseEntity<Map<String, String>> handleCallback(@RequestParam("code") String code) {
+    public ResponseEntity<?> handleCallback(@RequestParam("code") String code) {
         Map<String, Object> userMap = socialLoginService.KakaoCallback(code);
 
         int checkUser = socialLoginService.checkEmailExists(userMap.get("email").toString());
@@ -70,12 +70,9 @@ public class SocialLoginAPIController {
 
             socialLoginService.insertSocialUser(users); // DB에 정보 저장
 
-
         }
-
-        Map<String, String> responseMap = new HashMap<>();
-        responseMap.put("redirectUrl", "http://localhost:3000");
-        return ResponseEntity.ok(responseMap);
+        String url = "http://localhost:3000";
+        return ResponseEntity.ok(url);
     }
 */
     /**************** 네이버 로그인 *******************************/

@@ -78,10 +78,12 @@ const apiUserService = {
                 .then(
                     (res) => {
                         if (res.data){
-                            window.location.href = res.data.redirectUrl;
-                            // DB에 저장까지 끝내고 리엑트 페이지로 돌아오기 해결
+                            if (res.data === "success") {
+                                alert("회원가입완료");
+                                <Link to="/" />
+                            }
                         }else {
-                            console.log("리다이렉트 url 불러오기 실패");
+                            alert("이미 있는 아이디임");
                         }
                     }
                 )
