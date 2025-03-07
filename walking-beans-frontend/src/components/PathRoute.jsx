@@ -80,7 +80,8 @@ function PathRoute () {
                                 {/* 유저 관련 라우트 */}
 
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                {/*<Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>*/}
+                                <Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>
+
                                 <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>

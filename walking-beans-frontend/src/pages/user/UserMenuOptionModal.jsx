@@ -6,71 +6,57 @@ import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
 import React, {useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 
-const UserMenuOptionModal = ({menuPrice}) => {
+const UserMenuOptionModal = ({menuPrice, options}) => {
+    console.log("모달 내부 옵션:", options);
     const [selectedOption, setSelectedOption] = useState(null);
-    const [selectedMenu, setSelectedMenu] = useState(null);
-    const [options, setOptions] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
 
     // 모달창에서 옵션 선택하기
     const handleOptionChange = (option) => {
         setSelectedOption(option);
     };
 
-    // 메뉴 id로 옵션 가져오기
-    useEffect(() => {
-        if (selectedMenu?.menuId) {
-            apiUserOrderService.getOptionsByMenuId(selectedMenu.menuId, setOptions)
-        }
-    }, [selectedMenu]);
-
 
     // 장바구니에 추가 선택 시 장바구니에 넣기
     const addToCart = async () => {
-        if (!selectedMenu || !selectedOption) {
+        if (!selectedOption) {
             alert("옵션을 선택해주세요.");
             return;
         }
 
         const cartData = {
-            menuId: selectedMenu.menuId,
+            menuId: selectedOption.menuId,
             optionId: selectedOption.optionId,
-            menuPrice: selectedMenu.menuPrice,
+            menuPrice: menuPrice,
             optionPrice: selectedOption.optionPrice,
         };
         try {
             await apiUserOrderService.addToCart(cartData);
             alert("장바구니에 추가되었습니다!");
-            setModalOpen(false); // 모달 닫기
         } catch (error) {
             console.error("장바구니 추가 중 오류 발생:", error);
         }
     };
 
     return (
-        <div className="userMenuOptionModal-container">
+        <div className="user-menu-option-modal-container">
             <div className="user-cart-title">메뉴 상세</div>
             <img src={defaultDetailImage} alt="메뉴 사진"/>
             <div className="user-cart-grid">
                 <div className="user-cart-bordtext">가격</div>
-                <div className="user-cart-bordtext">+{menuPrice}원</div>
+                <div className="user-cart-bordtext">{menuPrice}원</div>
             </div>
             <hr className="user-order-hr"/>
 
             <form className="user-order-option-modal">
                 <UserMenuOptionGroup>
-                    {options.map((option) => (
-                        <UserMenuOption key={option.optionId}>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="option"
-                                    value={option.optionId}
-                                    onChange={() => handleOptionChange(option)}
-                                />
-                                {option.optionName} (+{option.optionPrice}원)
-                            </label>
-                        </UserMenuOption>
+                    {options && options.map((option) => (
+                        <UserMenuOption
+                            key={option.optionId}
+                            optionContent={option.optionContent}
+                            optionPrice={option.optionPrice}
+                            onChange={() => handleOptionChange(option)}
+                            checked={selectedOption?.optionId === option.optionId}
+                        />
                     ))}
                 </UserMenuOptionGroup>
             </form>

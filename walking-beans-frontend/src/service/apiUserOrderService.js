@@ -10,7 +10,7 @@ const apiUserOrderService = {
 
     // 장바구니 메뉴 삭제
     deleteUserOrderCart: function (cartId, setCarts) {
-        axios
+        return axios
             .delete(`${API_CART_URL}/${cartId}`)
             .then((res) => {
                 console.log("백엔드 연결 성공", res.data);
@@ -25,19 +25,17 @@ const apiUserOrderService = {
     // cart 데이터 가져오기
     getUserOrderByCartId:
         function (cartId) {
-           axios
+           return axios
                 .get(`${API_CART_URL}/${cartId}`)
                 .then(
                     (res) => {
-                        console.log("백엔드 연결 성공", res.data);
+                        console.log("카트 데이터 연결 성공", res.data);
                         return res.data;
                     }
                 )
                 .catch(
                     (err) => {
                         console.log("getUserOrderByCartId 에러 발생", err);
-                        alert("카트 데이터를 가져오는 데 문제가 발생하였습니다. 다시 시도해 주세요.");
-                        return null;
                     }
                 )
         },
@@ -45,11 +43,11 @@ const apiUserOrderService = {
     // 선택한 option 데이터 가져오기
     getUserOrderByOrderId:
     function (orderId, setCarts) {
-       return axios
+       axios
             .get(`${API_CART_URL}/order/${orderId}`)
             .then(
                 (res) => {
-                    console.log("백엔드 연결 성공 : ", res.data);
+                    console.log("getUserOrderByOrderId 연결 성공 : ", res.data);
                     return setCarts(res.data);
                 }
             )
@@ -104,7 +102,7 @@ const apiUserOrderService = {
             return;
         }
 
-        axios
+        return axios
             .get(`${API_OPTION_URL}/optionmenu/${menuId}`)
             .then(
                 (res) => {
