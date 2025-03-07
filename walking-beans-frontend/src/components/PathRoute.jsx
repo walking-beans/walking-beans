@@ -73,7 +73,7 @@ function PathRoute () {
             <BrowserRouter>
                 <HeaderRoute user={user}/>
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center">
+                    <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
