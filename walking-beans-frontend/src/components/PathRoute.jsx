@@ -32,8 +32,11 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+import UserMenuOption from "../pages/user/UserMenuOption";
+import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
+
 
 
 function PathRoute () {
@@ -81,11 +84,15 @@ function PathRoute () {
                                 {/* 유저 관련 라우트 */}
 
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                {/*<Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>*/}
+                                <Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>
+
                                 <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
+
+                                <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
+
                                 <Route path="/user/payment" element={<UserPayment/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
                                 <Route path="/user/order/:storId" element={<StoreMenuForm/>}/>
