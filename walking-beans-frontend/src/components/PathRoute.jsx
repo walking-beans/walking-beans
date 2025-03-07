@@ -33,6 +33,8 @@ import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
+import AdminSignUp from "../pages/admin/AdminSignUp";
+
 
 function PathRoute () {
     const [user, setUser] = useState(null);
