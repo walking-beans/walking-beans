@@ -131,6 +131,7 @@ const UserHome = () => {
                 {displayStores.map((store) => (
                     <li key={store.storeId} className="store-item">
                         <span className="store-name">{store.storeName}</span>
+                        <img className="store-picture" src={store.storePictureUrl}/>
                         <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
                         <span className="store-distance">{userLocation ? getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1) : "-"} km</span>
                     </li>
