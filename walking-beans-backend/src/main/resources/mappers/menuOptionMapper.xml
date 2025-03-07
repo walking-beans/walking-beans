@@ -29,13 +29,11 @@
 
     <!-- 메뉴에 속한 메뉴옵션 찾기, 메뉴에서 옵션보기-->
     <select id="findMenuOptionByMenuId">
-        SELECT (option_id,
+        SELECT option_id,
                 menu_id,
                 option_name,
                 option_content,
-                option_price,
-                option_create_date,
-                option_modified_date)
+                option_price
         FROM menuoption
         WHERE menu_id =#{menuId}
     </select>

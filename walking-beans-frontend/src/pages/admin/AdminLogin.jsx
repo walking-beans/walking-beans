@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {call} from "axios";
 
 const AdminLogin = () => {
     return (
@@ -107,9 +108,29 @@ const AdminLoginNomal = () => {
 
 const AdminLoginSocial = () => {
     const [callback, setCallback] = useState("");
+    const [code, setCode] = useState("");
+
+
+
 
     const kakaoLogin = () => {
-        apiUserService.kakaoLogin(callback);
+        apiUserService.kakaoLogin(setCallback);
+    }
+
+    useEffect(() => {
+        if (callback) {
+            window.location.href=callback;
+        }
+    }, [callback]);
+
+    useEffect(() => {
+        if (code){
+            finalLogin();
+        }
+    }, [code]);
+
+    const finalLogin = () => {
+        apiUserService.kakaoCallback(code);
     }
 
     return (
@@ -119,7 +140,6 @@ const AdminLoginSocial = () => {
                 <div className="social-login">
                     <button className="kakao-login">
                         <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
-                        <p>{callback}</p>
                     </button>
                     <button className="naver-login">
                         <img src={require('../../images/naverLoginButton.png')}/>
