@@ -41,8 +41,6 @@ import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 
 
-
-
 function PathRoute () {
     const [user, setUser] = useState(null);
 
@@ -94,22 +92,15 @@ function PathRoute () {
                                 {/* 유저 관련 라우트 */}
 
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                <Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>
-
+                                {/*<Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>*/}
                                 <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
-
-                                <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
-
-
+                                  
                                 <Route path="/user/payment" element={<UserPayment/>}/>
+                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
-                                <Route path="/user/order/:storId" element={<StoreMenuForm/>}/>
-                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
-
-
 
 
                                 {/* 라이더 관련 라우트 */}
@@ -146,52 +137,52 @@ function PathRoute () {
 
                                 {/* 사장님 관련 라우트 */}
                                 <Route path="/owner" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menu" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoption" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/mystore" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/order" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/revenue" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>
                                 }/>
@@ -199,6 +190,7 @@ function PathRoute () {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/message" element={<AdminMessageTest/>}/>
                             </Routes>
                         </div>
                     </div>
