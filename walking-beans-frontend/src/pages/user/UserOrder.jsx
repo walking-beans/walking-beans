@@ -9,19 +9,31 @@ import "../../css/Owner.css"
 import oneStar from "../../images/star/oneStar.svg"
 import detailBtn from "../../images/user/detailbtn.svg"
 import UserMenuOptionModal from "./UserMenuOptionModal";
+import StoreMenuCategory from "../owner/StoreMenuCategory";
 
 const UserOrder = () => {
     const [carts, setCarts] = useState([]);
-    const {orderId, cartId, storeId} = useParams();
+    const {orderId, cartId, storeId, menuId} = useParams();
     const navigate = useNavigate();
     const [totalAmount, setTotalAmount] = useState(0);
     const [menu, setMenu] = useState([]);
     const [store, setStore] = useState([]);
-    const modalBackground = useRef(null); //배경 눌렀을 때 돌아가기
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState(null);
     const [options, setOptions] = useState([]);
-    const [optionContent, setOptionContent] = useState([]);
+    const [menus, setMenus] = useState([]);
+    const [groupedMenus, setGroupedMenus] = useState({});
+    const [categoryName, setCategoryName] = useState([]);
+
+    // 메뉴 선택 시 endpoint 변경
+    const handleMenuClick = (menu) => {
+        if (!menu.menuId) {
+            console.error("menuId 없음 : ", menuId);
+            return;
+        }
+        navigate(`/user/order/${storeId}/${menu.menuId}`);
+        openModal(menu);
+    };
 
     // carts 데이터 가져오기 (장바구니로 메뉴를 담았을 때 실행 필요)
     useEffect(() => {
@@ -52,8 +64,15 @@ const UserOrder = () => {
             apiUserOrderService.getUserOrderByOrderId(orderId);
         }
     }, [orderId]);
+    /*
+        // 총 금액 계산하기
+        useEffect(() => {
+            const total = carts.reduce((sum, cart) => sum + Number(cart.menuPrice) + Number(cart.optionPrice), 0);
+            setTotalAmount(total);
+        }, [carts]);
 
-    // 총 금액 계산하기
+     */
+    /*
     useEffect(() => {
         if (Array.isArray(carts) && carts.length > 0) {
             const total = carts.reduce((sum, cart) => {
@@ -66,6 +85,7 @@ const UserOrder = () => {
             setTotalAmount(0);
         }
     }, [carts]);
+    */
 
     // 가게 데이터 가져오기
     useEffect(() => {
@@ -74,20 +94,14 @@ const UserOrder = () => {
 
     // 메뉴 데이터 가져오기
     useEffect(() => {
-        apiUserOrderService.getMenuByStoreId(storeId, setMenu);
+        apiUserOrderService.getMenuByStoreId(storeId, setMenu)
+            .then((data) => {
+                setMenus(data);
+                const grouped = groupMenusByCategory(data);
+                setGroupedMenus(grouped);
+            })
+            .catch((err) => console.error("메뉴 데이터를 가져오는 중 오류 발생:", err));
     }, [storeId]);
-
-    // 메뉴 id로 옵션 가져오기
-    useEffect(() => {
-        if (selectedMenu?.menuId) {
-            apiUserOrderService.getOptionsByMenuId(selectedMenu.menuId, setOptions)
-                .then(data => {
-                    console.log("가져온 옵션 데이터:", data);
-                    setOptions(data);
-                })
-                .catch(error => console.error("옵션 가져오기 오류:", error));
-        }
-    }, [selectedMenu]);
 
     // 모달 열기
     const openModal = (menu) => {
@@ -96,27 +110,35 @@ const UserOrder = () => {
         document.body.style.overflow = 'hidden';
     };
 
-    // 모달 닫기
+    // 배경 클릭 시 모달 닫기
     const closeModal = () => {
         setModalOpen(false);
         document.body.style.overflow = 'auto';
     };
 
+    // 메뉴 id로 옵션 가져오기
+    useEffect(() => {
+            apiUserOrderService.getOptionsByMenuId(menuId, setOptions)
+        }, [menuId]
+    );
 
-    // 배경 클릭 시 모달을 닫는 함수
-    const handleBackgroundClick = (e) => {
-        if (e.target === e.currentTarget) {
-            closeModal();
-        }
+    // 카테고리 가져오기
+    const groupMenusByCategory = (menus) => {
+        return menus.reduce((acc, menu) => {
+            const category = menu.menuCategory
+
+            if (!acc[category]) {
+                acc[category] = [];
+            }
+            acc[category].push(menu);
+            return acc;
+        }, {});
     };
 
-    // 메뉴 Id로 옵션 가져오기
-    useEffect(() => {
-        if (selectedMenu?.menuId) {
-            apiUserOrderService.getOptionsByMenuId(selectedMenu.menuId, setOptions);
-
-        }
-    }, [selectedMenu]);
+    if (!categoryName || typeof handleMenuClick !== "function") {
+        console.error("categoryName 또는 onMenuClick 값이 잘못되었습니다.");
+        return <div>메뉴 카테고리 정보가 부족합니다.</div>;
+    }
 
     return (
         <div className="userorder-container">
@@ -134,34 +156,39 @@ const UserOrder = () => {
 
                     <div className="user-order-hr" alt="구분선"></div>
                     <div className="user-cart-bordtext">대표메뉴</div>
-
+                    {/* {Object.entries(groupedMenus).map(([categoryName, menus]) => (
+                        key={categoryName}
+                        categoryName={categoryName}
+                        menu={menu}
+                        onMenuClick={handleMenuClick}
+                          ))}
+                        */}
                     {/* 카테고리별로 만들기 */}
-                    <div className="user-order-menuinfo">
-                        {menu.map((menu) => (
-                            <StoreMenuForm
-                                key={menu.menuId}
-                                menuName={menu.menuName}
-                                menuPrice={menu.menuPrice}
-                                onClick={() => openModal(menu)}
-                            />
-                        ))
-                        }
-                    </div>
-                    <div className="user-order-hr" alt="구분선"></div>
-                    <div className="user-cart-bordtext">{store?.menuCategory}</div>
 
+
+                    <div className="user-order-menu">
+                            {Object.entries(groupedMenus).map(([categoryName, menus]) => (
+                                <StoreMenuCategory
+                                    key={categoryName}
+                                    categoryName={categoryName}
+                                    menus={menus}
+                                    onMenuClick={handleMenuClick}
+                                />
+                            ))}
+                        <div className="user-order-hr" alt="구분선"></div>
+                        <div className="user-cart-bordtext">{store?.menuCategory}</div>
+
+                    </div>
                 </div>
             </div>
 
-            {/* menuOption modal */}
-
-            {/*수정한 코드*/}
+            {/* menuOption modal*/}
             {modalOpen && (
-                <div className="modal-backdrop" onClick={handleBackgroundClick}>
+                <div className="modal-backdrop" onClick={closeModal}>
                     <div className="user-order-modal-container" onClick={(e) => e.stopPropagation()}>
                         <UserMenuOptionModal
                             menuPrice={selectedMenu?.menuPrice}
-                            optionContent={selectedMenu.optionContent}
+                            menuId={selectedMenu?.menuId}
                             onClose={closeModal}
                         />
                     </div>
@@ -176,10 +203,13 @@ const UserOrder = () => {
                     {carts && carts.length > 0 ? (
                         carts.map((cart) => (
                             <UserCart key={cart.cartId}
-                                      menuName={cart.menuName}
-                                      menuPrice={cart.menuPrice}
-                                      optionName={cart.optionName}
-                                      optionPrice={cart.optionPrice}
+                                      {...cart}
+                                /*
+                                menuName={cart.menuName}
+                                menuPrice={cart.menuPrice}
+                                optionName={cart.optionName}
+                                optionPrice={cart.optionPrice}
+                                 */
                                       onDelete={handleDelete}
                             />
                         ))
@@ -190,9 +220,7 @@ const UserOrder = () => {
 
                 <div className="user-order-hr"></div>
                 <div className="user-cart-grid">
-                    <div className="user-cart-bordtext">
-                        최종 결제 금액
-                    </div>
+                    <div className="user-cart-bordtext">최종 결제 금액</div>
                     <div className="user-cart-title">{totalAmount.toLocaleString()}원</div>
                 </div>
                 <button className="user-order-btn">주문하기</button>

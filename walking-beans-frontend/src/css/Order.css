@@ -149,14 +149,45 @@
 
 }
 
+.user-menu-option-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.user-menu-option-group-container {
+    margin-bottom: 30px;
+}
+
+.user-order-option-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 .user-order-optiontitle {
     font-size: 20px;
     color: #5A3D21;
+    margin-bottom: 30px;
+    text-align: left;
 }
 
 .user-order-optiontext {
     font-size: 22px;
     color: #5A3D21;
+    display: flex;
+
+}
+
+.user-menu-option-list {
+    padding: 10px;
+}
+
+.user-order-optioncontent {
+    margin-right: auto;
 }
 
 .user-order-option-select {
