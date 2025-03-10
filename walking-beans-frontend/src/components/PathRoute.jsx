@@ -32,10 +32,14 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+
+import AdminMypage from "../pages/admin/AdminMypage";
+
 import UserMenuOption from "../pages/user/UserMenuOption";
 import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
+
 
 
 
@@ -81,6 +85,12 @@ function PathRoute () {
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
 
+                                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+
+
+                                 
+
+
                                 {/* 유저 관련 라우트 */}
 
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
@@ -92,6 +102,7 @@ function PathRoute () {
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
                                 <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
+
 
                                 <Route path="/user/payment" element={<UserPayment/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
