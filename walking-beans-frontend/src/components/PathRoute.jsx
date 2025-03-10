@@ -40,6 +40,7 @@ import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
+import UserOrdering from "../pages/user/UserOrdering";
 
 
 function PathRoute () {
@@ -102,6 +103,7 @@ function PathRoute () {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                   
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/ordering" element={<UserOrdering/>}/>
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
