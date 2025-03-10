@@ -72,19 +72,15 @@ const apiUserService = {
         },
 
     kakaoCallback:
-        function (code){
+        function (code, dataCallback){
             axios
                 .get(`/oauth/kakao/callback?code=${code}`)
                 .then(
                     (res) => {
-                        if (res.data){
-                            window.location.href = res.data.redirectUrl;
-                            // DB에 저장까지 끝내고 리엑트 페이지로 돌아오기 해결
-                        }else {
-                            console.log("리다이렉트 url 불러오기 실패");
+                        if (res.data) {
+                            dataCallback(res.data);
                         }
-                    }
-                )
+                    })
                 .catch(
                     (err) => {
                         alert("백엔드에서 오류가 발생했습니다.");
