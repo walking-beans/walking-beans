@@ -1,7 +1,7 @@
 import orderCartDeleteBtnIcon from "../../images/user/orderCartDeleteBtn.svg"
 import "../../css/Cart.css"
 
-const UserCart = ({cartId, menuName, menuPrice, optionName, optionPrice, onDelete}) => {
+const UserCart = ({cartId, menuName, menuPrice, optionName, optionPrice, handleDelete}) => {
 
     const totalPrice = Number(menuPrice) + Number(optionPrice);
     return (
@@ -12,7 +12,7 @@ const UserCart = ({cartId, menuName, menuPrice, optionName, optionPrice, onDelet
             </div>
             <div className="user-cart-detailtext">{optionName}(+{Number(optionPrice).toLocaleString()})</div>
 
-            <button className="user-cart-remove" onClick={() => onDelete(cartId)}>
+            <button className="user-cart-remove" onDelete={() => handleDelete}>
             <img src={orderCartDeleteBtnIcon} alt="장바구니 메뉴 삭제 버튼 아이콘"/>
             </button>
         </div>

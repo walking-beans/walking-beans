@@ -58,3 +58,9 @@
 .user-main-random-card .store-rating {
     color: #EE5A4C;
 }
+
+/***************** UserSearchMap *******************/
+.store-info .store-picture{
+    width: 50%;
+    height: 50%;
+}

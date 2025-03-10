@@ -52,3 +52,8 @@
 .user-home-container .store-rating{
     color: #EE5A4C;
 }
+.user-home-container .store-picture{
+    width: 50%;
+    height: 50%;
+}
+
