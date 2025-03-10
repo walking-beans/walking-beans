@@ -76,12 +76,12 @@ public class SocialLoginAPIController {
             socialLoginService.insertSocialUser(users); // DB에 정보 저장
         }
 
-        String email = userMap.get("email").toString();
+        String kakaoEmail = userMap.get("email").toString();
         try {
             System.out.println("성공");
 
 
-            response.sendRedirect("http://localhost:3000/login?email=" + email);
+            response.sendRedirect("http://localhost:3000/login?email=" + kakaoEmail);
         } catch (IOException e) {
             System.out.println("오류");
             throw new RuntimeException(e);
@@ -99,8 +99,8 @@ public class SocialLoginAPIController {
     }
 
     @GetMapping("/oauth/naver/callback")
-    public String handleCallback(@RequestParam("code") String code,
-                                 @RequestParam("state") String state) {
+    public void handleCallback(@RequestParam("code") String code,
+                                 @RequestParam("state") String state, HttpServletResponse response) {
         try {
             Map<String, Object> userInfo = socialLoginService.NaverCallback(code, state);
 
@@ -108,7 +108,8 @@ public class SocialLoginAPIController {
 
             System.out.println(checkUser);
 
-            byte role = (byte) userInfo.get("role");
+            Integer roleInt = (Integer) userInfo.get("role");
+            byte role = roleInt.byteValue();
             String phone = (String) userInfo.get("phone");
 
             if (checkUser == 0) {
@@ -124,16 +125,13 @@ public class SocialLoginAPIController {
                     users.setUserPhone(phone);
                 }
                 socialLoginService.insertSocialUser(users);
-                return "/signupComplete";
-            } else {
-                return "/failComplete";
             }
-
+            String naverEmail = userInfo.get("email").toString();
+            response.sendRedirect("http://localhost:3000/login?email=" + naverEmail);
         } catch (Exception e) {
             System.err.println("🚨 네이버 로그인 처리 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
-            return "redirect:/error?message=네이버 로그인 오류 발생";
         }
     }
- */
+*/
 }

@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 const USER_API_URL = "http://localhost:7070/api/users"
 
 const apiUserService = {
+    // 로그인 api
     login:
         function (userEmail, userPassword, callback) {
             axios
@@ -27,6 +28,7 @@ const apiUserService = {
                 )
         },
 
+    //로그아웃 api
     logout:
         function () {
             axios
@@ -44,6 +46,7 @@ const apiUserService = {
                 )
         },
 
+    //세션 데이터를 가져오는 api
     sessionData:
         function (callback) {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -52,6 +55,23 @@ const apiUserService = {
             } else {
                 callback(null); // 사용자 정보가 없으면 null 전달
             }
+        },
+
+    // 유저 롤 수정하는 api
+    updateRole:
+        function (userEmail, userRole) {
+            axios
+                .put(`${USER_API_URL}/${userEmail}/${userRole}`)
+                .then(
+                    (res) => {
+                        console.log("유저 롤이 수정되었습니다.");
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert("유저 롤을 수정하는데 백엔드에서 문제가 생겼습니다.");
+                    }
+                )
         },
 
     kakaoLogin:
@@ -84,6 +104,22 @@ const apiUserService = {
                 .catch(
                     (err) => {
                         alert("백엔드에서 오류가 발생했습니다.");
+                    }
+                )
+        },
+
+    naverLogin:
+        function (callback) {
+            axios
+                .get("/oauth/naver/login")
+                .then(
+                    (res) => {
+                        callback(res.data);
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert("백엔드와의 연결에 실패했습니다.");
                     }
                 )
         },
