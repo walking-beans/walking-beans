@@ -2,30 +2,21 @@ package walking_beans.walking_beans_backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer {
-    // sockJS Fallback을 이용해 노출할 endpoint 설정
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // 웹소켓이 handshake를 하기 위해 연결하는 endpoint
-        registry.addEndpoint("/api/message")
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
+@EnableWebSocket
+public class WebSocketMessageConfig implements WebSocketConfigurer {
 
+    private final WebSocketMessageHandler chattingHandler;
+
+    public WebSocketMessageConfig(WebSocketMessageHandler chattingHandler) {
+        this.chattingHandler = chattingHandler;
     }
 
-    //메세지 브로커에 관한 설정
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 서버 -> 클라이언트로 발행하는 메세지에 대한 endpoint 설정 : 구독
-        registry.enableSimpleBroker("/sub");
-
-        // 클라이언트->서버로 발행하는 메세지에 대한 endpoint 설정 : 구독에 대한 메세지
-        registry.setApplicationDestinationPrefixes("/pub");
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(chattingHandler, "/ws/message") // ✅ WebSocket 경로 api에 맞게 수정바람
+                .setAllowedOrigins("*");
     }
 }

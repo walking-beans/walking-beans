@@ -1,11 +1,12 @@
 import {useState} from "react";
+import apiRiderService from "../../components/rider/apiRiderService";
 
 const AdminMessageTest = () => {
     const [ws, setWs] = useState();
     const [nickname, setNickname] = useState();
     const [message, setMessage] = useState();
     const [receiver, setReceiver] = useState();
-    const [chatBox, setChatBox] = useState();
+    const [chatBox, setChatBox] = useState([]);
 
 // 닉네임 설정
     function ssetNickname(e) {
@@ -49,7 +50,8 @@ const AdminMessageTest = () => {
                      </p>`
              );*/
             console.log(`받은 메시지: ${data.content}`)
-            setChatBox(data.content);
+            // setChatBox(data.content);
+            apiRiderService.chatPage(setChatBox);
         };
 
         setWs(newWs);
@@ -86,7 +88,15 @@ const AdminMessageTest = () => {
 
     return (
         <div>
-            <div>{chatBox}</div>
+            <div>
+                {Array.isArray(chatBox) ? (
+                    chatBox.map((chat, index) => (
+                        <div key={index}>{chat.content}</div>
+                    ))
+                ) : (
+                    <p>채팅 기록이 없습니다.</p>
+                )}
+            </div>
 
             <input
                 id="nickname"
