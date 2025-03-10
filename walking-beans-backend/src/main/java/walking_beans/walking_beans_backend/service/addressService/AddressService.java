@@ -18,6 +18,9 @@ public interface AddressService {
     // 대표 주소 설정
     Address getPrimaryAddressByUserId(Long userId);
 
+    // 대표 주소 변경
+    void updatePrimaryAddress(long userId, long addressId);
+
 
     /********** LEO **********/
     // 유저 대표 주소 가져오기 by order_id

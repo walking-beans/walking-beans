@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
+import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -40,6 +40,7 @@ import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
+import UserOrdering from "../pages/user/UserOrdering";
 
 
 function PathRoute () {
@@ -92,15 +93,19 @@ function PathRoute () {
 
                                 {/* 유저 관련 라우트 */}
 
+                                {/* order 페이지 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                {/*<Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>*/}
-                                <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
+                                {/* 메뉴 클릭 했을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
+                                {/* 장바구니 담았을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                   
-                                <Route path="/user/payment" element={<UserPayment/>}/>
-                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/ordering" element={<UserOrdering/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
+
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
 
@@ -147,11 +152,7 @@ function PathRoute () {
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuDetail/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/owner/menuform" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuForm/>

@@ -9,10 +9,10 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+    background: #F4EDDF;
 }
 
 

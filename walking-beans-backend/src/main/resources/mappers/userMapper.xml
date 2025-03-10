@@ -41,6 +41,13 @@
         WHERE user_email = #{userEmail}
     </select>
 
+    <!-- 이메일로 유저 롤 변경하기 -->
+    <update id="updateUserRole">
+        UPDATE users
+        SET user_role = #{userRole}
+        WHERE user_email = #{userEmail}
+    </update>
+
     <!-- 회원 정보 조회 -->
     <select id="selectUserInfo">
 

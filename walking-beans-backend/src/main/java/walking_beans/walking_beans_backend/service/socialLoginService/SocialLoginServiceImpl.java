@@ -151,8 +151,6 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         resultMap.put("email", email);
         resultMap.put("nickname", nickname);
         resultMap.put("phone", phoneWithoutHyphen);
-        System.out.println(nickname);
-        System.out.println(phone);
         return resultMap;
     }
 */
