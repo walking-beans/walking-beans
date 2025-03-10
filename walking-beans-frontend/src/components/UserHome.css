@@ -1,5 +1,5 @@
 .user-home-container {
-    max-width: 420px;
+    max-width: 600px;
     width: 100%;
     margin: auto;
     background-color: #f8f1e4;
@@ -52,3 +52,8 @@
 .user-home-container .store-rating{
     color: #EE5A4C;
 }
+.user-home-container .store-picture{
+    width: 50%;
+    height: 50%;
+}
+

@@ -37,7 +37,7 @@
     <!-- 회원 가입 유무 확인 -->
     <select id="checkEmailExists">
         SELECT COUNT(*)
-        FROM testingusers2
+        FROM users
         WHERE user_email = #{userEmail}
     </select>
 

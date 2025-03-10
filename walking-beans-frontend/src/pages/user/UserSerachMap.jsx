@@ -1,14 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import "../../components/UserHome.css"
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import  "../../css/User.css";
+import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
+import axios from "axios";
+import apiStoreService from "../../service/apiStoreService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserSearchMap = () => {
+    const orderId = useParams();
+    const cartId = useParams();
+    const storeId = useParams(1);
     const location = useLocation();
     const { userLocation, stores } = location.state || {};
     const [map, setMap] = useState(null);
     const [selectedStore, setSelectedStore] = useState(null);
+    const [storeList, setStoreList] = useState([]);
+    const navigate = useNavigate();
+
+
+    // 거리 계산 함수 추가
+    const getDistance = (lat1, lng1, lat2, lng2) => {
+        if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
+
+        const R = 6371; // 지구 반지름 (km)
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLng = (lng2 - lng1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) *
+            Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // 거리 (km)
+    };
+
+    // 가게 목록에 거리 추가
+    useEffect(() => {
+        if (!userLocation || !stores) return;
+
+        const updatedStores = stores.map((store) => ({
+            ...store,
+            distance: getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude)
+        }));
+
+        updatedStores.sort((a, b) => a.distance - b.distance);
+        setStoreList(updatedStores);
+    }, [userLocation, stores]);
 
     useEffect(() => {
         if (!userLocation) return;
@@ -27,42 +65,62 @@ const UserSearchMap = () => {
                     center: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     level: 5,
                 };
-                const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
-                setMap(newMap);
+                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+                setMap(map);
 
-                // 내 위치 마커
+                const userMarkerImage = new window.kakao.maps.MarkerImage(
+                    `${userCurrentLocation}`,
+                    new window.kakao.maps.Size(40, 42),
+                    { offset: new window.kakao.maps.Point(20, 42) }
+                );
+
                 new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                    map: newMap,
+                    map: map,
                     title: "내 위치",
+                    image: userMarkerImage,
                 });
 
-                // 가게 마커 추가
-                stores.forEach((store) => {
+                storeList.forEach((store) => {
                     const marker = new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
-                        map: newMap,
+                        map: map,
                     });
 
                     window.kakao.maps.event.addListener(marker, "click", () => {
+                        if (!map) return;
+
+                        map.setLevel(2);
+                        map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+
                         setSelectedStore(store);
                     });
                 });
             });
         };
 
+
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLocation, stores]);
+    }, [userLocation, storeList]);
+    // const storeId = 1;
+    const handleStore = () =>{
+        navigate(`/user/order/${selectedStore.storeId}`);
+        console.log( "storeId 값 : " ,storeId);
+    }
 
     return (
         <div>
             <div id="search-map" style={{ width: "100%", height: "500px" }}></div>
             {selectedStore && (
                 <div className="store-info">
-                    <h3>{selectedStore.storeName}</h3>
+                    <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
+                        {selectedStore.storeName}
+                    </h3>
+                    <img className="store-picture" src={selectedStore.storePictureUrl}/>
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
+                    <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
                     <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
                 </div>
             )}
