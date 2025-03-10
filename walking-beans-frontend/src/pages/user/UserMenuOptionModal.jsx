@@ -9,12 +9,13 @@ import {useNavigate, useParams} from "react-router-dom";
 
 const UserMenuOptionModal = ({menuPrice}) => {
         const [selectedOption, setSelectedOption] = useState([]);
-        const {orderId, cartId, storeId, menuId, userId} = useParams();
+        const {orderId, cartId, storeId, menuId} = useParams();
         const navigate = useNavigate();
         const [options, setOptions] = useState([]);
         const [grouped, setGrouped] = useState([]);
         const [menuName, setMenuName] = useState([]);
         const [address, setAddress] = useState([]);
+        const [userId, setUserId] = useState([]);
 
     const [selectedUserId, setSelectedUserId] = useState(null);
         const [selectedStoreId, setSelectedStoreId] = useState(null);

@@ -8,7 +8,7 @@ const UserMenuOptionGroup = ({optionName, options, selectedOption, onOptionChang
         <div className="user-menu-option-group-container">
             <div className="user-order-optiontitle">{optionName}</div>
             <div className="user-menu-option-list">
-                {options.map(option => (
+                {options.map((option) => (
                     <UserMenuOption
                         key={option.optionId}
                         optionContent={option.optionContent}

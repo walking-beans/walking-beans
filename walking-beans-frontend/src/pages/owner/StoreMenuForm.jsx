@@ -4,7 +4,7 @@ import "../../css/Owner.css"
 
 const StoreMenuForm = ({ menuName, menuPrice, onClick }) => {
     return (
-        <div onClick={onClick} style={{ cursor: "pointer" }}>
+        <div onClick={onClick} className="store-menu-form-container">
             <div>
                 <img src={defaultImage} alt="메뉴 이미지" />
             </div>

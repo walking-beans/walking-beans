@@ -78,18 +78,19 @@ const apiUserOrderService = {
 
     // 메뉴 데이터 가져오기
     getMenuByStoreId:
-        function (storeId, setMenu) {
+        function (storeId) {
             return axios
                 .get(`${API_MENU_URL}/storemenu/${storeId}`)
                 .then(
                     (res) => {
                         console.log("메뉴 데이터 가져오기 성공 : ", res.data)
-                        setMenu(res.data);
+                        return res.data;
                     }
                 )
                 .catch(
                     (err) => {
                         console.error("메뉴 데이터 가져오기 실패 : ", err)
+                        throw err;
                     }
                 )
         },

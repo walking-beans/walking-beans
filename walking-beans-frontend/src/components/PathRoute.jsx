@@ -148,11 +148,6 @@ function PathRoute () {
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
-                                        <StoreMenuCategory/>
-                                    </ProtectedRoute>
-                                }/>
                                 <Route path="/owner/menuform" element={
                                     <ProtectedRoute allowedRoles={["store"]}>
                                         <StoreMenuForm/>
