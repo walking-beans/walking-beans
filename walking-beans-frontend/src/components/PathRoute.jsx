@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
+import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -83,10 +83,14 @@ function PathRoute () {
 
                                 {/* 유저 관련 라우트 */}
 
+                                {/* order 페이지 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                <Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>
+                                {/* 메뉴 클릭 했을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
+                                {/* 장바구니 담았을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
 
-                                <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
+                                <Route path="/user/test" element={<UserMenuOption/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
@@ -146,7 +150,7 @@ function PathRoute () {
                                 }/>
                                 <Route path="/owner/menudetail" element={
                                     <ProtectedRoute allowedRoles={["store"]}>
-                                        <StoreMenuDetail/>
+                                        <StoreMenuCategory/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuform" element={

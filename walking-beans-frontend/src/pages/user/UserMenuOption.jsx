@@ -1,23 +1,24 @@
-import "../../css/Order.css"
+import "../../css/Order.css";
 
 const UserMenuOption = ({optionContent, optionPrice, onChange, checked}) => {
+
     return (
-        <div className="UserMenuOption-container">
-            <div>
+        <div className="user-menu-option-container">
+            <div className="user-order-option-info">
                 <label className="user-order-optiontext">
                     <input
                         type="radio"
-                        value={optionContent}
                         className="user-order-option-select"
                         onChange={onChange}
-                        checked={checked}
+                        checked={checked || false}
                     />
-                    {optionContent}
+                    <div className="user-order-optioncontent">{optionContent}</div>
                 </label>
-                <div className="user-order-optiontext">+{optionPrice}원</div>
+            <div className="user-order-optiontext">+{optionPrice}원</div>
             </div>
         </div>
     )
+        ;
 };
 
 export default UserMenuOption;
