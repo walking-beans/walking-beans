@@ -1,87 +1,105 @@
-/*
-import {useState} from "react";
+import React, { useState, useEffect } from 'react';
+import {useParams} from "react-router-dom";
+import apiRiderService from "../../components/rider/apiRiderService"; // SockJS 라이브러리
 
 const AdminMessage = () => {
+    const userId = 1;
     const [ws, setWs] = useState();
-    const [nickname, setNickname] = useState();
+    const [message, setMessage] = useState("");
+    const [chatBox, setChatBox] = useState([]);
+    const [members, setMembers] = useState(null);
 
-// 닉네임 설정
-    function ssetNickname() {
-        if (!nickname) {
-            alert("닉네임을 입력하세요!");
-            return;
-        }
+    const {roomId} = useParams();
+
+
+    useEffect(() => {
+        apiRiderService.getAllChattingMember(roomId, userId, setMembers);
+    }, [roomId, userId]);
+
+    useEffect(() => {
+
         startWebSocket();
-    }
+    }, []);
 
-// 닉네임 설정 버튼 클릭 시 웹소켓 시작
     function startWebSocket() {
         if (ws && ws.readyState === WebSocket.OPEN) {
             console.log("WebSocket already connected.");
             return;
         }
 
-        setWs(new WebSocket("ws://localhost:8080/ws/chat"));
+        const newWs = new WebSocket("ws://localhost:7070/ws/message");
 
-        ws.onopen = function () {
-            console.log("WebSocket Connected.");
+        newWs.onopen = () => {
+            console.log("✅ WebSocket Connected.");
+            apiRiderService.getAllMessages(roomId, setChatBox);
         };
 
-        ws.onclose = function () {
-            console.log("WebSocket Closed. Reconnecting...");
-            setTimeout(startWebSocket, 5000);
+        newWs.onclose = () => {
+            console.log("❌ WebSocket Closed. Reconnezcting in 5 seconds...");
+            setTimeout(() => startWebSocket(), 5000);
         };
 
-        ws.onerror = function (error) {
-            console.error("WebSocket Error: ", error);
+        newWs.onerror = (error) => {
+            console.error("🚨 WebSocket Error: ", error);
         };
 
-        ws.onmessage = function (event) {
-            let data = JSON.parse(event.data);
-            let className = (data.sender === nickname) ? "message-sent" : "message-received";
-            document.getElementById("cha").append(
-                `<p class="message ${className}">
-                        <strong>${data.sender}</strong> to <strong>${data.receiver || '모두'}</strong>:
-                        ${data.content}
-                    </p>`
-            );
+        newWs.onmessage = (event) => {
+            apiRiderService.getAllMessages(roomId, setChatBox);
         };
+
+        setWs(newWs);
+
     }
 
-// 메세지 전송
+
     function sendMessage() {
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             alert("WebSocket이 연결되지 않았습니다. 다시 시도하세요.");
             return;
         }
 
-        let receiver = $("#receiver").val();
-        let message = $("#message").val();
-        if (!nickname) {
-            alert("닉네임을 먼저 설정하세요!");
-            return;
-        }
+        console.log(ws);
         if (!message) return;
 
-        let chatMessage = {sender: nickname, receiver: receiver || null, content: message};
+        let chatMessage = {roomId : roomId, userId: userId, messageRole : 1, messageContent: message};
         ws.send(JSON.stringify(chatMessage));
-        $("#message").val("");
+        setMessage("");
     }
 
+    const handleChangeValue = (e) => {
+        if (e.target.name === "message") setMessage(e.target.value);
+    }
 
     return (
         <div>
-            <div id="chat-box"></div>
+            <div>
+                {Array.isArray(chatBox) ? (
+                    chatBox.map((msg, index) => (
+                        <div
+                            key={index}
+                        >{msg.messageContent}</div>
+                    ))
+                ) : (
+                    <p>채팅 기록이 없습니다.</p>
+                )}
+            </div>
 
-            <input id="nickname" placeholder="닉네임 입력" type="text"/>
-            <button onClick={ssetNickname}>닉네임 설정</button>
-            <input id="receiver" placeholder="받는 사람 (빈칸 = 모두에게)" type="text"/>
-            <input id="message" placeholder="메시지 입력" type="text"/>
+            <input
+                id="message"
+                name="message"
+                value={message}
+                placeholder="메시지 입력"
+                type="text"
+                onChange={handleChangeValue}
+            />
             <button onClick={sendMessage}>전송</button>
         </div>
 
     )
 
-}
 
-export default AdminMessage;*/
+};
+
+
+
+export default AdminMessage;
