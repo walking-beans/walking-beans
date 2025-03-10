@@ -63,8 +63,9 @@ const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) =>
                     </Link>
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
-
-                            <button class="btn btn-outline-warning" onClick={handleDelete}>수정</button>
+                            <Link to={`/owner/menu/${menuId}`}>
+                            <button class="btn btn-outline-warning" >수정</button>
+                            </Link>
                             <button class="btn btn-outline-danger" onClick={handleDelete}>삭제</button>
                         </div>
                     </div>

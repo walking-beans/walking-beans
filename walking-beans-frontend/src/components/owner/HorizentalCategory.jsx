@@ -103,11 +103,7 @@ const HorizentalCategory = ({gettingValue}) => {
             <ScrollElement onClick={handleChange} value={"음료"}>음료</ScrollElement>
             <ScrollElement onClick={handleChange} value={"티"}>티</ScrollElement>
             <ScrollElement onClick={handleChange} value={"푸드"}>푸드</ScrollElement>
-            <ScrollElement onClick={handleChange} value={"상품"}>상품</ScrollElement>
-            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
-            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
-            <ScrollElement onClick={handleChange} value={"아이템"}>아이템 1</ScrollElement>
-
+            <ScrollElement onClick={handleChange} value={"음료"}>상품</ScrollElement>
 
         </ScrollWrap>
         </>
