@@ -55,6 +55,7 @@ const apiRiderService = {
             )
     },
 
+
     getStoreInfoInRiderMain : function (setStores) {
         axios
             .get(`${API_URL}/store/riderMain`)
