@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {use, useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
@@ -108,6 +108,7 @@ const AdminLoginNomal = () => {
 
 const AdminLoginSocial = () => {
     const [KakaoCallback, setKakaoCallback] = useState("");
+    const [NaverCallback, setNaverCallback] = useState("");
     //const [code, setCode] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
@@ -156,8 +157,14 @@ const AdminLoginSocial = () => {
     }*/
 
     const naverLogin = () => {
-
+        apiUserService.naverLogin(setNaverCallback);
     }
+
+    useEffect(() => {
+        if (NaverCallback) {
+            window.location.href=NaverCallback;
+        }
+    }, [NaverCallback]);
 
     return (
         <div>
