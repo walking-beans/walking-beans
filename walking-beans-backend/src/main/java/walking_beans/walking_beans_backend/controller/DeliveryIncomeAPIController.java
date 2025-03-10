@@ -23,9 +23,11 @@ public class DeliveryIncomeAPIController {
      * @return ResponseEntity.ok(List<DeliveryIncome>)
      */
     @GetMapping
-    public ResponseEntity<List<DeliveryIncome>> getDeliveryIncomeList(@RequestParam("riderId") long riderId) {
-        log.info("=== /api/deliveryIncome?riderId={} ===", riderId);
-        return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByRiderId(riderId));
+    public ResponseEntity<List<DeliveryIncome>> getDeliveryIncomeList(@RequestParam("riderId") long riderId,
+                                                                      @RequestParam("todaysMonth") int todaysMonth,
+                                                                      @RequestParam("todaysYear") int todaysYear) {
+        log.info("=== /api/deliveryIncome?riderId={}&todaysMonth={} ===", riderId, todaysMonth);
+        return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByRiderId(riderId, todaysMonth, todaysYear));
     }
 
     /**

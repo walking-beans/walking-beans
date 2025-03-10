@@ -1,0 +1,11 @@
+.store-menu-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #5A3D21;
+    margin-top: 10px;
+}
+
+.store-menu-price {
+    font-size: 16px;
+    color: #5A3D21;
+}

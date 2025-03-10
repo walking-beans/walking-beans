@@ -8,8 +8,5 @@ import java.util.List;
 public interface MessageService {
     List<Message> getAllMessages(long roomId);
 
-    Integer insertMessageByRoomId(@RequestParam("roomId") long roomId,
-                                  @RequestParam("userId") long userId,
-                                  @RequestParam("messageRole") int messageRole,
-                                  @RequestParam("messageContent") String messageContent);
+    Integer insertMessageByRoomId(Message message);
 }

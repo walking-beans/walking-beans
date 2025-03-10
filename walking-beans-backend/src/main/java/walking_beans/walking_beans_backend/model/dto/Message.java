@@ -13,6 +13,13 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message {
+
+    public enum MessageType {
+        TALK, JOIN, IMG
+    }
+
+    private MessageType type;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long messageId;
@@ -21,10 +28,8 @@ public class Message {
 
     private long userId;
 
-    private int messageRole;
-
     private String messageContent;
 
-    private Timestamp messageTime;
+    private String messageTime;
 
 }

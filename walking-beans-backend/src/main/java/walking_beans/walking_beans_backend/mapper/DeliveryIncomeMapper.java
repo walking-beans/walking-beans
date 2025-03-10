@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface DeliveryIncomeMapper {
-    List<DeliveryIncome> getDeliveryIncomeByRiderId(long riderId);
+    List<DeliveryIncome> getDeliveryIncomeByRiderId(@Param("riderId") long riderId, @Param("todaysMonth") int todaysMonth, @Param("todaysYear") int todaysYear);
 
     DeliveryIncome getDeliveryIncomeByOrderId(@Param("riderId") long riderId, @Param("orderId") long orderId);
 

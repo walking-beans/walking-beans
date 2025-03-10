@@ -1,0 +1,122 @@
+.login-container {
+    width: 100%;
+    max-width: 600px;
+    min-height: calc(100vh - 335px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f1e4;
+}
+
+.login-container .login-box {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-container .login-btn {
+    width: 100%;
+    background-color: #9c774d;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.login-container .login-btn:hover {
+    background-color: #7d5a3b;
+}
+
+.login-container .social-login {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.login-container .kakao-login,
+.login-container .naver-login {
+    /*display: flex;
+    align-items: center;
+    justify-content: center;*/
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.login-container .kakao-login {
+    background-color: #ffeb00;
+    color: #3c1e1e;
+}
+
+.login-container .naver-login {
+    background-color: #03c75a;
+    color: white;
+}
+
+.login-container .kakao-login img,
+.login-container .naver-login img {
+    width: 200px;
+    margin-right: 8px;
+}
+
+.login-container .login-footer {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-container .login-footer a {
+    color: #7d5a3b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-container .login-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 16px;
+    }
+
+    .login-container .login-box {
+        padding: 16px;
+    }
+
+    .login-container .form-control {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .login-container .login-btn {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .login-container .social-login {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .login-container .kakao-login,
+    .login-container .naver-login {
+        width: 100%;
+    }
+}

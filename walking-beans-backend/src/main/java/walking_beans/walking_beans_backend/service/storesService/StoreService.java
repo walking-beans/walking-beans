@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.storesService;
 
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
 
 import java.util.List;
 
@@ -30,4 +31,7 @@ public interface StoreService {
     /**************************************** Leo ****************************************/
     // 매장 주소 가져오기 by order id
     Stores getStoreAddressByOrderId(long orderId);
+
+    // 라이더가 필요한 주문 접수 중 매장 주소 가져오기
+    List<RiderMainStoreInfo> getStoreInfoInRiderMain();
 }

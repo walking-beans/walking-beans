@@ -11,14 +11,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payments {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long paymentId;
-
     private long orderId;
-
     private String paymentMethod;
-
     private String paymentStatus;
 
 }

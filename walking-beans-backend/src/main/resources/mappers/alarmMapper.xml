@@ -2,5 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="walking_beans.walking_beans_backend.mapper.AlarmMapper">
+    <select id="getChatRooms" resultType="Chattingroom">
+        SELECT * FROM Chattingroom WHERE user_id = #{userId}
+    </select>
+
+    <select id="getMessages" resultType="Message">
+        SELECT * FROM Message WHERE room_id = #{roomId} ORDER BY send_time ASC
+    </select>
+
+    <insert id="insertAlarm">
+        INSERT INTO Alarm (user_id, alarm_role, alarm_sender_id, alarm_content, alarm_status, alarm_create_date)
+        VALUES (#{userId}, #{alarmRole}, #{alarmSenderId}, #{alarmContent}, #{alarmStatus}, #{alarmCreateDate})
+    </insert>
+    <update id="updateLastMessage">
+        UPDATE Chattingroom
+        SET last_message = #{message}
+        WHERE room_id = #{roomId}
+    </update>
 
 </mapper>

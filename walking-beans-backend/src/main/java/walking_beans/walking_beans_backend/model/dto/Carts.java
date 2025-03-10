@@ -18,17 +18,10 @@ public class Carts {
     private long cartId;
 
     private long optionId;
-
     private long orderId;
-
     private long storeId;
-
     private long userId;
-
     private int cartQuantity;
-
     private Timestamp cartCreateDate;
-
     private Timestamp cartModifiedDate;
-
 }

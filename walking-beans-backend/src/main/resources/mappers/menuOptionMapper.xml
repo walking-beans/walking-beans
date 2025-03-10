@@ -4,7 +4,7 @@
 <mapper namespace="walking_beans.walking_beans_backend.mapper.MenuOptionMapper">
 
     <!--메뉴옵션 전체 검색-->
-    <select id="">
+    <select id="findAllMenuOption">
         SELECT *
         FROM menuoption
     </select>
@@ -29,13 +29,11 @@
 
     <!-- 메뉴에 속한 메뉴옵션 찾기, 메뉴에서 옵션보기-->
     <select id="findMenuOptionByMenuId">
-        SELECT (option_id,
+        SELECT option_id,
                 menu_id,
                 option_name,
                 option_content,
-                option_price,
-                option_create_date,
-                option_modified_date)
+                option_price
         FROM menuoption
         WHERE menu_id =#{menuId}
     </select>
@@ -84,5 +82,24 @@
         WHERE menu_id =#{menuId}
     </delete>
 
+    <!-- 장바구니에 등록할 메뉴, 메뉴옵션 가져오기 -->
+    <select id="selectMenuInfoToCart">
+        SELECT mo.option_id,
+               mo.option_name,
+               mo.option_content,
+               mo.option_price,
+               m.menu_id,
+               m.menu_price,
+               m.menu_name
+        FROM menuoption mo
+        JOIN menu m ON mo.menu_id = m.menu_id
+        WHERE mo.option_id = #{optionId}
+    </select>
 
+    <!-- 사용자가 선택한 옵션 확인하기 옵션명이 유니크한 경우-->
+    <select id="selectOptionByMenuIdAndName" resultType="Integer">
+        SELECT option_id
+        FROM menuOption
+        WHERE menu_id = #{menuId} AND option_name = #{optionName}
+    </select>
 </mapper>
