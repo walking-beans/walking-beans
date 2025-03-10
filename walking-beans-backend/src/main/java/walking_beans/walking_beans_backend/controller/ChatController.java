@@ -16,10 +16,14 @@ public class ChatController {
     @Autowired
     private ChatServiceImpl chatService;
 
-    @GetMapping("/chat")
+
+
+    /** WebSocketChattingTest
+     */
+    @GetMapping("/chatTEST")
     public String chatPage(Model model) {
         List<ChatMessage> messages = chatService.getMessages();
         model.addAttribute("messages", messages);
-        return "chat";
+        return "chatTEST";
     }
 }

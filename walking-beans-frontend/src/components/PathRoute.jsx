@@ -32,6 +32,7 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+import AdminMessageTest from "../pages/admin/AdminMessageTest";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -175,6 +176,7 @@ function PathRoute () {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/message" element={<AdminMessageTest/>}/>
                             </Routes>
                         </div>
                     </div>

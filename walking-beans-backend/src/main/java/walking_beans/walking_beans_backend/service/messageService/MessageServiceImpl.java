@@ -31,7 +31,7 @@ public class MessageServiceImpl implements MessageService {
         // messageRole checking -> 이미지 경로 재설정
 
         // chattingroom update
-        chattingRoomMapper.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
+        // chattingRoomMapper.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
 
         return messageMapper.insertMessageByRoomId(message);
     }
