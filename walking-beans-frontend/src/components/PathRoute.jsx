@@ -39,6 +39,7 @@ import UserMenuOption from "../pages/user/UserMenuOption";
 import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
+import AdminMessageTest from "../pages/admin/AdminMessageTest";
 
 
 function PathRoute () {
