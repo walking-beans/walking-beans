@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
 
 const AdminLogin = () => {
     return (
         <div>
-            {/*<AdminLoginNomal />*/}  {/*아이디 비밀번호 로그인*/}
+            {/*<AdminLoginNomal />*/}{/*아이디 비밀번호 로그인*/}
             <AdminLoginSocial/>{/*소셜 로그인*/}
         </div>
     )
@@ -107,22 +107,43 @@ const AdminLoginNomal = () => {
 }
 
 const AdminLoginSocial = () => {
-    const [callback, setCallback] = useState("");
-    const [code, setCode] = useState("");
+    const [KakaoCallback, setKakaoCallback] = useState("");
+    //const [code, setCode] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
 
+    // url 에서 이메일 가져와서 비밀번호랑 로그인
+    useEffect(()=> {
+        const params = new URLSearchParams(location.search);
+        const email = params.get("email");
+        if (email) {
+            // 로그인 API 호출 (임의 비밀번호 '0000'을 사용)
+            apiUserService.login(email, "0000", (status) => {
+                if (status === "success") {
+                    // 로그인 성공 후 로컬 스토리지에 저장된 사용자 정보 출력
+                    const user = JSON.parse(localStorage.getItem("user"));
+                    console.log("로그인 성공! 로컬 스토리지의 사용자 정보: ", user);
 
-
+                    // 홈 페이지로 이동
+                    navigate("/");
+                } else {
+                    console.log("로그인 실패");
+                }
+            });
+        }
+    }, [location, navigate]);
 
     const kakaoLogin = () => {
-        apiUserService.kakaoLogin(setCallback);
+        apiUserService.kakaoLogin(setKakaoCallback);
     }
 
     useEffect(() => {
-        if (callback) {
-            window.location.href=callback;
+        if (KakaoCallback) {
+            window.location.href=KakaoCallback;
         }
-    }, [callback]);
+    }, [KakaoCallback]);
 
+    /*
     useEffect(() => {
         if (code){
             finalLogin();
@@ -130,7 +151,12 @@ const AdminLoginSocial = () => {
     }, [code]);
 
     const finalLogin = () => {
-        apiUserService.kakaoCallback(code);
+        apiUserService.kakaoCallback(code, setCallback);
+        navigate("/");
+    }*/
+
+    const naverLogin = () => {
+
     }
 
     return (
@@ -142,9 +168,10 @@ const AdminLoginSocial = () => {
                         <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
                     </button>
                     <button className="naver-login">
-                        <img src={require('../../images/naverLoginButton.png')}/>
+                        <img src={require('../../images/naverLoginButton.png')} onClick={naverLogin}/>
                     </button>
                 </div>
+                <p>* 가입된 정보가 없을 경우 자동으로 가입됩니다! *</p>
             </div>
         </div>
     )

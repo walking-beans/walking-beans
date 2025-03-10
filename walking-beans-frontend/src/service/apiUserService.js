@@ -72,21 +72,15 @@ const apiUserService = {
         },
 
     kakaoCallback:
-        function (code){
+        function (code, dataCallback){
             axios
                 .get(`/oauth/kakao/callback?code=${code}`)
                 .then(
                     (res) => {
-                        if (res.data){
-                            if (res.data === "success") {
-                                alert("회원가입완료");
-                                <Link to="/" />
-                            }
-                        }else {
-                            alert("이미 있는 아이디임");
+                        if (res.data) {
+                            dataCallback(res.data);
                         }
-                    }
-                )
+                    })
                 .catch(
                     (err) => {
                         alert("백엔드에서 오류가 발생했습니다.");
