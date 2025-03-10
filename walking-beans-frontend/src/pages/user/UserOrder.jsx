@@ -141,12 +141,11 @@ const UserOrder = () => {
     }
 
     return (
-        <div className="userorder-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
 
                     {/* menu */}
-                    <div className="user-cart-title">{store?.storeName}</div>
+                    <div className="user-title">{store?.storeName}</div>
                     <div><img src={oneStar} alt="별점 아이콘"/>
                         <sapn className="store-menu-title">{store?.storeRating}({store?.storeReviewCount})</sapn>
 
@@ -180,7 +179,6 @@ const UserOrder = () => {
 
                     </div>
                 </div>
-            </div>
 
             {/* menuOption modal*/}
             {modalOpen && (
@@ -198,7 +196,7 @@ const UserOrder = () => {
 
             {/* cart */}
             <div className="user-cart-background">
-                <div className="user-cart-title">장바구니</div>
+                <div className="user-title">장바구니</div>
                 <div className="user-cart-menuinfo">
                     {carts && carts.length > 0 ? (
                         carts.map((cart) => (
@@ -221,7 +219,7 @@ const UserOrder = () => {
                 <div className="user-order-hr"></div>
                 <div className="user-cart-grid">
                     <div className="user-cart-bordtext">최종 결제 금액</div>
-                    <div className="user-cart-title">{totalAmount.toLocaleString()}원</div>
+                    <div className="user-title">{totalAmount.toLocaleString()}원</div>
                 </div>
                 <button className="user-order-btn">주문하기</button>
             </div>

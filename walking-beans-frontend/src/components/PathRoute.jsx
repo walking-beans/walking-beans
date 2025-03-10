@@ -102,8 +102,8 @@ function PathRoute () {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                   
-                                <Route path="/user/payment" element={<UserPayment/>}/>
-                                {/*<Route path="/user/order/:storId" element={<StoreMenuForm/>}/>*/}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
+
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
 

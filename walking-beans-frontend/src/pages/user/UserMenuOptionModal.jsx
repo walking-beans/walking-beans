@@ -152,7 +152,7 @@ const UserMenuOptionModal = ({menuPrice}) => {
 
         return (
             <div className="user-menu-option-modal-container">
-                <div className="user-cart-title">메뉴 상세</div>
+                <div className="user-title">메뉴 상세</div>
                 <img src={defaultDetailImage} alt="메뉴 사진"/>
                 <div className="user-cart-grid">
                     <div className="user-cart-bordtext">가격</div>
@@ -176,8 +176,8 @@ const UserMenuOptionModal = ({menuPrice}) => {
                     )}
                 </form>
                 <div className="user-order-click-btn">
-                    <button type="submit" className="user-order-mini-btn" onClick={handleAddToCart}>장바구니추가</button>
-                    <button type="submit" className="user-order-mini-btn">주문하기</button>
+                    <button type="submit" className="user-mini-btn" onClick={handleAddToCart}>장바구니추가</button>
+                    <button type="submit" className="user-mini-btn">주문하기</button>
                 </div>
             </div>
         )
