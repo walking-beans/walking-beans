@@ -65,7 +65,7 @@ public class MenuAPIController {
      *
      * @param menuId
      */
-    @PutMapping("/{menuId}")
+    @PostMapping("/{menuId}")
     public void updateMenu(@PathVariable long menuId, @RequestBody Menu menu) {
         menu.setMenuId(menuId);
         menuService.updateMenu(menu);

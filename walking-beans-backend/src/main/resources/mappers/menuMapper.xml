@@ -36,13 +36,13 @@
     <!-- 메뉴 수정하기 -->
     <update id="updateMenu">
         UPDATE Menu
-            SET (
-                menu_price = #{menuPrice},
-                menu_picture_url = #{menuPictureUrl},
-                menu_name = #{menuName},
-                menu_category = #{menuCategory},
-                menu_description = #{menuDescription},
-                menu_modified_date = NOW())
+        SET
+            menu_name = #{menuName},
+            menu_price = #{menuPrice},
+            menu_category = #{menuCategory},
+            menu_description = #{menuDescription},
+            menu_picture_url = #{menuPictureUrl},
+            menu_modified_date = NOW()
         WHERE menu_id = #{menuId}
 
     </update>

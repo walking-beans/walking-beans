@@ -39,7 +39,13 @@ const apiMenu = {
     updateMenu:
         function (id,postdata) {
             axios
-                .put(`${API_MENU_URL}/${id}`,postdata)
+                .post(`${API_MENU_URL}/${id}`,
+                    postdata,
+                    {
+                        headers: {
+                            "Contest-Type": "multipart/form-data"
+                        }
+                    })
                 .then( (res)=>{
                     console.log(res.data)
                     alert("수정완료!")
