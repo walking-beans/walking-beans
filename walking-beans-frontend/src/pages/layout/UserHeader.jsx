@@ -14,13 +14,14 @@ import searchIcon from "../../assert/svg/userNav/search.svg";
 import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import userIcon from "../../assert/svg/user.svg";
-import apiUserService from "../../service/apiUserService";
 
 const UserHeader = ({user}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(user);
     const [navOpen, setNavOpen] = useState(false);
+    const [userLocation, setUserLocation] = useState(null);
+    const [displayStores, setDisplayStores] = useState([]);
 
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
@@ -74,7 +75,6 @@ const UserHeader = ({user}) => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             setCurrentUser(JSON.parse(storedUser));
-            console.log(currentUser);
         }
     }, [user]);
 
@@ -93,11 +93,8 @@ const UserHeader = ({user}) => {
 
     // 로그아웃 함수
     const handleLogout = () => {
-        /*
         localStorage.removeItem("user");
         alert("로그아웃 되었습니다.");
-         */
-        apiUserService.logout();
         setCurrentUser(null);
         setNavOpen(false);
         navigate("/");
@@ -117,12 +114,18 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: location.pathname === "/mypage" ? "/" : "/mypage",
+            user: "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            owner: location.pathname ===  "/owner" ? "/" : "/owner",
-            admin: "/admin" //추후 추가할 수 있으면 추가하기
+            store: "/owner",
+            admin: "/admin"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
+    };
+
+
+    // /user/search/map
+    const handleOpenSearch = () => {
+        navigate("/user/search/map",{ state: { userLocation, stores: displayStores } });
     };
 
     //알람 토글
@@ -145,6 +148,10 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
+
+                                <img src={bellIcon} className="header-icon" alt="notifications"/>
+                                <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
+
                                 <div onClick={toggleAlarm} style={styles.notificationContainer}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
                                     {unreadCount > 0 && <span style={styles.badge}>{unreadCount}</span>}
@@ -163,6 +170,7 @@ const UserHeader = ({user}) => {
                                     </div>
                                     )}
                                 <img src={searchIcon} className="header-icon" alt="search"/>
+
                             </>
                         )}
                         <img src={toggleIcon} className="header-icon" alt="toggle" onClick={handleToggleNav}/>

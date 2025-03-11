@@ -26,17 +26,17 @@
     </select>
 
     <!-- 대표 주소 변경 -->
-    <update id="updateAddressRoleToPrimary">
+    <update id="updatePrimaryAddress">
         UPDATE address
-        SET addressRole = 1
-        WHERE addressId = #{addressId}
+        SET address_role = 1
+        WHERE address_id = #{addressId}
     </update>
 
     <!-- 특정 유저의 모든 주소의 addressRole을 0으로 변경 -->
-    <update id="updateAllAddressRolesToZero">
+    <update id="resetAddressRoles">
         UPDATE address
-        SET addressRole = 0
-        WHERE userId = #{userId}
+        SET address_role = 0
+        WHERE user_id = #{userId}
     </update>
     <!-- ========= Leo ========= -->
 
