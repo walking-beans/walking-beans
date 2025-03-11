@@ -6,7 +6,7 @@ import {call} from "axios";
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal />{/*아이디 비밀번호 로그인*/}
+            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
             {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
         </div>
     )
@@ -18,9 +18,13 @@ const AdminLoginNomal = () => {
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [loginResult, setLoginresult] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(null);
     const [errMessage, setErrmessage] = useState("");
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleLongin();
+    }
 
     const handleLongin = () => {
         apiUserService.login(userEmail, userPassword, (response => {
@@ -36,24 +40,40 @@ const AdminLoginNomal = () => {
         if (loginResult === "success") {
             // 로그인 성공 후의 처리
             console.log("로그인 성공!");
-            //apiUserService.sessionData(setRole); // 세션 데이터 가져오기
 
             apiUserService.sessionData((data) => {
-                // data를 콘솔에 출력
+                // 세션 데이터에서 role을 받아서 설정
                 console.log("세션 데이터: ", data);
-                setRole(data.role); // 역할 설정 예시
+                setRole(data.user_role); // 역할 설정
             });
 
             // sessionStorage에서 직접 데이터 확인
             const user = JSON.parse(localStorage.getItem("user"));
             console.log("localStorage에서 가져온 사용자 데이터: ", user); // 콘솔에 출력
-
-            navigate("/");
         } else if (loginResult === "fail") {
             console.log("로그인 실패");
             setErrmessage("아이디나 비밀번호가 일치하지 않습니다");
         }
     }, [loginResult]); // loginResult가 변경될 때마다 실행
+
+    useEffect(() => {
+        if (role !== null) {
+            switch (role) {
+                case "user":
+                    navigate("/");
+                    break;
+                case "rider":
+                    navigate("/rider");
+                    break;
+                case "owner":
+                    navigate("/owner");
+                    break;
+                default:
+                    navigate("/");
+                    break;
+            }
+        }
+    }, [role]); // role이 변경될 때마다 실행
 
     return (
         <div className="login-container">
@@ -61,7 +81,7 @@ const AdminLoginNomal = () => {
                 <div className="login-header">
                     <h3>로그인</h3>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">아이디(이메일)</label>
                         <input
@@ -82,11 +102,10 @@ const AdminLoginNomal = () => {
                             required
                         />
                     </div>
-                    <button type="button" onClick={handleLongin} className="login-btn">
+                    <button type="submit" className="login-btn">
                         로그인
                     </button>
                 </form>
-
                 <div className="social-login">
                     <button className="kakao-login">
                         <img src="/images/kakao_icon.png" alt="Kakao"/>
@@ -109,12 +128,13 @@ const AdminLoginNomal = () => {
 const AdminLoginSocial = () => {
     const [KakaoCallback, setKakaoCallback] = useState("");
     const [NaverCallback, setNaverCallback] = useState("");
+    const [role, setRole] = useState(null);
     //const [code, setCode] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
     // url 에서 이메일 가져와서 비밀번호랑 로그인
-    useEffect(()=> {
+    useEffect(() => {
         const params = new URLSearchParams(location.search);
         const email = params.get("email");
         if (email) {
@@ -125,8 +145,7 @@ const AdminLoginSocial = () => {
                     const user = JSON.parse(localStorage.getItem("user"));
                     console.log("로그인 성공! 로컬 스토리지의 사용자 정보: ", user);
 
-                    // 홈 페이지로 이동
-                    navigate("/");
+                    setRole(user.user_role);
                 } else {
                     console.log("로그인 실패");
                 }
@@ -140,7 +159,7 @@ const AdminLoginSocial = () => {
 
     useEffect(() => {
         if (KakaoCallback) {
-            window.location.href=KakaoCallback;
+            window.location.href = KakaoCallback;
         }
     }, [KakaoCallback]);
 
@@ -162,9 +181,28 @@ const AdminLoginSocial = () => {
 
     useEffect(() => {
         if (NaverCallback) {
-            window.location.href=NaverCallback;
+            window.location.href = NaverCallback;
         }
     }, [NaverCallback]);
+
+    useEffect(() => {
+        if (role !== null) {
+            switch (role) {
+                case "user":
+                    navigate("/");
+                    break;
+                case "rider":
+                    navigate("/rider");
+                    break;
+                case "owner":
+                    navigate("/owner");
+                    break;
+                default:
+                    navigate("/");
+                    break;
+            }
+        }
+    }, [role]); // role이 변경될 때마다 실행
 
     return (
         <div>
