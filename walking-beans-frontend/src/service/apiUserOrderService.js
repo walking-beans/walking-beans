@@ -9,7 +9,8 @@ const API_OPTION_URL = "http://localhost:7070/api/option"
 const apiUserOrderService = {
 
     // 장바구니 메뉴 삭제
-    deleteUserOrderCart: function (cartId, setCarts) {
+    deleteUserOrderCart:
+        function (cartId, setCarts) {
         return axios
             .delete(`${API_CART_URL}/${cartId}`)
             .then((res) => {
@@ -23,32 +24,32 @@ const apiUserOrderService = {
     },
 
     // cart 데이터 가져오기
-    getUserOrderByCartId:
-        function (cartId) {
-            return axios
-                .get(`${API_CART_URL}/${cartId}`)
-                .then(
-                    (res) => {
-                        console.log("카트 데이터 연결 성공", res.data);
-                        return res.data;
-                    }
-                )
-                .catch(
-                    (err) => {
-                        console.log("getUserOrderByCartId 에러 발생", err);
-                    }
-                )
-        },
+    getUserOrderByCartId: function (cartId) {
+        return axios
+            .get(`${API_CART_URL}/${cartId}`)
+            .then((res) => {
+                console.log("카트 데이터 연결 성공", res.data);
+                // 응답 데이터가 객체일 경우 배열로 감싸기
+                if (res.data && typeof res.data === 'object' && !Array.isArray(res.data)) {
+                    return [res.data]; // 단일 객체를 배열로 감싸서 반환
+                }
+                return res.data; // 이미 배열이면 그대로 반환
+            })
+            .catch((err) => {
+                console.log("getUserOrderByCartId 에러 발생", err);
+                return [];
+            });
+    },
 
     // 선택한 option 데이터 가져오기
     getUserOrderByOrderId:
         function (orderId, setCarts) {
-            axios
+            return axios
                 .get(`${API_CART_URL}/order/${orderId}`)
                 .then(
                     (res) => {
                         console.log("getUserOrderByOrderId 연결 성공 : ", res.data);
-                        return setCarts(res.data);
+                        setCarts(Array.isArray(res.data) ? res.data : [res.data]);
                     }
                 )
                 .catch(
@@ -141,16 +142,16 @@ const apiUserOrderService = {
     // 대표메뉴 정보 가져오기
     getMenusByStoreId:
         function (storeId) {
-        return axios
-            .get(`${API_MENU_URL}/mainmenu/${storeId}`)
-            .then((res) => {
-                console.log("대표메뉴 데이터 불러오기 성공:", res.data);
-                return res.data;
-            })
-            .catch((err) => {
-                console.error("대표메뉴 데이터 불러오기 실패:", err);
-                return [];
-            });
+            return axios
+                .get(`${API_MENU_URL}/mainmenu/${storeId}`)
+                .then((res) => {
+                    console.log("대표메뉴 데이터 불러오기 성공:", res.data);
+                    return res.data;
+                })
+                .catch((err) => {
+                    console.error("대표메뉴 데이터 불러오기 실패:", err);
+                    return [];
+                });
         }
 }
 

@@ -7,19 +7,17 @@ import React, {useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import {useNavigate, useParams} from "react-router-dom";
 
-const UserMenuOptionModal = ({menuPrice, menuDescription}) => {
+const UserMenuOptionModal = ({menuPrice, menuDescription, onClose}) => {
         const [selectedOption, setSelectedOption] = useState([]);
         const {orderId, cartId, storeId, menuId} = useParams();
         const navigate = useNavigate();
         const [options, setOptions] = useState([]);
         const [grouped, setGrouped] = useState([]);
-        const [menuName, setMenuName] = useState([]);
-        const [address, setAddress] = useState([]);
-        const [userId, setUserId] = useState([]);
-        const [paymentMethod, setPaymentMethod] = useState(null);
-        const [selectedOrderRequests, setSelectedOrderRequests] = useState([]);
-
-        const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+        const [menuName, setMenuName] = useState("");
+        const [address, setAddress] = useState(null);
+        const [userId, setUserId] = useState(null);
+        const [paymentMethod, setPaymentMethod] = useState("CASH");
+        const [selectedOrderRequests, setSelectedOrderRequests] = useState("");
 
         // 카테고리 가져오기
         const groupOptionsByName = (options) => {
@@ -86,14 +84,16 @@ const UserMenuOptionModal = ({menuPrice, menuDescription}) => {
 
             const requestData = {
                 cartItems: cartItems,
-                totalPrice: calculateTotalPrice(cartItems),
-                orderRequest: selectedOrderRequests || '',
+                totalPrice: calculateTotalPrice(cartItems) || 0,
+                orderRequest: selectedOrderRequests || "",
             };
 
             try {
                 await apiUserOrderService.addToCart(requestData);
-                alert("장바구니에 추가되었습니다!");
-                navigate(`/user/order/${storeId}/${menuId}/${orderId}/${cartId}`);
+                console.log("장바구니 추가 성공");
+                await apiUserOrderService.addToCart(requestData);
+                onClose();
+                navigate(`/user/order/${storeId}/${menuId}/${orderId}/${cartId}`, { state: { cartId, orderId } });
             } catch (error) {
                 console.error("장바구니 추가 중 오류 발생:", error);
                 alert("장바구니 추가에 실패했습니다.");

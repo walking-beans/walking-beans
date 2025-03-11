@@ -10,7 +10,7 @@
     transform: translateX(60%);
 }
 
-.userorder-container, .user-ordering-container, .user-order-background {
+.user-order-container, .user-ordering-container, .user-order-background {
     background: #F4EDDF;
 }
 
@@ -46,6 +46,9 @@
 
 .user-cart-menuinfo {
     margin-top: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .user-order-btn {
