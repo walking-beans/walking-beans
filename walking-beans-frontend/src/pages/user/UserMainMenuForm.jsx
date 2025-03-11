@@ -2,7 +2,7 @@ import defaultImage from "../../images/user/defaultimage.svg";
 import "../../css/Owner.css"
 import React from "react";
 
-const UserMainMenuForm = ({menuName, onClick, menuPrice}) => {
+const UserMainMenuForm = ({menuName, onClick, menuPrice, menuDescription}) => {
     return (
         <div className="user-main-menu-container" onClick={onClick}>
             <div>

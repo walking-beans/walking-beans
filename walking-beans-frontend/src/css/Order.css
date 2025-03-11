@@ -10,7 +10,7 @@
     transform: translateX(60%);
 }
 
-.userorder-container, .user-ordering-container, .user-order-background {
+.user-order-container, .user-ordering-container, .user-order-background {
     background: #F4EDDF;
 }
 
@@ -46,6 +46,9 @@
 
 .user-cart-menuinfo {
     margin-top: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .user-order-btn {
@@ -121,11 +124,10 @@
     background: white;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px 30px 0 0;
-    gap: 30px;
     overflow-y: auto;
     scrollbar-width: none;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .modal-backdrop {
@@ -143,7 +145,7 @@
 
 .user-order-click-btn {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .user-mini-btn {
@@ -250,7 +252,7 @@
     margin-right: 30px;
 }
 
-.user-order-option-select:hover {
+.user-order-option-select:checked {
     background: #5A3D21;
     border: none;
 }
@@ -260,4 +262,24 @@
     align-items: center;
     flex-direction: column;
     cursor: pointer;
+}
+
+.user-order-description {
+    font-size: 20px;
+    color: #5A3D21;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-order-bordtext {
+    font-size: 20px;
+    color: #5A3D21;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.order-option-photo {
+    max-width: 540px;
+    margin-bottom: 20px;
 }

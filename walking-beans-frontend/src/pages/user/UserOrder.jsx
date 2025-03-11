@@ -25,18 +25,28 @@ const UserOrder = () => {
     const [groupedMenus, setGroupedMenus] = useState({});
     const [categoryName, setCategoryName] = useState([]);
     const [mainMenu, setMainMenu] = useState([]);
+    const [orderData, setOrderData] = useState([]);
+    const [cartData, setCartData] = useState([]);
 
     // 메뉴 선택 시 endpoint 변경
     const handleMenuClick = (menu) => {
+        // menuId가 없으면 오류 처리
         if (!menu.menuId) {
             console.error("menuId 없음 : ", menuId);
             return;
         }
-        navigate(`/user/order/${storeId}/${menu.menuId}`);
-        openModal(menu);
-    };
 
-    // carts 데이터 가져오기 (장바구니로 메뉴를 담았을 때 실행 필요)
+        // orderId가 없을 경우 생성
+        if (!orderId) {
+            navigate(`/user/order/${storeId}/${menu.menuId}`);
+            openModal(menu);
+        } else {
+            // orderId가 생성되었으면 장바구니에 담은 메뉴로 이동
+            navigate(`/user/order/${storeId}/${menu.menuId}/${orderId}/${cartId}`);
+            openModal(menu);
+        }
+    };
+    // carts 데이터 가져오기
     useEffect(() => {
         if (cartId) {
             apiUserOrderService.getUserOrderByCartId(cartId)
@@ -50,43 +60,45 @@ const UserOrder = () => {
         }
     }, [cartId]);
 
+    // option 데이터 가져오기
+    useEffect(() => {
+        if (orderId) {
+            apiUserOrderService.getUserOrderByOrderId(orderId, setCarts)
+                .then(() => {
+                    console.log("주문에 해당하는 장바구니 데이터 업데이트 완료");
+                })
+                .catch((err) => {
+                    console.error("getUserOrderByOrderId 에러 발생", err);
+                });
+        }
+    }, [orderId]);
+
     // 장바구니 메뉴 삭제하기
     const handleDelete = (deleteCartId) => {
-        apiUserOrderService.deleteUserOrderCart(deleteCartId)
+        console.log("삭제 요청된 cartId:", deleteCartId);
+
+        if (!deleteCartId) {
+            console.error("삭제할 cartId가 없습니다!");
+            return;
+        }
+
+        apiUserOrderService.deleteUserOrderCart(deleteCartId, setCarts)
             .then(() => {
-                setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== deleteCartId));
+                setCarts(prevCarts => prevCarts.filter(cart => cart.cartId !== deleteCartId));
+                console.log(`cartId ${deleteCartId} 삭제 완료`);
             })
             .catch(err => console.error("장바구니 삭제 중 오류 발생:", err));
     };
 
-    // option 데이터 가져오기 (장바구니로 메뉴를 담았을 때 실행 필요)
+    // 총 금액 계산하기
     useEffect(() => {
-        if (orderId) {
-            apiUserOrderService.getUserOrderByOrderId(orderId);
-        }
-    }, [orderId]);
-    /*
-        // 총 금액 계산하기
-        useEffect(() => {
+        if (Array.isArray(carts)) {
             const total = carts.reduce((sum, cart) => sum + Number(cart.menuPrice) + Number(cart.optionPrice), 0);
             setTotalAmount(total);
-        }, [carts]);
-
-     */
-    /*
-    useEffect(() => {
-        if (Array.isArray(carts) && carts.length > 0) {
-            const total = carts.reduce((sum, cart) => {
-                const menuPrice = Number(cart.menuPrice) || 0;
-                const optionPrice = Number(cart.optionPrice) || 0;
-                return sum + menuPrice + optionPrice;
-            }, 0);
-            setTotalAmount(total);
         } else {
-            setTotalAmount(0);
+            console.warn("carts 데이터가 배열이 아닙니다.");
         }
     }, [carts]);
-    */
 
     // 가게 데이터 가져오기
     useEffect(() => {
@@ -155,7 +167,7 @@ const UserOrder = () => {
     }, [storeId, store]);
 
     return (
-        <div className="userorder-container">
+        <div className="user-order-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
 
@@ -171,15 +183,15 @@ const UserOrder = () => {
                     <div className="user-order-hr" alt="구분선"></div>
                     <div className="user-cart-bordtext">대표메뉴</div>
                     <div className="user-order-mainmenu-grid">
-                    {menu.map((menu, index) => (
-                        <UserMainMenuForm
-                            key={`${menu.menuId}-${index}`}
-                            menuName={menu.menuName}
-                            menuPrice={menu.menuPrice}
-                            onClick={() => handleMenuClick(menu)}
-                        />
-                    ))
-                    }
+                        {menu.map((menu, index) => (
+                            <UserMainMenuForm
+                                key={`${menu.menuId}-${index}`}
+                                menuName={menu.menuName}
+                                menuPrice={menu.menuPrice}
+                                onClick={() => handleMenuClick(menu)}
+                            />
+                        ))
+                        }
                     </div>
                     <div className="user-order-menu">
                         {Object.entries(groupedMenus).map(([categoryName, menus]) => (
@@ -200,6 +212,7 @@ const UserOrder = () => {
                             <UserMenuOptionModal
                                 menuPrice={selectedMenu?.menuPrice}
                                 menuId={selectedMenu?.menuId}
+                                menuDescription={selectedMenu?.menuDescription}
                                 onClose={closeModal}
                             />
                         </div>
@@ -214,27 +227,27 @@ const UserOrder = () => {
                         {carts && carts.length > 0 ? (
                             carts.map((cart) => (
                                 <UserCart key={cart.cartId}
-                                          {...cart}
-                                    /*
-                                    menuName={cart.menuName}
-                                    menuPrice={cart.menuPrice}
-                                    optionName={cart.optionName}
-                                    optionPrice={cart.optionPrice}
-                                     */
-                                          onDelete={handleDelete}
+                                          cartId={cart.cartId}
+                                          menuName={cart.menuName}
+                                          menuPrice={cart.menuPrice}
+                                          optionName={cart.optionName}
+                                          optionPrice={cart.optionPrice}
+                                          handleDelete={handleDelete}
                                 />
                             ))
                         ) : (
                             <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
                         )}
                     </div>
-
-                    <div className="user-order-hr"></div>
-                    <div className="user-cart-grid">
-                        <div className="user-cart-bordtext">최종 결제 금액</div>
-                        <div className="user-title">{totalAmount.toLocaleString()}원</div>
+                    <div className="cart-fixed">
+                        <div className="user-order-hr"></div>
+                        <div className="user-cart-grid">
+                            <div className="user-cart-pricetext">최종 결제 금액</div>
+                            <div className="user-title">{totalAmount.toLocaleString()}원</div>
+                        </div>
+                        <button className="user-order-btn">주문하기</button>
                     </div>
-                    <button className="user-order-btn">주문하기</button>
+
                 </div>
 
             </div>
