@@ -149,8 +149,8 @@ const UserHeader = ({user}) => {
                         {currentUser && (
                             <>
 
-                                <img src={bellIcon} className="header-icon" alt="notifications"/>
-                                <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
+
+
 
                                 <div onClick={toggleAlarm} style={styles.notificationContainer}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
@@ -169,7 +169,7 @@ const UserHeader = ({user}) => {
                                         )}
                                     </div>
                                     )}
-                                <img src={searchIcon} className="header-icon" alt="search"/>
+                                <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>
                         )}
