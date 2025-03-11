@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import apiUserService from "../../service/apiUserService";
 
 const AdminMypage = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [userId, setuserId] = useState(null);
 
     useEffect(() => {
-        const userId = localStorage.getItem("userId"); // 로그인된 유저 ID 가져오기
-        if (!userId) {
-            navigate("/login"); // 로그인되지 않았다면 로그인 페이지로 이동
-            return;
-        }
+        apiUserService.sessionData((response) => {  // ✅ sessionData() 올바르게 호출
+            if (response && response.userId) {
+                setuserId(response.userId);  // ✅ userId 설정
+            } else {
+                alert("로그인이 필요합니다.");
+                navigate("/login");  // ✅ 로그인 페이지로 이동
+            }
+        });
+    }, [navigate]);
 
-        axios.get(`/mypage/${userId}`)
+    useEffect(() => {
+        // const userId = localStorage.getItem("userId"); // 로그인된 유저 ID 가져오기
+        // if (!userId) {
+        //     navigate("/login"); // 로그인되지 않았다면 로그인 페이지로 이동
+        //     return;
+        // }
+
+        // apiUserService.SessionData((response) => {
+        //     if (response && response.userId) {
+        //         setuserId(response.userId); // 로그인한 사용자의 userId 설정
+        //     } else {
+        //         alert("로그인이 필요합니다.");
+        //         navigate("/login"); // 로그인되지 않았다면 로그인 페이지로 이동
+        //     }
+        // });
+
+        axios.get(`/admin/mypage/${userId}`)
             .then(response => {
                 setUser(response.data);
                 setLoading(false);

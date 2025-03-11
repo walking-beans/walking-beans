@@ -69,10 +69,10 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: "/mypage",
+            user: location.pathname === "/mypage" ? "/" : "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            owner: "/owner",
-            admin: "/admin"
+            owner: location.pathname ===  "/owner" ? "/" : "/owner",
+            admin: "/admin" //추후 추가할 수 있으면 추가하기
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
