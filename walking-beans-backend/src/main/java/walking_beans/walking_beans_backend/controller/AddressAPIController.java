@@ -66,7 +66,7 @@ public class AddressAPIController {
     public String updatePrimaryAddress(@RequestBody Map<String, Long> request) {
         long userId = request.get("userId");
         long addressId = request.get("addressId");
-        addressService.updatePrimaryAddress(userId, addressId);
+        addressService.updatePrimaryAddress(userId,addressId);
         return "기본 주소가 변경되었습니다.";
     }
     /**************************************** LEO ****************************************/

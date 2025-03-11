@@ -107,7 +107,7 @@ function PathRoute () {
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
-
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
@@ -190,9 +190,9 @@ function PathRoute () {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
-                                <Route path="/message" element={<AdminMessageTest/>}/>
+                                {/*<Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>*/}
+                                {/*<Route path="/message/:roomId" element={<AdminMessage/>}/>*/}
+                                {/*<Route path="/message" element={<AdminMessageTest/>}/>*/}
                             </Routes>
                         </div>
                     </div>
