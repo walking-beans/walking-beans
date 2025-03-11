@@ -97,4 +97,15 @@
           AND mo.option_id IN (#{optionId})
     </select>
  -->
+
+    <!--
+    <select id="getCategory">
+        SELECT m.menu_category
+        FROM menu m
+        JOIN stores s
+        ON m.user_id = s.user_id
+        GROUP by m.menu_category
+    </select>
+    -->
+
 </mapper>

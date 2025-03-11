@@ -43,8 +43,8 @@ const apiMenu = {
                     postdata,
                     {
                         headers: {
-                            "Contest-Type": "multipart/form-data"
-                        }
+                            "Content-Type": "multipart/form-data",
+                        },
                     })
                 .then( (res)=>{
                     console.log(res.data)

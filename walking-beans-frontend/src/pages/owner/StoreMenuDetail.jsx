@@ -10,12 +10,12 @@ const StoreMenuDetail = () => {
     const {id} = useParams();
     const [menus,setMenus] = useState([]);
     const [formData , setFormData] = useState({
-        menu_id : id ,
-        menuName:"",
-        menuPrice:"",
-        menuCategory:"",
-        menuDescription:"",
-        menuPictureUrl:"",
+        menu_id: id,
+        menuName: "",
+        menuPrice: "",
+        menuCategory: "",
+        menuDescription: "",
+        menuPictureUrl: "",
     });
     /*
     const inputFields = [
@@ -43,15 +43,6 @@ const StoreMenuDetail = () => {
                 .then((res) => {
                     console.log(res)
                     setMenus(res.data);
-                    setFormData({
-                        menu_id : id ,
-                        menuName:menus.menuName,
-                        menuPrice:menus.menuPrice,
-                        menuCategory:menus.menuCategory,
-                        menuDescription:menus.menuDescription,
-                        menuPictureUrl:menus.menuPictureUrl,
-                    })
-                    console.log(formData)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -61,8 +52,7 @@ const StoreMenuDetail = () => {
     }, []);
 
     const [imgFile,setImgFile]=useState("");
-    const imgRef = useRef();
-    const setThumbnail = (event) => {
+    const setThumbnail = (value, event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -70,18 +60,23 @@ const StoreMenuDetail = () => {
             reader.onloadend = () => {
                 setImgFile(reader.result);
             };
-        }
 
+        }
+        handleInputChange(value, event)
     };
 
     const handleSubmit =(e)=>{
         e.preventDefault();
-        const form = e.target; // 유효성 검사 체크
-        if(!form.checkValidity()){
-            form.classList.add("was-validated")
+        const postData = new FormData();
+        postData.append("menuName", formData.menuName);
+        postData.append("menuPrice", formData.menuPrice);
+        postData.append("menuDescription", formData.menuDescription);
+        postData.append("menuCategory", formData.menuCategory);
+        if (formData.menuPictureUrl){
+            postData.append("menuPictureUrl", formData.menuPictureUrl);
         }
-        console.log(formData);
-        apiMenu.updateMenu(id,formData);
+        console.log(postData);
+        apiMenu.updateMenu(id,postData);
     }
 
     const handleDelete = () => {
@@ -140,8 +135,8 @@ const StoreMenuDetail = () => {
                                id={"menuPicture"}
                                type={"file"}
                                defaultValue={""}
-                               onChange={setThumbnail}
-                               ref={imgRef}
+                               onChange={(e)=> setThumbnail("menuPictureUrl",e)}
+
                         />
                     </div>
                     <br/>
