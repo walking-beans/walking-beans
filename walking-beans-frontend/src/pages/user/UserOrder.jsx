@@ -2,14 +2,14 @@ import React, {use, useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import UserCart from "../user/UserCart";
-import StoreMenuForm from "../owner/StoreMenuForm";
 import "../../css/Order.css"
 import "../../css/Cart.css"
 import "../../css/Owner.css"
 import oneStar from "../../images/star/oneStar.svg"
 import detailBtn from "../../images/user/detailbtn.svg"
 import UserMenuOptionModal from "./UserMenuOptionModal";
-import StoreMenuCategory from "../owner/StoreMenuCategory";
+import UserMenuCategory from "./UserMenuCategory";
+import UserMainMenuForm from "./UserMainMenuForm";
 
 const UserOrder = () => {
     const [carts, setCarts] = useState([]);
@@ -24,6 +24,7 @@ const UserOrder = () => {
     const [menus, setMenus] = useState([]);
     const [groupedMenus, setGroupedMenus] = useState({});
     const [categoryName, setCategoryName] = useState([]);
+    const [mainMenu, setMainMenu] = useState([]);
 
     // 메뉴 선택 시 endpoint 변경
     const handleMenuClick = (menu) => {
@@ -135,12 +136,26 @@ const UserOrder = () => {
         }, {});
     };
 
-    if (!categoryName || typeof handleMenuClick !== "function") {
-        console.error("categoryName 또는 onMenuClick 값이 잘못되었습니다.");
-        return <div>메뉴 카테고리 정보가 부족합니다.</div>;
-    }
+    // 대표메뉴 정보 가져오기
+    useEffect(() => {
+        if (!storeId) return; // storeId가 없으면 실행하지 않음
+
+        apiUserOrderService.getMenusByStoreId(storeId)
+            .then((data) => {
+                setMenu(data);
+
+                // 대표 메뉴 찾기
+                if (store?.storeMainMenu) {
+                    const mainMenuItem = data.find(menuItem => menuItem.menuId === store.storeMainMenu);
+                    setMainMenu(mainMenuItem || null); // 대표 메뉴가 없으면 null로 설정
+                }
+            })
+            .catch(err => console.error("대표메뉴 데이터 가져오는 중 오류 발생:", err));
+
+    }, [storeId, store]);
 
     return (
+        <div className="userorder-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
 
@@ -155,75 +170,74 @@ const UserOrder = () => {
 
                     <div className="user-order-hr" alt="구분선"></div>
                     <div className="user-cart-bordtext">대표메뉴</div>
-                    {/* {Object.entries(groupedMenus).map(([categoryName, menus]) => (
-                        key={categoryName}
-                        categoryName={categoryName}
-                        menu={menu}
-                        onMenuClick={handleMenuClick}
-                          ))}
-                        */}
-                    {/* 카테고리별로 만들기 */}
-
-
-                    <div className="user-order-menu">
-                            {Object.entries(groupedMenus).map(([categoryName, menus]) => (
-                                <StoreMenuCategory
-                                    key={categoryName}
-                                    categoryName={categoryName}
-                                    menus={menus}
-                                    onMenuClick={handleMenuClick}
-                                />
-                            ))}
-                        <div className="user-order-hr" alt="구분선"></div>
-                        <div className="user-cart-bordtext">{store?.menuCategory}</div>
-
-                    </div>
-                </div>
-
-            {/* menuOption modal*/}
-            {modalOpen && (
-                <div className="modal-backdrop" onClick={closeModal}>
-                    <div className="user-order-modal-container" onClick={(e) => e.stopPropagation()}>
-                        <UserMenuOptionModal
-                            menuPrice={selectedMenu?.menuPrice}
-                            menuId={selectedMenu?.menuId}
-                            onClose={closeModal}
+                    <div className="user-order-mainmenu-grid">
+                    {menu.map((menu, index) => (
+                        <UserMainMenuForm
+                            key={`${menu.menuId}-${index}`}
+                            menuName={menu.menuName}
+                            menuPrice={menu.menuPrice}
+                            onClick={() => handleMenuClick(menu)}
                         />
+                    ))
+                    }
+                    </div>
+                    <div className="user-order-menu">
+                        {Object.entries(groupedMenus).map(([categoryName, menus]) => (
+                            <UserMenuCategory
+                                key={categoryName}
+                                categoryName={categoryName}
+                                menus={menus}
+                                onMenuClick={handleMenuClick}
+                            />
+                        ))}
                     </div>
                 </div>
-            )}
 
-
-            {/* cart */}
-            <div className="user-cart-background">
-                <div className="user-title">장바구니</div>
-                <div className="user-cart-menuinfo">
-                    {carts && carts.length > 0 ? (
-                        carts.map((cart) => (
-                            <UserCart key={cart.cartId}
-                                      {...cart}
-                                /*
-                                menuName={cart.menuName}
-                                menuPrice={cart.menuPrice}
-                                optionName={cart.optionName}
-                                optionPrice={cart.optionPrice}
-                                 */
-                                      onDelete={handleDelete}
+                {/* menuOption modal*/}
+                {modalOpen && (
+                    <div className="modal-backdrop" onClick={closeModal}>
+                        <div className="user-order-modal-container" onClick={(e) => e.stopPropagation()}>
+                            <UserMenuOptionModal
+                                menuPrice={selectedMenu?.menuPrice}
+                                menuId={selectedMenu?.menuId}
+                                onClose={closeModal}
                             />
-                        ))
-                    ) : (
-                        <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
-                    )}
+                        </div>
+                    </div>
+                )}
+
+
+                {/* cart */}
+                <div className="user-cart-background">
+                    <div className="user-title">장바구니</div>
+                    <div className="user-cart-menuinfo">
+                        {carts && carts.length > 0 ? (
+                            carts.map((cart) => (
+                                <UserCart key={cart.cartId}
+                                          {...cart}
+                                    /*
+                                    menuName={cart.menuName}
+                                    menuPrice={cart.menuPrice}
+                                    optionName={cart.optionName}
+                                    optionPrice={cart.optionPrice}
+                                     */
+                                          onDelete={handleDelete}
+                                />
+                            ))
+                        ) : (
+                            <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
+                        )}
+                    </div>
+
+                    <div className="user-order-hr"></div>
+                    <div className="user-cart-grid">
+                        <div className="user-cart-bordtext">최종 결제 금액</div>
+                        <div className="user-title">{totalAmount.toLocaleString()}원</div>
+                    </div>
+                    <button className="user-order-btn">주문하기</button>
                 </div>
 
-                <div className="user-order-hr"></div>
-                <div className="user-cart-grid">
-                    <div className="user-cart-bordtext">최종 결제 금액</div>
-                    <div className="user-title">{totalAmount.toLocaleString()}원</div>
-                </div>
-                <button className="user-order-btn">주문하기</button>
             </div>
-
         </div>
     )
 }

@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
+import UserMenuCategory from "../pages/user/UserMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -86,9 +86,6 @@ function PathRoute () {
                                 <Route path="/login" element={<AdminLogin/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
-
-
-                                 
 
 
                                 {/* 유저 관련 라우트 */}
