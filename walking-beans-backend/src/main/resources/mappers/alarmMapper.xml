@@ -11,12 +11,13 @@
     </select>
 
     <insert id="insertAlarm">
-        INSERT INTO Alarm (user_id, alarm_role, alarm_sender_id, alarm_content, alarm_status, alarm_create_date)
+        INSERT INTO Alarms (user_id, alarm_role, alarm_sender_id, alarm_content, alarm_status, alarm_create_date)
         VALUES (#{userId}, #{alarmRole}, #{alarmSenderId}, #{alarmContent}, #{alarmStatus}, #{alarmCreateDate})
     </insert>
+
     <update id="updateLastMessage">
-        UPDATE Chattingroom
-        SET last_message = #{message}
+        UPDATE Message
+        SET message_content = #{message}
         WHERE room_id = #{roomId}
     </update>
 

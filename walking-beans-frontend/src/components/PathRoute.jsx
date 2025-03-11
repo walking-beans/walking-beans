@@ -41,6 +41,7 @@ import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
+import AdminResultFindId from "../pages/admin/AdminResultFindId";
 
 
 function PathRoute () {
@@ -84,6 +85,7 @@ function PathRoute () {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
+                                <Route path="/alarm" element={<AdminResultFindId/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
