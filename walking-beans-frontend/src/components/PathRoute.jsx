@@ -43,6 +43,7 @@ import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
 import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
+import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
 
 function PathRoute() {
