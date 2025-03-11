@@ -30,7 +30,7 @@
 .user-order-basic-text {
     font-size: 18px;
     color: #5A3D21;
-    margin-top: 30px;
+    margin: 30px 0;
 }
 
 .user-order-basic-text-m-0 {
@@ -221,6 +221,14 @@
 
 .user-payment-mini-btn:hover {
     border: 3px #5A3D21 solid;
+}
+
+.user-payment-mini-btn.selected {
+    border: 3px #5A3D21 solid;
+}
+
+.user-order-btn-none {
+    display: none;
 }
 
 .user-order-hr {

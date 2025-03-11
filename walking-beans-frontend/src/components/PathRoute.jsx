@@ -95,14 +95,16 @@ function PathRoute() {
                                 <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
                                 {/* 장바구니 담았을 때 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
+                                {/* 주문하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering/>}/>
+                                {/* 결제하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering"
-                                       element={<UserOrdering/>}/>
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment"
-                                       element={<UserPayment/>}/>
+
+
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
