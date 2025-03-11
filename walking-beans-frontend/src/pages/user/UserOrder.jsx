@@ -200,6 +200,7 @@ const UserOrder = () => {
                             <UserMenuOptionModal
                                 menuPrice={selectedMenu?.menuPrice}
                                 menuId={selectedMenu?.menuId}
+                                menuDescription={selectedMenu?.menuDescription}
                                 onClose={closeModal}
                             />
                         </div>
