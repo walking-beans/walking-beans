@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {get} from "axios";
 
 const API_ORDER_URL = "http://localhost:7070/api/orders"
 const API_CART_URL = "http://localhost:7070/api/carts"
@@ -119,13 +119,15 @@ const apiUserOrderService = {
                 )
         },
 
+    // 카트에 추가하면서 order데이터 생성
     addToCart:
         function (requestData) {
             return axios
                 .post(`${API_ORDER_URL}/create`, requestData, {
                     headers: {
                         'Content-Type': 'application/json',
-                    }})
+                    }
+                })
                 .then((res) => {
                     console.log("장바구니 추가 성공:", res.data);
                     return res.data;  // orderId, cartId 반환
@@ -136,7 +138,22 @@ const apiUserOrderService = {
                 });
         },
 
+    // 대표메뉴 정보 가져오기
+    getMenusByStoreId:
+        function (storeId) {
+        return axios
+            .get(`${API_MENU_URL}/mainmenu/${storeId}`)
+            .then((res) => {
+                console.log("대표메뉴 데이터 불러오기 성공:", res.data);
+                return res.data;
+            })
+            .catch((err) => {
+                console.error("대표메뉴 데이터 불러오기 실패:", err);
+                return [];
+            });
+        }
 }
+
 
 export default apiUserOrderService;
 

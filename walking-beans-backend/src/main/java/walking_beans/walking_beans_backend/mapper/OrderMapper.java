@@ -4,10 +4,7 @@ import jakarta.mail.Store;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
-import walking_beans.walking_beans_backend.model.dto.Carts;
-import walking_beans.walking_beans_backend.model.dto.Orders;
-import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.dto.Users;
+import walking_beans.walking_beans_backend.model.dto.*;
 
 import java.util.List;
 

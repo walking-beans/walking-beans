@@ -10,12 +10,21 @@
     transform: translateX(60%);
 }
 
-.user-order-background, .user-ordering-container {
+.userorder-container, .user-ordering-container, .user-order-background {
+    background: #F4EDDF;
+}
+
+.user-order-background, .user-ordering {
     width: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 30px;
+}
+
+.user-order-menu-container {
+    margin: 30px 0;
+    width: 600px;
 }
 
 .user-order-basic-text {
@@ -24,7 +33,7 @@
     margin-top: 30px;
 }
 
-.user-order-basic-text-m-0{
+.user-order-basic-text-m-0 {
     font-size: 18px;
     color: #5A3D21;
 }
@@ -154,6 +163,10 @@
     background: #AB7A44;
 }
 
+.user-menu-form-container {
+    cursor: pointer;
+}
+
 .user-payment-mini-btn {
     width: 263px;
     height: 60px;
@@ -179,26 +192,14 @@
     margin: 30px 0;
 }
 
-.user-order-menu-container {
-    margin: 30px 0;
-    width: 600px;
-}
-
-.user-order-menu {
-    max-width: 600px;
-    display: flex;
-    justify-content: center;
-}
-
-.user-order-menuinfo {
+.user-order-menuinfo, .user-order-mainmenu-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 30px;
     text-align: center;
-
 }
 
-.user-menu-option-container {
+.user-menu-option-container{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -254,4 +255,9 @@
     border: none;
 }
 
-
+.user-main-menu-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
