@@ -10,6 +10,7 @@ import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,11 @@ public class AlarmServiceImpl implements AlarmService {
 
         // 웹소켓 알림 전송
         webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+    }
+
+    @Override
+    public List<Alarms> getUserAlarmList(int userId) {
+        return alarmMapper.getUserAlarmList(userId);
     }
 
     @Override

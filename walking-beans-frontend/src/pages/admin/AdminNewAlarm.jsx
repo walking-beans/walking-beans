@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 
 
-const AdminResultFindId = () => {
+
+const AdminNewAlarm = () => {
     const [messages, setMessages] = useState([]);
     const [chatSocket, setChatSocket] = useState(null);
     const [messageInput, setMessageInput] = useState("알림보내기");
@@ -45,4 +46,4 @@ const AdminResultFindId = () => {
     )
 }
 
-export default AdminResultFindId;
+    export default AdminNewAlarm;
