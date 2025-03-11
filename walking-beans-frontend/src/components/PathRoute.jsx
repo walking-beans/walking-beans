@@ -39,8 +39,9 @@ import UserMenuOption from "../pages/user/UserMenuOption";
 import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
-import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
+import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
+import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 
 
 function PathRoute () {
@@ -86,10 +87,6 @@ function PathRoute () {
                                 <Route path="/login" element={<AdminLogin/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
-
-
-                                 
-
 
                                 {/* 유저 관련 라우트 */}
 
@@ -190,9 +187,10 @@ function PathRoute () {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
-                                <Route path="/message" element={<AdminMessageTest/>}/>
+                                <Route path="/chat/chattingroom" element={<AdminChattingroom/>}/>
+                                <Route path="/chat/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
+                                <Route path="/TEST/chattingroom/:roomId" element={<AdminChattingroomTest/>}/>
                             </Routes>
                         </div>
                     </div>

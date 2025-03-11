@@ -148,7 +148,7 @@ const RiderHeader = ({user}) => {
                                 {icon: person, text: "마이페이지", path: "/rider"},
                                 {icon: payment, text: "내 수입", path: "/rider/orderlist"},
                                 {icon: list, text: "배달기록", path: "/rider/income"},
-                                {icon: textsms, text: "채팅", path: "/"},
+                                {icon: textsms, text: "채팅", path: "/chat/chattingroom"},
                                 {icon: supportAgent, text: "고객센터 문의하기", path: "/rider"}
                             ].map(({icon, text, path}) => (
                                 <li key={text}>

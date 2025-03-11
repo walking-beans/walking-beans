@@ -27,7 +27,7 @@ const AdminMessage = () => {
             return;
         }
 
-        const newWs = new WebSocket("ws://localhost:7070/ws/message");
+        const newWs = new WebSocket("ws://localhost:7070/ws/chatting");
 
         newWs.onopen = () => {
             console.log("✅ WebSocket Connected.");
@@ -35,8 +35,8 @@ const AdminMessage = () => {
         };
 
         newWs.onclose = () => {
-            console.log("❌ WebSocket Closed. Reconnezcting in 5 seconds...");
-            setTimeout(() => startWebSocket(), 5000);
+            console.log("❌ WebSocket Closed. Reconnecting in 5 seconds...");
+            setTimeout(() => startWebSocket(), 500);
         };
 
         newWs.onerror = (error) => {
@@ -44,6 +44,7 @@ const AdminMessage = () => {
         };
 
         newWs.onmessage = (event) => {
+            console.log("new Msg");
             apiRiderService.getAllMessages(roomId, setChatBox);
         };
 
@@ -52,6 +53,7 @@ const AdminMessage = () => {
     }
 
 
+    // messageRole = 1 일 경우
     function sendMessage() {
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             alert("WebSocket이 연결되지 않았습니다. 다시 시도하세요.");
@@ -61,7 +63,9 @@ const AdminMessage = () => {
         console.log(ws);
         if (!message) return;
 
+        // messageRole = 1 일 경우
         let chatMessage = {roomId : roomId, userId: userId, messageRole : 1, messageContent: message};
+
         ws.send(JSON.stringify(chatMessage));
         setMessage("");
     }
