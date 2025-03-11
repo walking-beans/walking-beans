@@ -148,6 +148,11 @@
     justify-content: space-between;
 }
 
+.user-order-click-btn-one {
+    display: flex;
+    justify-content: center;
+}
+
 .user-mini-btn {
     width: 263px;
     height: 60px;

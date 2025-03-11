@@ -1,9 +1,14 @@
 import tossPayLogo from "../../images/user/tossPay_Logo.svg";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import detailBtn from "../../images/user/detailbtn.svg";
 import React from "react";
 
 const UserOrdering = () => {
+    const {userId,orderId, storeId, menuId, cartId} = useParams();
+
+    // 배달 주소 가져오기
+
+
     return (
         <div className="user-ordering-container">
             <div className="user-ordering">
@@ -35,8 +40,7 @@ const UserOrdering = () => {
 
                     <div className="user-order-hr" alt="구분선"></div>
 
-
-                    <div className="user-order-click-btn">
+                    <div className="user-order-click-btn-one">
                         <button className="user-order-btn-b">배달 주문하기</button>
                     </div>
 
