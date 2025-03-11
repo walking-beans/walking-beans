@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import apiMenu from "../../service/apiMenu";
 import MenuInputTag from "../../components/owner/MenuInputTag";
 import axios from "axios";
@@ -10,11 +10,12 @@ const StoreMenuDetail = () => {
     const {id} = useParams();
     const [menus,setMenus] = useState([]);
     const [formData , setFormData] = useState({
-    menu_name:"",
-    menu_price:"",
-    menu_category:"",
-    menu_description:"",
-    menu_picture:"",
+        menu_id : id ,
+        menuName:"",
+        menuPrice:"",
+        menuCategory:"",
+        menuDescription:"",
+        menuPictureUrl:"",
     });
     /*
     const inputFields = [
@@ -43,11 +44,12 @@ const StoreMenuDetail = () => {
                     console.log(res)
                     setMenus(res.data);
                     setFormData({
-                        menu_name:menus.menuName,
-                        menu_price:menus.menuPrice,
-                        menu_category:menus.menuCategory,
-                        menu_description:menus.menuDescription,
-                        menu_picture:menus.menuPictureUrl,
+                        menu_id : id ,
+                        menuName:menus.menuName,
+                        menuPrice:menus.menuPrice,
+                        menuCategory:menus.menuCategory,
+                        menuDescription:menus.menuDescription,
+                        menuPictureUrl:menus.menuPictureUrl,
                     })
                     console.log(formData)
                 })
@@ -59,19 +61,16 @@ const StoreMenuDetail = () => {
     }, []);
 
     const [imgFile,setImgFile]=useState("");
-    const setThumbnail = (value, event) => {
+    const imgRef = useRef();
+    const setThumbnail = (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // 파일을URL로 만들기
             reader.onloadend = () => {
                 setImgFile(reader.result);
             };
         }
-        setFormData( (form)=>({
-            ...form,
-            [value]: event.target.value,
-        }));
 
     };
 
@@ -81,7 +80,7 @@ const StoreMenuDetail = () => {
         if(!form.checkValidity()){
             form.classList.add("was-validated")
         }
-
+        console.log(formData);
         apiMenu.updateMenu(id,formData);
     }
 
@@ -141,8 +140,8 @@ const StoreMenuDetail = () => {
                                id={"menuPicture"}
                                type={"file"}
                                defaultValue={""}
-                               onChange={(e)=> setThumbnail("menu_picture",e)}
-
+                               onChange={setThumbnail}
+                               ref={imgRef}
                         />
                     </div>
                     <br/>
@@ -152,7 +151,7 @@ const StoreMenuDetail = () => {
                                id={"floatingInput"}
                                placeholder={"제육볶음"}
                                defaultValue={menus.menuName}
-                               onChange={(e) => handleInputChange("menu_name",e)
+                               onChange={(e) => handleInputChange("menuName",e)
                                }
                         />
                         <label htmlFor={"floatingInput"}>메뉴 이름</label>
@@ -164,8 +163,7 @@ const StoreMenuDetail = () => {
                                id={"floatingInput"}
                                placeholder={"제육볶음"}
                                defaultValue={menus.menuCategory}
-                               onChange={() => {
-                               }}
+                               onChange={(e) => handleInputChange("menuCategory",e)}
                         />
                         <label htmlFor={"floatingInput"}>카테고리</label>
                     </div>
@@ -176,8 +174,7 @@ const StoreMenuDetail = () => {
                                id={"floatingInput"}
                                placeholder={"제육볶음"}
                                defaultValue={menus.menuPrice}
-                               onChange={() => {
-                               }}
+                               onChange={(e) => handleInputChange("menuPrice",e)}
                         />
                         <label htmlFor={"floatingInput"}>가격</label>
                     </div>
@@ -188,8 +185,7 @@ const StoreMenuDetail = () => {
                                id={"floatingTextarea"}
                                placeholder={"제육볶음은 맛있습니다."}
                                defaultValue={menus.menuDescription}
-                               onChange={() => {
-                               }}
+                               onChange={(e) => handleInputChange("menuDescription",e)}
                         />
                         <label htmlFor={"floatingTextarea"}>메뉴 설명</label>
                     </div>
