@@ -41,9 +41,10 @@ import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
+import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 
 
-function PathRoute () {
+function PathRoute() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -72,7 +73,7 @@ function PathRoute () {
         };
     }, []);
 
-    return(
+    return (
         <div className="layout-container">
             <BrowserRouter>
                 <HeaderRoute user={user}/>
@@ -89,8 +90,6 @@ function PathRoute () {
 
 
                                 {/* 유저 관련 라우트 */}
-
-                                {/* order 페이지 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
                                 {/* 메뉴 클릭 했을 때 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
@@ -99,12 +98,13 @@ function PathRoute () {
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
-                                  
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/ordering" element={<UserOrdering/>}/>
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
+
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering"
+                                       element={<UserOrdering/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment"
+                                       element={<UserPayment/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
-
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
