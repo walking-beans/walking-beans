@@ -1,24 +1,35 @@
-import React, { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
+import "../../css/User.css";
 
-const UserInsertAddress = () => {
-    const [userId, setUserId] = useState(null); // 로그인된 사용자 ID 저장
-    const [postcode, setPostcode] = useState("");
-    const [address, setAddress] = useState("");
-    const [detailAddress, setDetailAddress] = useState("");
-    const [extraAddress, setExtraAddress] = useState("");
+const UserInsertAddress = ({ user }) => {
+    const [address, setAddress] = useState(""); // 주소
+    const [detailedAddress, setDetailedAddress] = useState(""); // 상세 주소
+    const [addressName, setAddressName] = useState(""); // 주소 별칭
+    const [currentUser, setCurrentUser] = useState(user);
+    const [savedAddresses,setSavedAddresses] = useState([]); // 저장된 주소 목록
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-        // 로그인된 사용자 정보 가져오기
-        axios
-            .get("http://localhost:7070/api/users/login", { withCredentials: true }) // 쿠키 포함 요청
-            .then((response) => {
-                setUserId(response.data.userId);
-            })
-            .catch((error) => {
-                console.error("로그인 정보 가져오기 실패:", error);
-            });
+        console.log("user props:", user);
+        if (user) {
+            setCurrentUser(user);
+        } else {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                try {
+                    const parsedUser = JSON.parse(storedUser);
+                    setCurrentUser(parsedUser);
+                    console.log("로컬스토리지에서 가져온 사용자 정보:", parsedUser);
+                    fetchUserAddresses(parsedUser.userId);
+                } catch (error) {
+                    console.error("로컬스토리지 데이터 파싱 오류:", error);
+                }
+            }
+        }
+    }, [user]);
 
+    useEffect(() => {
         // 카카오 주소 API 스크립트 추가
         const script = document.createElement("script");
         script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -26,83 +37,127 @@ const UserInsertAddress = () => {
         document.body.appendChild(script);
     }, []);
 
-    // 카카오 주소 검색 API 실행
+    // 로그인한 유저의 주소 목록 불러오기
+     const fetchUserAddresses = (userId) =>{
+         if (!userId) return;
+
+         axios
+             .get(`http://localhost:7070/api/addresses/${userId}`)
+             .then((res) => {
+                 setSavedAddresses(res.data); // 서버에서 받은 주소 목록 저장
+                 console.log("불러온 주소 목록:", res.data);
+             })
+             .catch((error) => {
+                 console.error("주소 목록 불러오기 오류:", error);
+             });
+     }
+    useEffect(() => {
+        const currentUserId = currentUser?.user_id || currentUser?.userId;
+        if (currentUserId) {
+            fetchUserAddresses(currentUserId);
+        }
+    }, [currentUser]);
+
+    //  카카오 주소 검색 함수
     const handleSearchAddress = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
-                let fullAddress = data.address; // 기본 주소
-                let extraAddr = ""; // 참고항목
-
-                if (data.addressType === "R") {
-                    if (data.bname) extraAddr += data.bname;
-                    if (data.buildingName) extraAddr += (extraAddr ? ", " : "") + data.buildingName;
-                }
-
-                setPostcode(data.zonecode);
-                setAddress(fullAddress);
-                setExtraAddress(extraAddr);
-
-                // 카카오 지도 API를 이용해 좌표 정보 가져오기
-                const geocoder = new window.kakao.maps.services.Geocoder();
-                geocoder.addressSearch(fullAddress, function (result, status) {
-                    if (status === window.kakao.maps.services.Status.OK) {
-                        setLatitude(result[0].y); // 위도 저장
-                        setLongitude(result[0].x); // 경도 저장
-                    } else {
-                        console.error("좌표 변환 실패");
-                    }
-                });
+                setAddress(data.roadAddress); // 선택한 도로명 주소 저장
             },
         }).open();
     };
 
-    // 주소 데이터 백엔드로 전송
-    const handleAddressSubmit = async () => {
-        if (!userId) {
-            alert("로그인이 필요합니다.");
+    //  주소 저장 API (POST 요청)
+    const handleSaveAddress = () => {
+        if (!address || !addressName) {
+            alert("주소와 별칭을 입력해주세요!");
             return;
         }
 
-        const fullAddress = `${address} ${detailAddress} ${extraAddress}`.trim();
-
-        const addressData = {
-            userId: userId, // ✅ 로그인된 사용자 ID 사용
-            address: address, // 기본 주소
-            addressName: fullAddress, // 주소 + 상세주소 + 참고항목
-            addressLatitude: latitude, // ✅ 카카오 API에서 가져온 위도
-            addressLongitude: longitude, // ✅ 카카오 API에서 가져온 경도
-            addressRole: 1, // 기본 주소 설정 (0: 서브, 1: 메인)
-        };
-
-        try {
-            const response = await axios.post("http://localhost:7070/api/addresses/UserInsertAddress", addressData, {
-                withCredentials: true, // 쿠키 포함
-                headers: {
-                    "Content-Type": "application/json",
-                },
+        axios
+            .post("http://localhost:7070/api/addresses/UserInsertAddress", {
+                userId: currentUser?.user_id, // 로그인한 유저의 ID 추가
+                addressName,
+                address,
+                detailedAddress,
+            })
+            .then((res) => {
+                alert("주소가 저장되었습니다!");
+                setAddress(""); // 입력 필드 초기화
+                setAddressName("");
+                setDetailedAddress("");
+                fetchUserAddresses(currentUser?.user_id); // 저장 후 목록 갱신
+            })
+            .catch((error) => {
+                console.error("주소 저장 오류:", error);
+                alert("주소 저장에 실패했습니다.");
             });
-
-            if (response.status === 200) {
-                alert("주소가 성공적으로 저장되었습니다!");
-            }
-        } catch (error) {
-            console.error("주소 저장 실패", error);
-            alert("주소 저장 중 오류가 발생했습니다.");
-        }
+    };
+    const handleSetPrimaryAddress = (addressId) => {
+        axios.put(`http://localhost:7070/api/addresses/updateRole`, {
+            userId: currentUser?.user_id,
+            addressId: addressId
+        })
+            .then(() => {
+                alert("기본 주소가 변경되었습니다.");
+                fetchUserAddresses(currentUser?.user_id);  // 목록 갱신
+            })
+            .catch((error) => {
+                console.error("기본 주소 변경 오류:", error);
+            });
     };
 
     return (
-        <div>
-            <p>로그인된 사용자 ID: {userId}</p>
-            <input type="text" id="sample6_postcode" placeholder="우편번호" value={postcode} readOnly />
-            <button onClick={handleSearchAddress}>우편번호 찾기</button>
-            <br />
-            <input type="text" id="sample6_address" placeholder="주소" value={address} readOnly />
-            <br />
-            <input type="text" id="sample6_detailAddress" placeholder="상세주소" value={detailAddress} onChange={(e) => setDetailAddress(e.target.value)} />
-            <input type="text" id="sample6_extraAddress" placeholder="참고항목" value={extraAddress} readOnly />
-            <br />
-            <button onClick={handleAddressSubmit}>주소 저장</button>
+        <div className="user-insert-address-container">
+            <div className="address-input">
+            {/* 주소 입력 버튼 */}
+            {!showForm && (
+                <input placeholder="주소를 입력해주세요"
+                       onClick={() => setShowForm(true)}/>
+
+
+            )}
+            </div>
+            {/*  모달형 주소 입력 폼 */}
+            {showForm && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>주소 입력</h2>
+                        <button onClick={handleSearchAddress}>주소 검색</button>
+                        <input type="text" value={address} readOnly placeholder="선택한 주소" />
+                        <input
+                            type="text"
+                            value={detailedAddress}
+                            onChange={(e) => setDetailedAddress(e.target.value)}
+                            placeholder="상세 주소 입력 (예: 101동 202호)"
+                        />
+                        <input
+                            type="text"
+                            value={addressName}
+                            onChange={(e) => setAddressName(e.target.value)}
+                            placeholder="주소 별칭 (예: 우리 집, 회사)"
+                        />
+                        <button onClick={handleSaveAddress}>저장</button>
+                        <button onClick={() => setShowForm(false)}>닫기</button>
+                    </div>
+                </div>
+            )}
+
+            {/*  저장된 주소 목록 표시 */}
+            <h3>저장된 주소 목록</h3>
+            <ul>
+                {savedAddresses.length > 0 ? (
+                    savedAddresses.map((addr) => (
+                        <li key={addr.id} onClick={() => handleSetPrimaryAddress(addr.id)}>
+                            <strong>{addr.addressName}</strong>: {addr.address}
+                            <small>{addr.detailedAddress}</small>
+                            {addr.addressRole === 1 && <span> (기본 주소) </span>}
+                        </li>
+                    ))
+                ) : (
+                    <p>저장된 주소가 없습니다.</p>
+                )}
+            </ul>
         </div>
     );
 };

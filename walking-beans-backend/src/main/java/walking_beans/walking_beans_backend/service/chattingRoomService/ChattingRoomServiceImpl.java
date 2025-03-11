@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class ChattingRoomServiceImpl implements ChattingRoomService {
-
     @Autowired
     private ChattingRoomMapper chattingRoomMapper;
 

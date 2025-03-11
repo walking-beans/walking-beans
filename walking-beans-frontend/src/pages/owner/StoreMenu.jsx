@@ -1,40 +1,59 @@
 import {useEffect, useState} from "react";
-import apiMenu from "./apiMenu";
+import apiMenu from "../../service/apiMenu";
+import {useNavigate} from "react-router-dom";
+import HorizentalCategory from "../../components/owner/HorizentalCategory";
+import MenuCard from "../../components/owner/MenuCard";
 
 
 const StoreMenu = () => {
     const [menus, setMenus] = useState([]);
     const [err, setErr] = useState(null);
+    const navigate = useNavigate();
+
+    const [barrel, setBarrel] = useState(true); // 1열 3열 변환 버튼용 Ture 일때 1열
 
     useEffect(() => {
         apiMenu.fetchAllMenu(setMenus,setErr)
     }, []);
 
+    const handleDelete = () => {
+
+        if(window.confirm("정말 삭제하시겠습니까?")){
+
+            //API자리
+
+            navigate("/clothes");
+        }
+    }
+    const handleRow = () =>{// 1열 3열 변경 핸들러
+        if(barrel){
+            setBarrel(false)
+        } else {
+            setBarrel(true)
+        }
+    }
+
 
     return(
-        <div className="container mt-4">
-            <h2 className="text-center fw-bold">메뉴 목록</h2>
-                <div className="row">
-                    {menus.map((menu) => (
-                        <div className="col-4" key={menu.menuId}>
-                            <div className="card shadow-sm">
-                                <img
-                                    src={`${menu.menuPictureUrl}` || 'https://via.placeholder.com/300x200.png?text=No+Image'}
-                                    className="card-img-top"
-                                    alt={menu.menuName}
-                                    style={{height: '200px', objectFit: 'cover'}}
-                                />
-                                <div className="card-body">
-                                    <h5 className="card-title">{menu.menuName}</h5>
-                                    <p className="card-text">가격: {menu.menuPrice}원</p>
-                                    <button className="btn btn-primary btn-sm">자세히 보기</button>
-                                </div>
-                            </div>
-                        </div>
+        <>
+            <HorizentalCategory/>
+
+            <div>
+                <p className="col-1">{/*data.length*/}개</p>
+                <button className={"col-1"} onClick={handleRow}>{barrel ? "3열 보기" : "1열 보기"}</button>
+                <div className={"row"}>
+                    {menus.map((menus)=>(
+                        <MenuCard key={menus.id}
+                            {...menus}
+                            price={menus.price.toLocaleString()}
+                            handleDelete={handleDelete}
+                            barrel={barrel}/>
+
                     ))}
                 </div>
             </div>
 
+        </>
     )
 }
 

@@ -21,10 +21,10 @@ public class Message {
 
     private long userId;
 
-    private int messageRole;
-
     private String messageContent;
 
-    private Timestamp messageTime;
+    private int messageRole;
+
+    private String messageTime;
 
 }

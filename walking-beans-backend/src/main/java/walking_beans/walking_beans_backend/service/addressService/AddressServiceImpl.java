@@ -36,7 +36,12 @@ public class AddressServiceImpl implements AddressService {
         return addressMapper.getPrimaryAddressByUserId(userId);
     }
 
+    @Override
+    public void updatePrimaryAddress(long userId, long addressId) {
+        addressMapper.updatePrimaryAddress(userId, addressId);
+    }
 
+    // 대표주소 변경
     @Override
     public Address getUserMainAddress(long orderId, long userId) {
         return addressMapper.getUserMainAddress(orderId, userId);

@@ -13,6 +13,7 @@ const RiderIncome = () => {
     // 금일 year 가져오기
     const [todaysYear, setTodaysYear] = useState(`${new Date().getFullYear()}`);
 
+
     useEffect(() => {
         apiRiderService.getAllRiderIncomeList(2,
             setIncomeList,

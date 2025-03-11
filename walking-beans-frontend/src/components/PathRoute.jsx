@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
+import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -29,14 +29,18 @@ import UserOrderList from "../pages/user/UserOrderList";
 
 import "./PathRoute.css";
 import UserSearchMap from "../pages/user/UserSerachMap";
+import AdminChattingroom from "../pages/admin/AdminChattingroom";
+import AdminMessage from "../pages/admin/AdminMessage";
+import AdminLogin from "../pages/admin/AdminLogin";
 
-function AdminChattingroom() {
-    return null;
-}
+import AdminMypage from "../pages/admin/AdminMypage";
 
-function AdminMessage() {
-    return null;
-}
+import UserMenuOption from "../pages/user/UserMenuOption";
+import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
+import UserInsertAddress from "../pages/user/UserInsertAddress";
+import AdminSignUp from "../pages/admin/AdminSignUp";
+import AdminMessageTest from "../pages/admin/AdminMessageTest";
+import UserOrdering from "../pages/user/UserOrdering";
 
 
 function PathRoute () {
@@ -73,23 +77,37 @@ function PathRoute () {
             <BrowserRouter>
                 <HeaderRoute user={user}/>
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center">
+                    <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
-                                <Route path="/login" element={<Login/>}/>
-                                  
-                                {/* 유저 관련 라우트 */}
-                                <Route path="/user/order/:orderid" element={<UserOrder/>}/>
-                                <Route path="/user/ordercart/:orderid/:cartId" element={<UserCart/>}/>
-                                <Route path="/user/orderlist" element={<UserOrderList/>}/>
-                                <Route path="/user/orderlist/:orderid" element={<UserOrderDetail/>}/>
-                                <Route path="/user/payment" element={<UserPayment/>}/>
+                                <Route path="/login" element={<AdminLogin/>}/>
+
+                                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+
+
+                                 
+
 
                                 {/* 유저 관련 라우트 */}
-                                <Route path="user/search/map" element={<UserSearchMap/>}/>
+
+                                {/* order 페이지 */}
+                                <Route path="/user/order/:storeId" element={<UserOrder/>}/>
+                                {/* 메뉴 클릭 했을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
+                                {/* 장바구니 담았을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
+
+                                <Route path="/user/orderlist" element={<UserOrderList/>}/>
+                                <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
+                                  
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/ordering" element={<UserOrdering/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
+
+                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
+
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
@@ -125,52 +143,48 @@ function PathRoute () {
 
                                 {/* 사장님 관련 라우트 */}
                                 <Route path="/owner" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menu" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
-                                        <StoreMenuDetail/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/owner/menuform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoption" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/mystore" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/order" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/revenue" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>
                                 }/>
@@ -178,6 +192,7 @@ function PathRoute () {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/message" element={<AdminMessageTest/>}/>
                             </Routes>
                         </div>
                     </div>
