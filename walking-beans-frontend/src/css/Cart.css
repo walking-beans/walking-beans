@@ -17,6 +17,12 @@
     align-items: center;
 }
 
+.user-cart-pricetext {
+    font-size: 20px;
+    color: #5A3D21;
+    font-weight: bold;
+}
+
 .user-title{
     font-size: 33px;
     font-weight: bold;
@@ -34,6 +40,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 
 .user-cart-container .user-cart-detailtext {

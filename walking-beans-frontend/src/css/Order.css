@@ -10,12 +10,21 @@
     transform: translateX(60%);
 }
 
-.user-order-background, .user-ordering-container {
+.user-order-container, .user-ordering-container, .user-order-background {
+    background: #F4EDDF;
+}
+
+.user-order-background, .user-ordering {
     width: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 30px;
+}
+
+.user-order-menu-container {
+    margin: 30px 0;
+    width: 600px;
 }
 
 .user-order-basic-text {
@@ -24,7 +33,7 @@
     margin-top: 30px;
 }
 
-.user-order-basic-text-m-0{
+.user-order-basic-text-m-0 {
     font-size: 18px;
     color: #5A3D21;
 }
@@ -37,6 +46,9 @@
 
 .user-cart-menuinfo {
     margin-top: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .user-order-btn {
@@ -112,11 +124,10 @@
     background: white;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px 30px 0 0;
-    gap: 30px;
     overflow-y: auto;
     scrollbar-width: none;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .modal-backdrop {
@@ -134,7 +145,7 @@
 
 .user-order-click-btn {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .user-mini-btn {
@@ -152,6 +163,10 @@
 
 .user-mini-btn:hover {
     background: #AB7A44;
+}
+
+.user-menu-form-container {
+    cursor: pointer;
 }
 
 .user-payment-mini-btn {
@@ -179,26 +194,14 @@
     margin: 30px 0;
 }
 
-.user-order-menu-container {
-    margin: 30px 0;
-    width: 600px;
-}
-
-.user-order-menu {
-    max-width: 600px;
-    display: flex;
-    justify-content: center;
-}
-
-.user-order-menuinfo {
+.user-order-menuinfo, .user-order-mainmenu-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 30px;
     text-align: center;
-
 }
 
-.user-menu-option-container {
+.user-menu-option-container{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -249,9 +252,34 @@
     margin-right: 30px;
 }
 
-.user-order-option-select:hover {
+.user-order-option-select:checked {
     background: #5A3D21;
     border: none;
 }
 
+.user-main-menu-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
 
+.user-order-description {
+    font-size: 20px;
+    color: #5A3D21;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-order-bordtext {
+    font-size: 20px;
+    color: #5A3D21;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.order-option-photo {
+    max-width: 540px;
+    margin-bottom: 20px;
+}

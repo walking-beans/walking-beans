@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
+import UserMenuCategory from "../pages/user/UserMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -41,6 +41,8 @@ import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
+import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
+import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
 
 function PathRoute () {
@@ -84,11 +86,9 @@ function PathRoute () {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
-
-
-                                 
 
 
                                 {/* 유저 관련 라우트 */}
@@ -190,9 +190,13 @@ function PathRoute () {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                {/*<Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>*/}
-                                {/*<Route path="/message/:roomId" element={<AdminMessage/>}/>*/}
-                                {/*<Route path="/message" element={<AdminMessageTest/>}/>*/}
+
+                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
+                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/message" element={<AdminMessageTest/>}/>
+
+                                <Route path="/alarmlist" element={<AdminAlarmList />}/>
+
                             </Routes>
                         </div>
                     </div>
