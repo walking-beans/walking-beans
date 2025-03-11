@@ -9,6 +9,9 @@ import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
@@ -28,15 +31,21 @@ public class AlarmServiceImpl implements AlarmService {
         // 채팅 알람 생성
         Alarms alarm = new Alarms();
         alarm.setUserId(message.getUserId()); // 메시지를 보낸 사용자 ID
-        alarm.setAlarmContent("📩 새로운 메시지: " + message.getMessageContent());
+        alarm.setAlarmContent(message.getMessageContent());
         alarm.setAlarmStatus(false);
         alarm.setAlarmSenderId(message.getUserId()); // 보낸 사람 ID
         alarm.setAlarmRole(2);
+        alarm.setAlarmCreateDate(new Timestamp(System.currentTimeMillis()));
 
         alarmMapper.insertAlarm(alarm);
 
         // 웹소켓 알림 전송
         webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+    }
+
+    @Override
+    public List<Alarms> getUserAlarmList(int userId) {
+        return alarmMapper.getUserAlarmList(userId);
     }
 
     @Override

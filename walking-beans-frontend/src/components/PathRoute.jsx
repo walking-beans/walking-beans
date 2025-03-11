@@ -42,6 +42,7 @@ import AdminSignUp from "../pages/admin/AdminSignUp";
 import AdminMessageTest from "../pages/admin/AdminMessageTest";
 import UserOrdering from "../pages/user/UserOrdering";
 import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
+import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 
 
 function PathRoute() {
@@ -85,6 +86,7 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
@@ -103,7 +105,8 @@ function PathRoute() {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-
+                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
@@ -189,9 +192,13 @@ function PathRoute() {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
+
                                 <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
                                 <Route path="/message/:roomId" element={<AdminMessage/>}/>
                                 <Route path="/message" element={<AdminMessageTest/>}/>
+
+                                <Route path="/alarmlist" element={<AdminAlarmList />}/>
+
                             </Routes>
                         </div>
                     </div>
