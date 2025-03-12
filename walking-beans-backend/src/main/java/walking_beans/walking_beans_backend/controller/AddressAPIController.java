@@ -1,25 +1,24 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Address;
 import walking_beans.walking_beans_backend.model.dto.Users;
-import walking_beans.walking_beans_backend.service.addressService.AddressService;
+import walking_beans.walking_beans_backend.service.addressService.AddressServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/addresses")
 public class AddressAPIController {
+
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressService;
 
 
     @GetMapping
@@ -47,6 +46,7 @@ public class AddressAPIController {
     // 특정 userId의 주소 조회
     @GetMapping("/{userId}")
     public List<Address> getAddressByUserId(@PathVariable("userId") Long userId) {
+        log.info("불러오는 userId: {}", userId); // 로그 추가
         return addressService.getAddressByUserId(userId);
     }
 
@@ -61,6 +61,14 @@ public class AddressAPIController {
         return addressService.getPrimaryAddressByUserId(userId);
     }
 
+    // 기본 주소 변경 (PUT 요청)
+    @PutMapping("/updateRole")
+    public String updatePrimaryAddress(@RequestBody Map<String, Long> request) {
+        long userId = request.get("userId");
+        long addressId = request.get("addressId");
+        addressService.updatePrimaryAddress(userId,addressId);
+        return "기본 주소가 변경되었습니다.";
+    }
     /**************************************** LEO ****************************************/
 
     /**
@@ -72,7 +80,7 @@ public class AddressAPIController {
     @GetMapping("/userAddress/orderId")
     public ResponseEntity<Address> getUserMainAddressByOrderId(@RequestParam("orderId") long orderId,
                                                       @RequestParam("userId") long userId){
-        log.info("=== /api/addresses/userMainByOrderId?orderId={}&userId={} ===", orderId, userId);
+        log.info("=== /api/addresses/userAddress?orderId={}&userId={} ===", orderId, userId);
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
     }
 

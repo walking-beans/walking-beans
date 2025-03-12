@@ -11,8 +11,8 @@
 
     <!-- 주소 추가 -->
     <insert id="insertAddress">
-        INSERT INTO Address (address_id,user_id, address, address_name, address_latitude, address_longitude, address_role)
-        VALUES (#{addressId},#{userId}, #{address}, #{addressName}, #{addressLatitude}, #{addressLongitude}, #{addressRole})
+        INSERT INTO Address (address_id,user_id, address, detailed_address,address_name, address_latitude, address_longitude, address_role)
+        VALUES (#{addressId},#{userId}, #{address},#{detailedAddress}, #{addressName}, #{addressLatitude}, #{addressLongitude}, #{addressRole})
     </insert>
 
     <!-- 특정 id로 주소 검색 -->
@@ -25,7 +25,21 @@
         SELECT * FROM Address WHERE user_id = #{userId} AND address_role = 1 LIMIT 1
     </select>
 
+    <!-- 대표 주소 변경 -->
+    <update id="updatePrimaryAddress">
+        UPDATE address
+        SET address_role = 1
+        WHERE address_id = #{addressId}
+    </update>
+
+    <!-- 특정 유저의 모든 주소의 addressRole을 0으로 변경 -->
+    <update id="resetAddressRoles">
+        UPDATE address
+        SET address_role = 0
+        WHERE user_id = #{userId}
+    </update>
     <!-- ========= Leo ========= -->
+
     <!-- -->
     <select id="getUserMainAddress">
         SELECT A.address_id, A.user_id, A.address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
@@ -36,5 +50,4 @@
         AND A.user_id = #{userId}
         AND A.address_role = 1
     </select>
-
 </mapper>

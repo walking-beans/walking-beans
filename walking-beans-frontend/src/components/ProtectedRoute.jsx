@@ -4,7 +4,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
 
-   // console.log("현재 로그인된 사용자:", user);
+    // console.log("현재 로그인된 사용자:", user);
 
     if (!user) {
         alert("로그인이 필요합니다.");

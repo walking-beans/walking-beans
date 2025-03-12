@@ -12,11 +12,18 @@ import supportAgent from "../../assert/svg/riderNav/support_agent.svg";
 import textsms from "../../assert/svg/riderNav/textsms.svg";
 import toggleIcon from "../../assert/svg/menu_black.svg";
 
+import apiRiderService from "../../components/rider/apiRiderService";
+import starRatingPath from "../../components/star/starPath";
+
+
 const RiderHeader = ({user}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(user);
     const [navOpen, setNavOpen] = useState(false);
+
+    const [star, setStar] = useState(0);
+    const [starPath, setStarPath] = useState("");
 
     // 유저 정보 로드
     useEffect(() => {
@@ -71,6 +78,15 @@ const RiderHeader = ({user}) => {
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        apiRiderService.getRiderStarRating(2, (newStar) => {
+            setStar(newStar);
+            starRatingPath.getStarPath(newStar, setStarPath);
+        });
+    }, []);
+
+
     return (
         <div className="rider-header-wrapper">
             <header className="rider-header">
@@ -119,7 +135,7 @@ const RiderHeader = ({user}) => {
                                     </div>
                                 </div>
                                 <div className="rider-stars">
-                                    ⭐⭐⭐⭐⭐
+                                    <img src={starPath}/>
                                 </div>
                             </div>
                             <button className="rider-status-btn">
@@ -129,11 +145,11 @@ const RiderHeader = ({user}) => {
 
                         <ul className="rider-nav-menu list-unstyled">
                             {[
-                                {icon: person, text: "마이페이지", path: "/"},
-                                {icon: payment, text: "내 수입", path: "/"},
-                                {icon: list, text: "배달기록", path: "/"},
-                                {icon: textsms, text: "채팅", path: "/"},
-                                {icon: supportAgent, text: "고객센터 문의하기", path: "/"}
+                                {icon: person, text: "마이페이지", path: "/rider"},
+                                {icon: payment, text: "내 수입", path: "/rider/orderlist"},
+                                {icon: list, text: "배달기록", path: "/rider/income"},
+                                {icon: textsms, text: "채팅", path: "/chat/chattingroom"},
+                                {icon: supportAgent, text: "고객센터 문의하기", path: "/rider"}
                             ].map(({icon, text, path}) => (
                                 <li key={text}>
                                     <a href={path}>

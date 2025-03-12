@@ -21,39 +21,17 @@ public class ChattingRoomAPIController {
     @Autowired
     private ChattingRoomServiceImpl chattingRoomService;
 
-    @Autowired
-    private MessageServiceImpl messageService;
-
     /**
      * List of Chatting Room by the receiver's role
      * @param userId : user id
      * @param receiverRelation : receiver's role
      * @return ResponseEntity.ok(List<ChattingRoom>)
      */
-    @MessageMapping("/lists")
+    @GetMapping
     public ResponseEntity<List<ChattingRoom>> getChattingRooms(@RequestParam("userId") long userId,
                                                                @RequestParam("receiverRelation") int receiverRelation) {
         log.info("=== /api/chattingroom?userId=" + userId + "&receiverRelation=" + receiverRelation);
 
         return ResponseEntity.ok(chattingRoomService.getAllChattingRoomByReceiverRelation(userId, receiverRelation));
     }
-
-    /**
-     * Updating Last Message
-     * @return
-     */
-    @MessageMapping()// Put : 1개만 적용 && Post : 여러 개 적용시
-    public ResponseEntity<Integer> updateLastMessageOfChattingRoom(@RequestParam("roomId") long roomId,
-                                                                        @RequestParam("userId") long userId,
-                                                                        @RequestParam("messageRole") int messageRole,
-                                                                        @RequestParam("messageContent") String messageContent) {
-        log.info("=== /api/chattingroom?roomId=" + roomId + "&roomLastMessage=" + messageContent);
-        int messageInsert = messageService.insertMessageByRoomId(roomId, userId, messageRole, messageContent);
-        int chattingInsert = chattingRoomService.updateLastMessageOfChattingRoom(roomId, messageContent);
-        if (messageInsert != 0 && chattingInsert != 0) {
-            return ResponseEntity.ok(1);
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
 }

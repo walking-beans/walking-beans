@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
-    AddressMapper addressMapper;
+    private AddressMapper addressMapper;
 
     // 주소 조회
     @Override
@@ -36,7 +36,21 @@ public class AddressServiceImpl implements AddressService {
         return addressMapper.getPrimaryAddressByUserId(userId);
     }
 
+    // 대표주소 1로 변경하기
+    @Override
+    public void updatePrimaryAddress(long userId ,long addressId) {
+        addressMapper.resetAddressRoles(userId);
+        addressMapper.updatePrimaryAddress(addressId);
+    }
 
+    // 모든 주소 0 으로 만들기
+    @Override
+    public void resetAddressRoles(long userId) {
+        addressMapper.resetAddressRoles(userId);
+    }
+
+
+    // 대표주소 변경
     @Override
     public Address getUserMainAddress(long orderId, long userId) {
         return addressMapper.getUserMainAddress(orderId, userId);

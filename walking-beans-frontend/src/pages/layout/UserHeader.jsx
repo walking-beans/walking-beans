@@ -64,11 +64,26 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: "/mypage",
+            user: location.pathname === "/mypage" ? "/" : "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            store: "/owner",
-            admin: "/admin"
+            owner: location.pathname === "/owner" ? "/" : "/owner",
+            admin: location.pathname === "/admin" ? "/" : "/admin"
         };
+
+        /*
+            위 rolePaths 의 경우
+            const roles = ["user", "rider", "owner", "admin"];
+            const rolePaths = Object.fromEntries(
+                roles.map(role => [
+                    role,
+                    location.pathname === `/${role === "user" ? "mypage" : role}`
+                        ? "/"
+                        : `/${role === "user" ? "mypage" : role}`
+                ])
+            );
+            추후 이 코드로 변경해주는 것이 좋음
+        */
+
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
