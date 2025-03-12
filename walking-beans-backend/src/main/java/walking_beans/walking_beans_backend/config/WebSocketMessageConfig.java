@@ -16,7 +16,7 @@ public class WebSocketMessageConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chattingHandler, "/ws/message") // ✅ WebSocket 경로 api에 맞게 수정바람
+        registry.addHandler(chattingHandler, "/ws/chatting") // ✅ WebSocket 경로 api에 맞게 수정바람
                 .setAllowedOrigins("*");
     }
 }

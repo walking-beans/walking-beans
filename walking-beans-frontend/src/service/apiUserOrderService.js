@@ -5,23 +5,24 @@ const API_CART_URL = "http://localhost:7070/api/carts"
 const API_MENU_URL = "http://localhost:7070/api/menu"
 const API_STORE_URL = "http://localhost:7070/api/store"
 const API_OPTION_URL = "http://localhost:7070/api/option"
+const API_ADDRESS_URL = "http://localhost:7070/api/addresses"
 
 const apiUserOrderService = {
 
     // 장바구니 메뉴 삭제
     deleteUserOrderCart:
         function (cartId, setCarts) {
-        return axios
-            .delete(`${API_CART_URL}/${cartId}`)
-            .then((res) => {
-                console.log("백엔드 연결 성공", res.data);
-                setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== cartId));
-            })
-            .catch((err) => {
-                console.error("DeleteUserOrderCart 에러 발생", err);
-                alert("메뉴 삭제에 실패하였습니다. 다시 시도해 주세요.");
-            });
-    },
+            return axios
+                .delete(`${API_CART_URL}/${cartId}`)
+                .then((res) => {
+                    console.log("백엔드 연결 성공", res.data);
+                    setCarts((prevCarts) => prevCarts.filter(cart => cart.cartId !== cartId));
+                })
+                .catch((err) => {
+                    console.error("DeleteUserOrderCart 에러 발생", err);
+                    alert("메뉴 삭제에 실패하였습니다. 다시 시도해 주세요.");
+                });
+        },
 
     // cart 데이터 가져오기
     getUserOrderByCartId: function (cartId) {
@@ -41,7 +42,7 @@ const apiUserOrderService = {
             });
     },
 
-    // 선택한 option 데이터 가져오기
+    // 선택한 option 데이터 가져오기(orderId 기준)
     getUserOrderByOrderId:
         function (orderId, setCarts) {
             return axios
@@ -152,6 +153,21 @@ const apiUserOrderService = {
                     console.error("대표메뉴 데이터 불러오기 실패:", err);
                     return [];
                 });
+        },
+
+    // 고객 배달 주소 가져오기
+    getOrderAddressByUserId:
+        function (userId, setAddress) {
+            axios
+                .get(`${API_ADDRESS_URL}/${userId}`)
+                .then((res) => {
+                    console.log("주소 불러오기 성공 : ", res.data);
+                    const filteredAddress = res.data.find(addr => addr.addressRole === 1);
+                    setAddress(filteredAddress || "기본 주소가 없습니다. 설정해 주세요");
+                })
+                .catch((err) => {
+                    console.log("주소 불러오기 실패 : ", err);
+                })
         }
 }
 
