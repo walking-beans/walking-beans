@@ -8,7 +8,7 @@ import UntakenOrderDetail from "./UntakenOrderDetail";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d"; // 본인 카카오 API 키
+const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581"; // 본인 카카오 API 키
 
 
 // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
@@ -114,7 +114,7 @@ const RiderMainMap = () => {
                 // 가게 마커 추가 (추후 프로젝트에 맞게 수정바람)
                 filteredStores.forEach((store) => {
                     const storeMarkerImage = new window.kakao.maps.MarkerImage(
-                        `${store.storePictureUrl ? (store.storePictureUrl) : (storeDefault)}`, // 사용자 현재 위치 아이콘으로 구분지음
+                        `${storeDefault}`, // 사용자 현재 위치 아이콘으로 구분지음
                         new window.kakao.maps.Size(40, 42),
                         { offset: new window.kakao.maps.Point(20, 42) }
                     );

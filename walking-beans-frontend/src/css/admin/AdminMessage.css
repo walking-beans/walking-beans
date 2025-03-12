@@ -11,6 +11,16 @@
 
 }
 
+.admin-message-userInput {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.admin-message-notUserInput {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .admin-message-input {
     /* Rectangle 89 */
 

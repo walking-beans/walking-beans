@@ -29,6 +29,8 @@ public class UserMessage {
 
     private String userName;
 
+    private String userPictureUrl;
+
     public void timeChanged() {
         LocalDateTime now = LocalDateTime.now();
         log.info("Time changed from {} to {}", now, this.messageTime);

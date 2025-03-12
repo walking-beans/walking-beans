@@ -49,6 +49,7 @@ import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
 function PathRoute() {
     const [user, setUser] = useState(null);
+    const [order, setOrder] = useState(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -99,7 +100,7 @@ function PathRoute() {
                                 {/* 장바구니 담았을 때 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
                                 {/* 주문하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
 
@@ -114,9 +115,7 @@ function PathRoute() {
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
-                                    <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderMain/>
-                                    </ProtectedRoute>
+                                    <RiderMain/>
                                 }/>
                                 <Route path="/rider/ontheway" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
@@ -195,8 +194,10 @@ function PathRoute() {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
-                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
-                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest/>}/>
+
+
+                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST order = {order}/>}/>
+                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest order = {order}/>}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
