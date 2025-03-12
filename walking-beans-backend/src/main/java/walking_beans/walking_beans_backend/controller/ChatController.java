@@ -1,6 +1,8 @@
 package walking_beans.walking_beans_backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -9,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.Message;
+import walking_beans.walking_beans_backend.model.vo.admin.UserMessage;
 import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class ChatController {
@@ -36,5 +40,12 @@ public class ChatController {
         chattingRoomService.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
         messageService.insertMessageByRoomId(message);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/chattingmessage")
+    public ResponseEntity<List<UserMessage>> getAllUserMessage(@RequestParam("roomId") long roomId) {
+        log.info("getAllUserMessage roomId={}", roomId);
+        List<UserMessage> messages = messageService.getAllUserMessage(roomId);
+        return ResponseEntity.ok(messages);
     }
 }

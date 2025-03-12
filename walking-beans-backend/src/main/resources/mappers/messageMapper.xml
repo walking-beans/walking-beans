@@ -9,6 +9,14 @@
         WHERE room_id = #{roomId}
     </select>
 
+    <select id="getAllUserMessage">
+        SELECT M.message_id, M.room_id, M.user_id, M.message_role, M.message_content, M.message_time, U.user_name
+        FROM message M
+                 JOIN users U
+                      on M.user_id = U.user_id
+        WHERE room_id = #{roomId}
+    </select>
+
     <!--  -->
     <insert id="insertMessageByRoomId">
         INSERT INTO message(room_id, user_id, message_role, message_content, message_time)
