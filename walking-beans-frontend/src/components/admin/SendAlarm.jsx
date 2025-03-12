@@ -1,14 +1,18 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
-
-const SendAlarm = ({userId, alarmRole, senderId, messageContent}) => {
-    const [messages, setMessages] = useState([]);
+const SendAlarm = ({ userId, alarmRole, senderId, messageContent }) => {
     const [chatSocket, setChatSocket] = useState(null);
-    const [messageInput, setMessageInput] = useState("알림보내기");
+    const [isSocketOpen, setIsSocketOpen] = useState(false); // 웹소켓 상태 추적
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         const wsChat = new WebSocket("ws://localhost:7070/ws/chat");
         setChatSocket(wsChat);
+
+        wsChat.onopen = () => {
+            console.log("웹소켓 연결 성공");
+            setIsSocketOpen(true); // 연결 성공 시 상태 업데이트
+        };
 
         wsChat.onmessage = (event) => {
             const newMessage = JSON.parse(event.data);
@@ -17,32 +21,36 @@ const SendAlarm = ({userId, alarmRole, senderId, messageContent}) => {
 
         wsChat.onerror = (error) => {
             console.error("채팅 웹소켓 오류:", error);
+            setIsSocketOpen(false); // 오류 발생 시 연결 상태 업데이트
         };
 
-        return () => wsChat.close();
+        wsChat.onclose = () => {
+            console.log("웹소켓 연결 종료");
+            setIsSocketOpen(false); // 연결 종료 시 상태 업데이트
+        };
+
+        return () => {
+            wsChat.close();
+        };
     }, []);
 
-    const sendAlarmMessage = () => {
-        if (messageInput.trim() !== "") {
+    useEffect(() => {
+        if (chatSocket && isSocketOpen) {
             const messageData = {
-                userId: userId,                      // 알람을 받을 유저 ID (여기선 예시로 1번 유저)
-                alarmRole: alarmRole,                   // 알람의 종류 (1 = 알림, 2 = 채팅)
-                alarmSenderId: senderId,               // 알람을 보낸 유저 ID (여기선 예시로 1번 유저)
-                alarmContent: messageContent, // 알람 내용 (props로 전달된 메시지)
-                alarmStatus: false,              // 알람 읽음 여부 (기본값 false)
-                alarmCreateDate: new Date().toISOString(), // 알람 생성 시간 (현재 시간)
+                userId,
+                alarmRole,
+                alarmSenderId: senderId,
+                alarmContent: messageContent,
+                alarmStatus: false,
+                alarmCreateDate: new Date().toISOString(),
             };
 
             chatSocket.send(JSON.stringify(messageData));
+            console.log("알람 메시지 전송:", messageData);
         }
-    };
+    }, [chatSocket, isSocketOpen, userId, alarmRole, senderId, messageContent]);
 
-
-
-    return (
-        <div>
-        </div>
-    )
-}
+    return null; // UI는 보이지 않게 처리
+};
 
 export default SendAlarm;

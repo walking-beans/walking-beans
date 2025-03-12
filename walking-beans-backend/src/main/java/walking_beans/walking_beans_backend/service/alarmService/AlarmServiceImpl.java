@@ -31,7 +31,7 @@ public class AlarmServiceImpl implements AlarmService {
         alarm.setAlarmContent(message.getMessageContent());
         alarm.setAlarmStatus(false);
         alarm.setAlarmSenderId(message.getUserId()); // 보낸 사람 ID
-        alarm.setAlarmRole(2);
+        alarm.setAlarmRole(message.getMessageRole());
         alarm.setAlarmCreateDate(new Timestamp(System.currentTimeMillis()));
 
         alarmMapper.insertAlarm(alarm);

@@ -1,32 +1,49 @@
-import SendAlarm from "../../components/admin/SendAlarm";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
 
 
 const AdminNewAlarm = () => {
+    const [messages, setMessages] = useState([]);
+    const [chatSocket, setChatSocket] = useState(null);
+    const [messageInput, setMessageInput] = useState("알림보내기");
 
-    const [showSendAlert, setShowSendAlert] = useState(false);
+    useEffect(() => {
+        const wsChat = new WebSocket("ws://localhost:7070/ws/chat");
+        setChatSocket(wsChat);
 
-    // 알람 보내기 버튼 클릭 시 호출되는 함수
-    const handleSendAlarm = () => {
-        setShowSendAlert(true); // SendAlarm을 렌더링하여 알림을 보냄
+        wsChat.onmessage = (event) => {
+            const newMessage = JSON.parse(event.data);
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        };
+
+        wsChat.onerror = (error) => {
+            console.error("채팅 웹소켓 오류:", error);
+        };
+
+        return () => wsChat.close();
+    }, []);
+
+    const sendAlarmMessage = () => {
+        if (messageInput.trim() !== "") {
+            const messageData = {
+                roomId: 1,                  // 채팅방 ID (1번 방)
+                userId: 1,                  // 보내는 유저 ID (1번 유저)
+                messageContent: "테스팅", // 메시지 내용
+                messageRole: 1,             // 메시지 역할 (1: 일반 메시지)
+                messageTime: new Date().toISOString(),  // 메시지 시간 (현재 시간)
+            };
+
+            chatSocket.send(JSON.stringify(messageData));
+        }
     };
 
     return (
-        <div className="user-home-container">
-            <p>알람 보내기</p>
-            <button type="button" onClick={handleSendAlarm}>보내기 알람</button>
-
-            {/* 버튼 클릭 시 SendAlarm 컴포넌트를 렌더링하고, props로 전달 */}
-            {showSendAlert && (
-                <SendAlarm
-                    userId="2"
-                    alarmRole="1"
-                    senderId="1"
-                    messageContent="새로운 알람입니다."
-                />
-            )}
+        <div>
+            <div className="user-home-container">
+                <p>알람 보내기</p>
+                <button type="button" onClick={sendAlarmMessage}>보내기 알람</button>
+            </div>
         </div>
     )
 }
-
 export default AdminNewAlarm;
