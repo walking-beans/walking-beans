@@ -10,6 +10,7 @@ import detailBtn from "../../images/user/detailbtn.svg"
 import UserMenuOptionModal from "./UserMenuOptionModal";
 import UserMenuCategory from "./UserMenuCategory";
 import UserMainMenuForm from "./UserMainMenuForm";
+import axios from "axios";
 
 const UserOrder = () => {
     const [carts, setCarts] = useState([]);
@@ -25,8 +26,67 @@ const UserOrder = () => {
     const [groupedMenus, setGroupedMenus] = useState({});
     const [categoryName, setCategoryName] = useState([]);
     const [mainMenu, setMainMenu] = useState([]);
-    const [orderData, setOrderData] = useState([]);
-    const [cartData, setCartData] = useState([]);
+    const [orderStatus, setOrderStatus] = useState(0);
+    const [orderRequests, setOrderRequests] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("meetPayment");
+
+    // orderId, cartId 서버에 저장
+    const createOrder = async (orderData) => {
+        try {
+            const response = await axios.post("http://localhost:7070/api/orders/create", orderData);
+
+            if (response.data.orderId) {
+                localStorage.setItem("orderId", response.data.orderId);
+                localStorage.setItem("storeId", response.data.storeId);
+                localStorage.setItem("cartIdList", JSON.stringify(response.data.cartIdList)); // 배열 저장
+
+                console.log("생성된 주문 ID:", response.data.orderId);
+                console.log("가게 ID:", response.data.storeId);
+                console.log("장바구니 ID 리스트:", response.data.cartIdList);
+            }
+        } catch (err) {
+            console.error("주문 생성 중 오류 발생:", err);
+        }
+    };
+
+    // 주문 생성(데이터 저장)
+    const handleOrder = () => {
+        const storedUser = localStorage.getItem('user'); // 로컬 스토리지에서 사용자 정보 가져오기
+        const userAddress = localStorage.getItem('addressUpdated'); // 로컬 스토리지에서 사용자 정보 가져오기
+
+        // 사용자가 로그인되어 있는지 확인
+        if (!storedUser) {
+            // 로그인되지 않았다면 로그인 페이지로 리디렉션
+            alert("로그인 후 주문이 가능합니다.");
+            navigate('/login'); // 로그인 페이지로 이동
+            return; // 로그인 유도 후 더 이상 주문 처리하지 않음
+        }
+
+        const parsedUser = JSON.parse(storedUser); // 사용자 정보 파싱
+        const parsedUserAddress = JSON.parse(userAddress); // 사용자 정보 파싱
+        const userId = parsedUser.user_id; // 사용자 ID 설정
+        const addressId = parsedUserAddress.address_id;
+
+        // 주문 데이터 생성
+        const orderData = {
+            orders: {
+                userId: userId,
+                storeId: storeId,
+                addressId: addressId,
+                orderStatus: orderStatus,
+                orderRequests: orderRequests,
+                orderTotalPrice: totalAmount,
+            },
+            cartList: carts,  // 장바구니 데이터
+            payments: {
+                paymentMethod: paymentMethod,
+                totalAmount: totalAmount,
+            },
+        };
+
+        // 주문 생성 함수 호출
+        createOrder(orderData);
+    };
 
     // 메뉴 선택 시 endpoint 변경
     const handleMenuClick = (menu) => {
@@ -35,17 +95,10 @@ const UserOrder = () => {
             console.error("menuId 없음 : ", menuId);
             return;
         }
-
-        // orderId가 없을 경우 생성
-        if (!orderId) {
-            navigate(`/user/order/${storeId}/${menu.menuId}`);
-            openModal(menu);
-        } else {
-            // orderId가 생성되었으면 장바구니에 담은 메뉴로 이동
-            navigate(`/user/order/${storeId}/${menu.menuId}/${orderId}/${cartId}`);
-            openModal(menu);
-        }
+        navigate(`/user/order/${storeId}/${menu.menuId}`);
+        openModal(menu);
     };
+
     // carts 데이터 가져오기
     useEffect(() => {
         if (cartId) {
@@ -127,6 +180,7 @@ const UserOrder = () => {
     const closeModal = () => {
         setModalOpen(false);
         document.body.style.overflow = 'auto';
+        navigate(`/user/order/${storeId}`);
     };
 
     // 메뉴 id로 옵션 가져오기
@@ -245,7 +299,7 @@ const UserOrder = () => {
                             <div className="user-cart-pricetext">최종 결제 금액</div>
                             <div className="user-title">{totalAmount.toLocaleString()}원</div>
                         </div>
-                        <button className="user-order-btn">주문하기</button>
+                        <button className="user-order-btn" onClick={handleOrder}>주문하기</button>
                     </div>
 
                 </div>

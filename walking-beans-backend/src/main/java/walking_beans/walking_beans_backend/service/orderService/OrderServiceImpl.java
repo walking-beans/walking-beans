@@ -7,7 +7,9 @@ import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -62,24 +64,27 @@ public class OrderServiceImpl implements OrderService {
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
-    public void insertOrder(Orders order, List<Carts> cartList, Payments payment) {
-
-        // 주문 데이터 삽입
+    public Map<String, Object> insertOrder(Orders order, List<Carts> cartList, Payments payment) {
+        // 1️⃣ 주문 데이터 삽입 (orderId 자동 생성됨)
         orderMapper.insertOrder(order);
 
-
-        // 주문에 대한 장바구니 데이터 삽입
+        // 2️⃣ 장바구니 데이터 삽입 (cartId 자동 생성됨)
         for (Carts cart : cartList) {
             cart.setOrderId(order.getOrderId());
             cartMapper.insertCart(cart);
         }
 
-        // 결제 정보 설정
+        // 3️⃣ 결제 정보 삽입
         payment.setOrderId(order.getOrderId());
-
-        // 결제 정보 삽입
         paymentMapper.insertPayments(payment);
 
+        // 4️⃣ 반환할 데이터 생성
+        Map<String, Object> response = new HashMap<>();
+        response.put("orderId", order.getOrderId());
+        response.put("storeId", order.getStoreId());
+        response.put("cartIdList", cartList.stream().map(Carts::getCartId).toList()); // cartId 리스트
+
+        return response;
     }
 
 

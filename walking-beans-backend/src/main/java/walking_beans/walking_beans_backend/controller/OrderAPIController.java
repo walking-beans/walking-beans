@@ -17,6 +17,7 @@ import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -78,18 +79,17 @@ public class OrderAPIController {
 
     /* ***************************************  *************************************** */
 
-
-
-
     // 주문 저장
     @PostMapping("/create")
-    public String insertOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<Map<String, Object>> insertOrder(@RequestBody OrderRequest request) {
         if (request.getPayments() == null) {
-            return "결제 정보가 누락되었습니다.";
+            return ResponseEntity.badRequest().body(Map.of("error", "결제 정보가 누락되었습니다."));
         }
 
-        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
-        return "주문 등록 및 결제 정보 저장 완료";
+        // 주문 처리 후 생성된 orderId, storeId 반환
+        Map<String, Object> response = orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
+
+        return ResponseEntity.ok(response);
     }
 
 
