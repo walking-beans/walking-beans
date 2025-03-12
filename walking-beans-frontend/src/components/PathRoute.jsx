@@ -74,7 +74,7 @@ function PathRoute() {
             window.removeEventListener("userChange", handleStorageChange);
             window.removeEventListener("storage", handleStorageChange);
         };
-    }, []);
+    }, [user]);
 
     return (
         <div className="layout-container">
@@ -196,7 +196,7 @@ function PathRoute() {
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage/>}/>
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
-                                <Route path="/TEST/chattingroom/:roomId" element={<AdminChattingroomTest/>}/>
+                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest/>}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
