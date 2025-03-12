@@ -25,9 +25,6 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public void sendMessage(Message message) {
 
-        // 채팅방의 마지막 메시지 업데이트
-        alarmMapper.updateLastMessage(message.getRoomId(), message.getMessageContent());
-
         // 채팅 알람 생성
         Alarms alarm = new Alarms();
         alarm.setUserId(message.getUserId()); // 메시지를 보낸 사용자 ID

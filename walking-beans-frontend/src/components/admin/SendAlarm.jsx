@@ -1,41 +1,48 @@
-/*  알림 컴포넌트 제작 페이지
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import {useEffect, useState} from "react";
 
 
-const SendAlarm = forwardRef((props, ref) => {
-  const [chatSocket, setChatSocket] = useState(null);
+const SendAlarm = ({userId, alarmRole, senderId, messageContent}) => {
+    const [messages, setMessages] = useState([]);
+    const [chatSocket, setChatSocket] = useState(null);
+    const [messageInput, setMessageInput] = useState("알림보내기");
 
-    // 웹소켓 연결 설정
     useEffect(() => {
         const wsChat = new WebSocket("ws://localhost:7070/ws/chat");
         setChatSocket(wsChat);
 
         wsChat.onmessage = (event) => {
             const newMessage = JSON.parse(event.data);
-            console.log("받은 메시지:", newMessage); // 수신한 메시지 처리
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
         };
 
         wsChat.onerror = (error) => {
             console.error("채팅 웹소켓 오류:", error);
         };
 
-        return () => {
-            wsChat.close();
-        };
+        return () => wsChat.close();
     }, []);
 
-    // 부모 컴포넌트에서 호출 가능한 sendAlarm 함수 구현
-    useImperativeHandle(ref, () => ({
-        sendAlarm: (alarmData) => {
-            if (chatSocket) {
-                chatSocket.send(JSON.stringify(alarmData)); // 알람 데이터 전송
-            }
-        }
-    }));
+    const sendAlarmMessage = () => {
+        if (messageInput.trim() !== "") {
+            const messageData = {
+                userId: userId,                      // 알람을 받을 유저 ID (여기선 예시로 1번 유저)
+                alarmRole: alarmRole,                   // 알람의 종류 (1 = 알림, 2 = 채팅)
+                alarmSenderId: senderId,               // 알람을 보낸 유저 ID (여기선 예시로 1번 유저)
+                alarmContent: messageContent, // 알람 내용 (props로 전달된 메시지)
+                alarmStatus: false,              // 알람 읽음 여부 (기본값 false)
+                alarmCreateDate: new Date().toISOString(), // 알람 생성 시간 (현재 시간)
+            };
 
-    return null; // UI는 렌더링하지 않음
-});
+            chatSocket.send(JSON.stringify(messageData));
+        }
+    };
+
+
+
+    return (
+        <div>
+        </div>
+    )
+}
 
 export default SendAlarm;
-
- */
