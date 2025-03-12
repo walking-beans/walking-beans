@@ -194,7 +194,7 @@ function PathRoute() {
 
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom/>}/>
-                                <Route path="/chat/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
                                 <Route path="/TEST/chattingroom" element={<AdminChattingroomTest/>}/>
 

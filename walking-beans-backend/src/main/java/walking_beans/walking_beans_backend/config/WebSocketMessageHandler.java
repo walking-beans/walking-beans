@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,3 +63,4 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
         userSessions.entrySet().removeIf(entry -> entry.getValue().equals(session));
     }
 }
+*/

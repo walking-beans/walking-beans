@@ -117,7 +117,7 @@ import "../../css/admin/AdminMessage.css";
 
 import PictureButton from "../../assert/svg/adminNav/adminMessage-pictureButton.svg"
 
-function AdminMessage({userId}) {
+function AdminMessage({user}) {
 
     const {roomId} = useParams();
     const stompClient = useRef(null);
@@ -125,14 +125,30 @@ function AdminMessage({userId}) {
     const [messages, setMessages] = useState([]);
     // 사용자 입력을 저장할 변수
     const [inputValue, setInputValue] = useState('');
+    // input disabled
+    const [isDisabled, setIsDisabled] = useState(false);
+
     // 입력 필드에 변화가 있을 때마다 inputValue를 업데이트
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
+    const [previewImage, setPreviewImage] = useState(null);
+    // 이미지 input 에 변화가 있을 때마다
+    const handleImgChange = (event) => {
+        const file = event.target.files[0];
+        setInputValue("");
+        setIsDisabled(true);
+        console.log(file);
+        if (file && file.type.startsWith("image/")) {
+            console.log("image/");
+            setPreviewImage(URL.createObjectURL(file));
+        }
+    }
+
     // 웹소켓 연결 설정
     const connect = () => {
-        const socket = new WebSocket("ws://localhost:7070/ws/TEST");
+        const socket = new WebSocket("ws://localhost:7070/ws");
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
@@ -150,8 +166,9 @@ function AdminMessage({userId}) {
     };
 
     useEffect(() => {
+        console.log("user : ", user);
         connect();
-        apiRiderService.getChattingListTest(1, setMessages);
+        apiRiderService.getChattingMessageList(1, setMessages);
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, []);
@@ -167,22 +184,45 @@ function AdminMessage({userId}) {
             };
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
             setInputValue('');
+            return;
+        } else if (stompClient.current && previewImage) {
+            /*const reader = new FileReader();
+            reader.readAsDataURL(previewImage);
+
+            const body = {
+                roomId : roomId,
+                userId : 1,
+                messageRole : 2,
+                messageContent : previewImage.name,
+                data: reader.result,
+            };
+            stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));*/
+            alert("이미지 삽입");
+            // 이미지 미리보기 없애기
+            setPreviewImage(null);
+            // input disabled 해제하기
+            setIsDisabled(false);
+            return;
         }
+        alert("메세지를 작성해주세요");
     };
 
     return (
         <div className="admin-chattingroom-base">
             <ul>
-
                 {/* 메시지 리스트 출력 */}
-                {messages.map((item, index) => (
+                {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={(false) ? "" : ""}
+                        className={(msg.userId === 1) ? "" : ""}
                     >
-                        {item.messageContent}
+                        <p>{msg.userName}</p>
+                        <p>{msg.messageContent}</p>
                     </div>
                 ))}
+                <div className="admin-message-previewImage">
+                    {previewImage ? <div><img src={previewImage} /></div> : <div></div>}
+                </div>
                 {/* 입력 필드 */}
                 <div className="col-12 admin-message-bottomdiv">
                     <input
@@ -190,8 +230,10 @@ function AdminMessage({userId}) {
                         value={inputValue}
                         className="admin-message-input"
                         onChange={handleInputChange}
+                        disabled={isDisabled}
                     />
                     <div>
+                        <div id="img-preview"></div>
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
@@ -201,6 +243,7 @@ function AdminMessage({userId}) {
                             id="fileInput"
                             type="file"
                             style={{display: "none"}}
+                            onChange={handleImgChange}
                         />
                         {/* 메시지 전송, 메시지 리스트에 추가 */}
                         <button

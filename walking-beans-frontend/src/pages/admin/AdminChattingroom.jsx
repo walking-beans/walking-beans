@@ -166,7 +166,7 @@ const AdminChattingroom = () => {
     }
     // 웹소켓 연결 설정
     const connect = () => {
-        const socket = new WebSocket("ws://localhost:7070/ws/TEST");
+        const socket = new WebSocket("ws://localhost:7070/ws");
         console.log("✅ WebSocket Connected.");
         setReceiver();
         stompClient.current = Stomp.over(socket);
@@ -202,29 +202,31 @@ const AdminChattingroom = () => {
 
     return (
         <div>
-            <div>
-                <button>
-                    {leftButtonValue}
-                </button>
-                <button>
-                    {rightButtonValue}
-                </button>
-            </div>
-            <div>
-                {Array.isArray(chattingRoom) ? (
-                    chattingRoom.map((room, index) => (
-                        <div
-                            key={index}
-                        >
-                            <p>{room.roomId}</p>
-                            <p>{room.orderId}</p>
-                            <p>{room.lastMessage}</p>
-                        </div>
-                    ))
-                ) : (
-                    <p>채팅 기록이 없습니다.</p>
-                )}
-            </div>
+            <ul>
+                <div>
+                    <button>
+                        {leftButtonValue}
+                    </button>
+                    <button>
+                        {rightButtonValue}
+                    </button>
+                </div>
+                <div>
+                    {Array.isArray(chattingRoom) ? (
+                        chattingRoom.map((room, index) => (
+                            <div
+                                key={index}
+                            >
+                                <p>{room.roomId}</p>
+                                <p>{room.orderId}</p>
+                                <p>{room.lastMessage}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>채팅 기록이 없습니다.</p>
+                    )}
+                </div>
+            </ul>
         </div>
     );
 };
