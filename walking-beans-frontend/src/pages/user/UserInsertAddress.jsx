@@ -9,6 +9,8 @@ const UserInsertAddress = ({ user }) => {
     const [currentUser, setCurrentUser] = useState(user);
     const [savedAddresses,setSavedAddresses] = useState([]); // 저장된 주소 목록
     const [showForm, setShowForm] = useState(false);
+    const [addressLatitude, setLatitude] = useState("");
+    const [addressLongitude, setLongitude] = useState("");
 
     useEffect(() => {
         console.log("user props:", user);
@@ -63,6 +65,22 @@ const UserInsertAddress = ({ user }) => {
         new window.daum.Postcode({
             oncomplete: function (data) {
                 setAddress(data.roadAddress); // 선택한 도로명 주소 저장
+
+                // 카카오 주소 -> 좌표 변환 API 호출
+                const geocoder = new window.daum.maps.services.Geocoder();
+                geocoder.addressSearch(data.roadAddress, function (result, status) {
+                    if (status === window.daum.maps.services.Status.OK) {
+                        const latitude = result[0].y;  // 위도
+                        const longitude = result[0].x; // 경도
+                        console.log("위도:", latitude, "경도:", longitude);
+
+                        // 상태 저장 (추가 가능)
+                        setLatitude(latitude);
+                        setLongitude(longitude);
+                    } else {
+                        console.error("좌표 변환 실패:", status);
+                    }
+                });
             },
         }).open();
     };
@@ -80,6 +98,8 @@ const UserInsertAddress = ({ user }) => {
                 addressName,
                 address,
                 detailedAddress,
+                addressLatitude,
+                addressLongitude,
             })
             .then((res) => {
                 alert("주소가 저장되었습니다!");
@@ -99,11 +119,18 @@ const UserInsertAddress = ({ user }) => {
             addressId: addressId
         })
             .then(() => {
+
                 alert("기본 주소가 변경되었습니다.");
+
+                localStorage.setItem("addressUpdated", "true");
+                window.dispatchEvent(new Event("addressUpdated"));  // 다른 컴포넌트에도 알림 전송
+
                 fetchUserAddresses(currentUser?.user_id);  // 목록 갱신
             })
             .catch((error) => {
                 console.error("기본 주소 변경 오류:", error);
+                console.log("전송할 userId:", currentUser?.user_id);
+                console.log("전송할 addressId:", addressId);
             });
     };
 
@@ -148,7 +175,7 @@ const UserInsertAddress = ({ user }) => {
             <ul>
                 {savedAddresses.length > 0 ? (
                     savedAddresses.map((addr) => (
-                        <li key={addr.id} onClick={() => handleSetPrimaryAddress(addr.id)}>
+                        <li key={addr.id} onClick={() => handleSetPrimaryAddress(addr.addressId)}>
                             <strong>{addr.addressName}</strong>: {addr.address}
                             <small>{addr.detailedAddress}</small>
                             {addr.addressRole === 1 && <span> (기본 주소) </span>}

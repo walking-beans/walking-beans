@@ -58,6 +58,7 @@
                m.user_id,
                mo.option_name,
                mo.option_price,
+               mo.option_content,
                m.menu_name,
                m.menu_price
         FROM carts c
