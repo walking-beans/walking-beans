@@ -15,7 +15,7 @@
         WHERE cart_id = #{cartId}
     </delete>
 
-    <!-- 선택한 상품 개수 가져오기 mapper 추가 필요 -->
+    <!-- 선택한 상품 개수 가져오기 -->
     <select id="getCartQuantityByOrderId">
         SELECT count(cart_quantity) as total_quntity
         FROM carts

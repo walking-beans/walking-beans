@@ -168,7 +168,45 @@ const apiUserOrderService = {
                 .catch((err) => {
                     console.log("주소 불러오기 실패 : ", err);
                 })
-        }
+        },
+
+    // 주문내역 내 오더 정보 가져오기
+    getOrderStatusByOrderId:
+    function (orderId) {
+        return axios
+        .get(`${API_ORDER_URL}/info/${orderId}`)
+        .then(
+            (res) => {
+                console.log("주문내역 가져오기 성공 : ", res.data);
+                return res.data;
+            }
+        )
+        .catch(
+            (err) => {
+                console.log("주문내역 가져오기 실패 : ", err);
+                throw err;
+            }
+        )
+    },
+
+    // 장바구니 총 상품 개수 가져오기
+    getCartQuantityByOrderId:
+    function (orderId) {
+        axios
+        .get(`${API_CART_URL}/quantity/${orderId}`)
+        .then(
+            (res) => {
+                console.log("상품 개수 : ",res.data);
+                return res.data;
+            }
+        )
+        .catch(
+            (err) => {
+                console.log("상품 개수 가져오기 오류 : ", err)
+            }
+        )
+    },
+
 }
 
 

@@ -63,7 +63,6 @@ const UserPayment = () => {
                             type="radio"
                             className="user-order-btn-none"
                             checked={clicked === 'meetPayment'}
-                            readOnly
                         />
                         만나서 결제
                     </button>

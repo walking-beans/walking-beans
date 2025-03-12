@@ -4,7 +4,7 @@ import "../../css/Cart.css"
 import React from "react";
 
 
-const UserOrderMenuForm = ({cartId, menuName, menuPrice, optionName, optionPrice, handleDelete, optionContent}) => {
+const UserOrderMenuForm = ({cartId, menuName, menuPrice, optionPrice, handleDelete, optionContent}) => {
 
     const totalPrice = Number(menuPrice) + Number(optionPrice);
     return (
