@@ -5,7 +5,7 @@ import UserCart from "../user/UserCart";
 import "../../css/Order.css"
 import "../../css/Cart.css"
 import "../../css/Owner.css"
-import oneStar from "../../images/star/oneStar.svg"
+import oneStar from "../../assert/svg/starNav/oneStar.svg"
 import detailBtn from "../../images/user/detailbtn.svg"
 import UserMenuOptionModal from "./UserMenuOptionModal";
 import UserMenuCategory from "./UserMenuCategory";

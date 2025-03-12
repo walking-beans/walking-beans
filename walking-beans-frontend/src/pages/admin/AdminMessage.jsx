@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from 'react';
 import {useParams} from "react-router-dom";
 import apiRiderService from "../../components/rider/apiRiderService"; // SockJS 라이브러리
@@ -105,5 +106,114 @@ const AdminMessage = () => {
 };
 
 
+
+export default AdminMessage;
+*/
+import React, { useEffect, useState, useRef } from "react";
+import { Stomp } from "@stomp/stompjs";
+import apiRiderService from "../../components/rider/apiRiderService";
+import {useParams} from "react-router-dom";
+import "../../css/admin/AdminMessage.css";
+
+import PictureButton from "../../assert/svg/adminNav/adminMessage-pictureButton.svg"
+
+function AdminMessage({userId}) {
+
+    const {roomId} = useParams();
+    const stompClient = useRef(null);
+    // 채팅 내용들을 저장할 변수
+    const [messages, setMessages] = useState([]);
+    // 사용자 입력을 저장할 변수
+    const [inputValue, setInputValue] = useState('');
+    // 입력 필드에 변화가 있을 때마다 inputValue를 업데이트
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+    };
+
+    // 웹소켓 연결 설정
+    const connect = () => {
+        const socket = new WebSocket("ws://localhost:7070/ws/TEST");
+        console.log("✅ WebSocket Connected.");
+        stompClient.current = Stomp.over(socket);
+        stompClient.current.connect({}, () => {
+            stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
+                const newMessage = JSON.parse(message.body);
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+            });
+        });
+    };
+    // 웹소켓 연결 해제
+    const disconnect = () => {
+        if (stompClient.current) {
+            stompClient.current.disconnect();
+        }
+    };
+
+    useEffect(() => {
+        connect();
+        apiRiderService.getChattingListTest(1, setMessages);
+        // 컴포넌트 언마운트 시 웹소켓 연결 해제
+        return () => disconnect();
+    }, []);
+
+    //메세지 전송
+    const sendMessage = () => {
+        if (stompClient.current && inputValue) {
+            const body = {
+                roomId : roomId,
+                userId : 1,
+                messageRole : 1,
+                messageContent : inputValue
+            };
+            stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
+            setInputValue('');
+        }
+    };
+
+    return (
+        <div className="admin-chattingroom-base">
+            <ul>
+
+                {/* 메시지 리스트 출력 */}
+                {messages.map((item, index) => (
+                    <div
+                        key={index}
+                        className={(false) ? "" : ""}
+                    >
+                        {item.messageContent}
+                    </div>
+                ))}
+                {/* 입력 필드 */}
+                <div className="col-12 admin-message-bottomdiv">
+                    <input
+                        type="text"
+                        value={inputValue}
+                        className="admin-message-input"
+                        onChange={handleInputChange}
+                    />
+                    <div>
+                        <label htmlFor="fileInput"
+                            className="admin-message-pictureBtn"
+                        >
+                            <img src={PictureButton}/>
+                        </label>
+                        <input
+                            id="fileInput"
+                            type="file"
+                            style={{display: "none"}}
+                        />
+                        {/* 메시지 전송, 메시지 리스트에 추가 */}
+                        <button
+                            className="admin-message-button"
+                            onClick={sendMessage}
+                        >
+                            전송
+                        </button>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    );
+}
 
 export default AdminMessage;
