@@ -14,6 +14,7 @@ import searchIcon from "../../assert/svg/userNav/search.svg";
 import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import userIcon from "../../assert/svg/user.svg";
+import apiUserService from "../../service/apiUserService";
 
 const UserHeader = ({user}) => {
     const location = useLocation();
@@ -27,6 +28,11 @@ const UserHeader = ({user}) => {
     const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
     const [alretSoket, setAlertSocket] = useState(null); // 웹소켓 상태
+
+    const [userAddress, setUserAddress] = useState(null);  // 주소 상태 관리
+    const [userId, setUserId] = useState(null);  // userId 상태
+    const [userLat, setUserLat] = useState(null);
+    const [userLng, setUserLng] = useState(null);
 
     // 웹소켓 열기
     useEffect(() => {
@@ -122,10 +128,15 @@ const UserHeader = ({user}) => {
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
+    // 기본주소 변경하는 함수
+    const fetchPrimaryAddress = () => {
+        apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
+    };
+
 
     // /user/search/map
     const handleOpenSearch = () => {
-        navigate("/user/search/map",{ state: { userLocation, stores: displayStores } });
+        navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
     //알람 토글

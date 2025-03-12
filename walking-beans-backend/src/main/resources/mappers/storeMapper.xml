@@ -157,4 +157,17 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
         WHERE O.rider_id_on_duty IS NULL;
     </select>
     <!-- ************************************************************************************* -->
+
+    <!--사용자 위치 기준 반경 10km 내의 매장 조회 -->
+    <select id="findNearbyStores" resultType="walking_beans.walking_beans_backend.model.dto.Stores">
+        SELECT * FROM (
+        SELECT s.*,
+        (6371 * acos(cos(radians(#{lat})) * cos(radians(s.store_latitude))
+        * cos(radians(s.store_longitude) - radians(#{lng}))
+        + sin(radians(#{lat})) * sin(radians(s.store_latitude)))) AS distance
+        FROM Stores s
+        ) AS store_distance
+        WHERE <![CDATA[ distance <= #{radius} ]]>  <!--  `<![CDATA[]]>` 사용 xml 파일에서 < 는 태그표시로 오해받음 -->
+        ORDER BY distance ASC;
+    </select>
 </mapper>
