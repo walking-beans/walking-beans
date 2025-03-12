@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import walking_beans.walking_beans_backend.model.dto.ChatMessage;
 import walking_beans.walking_beans_backend.model.dto.Message;
-import walking_beans.walking_beans_backend.service.chatService.ChatService;
+import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +19,7 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
 
     private static final ConcurrentHashMap<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
     private final MessageService messageService;
+    private final ChattingRoomServiceImpl chattingRoomService;
 
     // private final ObjectMapper objectMapper = new ObjectMapper();
     private final ObjectMapper objectMapper = new ObjectMapper()
@@ -41,17 +41,19 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
 
         // 메시지 DB 저장
         messageService.insertMessageByRoomId(message);
+        // chattingroom lastMessage update
+        if (message.getMessageRole() != 2) {
+            chattingRoomService.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
+        }
 
         // 수신자에게 메시지 전송
         if (message.getUserId() != 0 && userSessions.containsKey(String.valueOf(message.getUserId()))) {
             WebSocketSession receiverSession = userSessions.get(String.valueOf(message.getUserId()));
             receiverSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-        } else {
-            // 수신자가 없으면 전체 전송 (그룹 채팅처럼)
-            for (WebSocketSession s : userSessions.values()) {
-                s.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-            }
         }
+
+
+
     }
 
     @Override
