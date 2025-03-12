@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
+import apiUserService from "../service/apiUserService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
@@ -19,6 +20,11 @@ const UserHome = ({ user: initialUser }) => {
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
+
+    useEffect(() => {
+        console.log("받은 사용자 위치:", userLocation);
+
+    }, [userLocation]);
 
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
@@ -56,23 +62,7 @@ const UserHome = ({ user: initialUser }) => {
 
     // 기본주소 변경하는 함수
     const fetchPrimaryAddress = () => {
-        if (userId) {
-            axios.get(`http://localhost:7070/api/addresses/${userId}`)
-                .then((res) => {
-                    console.log("API 응답 데이터:", res.data);
-                    const primaryAddress = res.data.find(addr => addr.addressRole === 1);
-                    if (primaryAddress) {
-                        setUserAddress(primaryAddress);
-                        setUserLat(primaryAddress.addressLatitude);
-                        setUserLng(primaryAddress.addressLongitude);
-                    } else {
-                        console.log("기본 주소가 없습니다.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("주소 목록 불러오기 오류:", error);
-                });
-        }
+       apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
     };
 
     useEffect(() => {
@@ -222,7 +212,7 @@ const UserHome = ({ user: initialUser }) => {
     };
 
     const handleMapClick = () => {
-        navigate("user/search/map", { state: { userLocation, stores: displayStores } });
+        navigate("user/search/map", { state: { lat: userLat, lng: userLng }  });
     };
 
 

@@ -28,6 +28,9 @@ public interface StoreService {
     // 매장정보 삭제하기
     void deleteStores(long storeId);
 
+    // 위도경도 10km 매장
+    List<Stores> findNearbyStores(double lat, double lng);
+
     /**************************************** Leo ****************************************/
     // 매장 주소 가져오기 by order id
     Stores getStoreAddressByOrderId(long orderId);
