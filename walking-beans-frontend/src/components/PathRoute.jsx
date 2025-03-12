@@ -5,7 +5,7 @@ import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuCategory from "../pages/owner/StoreMenuCategory";
+import UserMenuCategory from "../pages/user/UserMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -42,9 +42,12 @@ import AdminSignUp from "../pages/admin/AdminSignUp";
 import UserOrdering from "../pages/user/UserOrdering";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
+import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
+import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
+import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
 
-function PathRoute () {
+function PathRoute() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -73,7 +76,7 @@ function PathRoute () {
         };
     }, []);
 
-    return(
+    return (
         <div className="layout-container">
             <BrowserRouter>
                 <HeaderRoute user={user}/>
@@ -85,26 +88,29 @@ function PathRoute () {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/>
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
                                 {/* 유저 관련 라우트 */}
-
-                                {/* order 페이지 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
                                 {/* 메뉴 클릭 했을 때 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
                                 {/* 장바구니 담았을 때 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
+                                {/* 주문하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering/>}/>
+                                {/* 결제하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
-                                  
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/ordering" element={<UserOrdering/>}/>
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
+
+                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
@@ -191,6 +197,8 @@ function PathRoute () {
                                 <Route path="/chat/message/:roomId" element={<AdminMessage/>}/>
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
                                 <Route path="/TEST/chattingroom/:roomId" element={<AdminChattingroomTest/>}/>
+
+                                <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
                         </div>
                     </div>

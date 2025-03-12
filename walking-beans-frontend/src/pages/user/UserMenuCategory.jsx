@@ -1,14 +1,14 @@
-import StoreMenuForm from "./StoreMenuForm";
 import React from "react";
+import UserMenuForm from "./UserMenuForm";
 
-const StoreMenuCategory = ({ categoryName, menus, onMenuClick }) => {
+const UserMenuCategory = ({ categoryName, menus, onMenuClick }) => {
     return (
         <div className="menu-category-container">
             <div className="user-order-hr" alt="구분선"></div>
             <h3 className="user-cart-bordtext">{categoryName}</h3>
             <div className="user-order-menuinfo">
                 {menus.map((menu) => (
-                    <StoreMenuForm
+                    <UserMenuForm
                         key={menu.menuId}
                         menuName={menu.menuName}
                         menuPrice={menu.menuPrice}
@@ -20,4 +20,4 @@ const StoreMenuCategory = ({ categoryName, menus, onMenuClick }) => {
     );
 }
 
-export default StoreMenuCategory;
+export default UserMenuCategory;

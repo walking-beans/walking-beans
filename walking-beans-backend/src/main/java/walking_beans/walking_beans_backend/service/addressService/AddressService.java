@@ -19,7 +19,10 @@ public interface AddressService {
     Address getPrimaryAddressByUserId(Long userId);
 
     // 대표 주소 변경
-    void updatePrimaryAddress(long userId, long addressId);
+    void updatePrimaryAddress(long userId,long addressId);
+
+    // 모든 주소 0으로 만들기
+    void resetAddressRoles(long userId);
 
 
     /********** LEO **********/

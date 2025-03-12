@@ -12,21 +12,20 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmService;
-import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class WebSocketChatHandler extends TextWebSocketHandler {
+public class WebSocketChatAlertHandler extends TextWebSocketHandler {
 
     private static final Set<WebSocketSession> sessions = new HashSet<>();
     private final AlarmService alarmService;
     private final WebSocketAlertHandler alertHandler;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public WebSocketChatHandler(AlarmService alarmService, WebSocketAlertHandler alertHandler) {
+    public WebSocketChatAlertHandler(AlarmService alarmService, WebSocketAlertHandler alertHandler) {
         this.alarmService = alarmService;
         this.alertHandler = alertHandler;
     }
@@ -54,7 +53,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         }
 
         // 알림 전송
-        alertHandler.sendAlert("📩 새로운 채팅이 도착했습니다: " + receivedMessage.getMessageContent());
+        //alertHandler.sendAlert("📩 새로운 채팅이 도착했습니다: " + receivedMessage.getMessageContent());
     }
 
     @Override

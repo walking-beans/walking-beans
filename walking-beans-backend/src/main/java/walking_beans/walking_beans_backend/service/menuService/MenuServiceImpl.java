@@ -53,4 +53,10 @@ public class MenuServiceImpl implements MenuService {
     public void deleteMenu(long menuId) {
         menuMapper.deleteMenu(menuId);
     }
+
+    // 대표메뉴 정보 가져오기
+    @Override
+    public List<Menu> findMainMenuByStoreId(long storeId) {
+        return menuMapper.findMainMenuByStoreId(storeId);
+    }
 }
