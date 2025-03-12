@@ -225,7 +225,7 @@ function AdminMessage({user}) {
                                 <div
                                     className="admin-message-notUserInput "
                                 >
-                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} />{msg.userName}</p>
+                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
                                     <div>{msg.messageContent}</div>
                                 </div>
                             ) : (
@@ -251,8 +251,7 @@ function AdminMessage({user}) {
                         onChange={handleInputChange}
                         disabled={isDisabled}
                     />
-                    <div>
-                        <div id="img-preview"></div>
+                    <div className="admin-message-ImgAndBtnDiv">
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
