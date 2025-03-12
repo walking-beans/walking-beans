@@ -13,4 +13,6 @@ public interface AlarmMapper {
     void updateLastMessage(@Param("roomId") Long roomId, @Param("message") String message);
 
     List<Alarms> getUserAlarmList(int userId);
+
+    void deleteAllAlarm(byte userId);
 }

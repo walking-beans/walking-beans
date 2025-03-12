@@ -21,4 +21,11 @@
         FROM Alarms
         WHERE user_id = #{userId}
     </select>
+
+    <!-- 알람 모두 지우기 -->
+    <delete id="deleteAllAlarm">
+        DELETE
+        FROM Alarms
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>

@@ -49,6 +49,11 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
+    public void deleteAllAlarm(byte userId) {
+        alarmMapper.deleteAllAlarm(userId);
+    }
+
+    @Override
     public void sendAlarm(Alarms alarm) {
         alarmMapper.insertAlarm(alarm);
     }

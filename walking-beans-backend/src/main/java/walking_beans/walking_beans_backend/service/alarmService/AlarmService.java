@@ -13,4 +13,5 @@ public interface AlarmService {
 
     List<Alarms> getUserAlarmList(int userId);
 
+    void deleteAllAlarm(byte userId);
 }

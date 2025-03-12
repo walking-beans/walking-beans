@@ -25,4 +25,9 @@ public class AlarmAPIController {
     public List<Alarms> getUserAlarm(@PathVariable("userId") int userId) {
         return alarmService.getUserAlarmList(userId);
     }
+
+    @DeleteMapping("/api/alarm/delete/{userId}")
+    public void deleteAllAlarms(@PathVariable("userId") byte userId) {
+        alarmService.deleteAllAlarm(userId);
+    }
 }
