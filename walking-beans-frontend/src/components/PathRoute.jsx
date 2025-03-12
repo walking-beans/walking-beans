@@ -85,7 +85,7 @@ function PathRoute () {
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
 
-                                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+                                <Route path="/mypage" element={<AdminMypage/>}/>
 
 
                                  

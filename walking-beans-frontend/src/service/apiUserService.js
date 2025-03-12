@@ -91,6 +91,42 @@ const apiUserService = {
                     }
                 )
         },
+
+    mypage:
+        function (userId, callback, errorCallback) {
+            axios
+                .get(`${USER_API_URL}/mypage/${userId}`)
+                .then((res) => {
+                    callback(res.data);
+                })
+                .catch((err) => {
+                    console.error("사용자 정보를 불러오는 중 오류 발생:", err);
+                    errorCallback("사용자 정보를 불러오는 데 실패했습니다.");
+                });
+        },
+
+    uploadProfileImage:
+        function (userId, file, callback, errorCallback) {
+        const formData = new FormData();
+        formData.append("프로필 사진",file);
+
+        axios
+            .post(`${USER_API_URL}/mypage/${userId}`, formData, {
+
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((res) => {
+                callback(res.data);
+            })
+            .catch((err) => {
+                console.error("프로필 이미지 업로드 중 오류 발생:", err);
+                errorCallback("프로필 이미지를 업로드하는 데 실패했습니다.");
+            });
+        },
+
+
 }
 
 export default apiUserService;

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.util.HashMap;
@@ -75,4 +76,38 @@ public class UserAPIController {
         return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
     }
     */
+
+    // 회원정보 수정
+    @PutMapping("/infoCorrection")
+    public void updateInfoCorrection(@RequestParam("userId") long userId,
+                                     @RequestParam("userPhone") String userPhone) {
+        userService.updateUserInfo(userId,userPhone);
+    }
+
+
+//    @GetMapping("/admin/mypage/{userId}")
+//    public ResponseEntity<?> getMyPage(@RequestParam("userId") Long userId) {
+//        Users user = userService.selectUserInfo(userId);  // ✅ userId를 기반으로 사용자 정보 조회
+//
+//        if (user == null) {
+//            return ResponseEntity.status(404).body("User not found");
+//        }
+//
+//        return ResponseEntity.ok(user);
+//    }
+
+    @GetMapping("/mypage/{userId}")  // ✅ userId를 PathVariable로 받음
+    public ResponseEntity<?> getMyPage(@PathVariable("userId") Long userId) {
+        System.out.println("🔍 요청된 userId: " + userId);  // ✅ userId 확인 로그
+        Users user = userService.selectUserInfo(userId);
+
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        return ResponseEntity.ok(user);
+    }
 }
+
+
+
