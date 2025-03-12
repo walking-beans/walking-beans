@@ -16,8 +16,12 @@ const MenuOptionForm = () => {
             alert('최소한 하나의 폼은 남아있어야 합니다.')
             return;
         }
-        const values = [...formField].splice(index, 1);
+        const values = formField.filter((_, i)=> i !== index); // 인덱스가 일치하지 않은 요소만 남김
         setFormFields(values);
+        /*
+        const values = [...formField]; // 전체 배열 복사
+        values.splice(index, 1); // index으로 부터 하나만 제거
+        setFormFields(values);*/
     }
     // 인풋 입력시 name, value 값 넣기
     const handleInputChange = (index, e) =>{
@@ -71,7 +75,7 @@ const MenuOptionForm = () => {
             <button type={"button"}
                     onClick={handleAddFields}
                     >
-                필드더하기
+                옵션추가하기
             </button>
 
             <button type={'submit'}>
