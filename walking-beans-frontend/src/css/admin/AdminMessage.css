@@ -48,6 +48,13 @@
     border-radius: 10px;
 }
 
+.admin-message-previewImage img {
+    margin: 0 40px 5px 0;
+    float: right;
+    width: 20%;
+    border-radius: 5px;
+}
+
 .admin-message-pictureBtn:hover {
     cursor: pointer;
 }
