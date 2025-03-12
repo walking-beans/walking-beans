@@ -61,6 +61,12 @@ public class StoreServiceImpl implements StoreService {
         storeMapper.deleteStores(storeId);
     }
 
+    // 반경 10km 내의 매장 검색
+    @Override
+    public List<Stores> findNearbyStores(double lat, double lng) {
+        return storeMapper.findNearbyStores(lat, lng, 10.0);
+    }
+
     /**************************************** Leo ****************************************/
     // 매장 주소 가져오기 by order id
     @Override

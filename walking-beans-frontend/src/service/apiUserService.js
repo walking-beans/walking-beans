@@ -123,6 +123,26 @@ const apiUserService = {
                     }
                 )
         },
+    primaryAddress:
+    function (userId,setUserAddress,setUserLat,setUserLng){
+        if (userId) {
+            axios.get(`http://localhost:7070/api/addresses/${userId}`)
+                .then((res) => {
+                    console.log("API 응답 데이터:", res.data);
+                    const primaryAddress = res.data.find(addr => addr.addressRole === 1);
+                    if (primaryAddress) {
+                        setUserAddress(primaryAddress);
+                        setUserLat(primaryAddress.addressLatitude);
+                        setUserLng(primaryAddress.addressLongitude);
+                    } else {
+                        console.log("기본 주소가 없습니다.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("주소 목록 불러오기 오류:", error);
+                });
+        }
+    },
 }
 
 export default apiUserService;

@@ -77,6 +77,20 @@ public class StoreAPIController {
         return storeService.searchStore(keyword);
     }
 
+    /**
+     * 사용자 위치(lat, lng) 기준으로 주변 매장 검색
+     * @param lat
+     * @param lng
+     * @return
+     */
+    @GetMapping("/nearby")
+    public ResponseEntity<List<Stores>> findNearbyStores(
+            @RequestParam double lat,
+            @RequestParam double lng) {
+        List<Stores> nearbyStores = storeService.findNearbyStores(lat, lng);
+        return ResponseEntity.ok(nearbyStores);
+    }
+
     /**************************************** Leo ****************************************/
     /**
      * 매장 주소 가져오기 by order id
