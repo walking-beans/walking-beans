@@ -80,7 +80,7 @@ public class MenuAPIController {
      *      * @param menuCategory
      *      * @param menuPictureUrl
      */
-    @PostMapping("/{menuId}")
+    @PutMapping("/{menuId}")
     public void updateMenu(@PathVariable long menuId,
                            @RequestParam("menuName") String menuName,
                            @RequestParam("menuPrice") int menuPrice,

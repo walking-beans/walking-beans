@@ -10,6 +10,8 @@ public class WebConfig implements WebMvcConfigurer {
     // config.properties 에 작성한 파일 저장 경로 설정
     @Value("${upload-img}")
     private String uploadPath;
+
+
     // 이미지를 처리할 때 1. static 폴더 아래 이미지
     //                    2. 업로드 폴더 위치 이미지 설정
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

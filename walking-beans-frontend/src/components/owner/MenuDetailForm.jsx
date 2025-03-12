@@ -17,8 +17,14 @@ const MenuDetailForm = () => {
     const handlePreview = () => {
 
     }
+    // 1. id 값 가져오기
 
 
+    // 2. 인풋태그 내에 기본값 작성하기
+
+    // 3. 버튼눌렀을때 수정되는 버튼 설정
+
+    // 5. 이미지 미리보기 설정
 
 
 
@@ -28,7 +34,7 @@ const MenuDetailForm = () => {
     return (
         <div className="MenuDetailForm-container">
             <div className="image-preview">
-                <img id="imgPre" src=""/>
+                <img id="imgPre" src={"/images/menu/istockphoto-1396814518-1024x1024.jpg"}/>
                 <label htmlFor="imgPre">이미지 변경하기</label>
                 <input type="file" id="imgPre" accept="image/*"/>
             </div>

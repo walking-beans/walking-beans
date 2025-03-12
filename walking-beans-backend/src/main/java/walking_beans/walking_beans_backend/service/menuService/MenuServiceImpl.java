@@ -23,6 +23,7 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
+
     @Override
     public List<Menu> findAllMenu() {
 
@@ -56,13 +57,10 @@ public class MenuServiceImpl implements MenuService {
                            String menuCategory,
                            MultipartFile menuPictureUrl) {
 
-        String uuid = UUID.randomUUID().toString();
-
-        String originalFilename = menuPictureUrl.getOriginalFilename();
-        String fileExtension = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf("."));
+        String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
 
         try{
-            File file = new File(uploadImg+"/"+uuid+fileExtension);
+            File file = new File(uploadImg+uniqueFileName);
             menuPictureUrl.transferTo(file);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -74,7 +72,7 @@ public class MenuServiceImpl implements MenuService {
         menu.setMenuDescription(menuDescription);
         menu.setMenuCategory(menuCategory);
         menu.setMenuPrice(menuPrice);
-        menu.setMenuPictureUrl("/upload/"+ uuid + fileExtension);
+        menu.setMenuPictureUrl("/upload/"+ uniqueFileName);
 
         menuMapper.updateMenu(menu);
     }

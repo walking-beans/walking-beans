@@ -32,6 +32,8 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
+import MenuDetailForm from "./owner/MenuDetailForm";
+import MenuOptionForm from "./owner/MenuOptionForm";
 
 function PathRoute () {
     const [user, setUser] = useState(null);
@@ -150,7 +152,7 @@ function PathRoute () {
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionForm/>
+                                        <MenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/mystore" element={

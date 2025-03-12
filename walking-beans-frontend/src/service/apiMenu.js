@@ -37,14 +37,15 @@ const apiMenu = {
         },
     //메뉴 수정하기
     updateMenu:
-        function (id,postdata) {
+        function (id,postData) {
             axios
                 .post(`${API_MENU_URL}/${id}`,
-                    postdata,
+                    postData,
                     {
                         headers: {
                             "Content-Type": "multipart/form-data",
                         },
+
                     })
                 .then( (res)=>{
                     console.log(res.data)
