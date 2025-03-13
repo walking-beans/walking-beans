@@ -51,13 +51,16 @@ const SearchHeader = ({setSearchResults}) => {
     // 캐치 -> 데이터를 연결하는데 문제가 발생했습니다.
     const handleSearch = (e) => {
         if (e.key === "Enter" && searchQuery.trim()) {
-            apiStoreService.searchStore(e, searchQuery, sortType, userLocation, setDisplayStores, getDistance)
-                ?.then((response) => {
-                    console.log("🔍 검색 결과:", response); // ✅ 검색 결과 콘솔 확인
-                    setSearchResults(response.data);
-
+            apiStoreService.searchStore(e, searchQuery, sortType, userLocation, setDisplayStores)
+                .then((response) => {
+                    if (response.data.length > 0) {
+                        navigate("/user/search/map", { state: { searchResults: response.data } });
+                    } else {
+                        alert("검색 결과가 없습니다.");
+                    }
                 })
                 .catch((error) => {
+                    console.error("❌ 검색 오류:", error);
                 });
         }
     };
