@@ -45,6 +45,7 @@ import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
+import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
 import SearchHeader from "../pages/layout/SearchHeader";
 
@@ -98,7 +99,7 @@ function PathRoute() {
                                 <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
                                 <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
-                                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+                                <Route path="/mypage" element={<AdminMypage/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
@@ -118,6 +119,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
+                                <Route path="/user/delivery/status" element={<UserDeliveryStatus/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
