@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.Message;
+import walking_beans.walking_beans_backend.model.vo.admin.UserChattingRoom;
 import walking_beans.walking_beans_backend.model.vo.admin.UserMessage;
 import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 public class ChatController {
     private final MessageServiceImpl messageService;
+
     private final ChattingRoomServiceImpl chattingRoomService;
 
     private final SimpMessageSendingOperations messagingTemplate;
@@ -47,5 +49,12 @@ public class ChatController {
         log.info("getAllUserMessage roomId={}", roomId);
         List<UserMessage> messages = messageService.getAllUserMessage(roomId);
         return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/api/userchattingroom")
+    public ResponseEntity<List<UserChattingRoom>> getUserChattingRoomByUserId(@RequestParam("userId") long userId,
+                                                                              @RequestParam("receiverRelation") int receiverRelation) {
+        log.info("getUserChattingRoomByUserId userId={}, userRole={}", userId, receiverRelation);
+        return ResponseEntity.ok(chattingRoomService.getUserChattingRoomByUserId(userId, receiverRelation));
     }
 }
