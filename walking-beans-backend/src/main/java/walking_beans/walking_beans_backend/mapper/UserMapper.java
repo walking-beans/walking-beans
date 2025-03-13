@@ -26,6 +26,9 @@ public interface UserMapper {
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
 
+    // 프로필 수정
+    void updateUserProfile(Long userId, String userPictureUrl);
+
     // 마이페이지 사용자 정보 수정
     void updateUserInfo(Long userId, String userPhone);
 

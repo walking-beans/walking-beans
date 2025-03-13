@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import apiUserService from "../../service/apiUserService";
+import defaultProfileImage from '../../images/user/defaultProfileImage.png'
 
 const AdminMypage = () => {
     const navigate = useNavigate();
@@ -36,7 +36,7 @@ const AdminMypage = () => {
 
 
     //     if (!userId) return;
-    //     console.log("🟣 userId 설정 완료, API 요청 시작:", userId);
+    //     console.log("userId 설정 완료, API 요청 시작:", userId);
     //     axios.get(`/mypage/${userId}`)
     //         .then(response => {
     //             setUser(response.data);
@@ -101,7 +101,7 @@ const AdminMypage = () => {
             <h2>마이페이지</h2>
             <div className="profile-section">
                 <img
-                    src={user?.user_picture_url || "/default-profile.png"}
+                    src={user?.user_picture_url || defaultProfileImage}
                     alt="프로필 사진"
                     className="profile-picture"
                     onClick={() => document.getElementById("profileInput").click()}

@@ -108,16 +108,20 @@ const apiUserService = {
     uploadProfileImage:
         function (userId, file, callback, errorCallback) {
         const formData = new FormData();
-        formData.append("프로필 사진",file);
+        formData.append("file",file);
 
-        axios
-            .post(`${USER_API_URL}/mypage/${userId}`, formData, {
+            console.log("📢 업로드 요청 URL:", `${USER_API_URL}/mypage/${userId}/uploadProfile`);
+            console.log("📢 업로드할 파일:", file);
+
+            axios
+            .post(`${USER_API_URL}/mypage/${userId}/uploadProfile`, formData, {
 
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             })
             .then((res) => {
+                console.log("✅ 프로필 업로드 성공:", res.data);
                 callback(res.data);
             })
             .catch((err) => {

@@ -50,6 +50,13 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 프로필 사진 변경 -->
+    <update id="updateUserProfile">
+        UPDATE users
+        SET user_picture_url = #{userPictureUrl}
+        WHERE user_id = #{userId}
+    </update>
+
 
 
 
