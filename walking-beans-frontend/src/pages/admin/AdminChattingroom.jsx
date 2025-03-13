@@ -125,19 +125,20 @@ import {Stomp} from "@stomp/stompjs";
 import apiRiderService from "../../components/rider/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 
-const AdminChattingroom = () => {
+const AdminChattingroom = ({user}) => {
 
     const navigate = useNavigate();
     const stompClient = useRef(null);
     const [chattingRoom, setChattingRoom] = useState([]);
 
-    const userId = 1;
     const [receiverRelationLeft, setReceiverRelationLeft] = useState(2);
     const [receiverRelationRight, setReceiverRelationRight] = useState(3);
     const [receiverRelationLeftOrRight, setReceiverRelationLeftOrRight] = useState(false);
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
     const [msg, setMsg] = useState(null);
+
+    const userId = 1;
 
     // userId 에 따른 채팅목록 설정
     function setReceiver() {
@@ -168,7 +169,7 @@ const AdminChattingroom = () => {
     const connect = () => {
         const socket = new WebSocket("ws://localhost:7070/ws");
         console.log("✅ WebSocket Connected.");
-        setReceiver();
+
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
             stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
@@ -187,6 +188,7 @@ const AdminChattingroom = () => {
     };
 
     useEffect(() => {
+        setReceiver();
         connect();
         // apiRiderService.getChattingListTest(1, setMessages);
         apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft,
