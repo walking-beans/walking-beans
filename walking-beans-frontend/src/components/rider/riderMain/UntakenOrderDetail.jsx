@@ -27,7 +27,7 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
     return (
         <div>
             <p>{selectedStore?.storeName}</p>
-            <p>배달 금액 : {selectedStore?.incomeAmount.toLocaleString()}원</p>
+            <p>배달 금액 : 3,500원</p>
             <p>주문 시간 : {selectedStore?.orderCreateDate}</p>
             <p>가게 이미지 : {selectedStore?.storePictureUrl}</p>
             <p>라이더 - 가게 거리 : {(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>

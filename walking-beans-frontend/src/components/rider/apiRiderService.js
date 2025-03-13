@@ -141,11 +141,9 @@ const apiRiderService = {
             );
     },
 
-
-    /*** TEST ***/
-    getChattingListTest : function (roomId, setMessages) {
+    getChattingMessageList : function (roomId, setMessages) {
         axios
-            .get(`${API_URL}/chatting?roomId=${roomId}`)
+            .get(`${API_URL}/chattingmessage?roomId=${roomId}`)
             .then(
                 (res) => {
                     setMessages(res.data);
@@ -157,7 +155,25 @@ const apiRiderService = {
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             );
-    }
+    },
+
+    getUserChattingRoomByUserId : function (userId, receiverRelation, setChattingRoom) {
+        axios
+            .get(`${API_URL}/userchattingroom?userId=${userId}&receiverRelation=${receiverRelation}`)
+            .then(
+                (res) => {
+                    setChattingRoom(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+
 }
 
 export default apiRiderService;

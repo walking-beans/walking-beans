@@ -9,8 +9,9 @@ public interface AlarmService {
 
     void sendAlarm(Alarms alarm);
 
-    void sendMessage(Message message);
+    void sendMessage(Alarms alarms);
 
     List<Alarms> getUserAlarmList(int userId);
 
+    void deleteAllAlarm(byte userId);
 }
