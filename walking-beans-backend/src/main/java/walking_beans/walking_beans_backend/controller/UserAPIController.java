@@ -63,6 +63,12 @@ public class UserAPIController {
         }
     }
 
+    //유저 롤 업데이트
+    @PutMapping("/{userEmail}/{userRole}")
+    public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
+        userService.updateUserRole(userEmail, userRole);
+    }
+
     /************************* 이메일 인증 ****************************/
     /*
     @PostMapping("/sendCode")

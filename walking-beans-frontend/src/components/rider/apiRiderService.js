@@ -55,6 +55,7 @@ const apiRiderService = {
             )
     },
 
+
     getStoreInfoInRiderMain : function (setStores) {
         axios
             .get(`${API_URL}/store/riderMain`)
@@ -90,6 +91,89 @@ const apiRiderService = {
                 }
             )
     },
+
+    /***************** Chatting *****************/
+    getAllMessages : function (roomId, setChatBox) {
+        axios
+            .get(`${API_URL}/message?roomId=${roomId}`)
+            .then(
+                (res) => {
+                    setChatBox(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("메세지 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+    getAllChattingMember : function (roomId, userId, setMembers) {
+        axios
+            .get(`${API_URL}/chattingmember?roomId=${roomId}&userId=${userId}`)
+            .then(
+                (res) => {
+                    setMembers(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅 멤버를 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            )
+    },
+
+    getChattingRooms : function (userId, receiverRelation, setChattingRoom) {
+        axios
+            .get(`${API_URL}/chattingroom?userId=${userId}&receiverRelation=${receiverRelation}`)
+            .then(
+                (res) => {
+                    setChattingRoom(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+    getChattingMessageList : function (roomId, setMessages) {
+        axios
+            .get(`${API_URL}/chattingmessage?roomId=${roomId}`)
+            .then(
+                (res) => {
+                    setMessages(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+    getUserChattingRoomByUserId : function (userId, receiverRelation, setChattingRoom) {
+        axios
+            .get(`${API_URL}/userchattingroom?userId=${userId}&receiverRelation=${receiverRelation}`)
+            .then(
+                (res) => {
+                    setChattingRoom(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+
 }
 
 export default apiRiderService;

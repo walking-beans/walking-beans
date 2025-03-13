@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
+import UserMenuCategory from "../pages/user/UserMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -39,12 +39,24 @@ import UserMenuOption from "../pages/user/UserMenuOption";
 import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
 import AdminSignUp from "../pages/admin/AdminSignUp";
+import UserOrdering from "../pages/user/UserOrdering";
+import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
+import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
+import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
+import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
+import AdminAlarmList from "../pages/admin/AdminAlarmList";
+
+import SearchHeader from "../pages/layout/SearchHeader";
+
+import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 
 
-
-function PathRoute () {
+function PathRoute() {
     const [user, setUser] = useState(null);
+
+    const [searchResults, setSearchResults] = useState([]);
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -59,6 +71,7 @@ function PathRoute () {
         }
 
         const handleStorageChange = () => {
+            console.log("localStorage.getItem : " + user)
             const updatedUser = localStorage.getItem("user");
             setUser(updatedUser ? JSON.parse(updatedUser) : null);
         };
@@ -70,9 +83,9 @@ function PathRoute () {
             window.removeEventListener("userChange", handleStorageChange);
             window.removeEventListener("storage", handleStorageChange);
         };
-    }, []);
+    }, [user]);
 
-    return(
+    return (
         <div className="layout-container">
             <BrowserRouter>
                 <HeaderRoute user={user}/>
@@ -84,39 +97,35 @@ function PathRoute () {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
+                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
-
-                                 
-
-
                                 {/* 유저 관련 라우트 */}
-
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                <Route path="/user/order/:storeId/:orderId/:cartId" element={<UserOrder/>}/>
-
-                                <Route path="/user/ordercart/:orderId/:cartId" element={<UserCart/>}/>
+                                {/* 메뉴 클릭 했을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
+                                {/* 장바구니 담았을 때 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
+                                {/* 주문하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering />}/>
+                                {/* 결제하기 페이지 */}
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-                                <Route path="/user/order/option" element={<UserMenuOptionModal/>}/>
-
-
-                                <Route path="/user/payment" element={<UserPayment/>}/>
-                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
-                                <Route path="/user/order/:storId" element={<StoreMenuForm/>}/>
+                                {/* ✅ `searchResults`를 `UserSearchMap`에 전달 */}
+                                <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
 
-
+                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
-                                    <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderMain/>
-                                    </ProtectedRoute>
+                                    <RiderMain/>
                                 }/>
                                 <Route path="/rider/ontheway" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
@@ -146,59 +155,61 @@ function PathRoute () {
 
                                 {/* 사장님 관련 라우트 */}
                                 <Route path="/owner" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menu" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menudetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
-                                        <StoreMenuDetail/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/owner/menuform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoption" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionDetail/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/mystore" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/order" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/revenue" element={
-                                    <ProtectedRoute allowedRoles={["store"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chattingroom/:userId" element={<AdminChattingroom/>}/>
-                                <Route path="/message/:roomId" element={<AdminMessage/>}/>
+                                <Route path="/chat/chattingroom" element={user ? <AdminChattingroom user={user} /> : <div>Loading...</div>}/>
+                                <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
+
+
+                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST />}/>
+                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest />}/>
+
+                                <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
                         </div>
                     </div>
@@ -206,6 +217,7 @@ function PathRoute () {
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
         </div>
+
     )
 }
 

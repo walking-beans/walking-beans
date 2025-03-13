@@ -12,7 +12,7 @@ const UserCart = ({cartId, menuName, menuPrice, optionName, optionPrice, handleD
             </div>
             <div className="user-cart-detailtext">{optionName}(+{Number(optionPrice).toLocaleString()})</div>
 
-            <button className="user-cart-remove" onDelete={() => handleDelete}>
+            <button className="user-cart-remove" onClick={() => handleDelete(cartId)}>
             <img src={orderCartDeleteBtnIcon} alt="장바구니 메뉴 삭제 버튼 아이콘"/>
             </button>
         </div>

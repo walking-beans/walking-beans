@@ -1,55 +1,39 @@
 import React, { useEffect, useState } from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import  "../../css/User.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
 import axios from "axios";
-import apiStoreService from "../../service/apiStoreService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
-const UserSearchMap = () => {
-    const orderId = useParams();
-    const cartId = useParams();
-    const storeId = useParams(1);
+const UserSearchMap = ({searchResults}) => {
     const location = useLocation();
-    const { userLocation, stores } = location.state || {};
+    const { lat, lng } = location.state || {};
     const [map, setMap] = useState(null);
+    const [stores, setStores] = useState([]);
     const [selectedStore, setSelectedStore] = useState(null);
-    const [storeList, setStoreList] = useState([]);
+    const [infoWindow, setInfoWindow] = useState(null);
+    const [markers, setMarkers] = useState([]); // ⭐ 마커 상태 추가
     const navigate = useNavigate();
 
-
-    // 거리 계산 함수 추가
-    const getDistance = (lat1, lng1, lat2, lng2) => {
-        if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
-
-        const R = 6371; // 지구 반지름 (km)
-        const dLat = (lat2 - lat1) * (Math.PI / 180);
-        const dLng = (lng2 - lng1) * (Math.PI / 180);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * (Math.PI / 180)) *
-            Math.cos(lat2 * (Math.PI / 180)) *
-            Math.sin(dLng / 2) *
-            Math.sin(dLng / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // 거리 (km)
-    };
-
-    // 가게 목록에 거리 추가
     useEffect(() => {
-        if (!userLocation || !stores) return;
+        console.log("📌 지도에 반영될 검색 결과:", searchResults); // ✅ 검색 결과 확인
+    }, [searchResults]);
 
-        const updatedStores = stores.map((store) => ({
-            ...store,
-            distance: getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude)
-        }));
-
-        updatedStores.sort((a, b) => a.distance - b.distance);
-        setStoreList(updatedStores);
-    }, [userLocation, stores]);
-
+    // 주변 매장 불러오기
     useEffect(() => {
-        if (!userLocation) return;
+        if (!lat || !lng) return;
+
+        axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
+            .then((res) => {
+                setStores(res.data);
+            })
+            .catch((error) => console.error("매장 정보 불러오기 오류:", error));
+    }, [lat, lng]);
+
+    //  카카오 지도 초기화
+    useEffect(() => {
+        if (!lat || !lng) return;
 
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -62,53 +46,77 @@ const UserSearchMap = () => {
                 if (!mapContainer) return;
 
                 const mapOption = {
-                    center: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                    center: new window.kakao.maps.LatLng(lat, lng),
                     level: 5,
                 };
-                const map = new window.kakao.maps.Map(mapContainer, mapOption);
-                setMap(map);
+                const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
+                setMap(newMap);
 
+                //  사용자 위치 마커 추가
                 const userMarkerImage = new window.kakao.maps.MarkerImage(
-                    `${userCurrentLocation}`,
+                    userCurrentLocation,
                     new window.kakao.maps.Size(40, 42),
                     { offset: new window.kakao.maps.Point(20, 42) }
                 );
 
                 new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                    map: map,
+                    position: new window.kakao.maps.LatLng(lat, lng),
+                    map: newMap,
                     title: "내 위치",
                     image: userMarkerImage,
-                });
-
-                storeList.forEach((store) => {
-                    const marker = new window.kakao.maps.Marker({
-                        position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
-                        map: map,
-                    });
-
-                    window.kakao.maps.event.addListener(marker, "click", () => {
-                        if (!map) return;
-
-                        map.setLevel(2);
-                        map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
-
-                        setSelectedStore(store);
-                    });
                 });
             });
         };
 
-
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLocation, storeList]);
-    // const storeId = 1;
-    const handleStore = () =>{
+    }, [lat, lng,searchResults]);
+
+    //  검색 결과 or 기본 매장 데이터로 지도 업데이트
+    useEffect(() => {
+
+        console.log("가져옴 : " + searchResults);
+        if (!map) return;
+
+
+        //  기존 마커 삭제
+        markers.forEach(marker => marker.setMap(null));
+        setMarkers([]);
+
+        //  표시할 매장 결정 (검색 결과 있으면 검색 결과, 없으면 전체 매장)
+        const displayStores = searchResults?.length > 0 ? searchResults : stores;
+        let newMarkers = [];
+
+        displayStores.forEach((store) => {
+            const marker = new window.kakao.maps.Marker({
+                position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
+                map: map,
+            });
+
+            const storeInfoWindow = new window.kakao.maps.InfoWindow({
+                content: `<div style="padding:5px;font-size:14px;">${store.storeName}</div>`,
+            });
+
+            window.kakao.maps.event.addListener(marker, "click", () => {
+                if (infoWindow) infoWindow.close();
+                storeInfoWindow.open(map, marker);
+                setInfoWindow(storeInfoWindow);
+                setSelectedStore(store);
+                map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+            });
+
+            newMarkers.push(marker);
+        });
+
+        setMarkers(newMarkers);
+    }, [searchResults, stores, map]);
+
+    // ✅ 매장 상세 정보 보기
+    const handleStore = () => {
+        if (!selectedStore?.storeId) return;
         navigate(`/user/order/${selectedStore.storeId}`);
-        console.log( "storeId 값 : " ,storeId);
-    }
+    };
 
     return (
         <div>
@@ -118,10 +126,9 @@ const UserSearchMap = () => {
                     <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
                         {selectedStore.storeName}
                     </h3>
-                    <img className="store-picture" src={selectedStore.storePictureUrl}/>
+                    <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장 이미지" />
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
-                    <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
-                    <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
+                    <p>{selectedStore.storeStatus} : {selectedStore.storeOperationHours}</p>
                 </div>
             )}
         </div>

@@ -1,5 +1,5 @@
 .user-cart-container {
-    width: 410px;
+    width: 100%;
     background-color: #F4EDDF;
     padding: 30px;
     border-radius: 30px;
@@ -17,10 +17,29 @@
     align-items: center;
 }
 
-.user-cart-title {
+.user-cart-pricetext {
+    font-size: 20px;
+    color: #5A3D21;
+    font-weight: bold;
+}
+
+.user-cart-bic-pricetext {
+    font-size: 23px;
+    color: #5A3D21;
+    font-weight: bold;
+}
+
+.user-title{
     font-size: 33px;
     font-weight: bold;
     color: #5A3D21;
+}
+
+.user-title-center {
+    font-size: 33px;
+    font-weight: bold;
+    color: #5A3D21;
+    text-align: center;
 }
 
 .user-cart-grid {
@@ -51,4 +70,9 @@
 
 .user-cart-container .user-cart-remove:hover {
     content: url("../images/user/orderCartDeleteBtnHover.svg");
+}
+
+.user-cart-remove {
+    border: none;
+    background: none;
 }

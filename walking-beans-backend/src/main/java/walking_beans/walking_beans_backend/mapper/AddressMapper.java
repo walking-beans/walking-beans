@@ -19,6 +19,12 @@ public interface AddressMapper {
     // 대표 주소 설정하기
     Address getPrimaryAddressByUserId(Long userId);
 
+    // 대표 주소 변경
+    void updatePrimaryAddress(long addressId);
+
+    // 모든 주소 0 으로 설정
+    void resetAddressRoles(long userId);
+
     /********** LEO **********/
     // 유저 대표 주소 가져오기 by order_id
     Address getUserMainAddress(long orderId, long userId);

@@ -23,6 +23,9 @@ public interface UserMapper {
     //회원가입 유무 확인
     int checkEmailExists(String email);
 
+    //유저 롤 업데이트
+    void updateUserRole(String userEmail, byte userRole);
+
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
 

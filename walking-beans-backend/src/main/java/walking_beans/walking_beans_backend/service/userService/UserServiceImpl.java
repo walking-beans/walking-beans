@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePw(userEmail, userPassword);
     }
 
+    @Override
+    public void updateUserRole(String userEmail, byte userRole) {
+        userMapper.updateUserRole(userEmail, userRole);
+    }
+
 
     /************************이메일 인증**************************/
     /*

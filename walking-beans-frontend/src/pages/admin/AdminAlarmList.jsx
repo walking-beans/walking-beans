@@ -1,81 +1,111 @@
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 
 const AdminAlarmList = () => {
-    const [notifications, setNotifications] = useState([]);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [unreadCount, setUnreadCount] = useState(0);
-    const [alertSocket, setAlertSocket] = useState(null);
-
+    const [userId, setUserId] = useState(0);
+    const [AlarmList, setAlarmList] = useState([]);
 
     useEffect(() => {
-        const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
+        // localStorage에서 user 객체를 가져온 후 JSON.parse로 객체로 변환
+        const localSession = localStorage.getItem("user");
 
-        wsAlert.onopen = () => {
-            console.log("✅ 알림 WebSocket 연결 성공");
-        };
-
-        wsAlert.onmessage = (event) => {
-            console.log("📩 새 알림 도착:", event.data);
-
-            // prevNotifications 를 통해 이전 배열의 내용을 복사해서 새로운 배열로 만들어서 내용추가
-            // 즉 이전 내용에서 추가하기 위한것임
-            // 채팅 타입으로 이벤트가 발생한 내용을 넣는다.
-            // const notifications = [
-            //     { message: "새로운 메시지가 도착했음", type: "채팅" },
-            //     { message: "두 번째 메시지", type: "채팅" }
-            // ]; 이런식
-            setNotifications((prevNotifications) => [
-                ...prevNotifications,
-                {message: event.data, type: "채팅"},
-            ]);
-
-            setUnreadCount((prevCount) => prevCount + 1);
-        };
-
-        //웹 소켓 연결 오류
-        wsAlert.onerror = (error) => {
-            console.error("🚨 WebSocket 오류:", error);
-        };
-
-        // 웹소켓 연결 종료
-        wsAlert.onclose = () => {
-            console.warn("❌ 알림 WebSocket 연결 종료");
-        };
-
-        setAlertSocket(wsAlert);
-
-        return () => wsAlert.close();
+        // user_id 추출
+        if (localSession) {
+            const parsedSession = JSON.parse(localSession);
+            setUserId(parsedSession.user_id);
+        }
     }, []);
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-        setUnreadCount(0);
-    };
+    useEffect(() => {
+        if (userId !== 0) {
+            axios
+                .get(`http://localhost:7070/api/chat/${userId}`)
+                .then((res) => {
+                    setAlarmList(res.data);
+                })
+                .catch((err) => {
+                    alert("백엔드에서 리스트를 가져오는데 실패했습니다.");
+                });
+        }
+    }, [userId]);
+
+    const deleteAllAlrams = () => {
+        const confirmed = window.confirm("모든 알림을 지우시겠습니까?");
+
+        if(confirmed) {
+            axios
+                .delete(`http://localhost:7070/api/alarm/delete/${userId}`)
+                .then(
+                    () => {
+                        setAlarmList([]); //리스트 비우기
+                        alert("삭제가 완료되었습니다.");
+                    }
+                )
+                .catch(
+                    (err) => {
+                        console.log("err: ", err);
+                        alert("백엔드에 문제가 생겼습니다.");
+                    }
+                )
+        }
+    }
+
     return (
-        <div>
-
-            <div onClick={toggleDropdown}>
-                🔔
-                {unreadCount > 0 && <span>{unreadCount}</span>}
-            </div>
-
-            {showDropdown && (
-                <div>
-                    <h4>📢 알림</h4>
-                    {notifications.length > 0 ? (
-                        notifications.map((noti, index) => (
-                            <div key={index}>
-                                <strong>{noti.type === "채팅" ? "💬 채팅" : "🔔 알림"}:</strong> {noti.message}
-                            </div>
-                        ))
-                    ) : (
-                        <p>알림이 없습니다.</p>
-                    )}
+        <div className="user-home-container">
+            {AlarmList.length === 0 ? (
+                <h3 style={style.NoAlarmList}>알람이 없습니다</h3>
+            ) : (
+                AlarmList.map((value, index) => (
+                    <div key={index}>
+                        <div style={style.AlarmList}>
+                            <h3>{value.alarmRole === 1
+                                ? "알람" : value.alarmRole === 2 ? "메시지" : ""}</h3>
+                            <p>{value.alarmContent}</p>
+                            <p>
+                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
+                                {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
+                            </p>
+                        </div>
+                    </div>
+                ))
+            )}
+            {AlarmList.length > 0 && (
+                <div style={style.AlarmDeleteContainer}>
+                    <button type={"submit"} onClick={deleteAllAlrams} style={style.AlarmDeleteBtn}>
+                        알림 모두 지우기
+                    </button>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
+// 메세지 발신인 띄우기
+// DB문제 해결 -> null 문제
 
+const style = {
+    AlarmList: {
+        border: "1px solid #5A3D21",
+        borderRadius: "35px",
+        margin: "20px",
+        textAlign: "center",
+        backgroundColor: "#FAF1D0",
+        padding: "8px",
+    },
+    NoAlarmList : {
+        textAlign: "center",
+        minHeight: "70vh",
+    },
+
+    AlarmDeleteContainer : {
+        textAlign: "right",
+    },
+
+    AlarmDeleteBtn : {
+
+    }
+}
 export default AdminAlarmList;

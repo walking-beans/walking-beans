@@ -10,6 +10,7 @@ import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.service.addressService.AddressServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -45,6 +46,7 @@ public class AddressAPIController {
     // 특정 userId의 주소 조회
     @GetMapping("/{userId}")
     public List<Address> getAddressByUserId(@PathVariable("userId") Long userId) {
+        log.info("불러오는 userId: {}", userId); // 로그 추가
         return addressService.getAddressByUserId(userId);
     }
 
@@ -59,6 +61,14 @@ public class AddressAPIController {
         return addressService.getPrimaryAddressByUserId(userId);
     }
 
+    // 기본 주소 변경 (PUT 요청)
+    @PutMapping("/updateRole")
+    public String updatePrimaryAddress(@RequestBody Map<String, Long> request) {
+        long userId = request.get("userId");
+        long addressId = request.get("addressId");
+        addressService.updatePrimaryAddress(userId,addressId);
+        return "기본 주소가 변경되었습니다.";
+    }
     /**************************************** LEO ****************************************/
 
     /**

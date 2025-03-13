@@ -9,7 +9,6 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
-    border-radius: 0 0 20px 20px;
 }
 
 .user-header-wrapper .custom-header {
@@ -139,6 +138,45 @@
 
 .user-header-wrapper .nav-logout-btn:hover {
     background-color: #5a3d21;
+}
+
+.user-header-wrapper .AlarmNotificationContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-header-wrapper .AlarmBadge {
+    position: absolute;
+    top: -1px;
+    right: +3px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.user-header-wrapper .AlarmDropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 250px;
+    background: #D2B595;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 9999;
+}
+
+.user-header-wrapper .AlarmNotificationItem {
+    border: 1px solid #ab7a44;
+    border-radius : 3%;
+    margin-top : 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding : 10px;
+    background-color :#F4EDDF;
 }
 
 @media (max-width: 768px) {

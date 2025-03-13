@@ -9,10 +9,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketAlertConfig implements WebSocketConfigurer {
 
-    private final WebSocketChatHandler chatHandler;
+    private final WebSocketChatAlertHandler chatHandler;
     private final WebSocketAlertHandler alertHandler;
 
-    public WebSocketAlertConfig(WebSocketChatHandler chatHandler, WebSocketAlertHandler alertHandler) {
+    public WebSocketAlertConfig(WebSocketChatAlertHandler chatHandler, WebSocketAlertHandler alertHandler) {
         this.chatHandler = chatHandler;
         this.alertHandler = alertHandler;
     }

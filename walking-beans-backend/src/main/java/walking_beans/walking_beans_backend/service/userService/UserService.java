@@ -16,6 +16,9 @@ public interface UserService {
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
+
+    //유저 롤 변경
+    void updateUserRole(String email, byte userRole);
     /*
         //랜덤 난수 생성
         String randomCode();

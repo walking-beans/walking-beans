@@ -18,4 +18,29 @@
         SET last_message = #{lastMessage}
         WHERE room_id = #{roomId}
     </update>
+
+    <select id="getUserChattingRoomByUserId">
+        WITH RankedMessages AS (
+            SELECT
+                CR.room_id,
+                CR.order_id,
+                M.message_content,
+                M.message_time,
+                U.user_name,
+                U.user_picture_url,
+                ROW_NUMBER() OVER (PARTITION BY CR.room_id ORDER BY M.message_time DESC) AS rn
+            FROM chattingroom CR
+                     INNER JOIN message M
+                                ON CR.room_id = M.room_id
+                     INNER JOIN chattingmember CM
+                                ON CR.room_id = CM.room_id
+                     INNER JOIN users U
+                                ON U.user_id = CM.room_receiver_id
+            WHERE CM.user_id = #{userId}
+              AND CM.receiver_relation = #{receiverRelation}
+        )
+        SELECT room_id, order_id, message_content, message_time, user_name, user_picture_url
+        FROM RankedMessages
+        WHERE rn = 1;
+    </select>
 </mapper>
