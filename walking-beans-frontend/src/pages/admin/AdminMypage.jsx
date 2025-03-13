@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import apiUserService from "../../service/apiUserService";
-import defaultProfileImage from '../../images/user/defaultProfileImage.png'
+import defaultProfileImage from '../../images/user/defaultProfileImage.jpeg'
 
 const AdminMypage = () => {
     const navigate = useNavigate();
