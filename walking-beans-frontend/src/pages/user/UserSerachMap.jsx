@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import  "../../css/User.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
 import axios from "axios";
-import apiStoreService from "../../service/apiStoreService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
-const UserSearchMap = () => {
+const UserSearchMap = ({searchResults}) => {
     const location = useLocation();
     const { lat, lng } = location.state || {};
     const [map, setMap] = useState(null);
-    const [selectedStore, setSelectedStore] = useState(null);
     const [stores, setStores] = useState([]);
+    const [selectedStore, setSelectedStore] = useState(null);
+    const [infoWindow, setInfoWindow] = useState(null);
+    const [markers, setMarkers] = useState([]); // ⭐ 마커 상태 추가
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log("📌 지도에 반영될 검색 결과:", searchResults); // ✅ 검색 결과 확인
+    }, [searchResults]);
 
-
-
-    // 대표 주소를 기준으로 주변 매장 불러오기
+    // 주변 매장 불러오기
     useEffect(() => {
         if (!lat || !lng) return;
 
@@ -29,18 +31,9 @@ const UserSearchMap = () => {
             .catch((error) => console.error("매장 정보 불러오기 오류:", error));
     }, [lat, lng]);
 
-    // 마커 클릭 시  해당 매장 정보 불러오기
+    //  카카오 지도 초기화
     useEffect(() => {
-        axios.get("http://localhost:7070/api/store")
-            .then((res) => {
-                setStores(res.data);
-                console.log("모든 매장 불러오기 성공:", res.data);
-            })
-            .catch((error) => console.error(" 매장 정보 불러오기 오류 : ", error));
-    }, []);
-
-    useEffect(() => {
-        if (!lat || !lng || stores.length === 0) return;
+        if (!lat || !lng) return;
 
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -59,7 +52,7 @@ const UserSearchMap = () => {
                 const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
                 setMap(newMap);
 
-                //  사용자 위치 마커
+                //  사용자 위치 마커 추가
                 const userMarkerImage = new window.kakao.maps.MarkerImage(
                     userCurrentLocation,
                     new window.kakao.maps.Size(40, 42),
@@ -72,44 +65,58 @@ const UserSearchMap = () => {
                     title: "내 위치",
                     image: userMarkerImage,
                 });
-
-                //  매장 마커 추가
-                stores.forEach((store) => {
-                    const marker = new window.kakao.maps.Marker({
-                        position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
-                        map: newMap,
-                    });
-
-                    window.kakao.maps.event.addListener(marker, "click", () => {
-                        if (!map) {
-                            console.warn("⚠️ 지도 객체가 없습니다.");
-                            return;
-                        }
-
-                        console.log("📍 마커 클릭 - 선택한 매장 정보:", store);
-                        setSelectedStore(store);
-                        console.log("🔄 상태 업데이트 요청됨:", store);
-
-                        map.setLevel(2);
-                        map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
-                    });
-                });
             });
         };
-
-
 
         return () => {
             document.head.removeChild(script);
         };
-    }, [lat, lng, stores]);
+    }, [lat, lng,searchResults]);
 
-    //  매장 상세 정보 보기
+    //  검색 결과 or 기본 매장 데이터로 지도 업데이트
+    useEffect(() => {
+
+        console.log("가져옴 : " + searchResults);
+        if (!map) return;
+
+
+        //  기존 마커 삭제
+        markers.forEach(marker => marker.setMap(null));
+        setMarkers([]);
+
+        //  표시할 매장 결정 (검색 결과 있으면 검색 결과, 없으면 전체 매장)
+        const displayStores = searchResults?.length > 0 ? searchResults : stores;
+        let newMarkers = [];
+
+        displayStores.forEach((store) => {
+            const marker = new window.kakao.maps.Marker({
+                position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
+                map: map,
+            });
+
+            const storeInfoWindow = new window.kakao.maps.InfoWindow({
+                content: `<div style="padding:5px;font-size:14px;">${store.storeName}</div>`,
+            });
+
+            window.kakao.maps.event.addListener(marker, "click", () => {
+                if (infoWindow) infoWindow.close();
+                storeInfoWindow.open(map, marker);
+                setInfoWindow(storeInfoWindow);
+                setSelectedStore(store);
+                map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+            });
+
+            newMarkers.push(marker);
+        });
+
+        setMarkers(newMarkers);
+    }, [searchResults, stores, map]);
+
+    // ✅ 매장 상세 정보 보기
     const handleStore = () => {
         if (!selectedStore?.storeId) return;
         navigate(`/user/order/${selectedStore.storeId}`);
     };
-
 
     return (
         <div>
@@ -119,10 +126,9 @@ const UserSearchMap = () => {
                     <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
                         {selectedStore.storeName}
                     </h3>
-                    <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장이미지"/>
+                    <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장 이미지" />
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
-                    <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
-                    <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
+                    <p>{selectedStore.storeStatus} : {selectedStore.storeOperationHours}</p>
                 </div>
             )}
         </div>

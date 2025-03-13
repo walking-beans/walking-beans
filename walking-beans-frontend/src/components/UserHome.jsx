@@ -186,29 +186,7 @@ const UserHome = ({ user: initialUser }) => {
 
     // 검색 기능
     const handleSearch = (e) => {
-        if (e.key === "Enter") {
-            axios.get(`http://localhost:7070/api/store/search?keyword=${searchKeyword}`)
-                .then((res) => {
-                    console.table(res.data);
-                    let sortedData = res.data.map(store => ({
-                        ...store,
-                        storeRating: store.storeRating ?? 0,
-                        storeReviewCount: store.storeReviewCount ?? 0,
-                        storeLatitude: store.storeLatitude ?? 0,
-                        storeLongitude: store.storeLongitude ?? 0
-                    }));
-                    if (sortType === "rating") {
-                        sortedData.sort((a, b) => b.storeRating - a.storeRating);
-                    } else if (sortType === "distance") {
-                        sortedData.sort((a, b) =>
-                            getDistance(userLocation.lat, userLocation.lng, a.storeLatitude, a.storeLongitude) -
-                            getDistance(userLocation.lat, userLocation.lng, b.storeLatitude, b.storeLongitude)
-                        );
-                    }
-                    setDisplayStores(sortedData);
-                })
-                .catch(() => alert("검색 데이터를 가져오지 못했습니다."));
-        }
+        apiStoreService.searchStore(e, searchKeyword, sortType, userLocation, setDisplayStores,getDistance)
     };
 
     const handleMapClick = () => {
@@ -219,25 +197,30 @@ const UserHome = ({ user: initialUser }) => {
     return (
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
-            <div className="user-address">
-                {userAddress ? (
-                    <span onClick={() => navigate("/user/insertAddress")}>
-                        <strong>{userAddress.addressName}</strong> {userAddress.address} {userAddress.detailedAddress}
-                    </span>
-                ) : (
-                    <button onClick={() => navigate("/user/insertAddress")}>주소를 입력해주세요</button>
-                )}
+            <div className="d-flex align-items-center px-3 mb-2">
+                <h5 className="fw-bold mb-0"
+                    onClick={() => navigate("/user/insertAddress")}
+                    style={{cursor: "pointer"}}>
+                    {userAddress ? userAddress.address : "주소를 입력해주세요"}
+                    <i className="bi bi-chevron-down ms-1"></i>
+                </h5>
             </div>
             {/*검색 공간*/}
-            <select onChange={(e) => setSortType(e.target.value)}>
-                <option value="rating">평점순</option>
-                <option value="distance">거리순</option>
-            </select>
-            <input type="text" placeholder="가게 검색" value={searchKeyword}
-                   onChange={(e) => setSearchKeyword(e.target.value)}
-                   onKeyDown={handleSearch} />
-
-                <div id="map" onClick={handleMapClick}></div>
+            <div className="input-group mb-3 px-2">
+                <div className="d-flex">
+                    <select className="form-select rounded-start" select onChange={(e) => setSortType(e.target.value)}>
+                        <option value="rating">평점순</option>
+                        <option value="distance">거리순</option>
+                    </select>
+                </div>
+                <input type="text"
+                       className="form-control rounded-end"
+                       placeholder="어떤 커피를 찾으시나요?"
+                       value={searchKeyword}
+                       onChange={(e) => setSearchKeyword(e.target.value)}
+                       onKeyDown={handleSearch}/>
+            </div>
+            <div id="map" onClick={handleMapClick}></div>
             {/*매장 리스트*/}
             <ul className="store-list">
                 {displayStores.map((store) => (

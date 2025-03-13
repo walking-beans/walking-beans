@@ -1,14 +1,16 @@
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../../css/User.css";
 
 const UserInsertAddress = ({ user }) => {
+    const navigate = useNavigate();
     const [address, setAddress] = useState(""); // 주소
     const [detailedAddress, setDetailedAddress] = useState(""); // 상세 주소
     const [addressName, setAddressName] = useState(""); // 주소 별칭
     const [currentUser, setCurrentUser] = useState(user);
     const [savedAddresses,setSavedAddresses] = useState([]); // 저장된 주소 목록
-    const [showForm, setShowForm] = useState(false);
+    const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
     const [addressLatitude, setLatitude] = useState("");
     const [addressLongitude, setLongitude] = useState("");
 
@@ -32,11 +34,19 @@ const UserInsertAddress = ({ user }) => {
     }, [user]);
 
     useEffect(() => {
-        // 카카오 주소 API 스크립트 추가
-        const script = document.createElement("script");
-        script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-        script.async = true;
-        document.body.appendChild(script);
+        const script1 = document.createElement("script");
+        script1.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        script1.async = true;
+        document.body.appendChild(script1);
+
+        const script2 = document.createElement("script");
+        script2.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_JAVASCRIPT_KEY&libraries=services`;
+        script2.async = true;
+        script2.onload = () => {
+            setIsKakaoLoaded(true);
+            console.log("카카오 지도 API 로드 완료");
+        };
+        document.body.appendChild(script2);
     }, []);
 
     // 로그인한 유저의 주소 목록 불러오기
@@ -65,6 +75,11 @@ const UserInsertAddress = ({ user }) => {
         new window.daum.Postcode({
             oncomplete: function (data) {
                 setAddress(data.roadAddress); // 선택한 도로명 주소 저장
+
+                if (!isKakaoLoaded || !window.kakao || !window.kakao.maps) {
+                    console.error("카카오 지도 API가 아직 로드되지 않았습니다.");
+                    return;
+                }
 
                 // 카카오 주소 -> 좌표 변환 API 호출
                 const geocoder = new window.daum.maps.services.Geocoder();
@@ -113,6 +128,8 @@ const UserInsertAddress = ({ user }) => {
                 alert("주소 저장에 실패했습니다.");
             });
     };
+
+    // 대표주소 설정
     const handleSetPrimaryAddress = (addressId) => {
         axios.put(`http://localhost:7070/api/addresses/updateRole`, {
             userId: currentUser?.user_id,
@@ -133,58 +150,87 @@ const UserInsertAddress = ({ user }) => {
                 console.log("전송할 addressId:", addressId);
             });
     };
+    // 주소 삭제
+    const handleDeleteAddress = (addressId) => {
+        axios.delete(`http://localhost:7070/api/addresses/delete/${addressId}`)
+            .then(() => {
+                alert("주소가 삭제되었습니다.");
+                fetchUserAddresses(currentUser?.user_id);
+            })
+            .catch((error) => {
+                console.error("주소 삭제 오류:", error);
+                alert("주소 삭제에 실패했습니다.");
+            });
+    };
 
     return (
         <div className="user-insert-address-container">
-            <div className="address-input">
-            {/* 주소 입력 버튼 */}
-            {!showForm && (
-                <input placeholder="주소를 입력해주세요"
-                       onClick={() => setShowForm(true)}/>
-
-
-            )}
+            <div className="d-flex justify-content-between align-items-center py-3 border-bottom">
+                <i className="bi bi-arrow-left fs-4" onClick={() => navigate(-1)} style={{cursor: "pointer"}}></i>
+                <h5 className="fw-bold mb-0">주소 설정</h5>
             </div>
-            {/*  모달형 주소 입력 폼 */}
-            {showForm && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h2>주소 입력</h2>
-                        <button onClick={handleSearchAddress}>주소 검색</button>
-                        <input type="text" value={address} readOnly placeholder="선택한 주소" />
-                        <input
-                            type="text"
-                            value={detailedAddress}
-                            onChange={(e) => setDetailedAddress(e.target.value)}
-                            placeholder="상세 주소 입력 (예: 101동 202호)"
-                        />
-                        <input
-                            type="text"
-                            value={addressName}
-                            onChange={(e) => setAddressName(e.target.value)}
-                            placeholder="주소 별칭 (예: 우리 집, 회사)"
-                        />
-                        <button onClick={handleSaveAddress}>저장</button>
-                        <button onClick={() => setShowForm(false)}>닫기</button>
-                    </div>
-                </div>
-            )}
 
-            {/*  저장된 주소 목록 표시 */}
-            <h3>저장된 주소 목록</h3>
-            <ul>
-                {savedAddresses.length > 0 ? (
-                    savedAddresses.map((addr) => (
-                        <li key={addr.id} onClick={() => handleSetPrimaryAddress(addr.addressId)}>
-                            <strong>{addr.addressName}</strong>: {addr.address}
-                            <small>{addr.detailedAddress}</small>
-                            {addr.addressRole === 1 && <span> (기본 주소) </span>}
-                        </li>
-                    ))
-                ) : (
-                    <p>저장된 주소가 없습니다.</p>
-                )}
-            </ul>
+            <div className="mt-3">
+                <div className="input-group">
+                    <span className="input-group-text bg-light border-0">
+                        <i className="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" className="form-control bg-light border-0"
+                           placeholder="주소를 입력해 주세요."
+                           value={address}
+                           readOnly
+                           onClick={handleSearchAddress}/>
+                </div>
+                {address && (
+                    <>
+                        <div className="d-flex align-items-center mt-2">
+                            <input type="text" className="form-control me-2"
+                                   style={{flex: "0 0 60%"}}
+                                   placeholder="주소 별칭 (예: 집, 회사)"
+                                   value={addressName}
+                                   onChange={(e) => setAddressName(e.target.value)}/>
+
+                            <button className="btn btn-dark me-2 "
+                                    style={{flex: "0 0 19%"}}
+                                    onClick={handleSaveAddress}>
+                                저장
+                            </button>
+
+                            <button className="btn btn-secondary"
+                                    style={{flex: "0 0 18%"}}
+                                    onClick={() => {
+                                        setAddress("");
+                                        setAddressName("");
+                                        setDetailedAddress("");
+                                    }}>
+                                취소
+                            </button>
+                        </div>
+                        <input type="text" className="form-control mt-2"
+                               placeholder="상세 주소 입력"
+                               value={detailedAddress}
+                               onChange={(e) => setDetailedAddress(e.target.value)}/>
+                    </>
+                )
+                }
+
+
+            </div>
+            <div className="mt-3">
+                {savedAddresses.map((addr) => (
+                    <div key={addr.id} onClick={() => handleSetPrimaryAddress(addr.addressId)} className="p-3 border-bottom d-flex justify-content-between">
+                        <div>
+                            <h6 className="fw-bold mb-0">
+                                <i className="bi bi-geo-alt-fill me-2"></i> {addr.addressName}
+                            </h6>
+                            <p className="text-muted small">{addr.address} {addr.detailedAddress}</p>
+                            {addr.addressRole === 1 && <span>기본 주소</span>}
+                        </div>
+                        <button className="btn  btn-sm" onClick={() => handleDeleteAddress(addr.addressId)}>삭제</button>
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 };
