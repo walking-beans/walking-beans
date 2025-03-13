@@ -53,38 +53,36 @@ import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 
 function PathRoute() {
-    const [user, setUser] = useState(null);
-
     const [searchResults, setSearchResults] = useState([]);
 
 
-    useEffect(() => {
+    const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            try {
-                const parsedUser = JSON.parse(storedUser);
-                //  console.log("로컬스토리지에서 가져온 유저:", parsedUser);
-                setUser(parsedUser);
-            } catch (error) {
-                //  console.error("JSON 파싱 에러:", error);
-            }
+        try {
+            return storedUser ? JSON.parse(storedUser) : null;
+        } catch (error) {
+            console.error("JSON 파싱 에러:", error);
+            return null;
         }
+    });
 
+    useEffect(() => {
         const handleStorageChange = () => {
-            console.log("localStorage.getItem : " + user)
             const updatedUser = localStorage.getItem("user");
-            setUser(updatedUser ? JSON.parse(updatedUser) : null);
+            try {
+                setUser(updatedUser ? JSON.parse(updatedUser) : null);
+            } catch (error) {
+                console.error("JSON 파싱 에러:", error);
+                setUser(null);
+            }
         };
 
-        window.addEventListener("userChange", handleStorageChange);
         window.addEventListener("storage", handleStorageChange);
 
         return () => {
-            window.removeEventListener("userChange", handleStorageChange);
             window.removeEventListener("storage", handleStorageChange);
         };
-    }, [user]);
-
+    }, []);
     return (
         <div className="layout-container">
             <BrowserRouter>
