@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import apiUserService from "../../service/apiUserService";
+import defaultProfileImage from '../../images/user/defaultProfileImage.png'
 
 const AdminMypage = () => {
     const navigate = useNavigate();
@@ -11,51 +11,87 @@ const AdminMypage = () => {
     const [userId, setuserId] = useState(null);
 
     useEffect(() => {
-        apiUserService.sessionData((response) => {  // ✅ sessionData() 올바르게 호출
-            if (response && response.userId) {
-                setuserId(response.userId);  // ✅ userId 설정
+
+            console.log("AdminMypage.jsx에서 sessionData 호출!");
+            console.log("localStorage 값 확인:", localStorage.getItem("user"));
+            console.log("sessionStorage 값 확인:", sessionStorage.getItem("user"));
+
+
+        apiUserService.sessionData((response) => {  //  sessionData() 올바르게 호출
+            console.log("sessionData에서 받은 값:", response);
+            if (response && response.user_id) {
+                setuserId(response.user_id);  //  userId 설정
+                console.log(" userId 상태 업데이트 요청:", response.user_id);
+
+                setTimeout(() => {
+                    console.log("100ms 후 userId 값 확인:", response.user_id);
+                    setuserId(response.user_id);
+                }, 100);
             } else {
                 alert("로그인이 필요합니다.");
-                navigate("/login");  // ✅ 로그인 페이지로 이동
+                navigate("/login");  //  로그인 페이지로 이동
             }
         });
     }, [navigate]);
 
-    useEffect(() => {
-        // const userId = localStorage.getItem("userId"); // 로그인된 유저 ID 가져오기
-        // if (!userId) {
-        //     navigate("/login"); // 로그인되지 않았다면 로그인 페이지로 이동
-        //     return;
-        // }
 
-        // apiUserService.SessionData((response) => {
-        //     if (response && response.userId) {
-        //         setuserId(response.userId); // 로그인한 사용자의 userId 설정
-        //     } else {
-        //         alert("로그인이 필요합니다.");
-        //         navigate("/login"); // 로그인되지 않았다면 로그인 페이지로 이동
-        //     }
-        // });
+    //     if (!userId) return;
+    //     console.log("userId 설정 완료, API 요청 시작:", userId);
+    //     axios.get(`/mypage/${userId}`)
+    //         .then(response => {
+    //             setUser(response.data);
+    //             setLoading(false);
+    //         })
+    //         .catch(error => {
+    //             console.error("사용자 정보를 불러오는 중 오류 발생:", error);
+    //             setError("사용자 정보를 불러오는 데 실패했습니다.");
+    //             setLoading(false);
+    //         });
+    // }, [userId]);
 
-        axios.get(`/admin/mypage/${userId}`)
-            .then(response => {
-                setUser(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("사용자 정보를 불러오는 중 오류 발생:", error);
-                setError("사용자 정보를 불러오는 데 실패했습니다.");
-                setLoading(false);
-            });
-    }, [navigate]);
+        useEffect(() => {
+            console.log("useEffect 실행됨 - 현재 userId 값:", userId);
+            if (userId === null) return; // userId가 없으면 실행하지 않음
+
+            console.log("userId 업데이트 완료 - API 요청 가능:", userId);
+
+            apiUserService.mypage(
+                userId,
+                (data) => {
+                    setUser(data);
+                    setLoading(false);
+                },
+                (errorMessage) => {
+                    setError(errorMessage);
+                    setLoading(false);
+                }
+            );
+        }, [userId]);
 
     const handleProfileChange = (event) => {
         const file = event.target.files[0];
-        if (file) {
-            // 프로필 이미지 변경 로직 추가 가능 (예: 서버에 업로드)
-            console.log("선택된 파일:", file);
+        if (file && userId) {
+            apiUserService.uploadProfileImage(
+                userId,
+                file,
+                (data) => {
+                    console.log("프로필 이미지 변경 성공:", data);
+                    setUser({ ...user, user_picture_url: data.imageUrl });
+                },
+                (errorMessage) => {
+                    console.error(errorMessage);
+                }
+            );
         }
     };
+
+    // const handleProfileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         // 프로필 이미지 변경 로직 추가 가능 (예: 서버에 업로드)
+    //         console.log("선택된 파일:", file);
+    //     }
+    // };
 
     if (loading) return <p>로딩 중...</p>;
     if (error) return <p>{error}</p>;
@@ -65,7 +101,7 @@ const AdminMypage = () => {
             <h2>마이페이지</h2>
             <div className="profile-section">
                 <img
-                    src={user?.user_picture_url || "/default-profile.png"}
+                    src={user?.user_picture_url || defaultProfileImage}
                     alt="프로필 사진"
                     className="profile-picture"
                     onClick={() => document.getElementById("profileInput").click()}

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
 
@@ -80,9 +80,16 @@ const UserHeader = ({user}) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setCurrentUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setCurrentUser(parsedUser);
+            setUserId(parsedUser.user_id);
         }
     }, [user]);
+    //  userId가 설정된 후 대표 주소 가져오기
+    useEffect(() => {
+
+        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+    }, [userId]);
 
     /**
      * 네비게이션바 토글아이콘  함수
@@ -120,22 +127,22 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: "/mypage",
+            user: location.pathname === "/admin/mypage" ? "/" : "/admin/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            store: "/owner",
+            owner: location.pathname === "/owner" ? "/" : "/owner",
             admin: "/admin"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
-    // 기본주소 변경하는 함수
-    const fetchPrimaryAddress = () => {
-        apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
-    };
 
 
     // /user/search/map
     const handleOpenSearch = () => {
+        if (!userLat || !userLng) {
+            alert("대표 주소 정보를 불러올 수 없습니다.");
+            return;
+        }
         navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
@@ -159,19 +166,15 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-
-
-
-
-                                <div onClick={toggleAlarm} style={styles.notificationContainer}>
+                                <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
-                                    {unreadCount > 0 && <span style={styles.badge}>{unreadCount}</span>}
+                                    {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
                                 </div>
                                 {showDropdown && (
-                                    <div style={styles.dropdown}>
+                                    <div className={"AlarmDropdown"}>
                                         {notifications.length > 0 ? (
                                             notifications.map((noti, index) => (
-                                                <div key={index} style={styles.notificationItem}>
+                                                <div key={index} className={"AlarmNotificationItem"}>
                                                     <strong>{noti.type === "채팅" ? "💬 채팅" : "🔔 알림"}:</strong> {noti.message}
                                                 </div>
                                             ))
@@ -220,58 +223,5 @@ const UserHeader = ({user}) => {
         </div>
     );
 };
-
-const styles = {
-    notificationContainer: {
-        position: "relative",
-        marginRight: "20px",
-        display: "flex",
-        alignItems: "center",
-    },
-    iconContainer: {
-        cursor: "pointer",
-        fontSize: "24px",
-        position: "relative",
-        padding: "10px",
-        borderRadius: "50%",
-        background: "#FFF",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transition: "0.2s",
-    },
-    badge: {
-        position: "absolute",
-        top: "-1px",
-        right: "-8px",
-        background: "red",
-        color: "white",
-        borderRadius: "50%",
-        padding: "4px 8px",
-        fontSize: "10px",
-        fontWeight: "bold",
-    },
-    dropdown: {
-        position: "absolute",
-        top: "50px",
-        right: "0",
-        width: "250px",
-        background: "#D2B595",
-        borderRadius: "10px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        padding: "15px",
-        zIndex: 9999,
-    },
-    notificationItem: {
-        border: "1px solid #ab7a44",
-        borderRadius : "3%",
-        marginTop : "5px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        padding : "10px",
-        backgroundColor :"#F4EDDF",
-    }
-};
-
 
 export default UserHeader;

@@ -114,8 +114,9 @@ import { Stomp } from "@stomp/stompjs";
 import apiRiderService from "../../components/rider/apiRiderService";
 import {useParams} from "react-router-dom";
 import "../../css/admin/AdminMessage.css";
+import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 
-import PictureButton from "../../assert/svg/adminNav/adminMessage-pictureButton.svg"
+import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
 
 function AdminMessage({user}) {
 
@@ -168,7 +169,11 @@ function AdminMessage({user}) {
     useEffect(() => {
         console.log("user : ", user);
         connect();
-        apiRiderService.getChattingMessageList(1, setMessages);
+        apiRiderService.getChattingMessageList(roomId,
+            (newMessage) => {
+                setMessages(newMessage);
+                console.log(newMessage);
+            });
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, []);
@@ -214,10 +219,24 @@ function AdminMessage({user}) {
                 {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={(msg.userId === 1) ? "" : ""}
                     >
-                        <p>{msg.userName}</p>
-                        <p>{msg.messageContent}</p>
+                        {
+                            msg.userId !== 1 ? (
+                                <div
+                                    className="admin-message-notUserInput "
+                                >
+                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
+                                    <p>{msg.messageContent}</p>
+                                </div>
+                            ) : (
+                                <div
+                                    className="admin-message-userInput"
+                                >
+                                    <p>{msg.messageContent}</p>
+                                </div>
+                            )
+                        }
+
                     </div>
                 ))}
                 <div className="admin-message-previewImage">
@@ -232,8 +251,7 @@ function AdminMessage({user}) {
                         onChange={handleInputChange}
                         disabled={isDisabled}
                     />
-                    <div>
-                        <div id="img-preview"></div>
+                    <div className="admin-message-ImgAndBtnDiv">
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >

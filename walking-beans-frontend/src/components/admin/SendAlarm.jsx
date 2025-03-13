@@ -1,22 +1,32 @@
-/*  알림 컴포넌트 제작 페이지
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState } from "react";
 
+const SendAlarm = ({ userId, alarmRole, senderId, messageContent }) => {
+    const [chatSocket, setChatSocket] = useState(null);
+    const [isSocketOpen, setIsSocketOpen] = useState(false); // 웹소켓 상태 추적
+    const [messages, setMessages] = useState([]);
 
-const SendAlarm = forwardRef((props, ref) => {
-  const [chatSocket, setChatSocket] = useState(null);
-
-    // 웹소켓 연결 설정
     useEffect(() => {
         const wsChat = new WebSocket("ws://localhost:7070/ws/chat");
         setChatSocket(wsChat);
 
+        wsChat.onopen = () => {
+            console.log("웹소켓 연결 성공");
+            setIsSocketOpen(true); // 연결 성공 시 상태 업데이트
+        };
+
         wsChat.onmessage = (event) => {
             const newMessage = JSON.parse(event.data);
-            console.log("받은 메시지:", newMessage); // 수신한 메시지 처리
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
         };
 
         wsChat.onerror = (error) => {
             console.error("채팅 웹소켓 오류:", error);
+            setIsSocketOpen(false); // 오류 발생 시 연결 상태 업데이트
+        };
+
+        wsChat.onclose = () => {
+            console.log("웹소켓 연결 종료");
+            setIsSocketOpen(false); // 연결 종료 시 상태 업데이트
         };
 
         return () => {
@@ -24,18 +34,23 @@ const SendAlarm = forwardRef((props, ref) => {
         };
     }, []);
 
-    // 부모 컴포넌트에서 호출 가능한 sendAlarm 함수 구현
-    useImperativeHandle(ref, () => ({
-        sendAlarm: (alarmData) => {
-            if (chatSocket) {
-                chatSocket.send(JSON.stringify(alarmData)); // 알람 데이터 전송
-            }
-        }
-    }));
+    useEffect(() => {
+        if (chatSocket && isSocketOpen) {
+            const messageData = {
+                userId,
+                alarmRole,
+                alarmSenderId: senderId,
+                alarmContent: messageContent,
+                alarmStatus: false,
+                alarmCreateDate: new Date().toISOString(),
+            };
 
-    return null; // UI는 렌더링하지 않음
-});
+            chatSocket.send(JSON.stringify(messageData));
+            console.log("알람 메시지 전송:", messageData);
+        }
+    }, [chatSocket, isSocketOpen, userId, alarmRole, senderId, messageContent]);
+
+    return null; // UI는 보이지 않게 처리
+};
 
 export default SendAlarm;
-
- */

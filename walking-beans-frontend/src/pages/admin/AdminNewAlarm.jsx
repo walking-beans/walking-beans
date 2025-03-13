@@ -34,16 +34,16 @@ const AdminNewAlarm = () => {
             };
 
             chatSocket.send(JSON.stringify(messageData));
-            setMessageInput("");
         }
     };
 
     return (
         <div>
-            <p>알람 보내기</p>
-            <button type="button" onClick={sendAlarmMessage}>보내기 알람</button>
+            <div className="user-home-container">
+                <p>알람 보내기</p>
+                <button type="button" onClick={sendAlarmMessage}>보내기 알람</button>
+            </div>
         </div>
     )
 }
-
-    export default AdminNewAlarm;
+export default AdminNewAlarm;

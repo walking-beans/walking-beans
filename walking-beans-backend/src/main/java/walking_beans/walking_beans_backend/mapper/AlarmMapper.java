@@ -10,7 +10,8 @@ import java.util.List;
 public interface AlarmMapper {
 
     void insertAlarm(Alarms alarm);
-    void updateLastMessage(@Param("roomId") Long roomId, @Param("message") String message);
 
     List<Alarms> getUserAlarmList(int userId);
+
+    void deleteAllAlarm(byte userId);
 }
