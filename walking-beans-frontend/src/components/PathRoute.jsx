@@ -45,6 +45,7 @@ import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
+import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
 
 function PathRoute() {
@@ -109,6 +110,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
+                                <Route path="/user/delivery/status" element={<UserDeliveryStatus/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
