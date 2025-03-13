@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-const MenuOptionForm = (option_content) => {
-
+const MenuOptionForm = ({option_content, onUpdate}) => {
     const {id} = useParams();
+
     // 입력필드
     const[formField, setFormFields] = useState([{menuId : id ,name:'',price:'' ,option_content: option_content}]);
 
     //필드추가기능
     const handleAddFields = () => {
-        const values = [...formField, {menuId : id , name:'',price:'', option_content: option_content}];
+        const values = [...formField, {menuId : id, name:'',price:'', option_content: option_content}];
         setFormFields(values);
     };
 
@@ -38,20 +38,18 @@ const MenuOptionForm = (option_content) => {
         setFormFields(values);
     };
 
-    //폼 제출시
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        console.log(formField);
-    };
-
+    // formField 가 변경될 때마다 부모로 데이터 전달
     useEffect(() => {
-        console.log('필드값 확인용',formField)
-    }, [formField]);
+        onUpdate(formField);
+        console.log('필드값 확인용',formField);
+    }, [formField, onUpdate]);
+
+    console.log("Rendering MenuOptionForm for", option_content)
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             {formField.map((field,index)=> (
-                <div key={index} style={{margin: "5px"}}>
+                <div key={index} style={{margin: "10px"}}>
                     <input
                         type='text'
                         placeholder='옵션'
@@ -81,11 +79,7 @@ const MenuOptionForm = (option_content) => {
                 새로운옵션
             </button>
 
-            <button type={'submit'}>
-                저장하기
-            </button>
-
-        </form>
+        </div>
     );
 }
 

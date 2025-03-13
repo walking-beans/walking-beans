@@ -54,7 +54,7 @@
         WHERE menu_id = #{menuId}
     </update>
 
-    <!--메뉴옵션 추가하기-->
+    <!--메뉴옵션 추가하기 1개씩만 -->
     <update id="addMenuOption">
         INSERT INTO MenuOption (
                                 option_id,
