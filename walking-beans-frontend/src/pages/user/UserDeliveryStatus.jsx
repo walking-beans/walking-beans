@@ -32,7 +32,7 @@ const UserDeliveryStatus = () => {
     }, []);
 
 
-    // 기본 지도 위치 설정
+    // 기본 지도 유저 위치 설정
     useEffect(() => {
         if (!isLoaded || !window.kakao || !window.kakao.maps) return;
 
@@ -45,6 +45,15 @@ const UserDeliveryStatus = () => {
             level: 12
         };
 
+        // 마커 이미지
+        const imageSrc = UserMapMarker;
+
+        // 마커 이미지 크기
+        const imageSize = new window.kakao.maps.Size(80, 60);
+
+        // 마커 이미지 생성
+        const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
         const newMap = new window.kakao.maps.Map(mapContainer, mapOption); // 지도 생성
         setMap(newMap); // map 상태값 저장
 
@@ -52,8 +61,11 @@ const UserDeliveryStatus = () => {
         new window.kakao.maps.Marker({
             position: storePosition, // 마커 위치
             map: newMap, // 지도
-            title: "매장 위치"
-        });
+            title: "매장 위치",
+            image : markerImage // 마커 이미지
+        })
+
+
 
         // 유저 위치 가져오기
         if (navigator.geolocation) {
@@ -65,11 +77,22 @@ const UserDeliveryStatus = () => {
 
                     setUserPosition(userPos);
 
+                    // 마커 이미지
+                    const imageSrc = storeMapMarker;
+
+                    // 마커 이미지 크기
+                    const imageSize = new window.kakao.maps.Size(80, 60);
+
+                    // 마커 이미지 생성
+                    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
+
                     // 유저 위치 마커 추가
                     new window.kakao.maps.Marker({
                         position: userPos,
                         map: newMap,
-                        title: "사용자 위치"
+                        title: "사용자 위치",
+                        image : markerImage
                     });
 
                     // 지도 중심을 유저 위치로 변경
