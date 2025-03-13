@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-const MenuOptionForm = () => {
+const MenuOptionForm = (option_content) => {
 
     const {id} = useParams();
     // 입력필드
-    const[formField, setFormFields] = useState([{menuId : id ,name:'',price:''}]);
+    const[formField, setFormFields] = useState([{menuId : id ,name:'',price:'' ,option_content: option_content}]);
 
     //필드추가기능
     const handleAddFields = () => {
-        const values = [...formField, {menuId : id , name:'',price:''}];
+        const values = [...formField, {menuId : id , name:'',price:'', option_content: option_content}];
         setFormFields(values);
     };
 
@@ -70,7 +70,7 @@ const MenuOptionForm = () => {
                         style={{ marginRight: 10 }}
                     />
                     <button type='button' onClick={() => hanadleRemoveFields(index)}>
-                        해당옵션삭제
+                        삭제
                     </button>
 
                 </div>
@@ -78,7 +78,7 @@ const MenuOptionForm = () => {
             <button type={"button"}
                     onClick={handleAddFields}
                     >
-                새로운옵션추가
+                새로운옵션
             </button>
 
             <button type={'submit'}>

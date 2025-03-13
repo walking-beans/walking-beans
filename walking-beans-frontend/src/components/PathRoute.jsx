@@ -143,12 +143,12 @@ function PathRoute () {
                                 {/* id는 연결되는 메뉴id */}
                                 <Route path="/owner/menuoption/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <MenuOptionForm/>
+                                        <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoptiondetail" element={
+                                <Route path="/owner/menuoption" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionDetail/>
+                                        <MenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondeform" element={
