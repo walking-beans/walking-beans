@@ -9,12 +9,18 @@ import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import packages from "../../assert/svg/userNav/package.svg";
 import receipt from "../../assert/svg/userNav/receipt.svg";
 import chatBubble from "../../assert/svg/userNav/chat_bubble.svg";
+import apiStoreService from "../../service/apiStoreService";
 
-const SearchHeader = () => {
+const SearchHeader = ({setSearchResults}) => {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
     const [navOpen, setNavOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [sortType, setSortType] = useState("rating");
+    const [userLocation, setUserLocation] = useState(null);
+    const [displayStores, setDisplayStores] = useState([]);
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -22,6 +28,19 @@ const SearchHeader = () => {
             setCurrentUser(JSON.parse(storedUser));
         }
     }, []);
+    const getDistance = (lat1, lng1, lat2, lng2) => {
+        if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
+        const R = 6371; // 지구 반지름 (km)
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLng = (lng2 - lng1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) *
+            Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // 거리 (km)
+    };
 
 
 
@@ -31,9 +50,15 @@ const SearchHeader = () => {
     // 엑시오스 댄 -> 알락 무사히 가져왔습니다.
     // 캐치 -> 데이터를 연결하는데 문제가 발생했습니다.
     const handleSearch = (e) => {
-        alert("null ");
         if (e.key === "Enter" && searchQuery.trim()) {
-            alert("null ");
+            apiStoreService.searchStore(e, searchQuery, sortType, userLocation, setDisplayStores, getDistance)
+                ?.then((response) => {
+                    console.log("🔍 검색 결과:", response); // ✅ 검색 결과 콘솔 확인
+                    setSearchResults(response.data);
+
+                })
+                .catch((error) => {
+                });
         }
     };
 
@@ -50,6 +75,8 @@ const SearchHeader = () => {
             setNavOpen((prev) => !prev);
         }
     };
+
+
 
     return (
         <div className="search-header-wrapper">

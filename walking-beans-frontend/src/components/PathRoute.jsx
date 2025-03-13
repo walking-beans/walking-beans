@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
 import Login from "../pages/custom-login/Login";
@@ -46,9 +46,17 @@ import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
 
+import SearchHeader from "../pages/layout/SearchHeader";
+
+import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+
+
 
 function PathRoute() {
     const [user, setUser] = useState(null);
+
+    const [searchResults, setSearchResults] = useState([]);
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -89,7 +97,8 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/alarm" element={<AdminNewAlarm/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
+                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
@@ -107,7 +116,8 @@ function PathRoute() {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-                                <Route path="/user/search/map" element={<UserSearchMap/>}/>
+                                {/* ✅ `searchResults`를 `UserSearchMap`에 전달 */}
+                                <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
 
@@ -207,6 +217,7 @@ function PathRoute() {
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
         </div>
+
     )
 }
 

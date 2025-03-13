@@ -17,12 +17,17 @@ public class AlarmAPIController {
     }
 
     @PostMapping("/chat/send")
-    public void sendMessage(@RequestBody Message message) {
-        alarmService.sendMessage(message);
+    public void sendMessage(@RequestBody Alarms alarms) {
+        alarmService.sendMessage(alarms);
     }
 
     @GetMapping("/api/chat/{userId}")
     public List<Alarms> getUserAlarm(@PathVariable("userId") int userId) {
         return alarmService.getUserAlarmList(userId);
+    }
+
+    @DeleteMapping("/api/alarm/delete/{userId}")
+    public void deleteAllAlarms(@PathVariable("userId") byte userId) {
+        alarmService.deleteAllAlarm(userId);
     }
 }
