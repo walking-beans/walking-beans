@@ -100,7 +100,7 @@ function PathRoute() {
                                 <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
                                 <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
-                                <Route path="/admin/mypage" element={<AdminMypage/>}/>
+                                <Route path="/mypage" element={<AdminMypage/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
