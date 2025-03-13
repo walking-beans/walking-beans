@@ -16,10 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
     //                    2. 업로드 폴더 위치 이미지 설정
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 이미지 위치가 여러 공간일 경우에는  각 위치별 페이크 위치를 사용해서 별칭 사용
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("classpath:/static/images/");
+        registry.addResourceHandler("/images/**") // 이미지 불러오는 경로
+                .addResourceLocations("classpath:/static/images/"); // 저장하는 경로
 
-        registry.addResourceHandler("/uploaded/**").
-                addResourceLocations("file:"+uploadPath+"/");
+        registry.addResourceHandler("/upload/**").
+                addResourceLocations("file:"+ uploadPath);
     }
 }
