@@ -23,15 +23,15 @@ public class AlarmServiceImpl implements AlarmService {
     private AlarmMapper alarmMapper;
 
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(Alarms alarms) {
 
         // 채팅 알람 생성
         Alarms alarm = new Alarms();
-        alarm.setUserId(message.getUserId()); // 메시지를 보낸 사용자 ID
-        alarm.setAlarmContent(message.getMessageContent());
+        alarm.setUserId(alarms.getUserId()); // 메시지를 보낸 사용자 ID
+        alarm.setAlarmContent(alarms.getAlarmContent());
         alarm.setAlarmStatus(false);
-        alarm.setAlarmSenderId(message.getUserId()); // 보낸 사람 ID
-        alarm.setAlarmRole(message.getMessageRole());
+        alarm.setAlarmSenderId(alarms.getUserId()); // 보낸 사람 ID
+        alarm.setAlarmRole(alarms.getAlarmRole());
         alarm.setAlarmCreateDate(new Timestamp(System.currentTimeMillis()));
 
         alarmMapper.insertAlarm(alarm);

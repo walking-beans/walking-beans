@@ -17,8 +17,8 @@ public class AlarmAPIController {
     }
 
     @PostMapping("/chat/send")
-    public void sendMessage(@RequestBody Message message) {
-        alarmService.sendMessage(message);
+    public void sendMessage(@RequestBody Alarms alarms) {
+        alarmService.sendMessage(alarms);
     }
 
     @GetMapping("/api/chat/{userId}")
