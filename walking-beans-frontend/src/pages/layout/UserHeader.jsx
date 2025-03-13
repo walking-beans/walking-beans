@@ -80,9 +80,16 @@ const UserHeader = ({user}) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setCurrentUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setCurrentUser(parsedUser);
+            setUserId(parsedUser.user_id);
         }
     }, [user]);
+    //  userId가 설정된 후 대표 주소 가져오기
+    useEffect(() => {
+
+        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+    }, [userId]);
 
     /**
      * 네비게이션바 토글아이콘  함수
@@ -128,14 +135,14 @@ const UserHeader = ({user}) => {
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
-    // 기본주소 변경하는 함수
-    const fetchPrimaryAddress = () => {
-        apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
-    };
 
 
     // /user/search/map
     const handleOpenSearch = () => {
+        if (!userLat || !userLng) {
+            alert("대표 주소 정보를 불러올 수 없습니다.");
+            return;
+        }
         navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
