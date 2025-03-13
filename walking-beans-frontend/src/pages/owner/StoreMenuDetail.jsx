@@ -8,8 +8,8 @@ import {useParams} from "react-router-dom";
 const StoreMenuDetail = () => {
     // 메뉴 정보
     const {id} = useParams();
-    const [menus,setMenus] = useState({});
-    const [formData , setFormData] = useState({
+    const [menus, setMenus] = useState({});
+    const [formData, setFormData] = useState({
         menu_id: id,
         menuName: "",
         menuPrice: 0,
@@ -17,14 +17,14 @@ const StoreMenuDetail = () => {
         menuDescription: "",
         menuPictureUrl: "",
     });
-    const [imgFile,setImgFile]=useState("");
+    const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
 
-   // const [isLoading, setIsLoading] = useState(true); // 로딩상태 관리
+    // const [isLoading, setIsLoading] = useState(true); // 로딩상태 관리
     // 초기값 가져오기
     useEffect(() => {
         console.log("renderingCheck")
-        if(id) {
+        if (id) {
             axios
                 .get(`http://localhost:7070/api/menu/${id}`)
                 .then((res) => {
@@ -34,23 +34,19 @@ const StoreMenuDetail = () => {
                         menu_id: id,
                         menuName: res.data.menuName || "",
                         menuPrice: res.data.menuPrice || 0,
-                        menuCategory: res.data.menuCategory ||"",
-                        menuDescription:res.data.menuDescription || "",
-                        menuPictureUrl:res.data.menuPictureUrl || "",
+                        menuCategory: res.data.menuCategory || "",
+                        menuDescription: res.data.menuDescription || "",
+                        menuPictureUrl: res.data.menuPictureUrl || "",
                     });
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-           // setIsLoading(false);
+            // setIsLoading(false);
 
         }
 
     }, [id]);
-
-
-
-
 
 
     const setThumbnail = (event) => {
@@ -65,35 +61,35 @@ const StoreMenuDetail = () => {
         }
     };
     // 폼 제출
-    const handleSubmit =(e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-            const submitData = new FormData();
-            submitData.append("menu_id", id);
-            submitData.append("menuName", formData.menuName);
-            submitData.append("menuPrice", formData.menuPrice);
-            submitData.append("menuCategory", formData.menuCategory);
-            submitData.append("menuDescription", formData.menuDescription);
+        const submitData = new FormData();
+        submitData.append("menu_id", id);
+        submitData.append("menuName", formData.menuName);
+        submitData.append("menuPrice", formData.menuPrice);
+        submitData.append("menuCategory", formData.menuCategory);
+        submitData.append("menuDescription", formData.menuDescription);
         if (imgRef.current?.files[0]) {
             submitData.append("menuPictureUrl", imgRef.current.files[0]);
         }
-            console.log(submitData);
-            axios
-                .put(`http://localhost:7070/api/menu/${id}`,
-                    submitData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+        console.log(submitData);
+        axios
+            .put(`http://localhost:7070/api/menu/${id}`,
+                submitData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
 
-                    })
-                .then((res) => {
-                    console.log(res.data)
-                    alert("수정완료!")
                 })
-                .catch((err) => {
-                    console.log(err)
-                    alert("데이터를 전송하지 못했습니다. 잠시후 다시 시도해주세요.")
-                })
+            .then((res) => {
+                console.log(res.data)
+                alert("수정완료!")
+            })
+            .catch((err) => {
+                console.log(err)
+                alert("데이터를 전송하지 못했습니다. 잠시후 다시 시도해주세요.")
+            })
 
     }
 
@@ -102,8 +98,8 @@ const StoreMenuDetail = () => {
     }
     // 인풋 변경 제어
     const handleInputChange = (e) => {
-        const{name,value} = e.target;
-        setFormData( {
+        const {name, value} = e.target;
+        setFormData({
             ...formData,
             [name]: value,
         });
@@ -117,10 +113,10 @@ const StoreMenuDetail = () => {
             <div className={"StoreMenuDetail-container"}>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <img style={{ maxWidth: '600px', marginTop: '10px' }}
-                            src={imgFile ? imgFile : menus.menuPictureUrl}
-                            alt={"메뉴 이미지"}
-                            />
+                        <img style={{maxWidth: '600px', marginTop: '10px'}}
+                             src={imgFile ? imgFile : menus.menuPictureUrl}
+                             alt={"메뉴 이미지"}
+                        />
                         <label htmlFor={"menuPicture"} className={"form-label"}></label>
                         <input className={"form-control form-control-lg"}
                                id={"menuPicture"}
@@ -192,7 +188,7 @@ const StoreMenuDetail = () => {
                         />
                         <label htmlFor={"floatingInput"}>수정일</label>
                     </div>
-                    <button type={"submit"} >수정완료</button>
+                    <button type={"submit"}>수정완료</button>
                     <button type="button" onClick={handleDelete}>삭제하기</button>
                 </form>
             </div>

@@ -36,6 +36,9 @@ const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) =>
                                     <Link to={`/owner/menu/${menuId}`}>
                                         <button className="btn btn-outline-warning">수정하기</button>
                                     </Link>
+                                    <Link to={`/owner/menuoption/${menuId}`}>
+                                        <button className="btn btn-outline-success">옵션관리</button>
+                                    </Link>
                                     {/* ✅ 삭제 버튼 */}
                                         <button className="btn btn-outline-danger">삭제하기</button>
                                 </div>
@@ -64,7 +67,10 @@ const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) =>
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
                             <Link to={`/owner/menu/${menuId}`}>
-                            <button class="btn btn-outline-warning" >수정</button>
+                                <button class="btn btn-outline-warning">수정</button>
+                            </Link>
+                            <Link to={`/owner/menuoption/${menuId}`}>
+                            <button className="btn btn-outline-success">옵션관리</button>
                             </Link>
                             <button class="btn btn-outline-danger" onClick={handleDelete}>삭제</button>
                         </div>

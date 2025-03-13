@@ -21,9 +21,10 @@ public class MenuOption {
 
     private String optionName;
 
+	// 옵션그룹으로 이용
 	private String optionContent;
 
-	private String optionPrice;
+	private int optionPrice;
 
 	private Timestamp optionCreateDate;
 

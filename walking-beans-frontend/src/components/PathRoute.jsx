@@ -32,7 +32,7 @@ import UserSearchMap from "../pages/user/UserSerachMap";
 import AdminChattingroom from "../pages/admin/AdminChattingroom";
 import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
-import MenuDetailForm from "./owner/MenuDetailForm";
+
 import MenuOptionForm from "./owner/MenuOptionForm";
 
 function PathRoute () {
@@ -140,9 +140,10 @@ function PathRoute () {
                                         <StoreMenuForm/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoption" element={
+                                {/* id는 연결되는 메뉴id */}
+                                <Route path="/owner/menuoption/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOption/>
+                                        <MenuOptionForm/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/menuoptiondetail" element={
