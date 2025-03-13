@@ -119,7 +119,7 @@ const AdminChattingroom = () => {
 }
 
 export default AdminChattingroom;*/
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
 import apiRiderService from "../../components/rider/apiRiderService";
@@ -127,6 +127,7 @@ import "../../css/admin/AdminChattingroom.css";
 
 const AdminChattingroom = () => {
 
+    const navigate = useNavigate();
     const stompClient = useRef(null);
     const [chattingRoom, setChattingRoom] = useState([]);
 
@@ -137,7 +138,6 @@ const AdminChattingroom = () => {
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
     const [msg, setMsg] = useState(null);
-    let checking = 1;
 
     // userId 에 따른 채팅목록 설정
     function setReceiver() {
@@ -173,8 +173,7 @@ const AdminChattingroom = () => {
         stompClient.current.connect({}, () => {
             stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
                 console.log("connected && message : ", message);
-                apiRiderService.getChattingRooms(userId, receiverRelationLeft, setChattingRoom);
-
+                (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });
         });
     };
@@ -190,37 +189,54 @@ const AdminChattingroom = () => {
     useEffect(() => {
         connect();
         // apiRiderService.getChattingListTest(1, setMessages);
-        apiRiderService.getChattingRooms(userId, receiverRelationLeft, setChattingRoom);
+        apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft,
+            (newCR) => {
+                setChattingRoom(newCR);
+                console.log(newCR);
+            });
 
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, []);
 
-    function handleUpdateChattingRoom (receiverRelation) {
-        apiRiderService.getChattingRooms(userId, receiverRelation, setChattingRoom);
+    const handleButton = (whichOne) => {
+        console.log(whichOne);
+        (whichOne) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
     }
 
+
     return (
-        <div>
-            <ul>
-                <div>
-                    <button>
+        <div className="admin-chattingroom-base ">
+            <ul className="nav nav-underline">
+                <div className="admin-button-base col-12">
+                    <button type="button"
+                            className="btn btn-dark btn-lg"
+                            onClick={() => handleButton(false)}
+                    >
                         {leftButtonValue}
                     </button>
-                    <button>
+                    <button type="button"
+                            className="btn btn-light btn-lg"
+                            onClick={() => handleButton(true)}
+                    >
                         {rightButtonValue}
                     </button>
+
                 </div>
-                <div>
+                <div className="admin-chattingroom-list">
                     {Array.isArray(chattingRoom) ? (
                         chattingRoom.map((room, index) => (
-                            <div
-                                key={index}
-                            >
-                                <p>{room.roomId}</p>
-                                <p>{room.orderId}</p>
-                                <p>{room.lastMessage}</p>
-                            </div>
+                            <Link to={`/chat/message/${room.roomId}`}>
+                                <div
+                                    key={index}
+                                    className="admin-chattingroom-list-chat"
+                                >
+                                    <p>{room.userName}</p>
+                                    <p>{room.userPictureUrl}</p>
+                                    <p>{room.messageContent}</p>
+                                    <p>{room.messageTime}</p>
+                                </div>
+                            </Link>
                         ))
                     ) : (
                         <p>채팅 기록이 없습니다.</p>

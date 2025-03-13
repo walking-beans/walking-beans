@@ -169,7 +169,7 @@ function AdminMessage({user}) {
     useEffect(() => {
         console.log("user : ", user);
         connect();
-        apiRiderService.getChattingMessageList(1,
+        apiRiderService.getChattingMessageList(roomId,
             (newMessage) => {
                 setMessages(newMessage);
                 console.log(newMessage);
@@ -226,7 +226,7 @@ function AdminMessage({user}) {
                                     className="admin-message-notUserInput "
                                 >
                                     <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
-                                    <div>{msg.messageContent}</div>
+                                    <p>{msg.messageContent}</p>
                                 </div>
                             ) : (
                                 <div
