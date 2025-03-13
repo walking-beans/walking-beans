@@ -93,4 +93,9 @@
 .user-insert-address-container .modal-content button {
     margin: 5px;
     padding: 10px;
+  
+/******************* user delivery status ********************/
+.user-delivery-map {
+    width: 600px;
+    height: 400px;
 }
