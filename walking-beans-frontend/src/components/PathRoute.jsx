@@ -45,6 +45,7 @@ import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
+import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 
 function PathRoute() {
@@ -89,7 +90,8 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/alarm" element={<AdminNewAlarm/>}/>
+                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
+                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
