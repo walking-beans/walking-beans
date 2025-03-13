@@ -58,10 +58,6 @@ function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
 
 
-
-    const [order, setOrder] = useState(null);
-
-
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -75,6 +71,7 @@ function PathRoute() {
         }
 
         const handleStorageChange = () => {
+            console.log("localStorage.getItem : " + user)
             const updatedUser = localStorage.getItem("user");
             setUser(updatedUser ? JSON.parse(updatedUser) : null);
         };
@@ -205,12 +202,12 @@ function PathRoute() {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chat/chattingroom" element={<AdminChattingroom/>}/>
-                                <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
+                                <Route path="/chat/chattingroom" element={user ? <AdminChattingroom user={user} /> : <div>Loading...</div>}/>
+                                <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
 
 
-                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST order = {order}/>}/>
-                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest order = {order}/>}/>
+                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST />}/>
+                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest />}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
