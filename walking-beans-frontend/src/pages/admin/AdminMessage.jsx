@@ -119,7 +119,6 @@ import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefa
 import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
 import SendAlarm from "../../components/admin/SendAlarm";
 
-import sendAlarm from "../../components/admin/SendAlarm";
 
 function AdminMessage({user}) {
 
