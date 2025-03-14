@@ -37,7 +37,7 @@ public class AlarmServiceImpl implements AlarmService {
         alarmMapper.insertAlarm(alarm);
 
         // 웹소켓 알림 전송
-        webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+        webSocketAlertHandler.sendAlert(alarm);
     }
 
     @Override
