@@ -295,9 +295,9 @@ function AdminMessage({user}) {
                         </button>
                         {showSendAlarm &&
                             <SendAlarm
-                                userId="3" //받는사람
+                                userId={senderId} //받는사람
                                 alarmRole="2" // 알림 타입
-                                senderId="1" //보낸사람(roomId)
+                                senderId={roomId} //보낸사람(roomId)
                                 messageContent={sendAlarmMessage} // 알림 내용
                             />
                         }
