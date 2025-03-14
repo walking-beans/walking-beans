@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,11 +37,22 @@ public class ChatController {
 
     //메시지 송신 및 수신, /pub가 생략된 모습. 클라이언트 단에선 /pub/message로 요청
     @MessageMapping("/message")
+    @SendTo("/sub/chatroom")
     public ResponseEntity<Void> receiveMessage(@RequestBody Message message) {
+        log.info("================ message : {} ===================", message.toString());
         // 메시지를 해당 채팅방 구독자들에게 전송
-        messagingTemplate.convertAndSend("/sub/chatroom/1", message);
-        chattingRoomService.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
+        messagingTemplate.convertAndSend("/sub/chatroom/" + message.getRoomId(), message);
         messageService.insertMessageByRoomId(message);
+        return ResponseEntity.ok().build();
+    }
+
+    @MessageMapping("/chatting")
+    @SendTo("/sub/chattingroom")
+    public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
+        log.info("================ receiveChattingMessage : {} ===================", message.toString());
+        // 메시지를 해당 채팅방 구독자들에게 전송
+        messagingTemplate.convertAndSend("/sub/chattingroom" + message.getRoomId(), message);
+        chattingRoomService.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
         return ResponseEntity.ok().build();
     }
 
