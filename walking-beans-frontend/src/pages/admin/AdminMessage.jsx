@@ -118,6 +118,7 @@ import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefa
 
 import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
 import SendAlarm from "../../components/admin/SendAlarm";
+
 import sendAlarm from "../../components/admin/SendAlarm";
 
 function AdminMessage({user}) {
@@ -226,11 +227,12 @@ function AdminMessage({user}) {
             setPreviewImage(null);
             // input disabled 해제하기
             setIsDisabled(false);
+        } else {
+            alert("메세지를 작성해주세요");
             setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
             setShowSendAlarm(true); //알림 전송 트리거
             return;
         }
-        alert("메세지를 작성해주세요");
         // 알람 컴포넌트
 
     };

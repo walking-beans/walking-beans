@@ -1,45 +1,71 @@
 import {useEffect, useState} from "react";
 import apiRiderService from "../apiRiderService";
 
-const RiderOrderStatus = ({orderId}) => {
+const RiderOrderStatus = ({orderId, message, css}) => {
     const [newOrderId, setOrderId] = useState(orderId);
     const [orderInfo, setOrderInfo] = useState(null);
 
-    const status = {
-        '0' : '구매 희망',
-        '1' : '주문 접수 대기 중',
-        '2' : '조리 중',
-        '3' : '조리 완료',
-        '4' : '배달 중',
-        '5' : '배달 완료'
-    };
+    const [orderProgress, setOrderProgress] = useState(0);
+
+    const setOrderProgressPercent = (no_order_status) => {
+        if (no_order_status === 3) {
+            setOrderProgress(30);
+        } else if (no_order_status === 4) {
+            setOrderProgress(50);
+        } else if (no_order_status === 5) {
+            setOrderProgress(72);
+        } else if (no_order_status === 6) {
+            setOrderProgress(100);
+        } else {
+            setOrderProgress(0);
+        }
+    }
 
     useEffect(() => {
-        console.log("orderId : " + orderId)
+        console.log("orderId : " + orderId);
+        console.log("css : " + css)
+
         setOrderId(orderId);
         apiRiderService.getOrderStatusWithRemainingTime(newOrderId, (no) => {
             setOrderInfo(no);
+            setOrderProgressPercent(no.orderStatus);
             console.log("RiderOrderStatus order : " + no);
         });
     }, []);
 
 
     return (
-        <div className="-container">
-            <ul>
-                {
-                    orderInfo ? (
-                        <div>
-                            <div>{orderInfo.orderStatus}</div>
-                            <div>{orderInfo.orderModifiedDate}</div>
-                            <div>{orderInfo.storeMaxDeliveryTime}</div>
-                            <div>{orderInfo.timeRemaining}</div>
+        <div className={css.order_status}>
+            {
+                orderInfo ? (
+                    <div className={css.order_status_content}>
+                        {
+                            (orderInfo.timeRemaining !== 0) ?
+                                <div className={css.order_status_time_div}>
+                                    <span className={css.order_status_time_remaining}>{orderInfo.timeRemaining}분</span>
+                                    <span className={css.order_status_delivery_deadline}>{orderInfo.deliveryDeadline}</span>
+                                </div>
+                                :
+                                <div className={css.order_status_message}>
+                                    {message}
+                                </div>
+                        }
+                        <div className="progress">
+                            <div className="progress-bar bg-warning" role="progressbar" style={{ width: `${orderProgress}%` }}
+                                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                    ) : (
-                        <div>Loading...</div>
-                    )
-                }
-            </ul>
+                        <div className={css.order_status_steps}>
+                            <span className={css.order_status_step}>주문 수락</span>
+                            <span className={css.order_status_step}>조리 중</span>
+                            <span className={css.order_status_step}>조리 완료</span>
+                            <span className={css.order_status_step}>배달 중</span>
+                            <span className={css.order_status_step}>배달 완료</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={css.order_status_loading}>Loading...</div>
+                )
+            }
         </div>
     )
 };

@@ -2,6 +2,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import RiderOrderDetail from "./RiderOrderDetail";
 import RiderOrderStatus from "./RiderOrderStatus";
+import "../../../css/rider/RiderOrderStatus.css";
 
 const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
@@ -32,8 +33,24 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
     };
 
     return (
-        <div>
-            <RiderOrderStatus orderId={1} />
+        <div className="untaken_order_detail_container">
+            <RiderOrderStatus
+                orderId={10}
+                message="배달 시간이 초과되었습니다."
+                css={
+                    {
+                        order_status : "riderOrderStatus-container",
+                        order_status_content : "",
+                        order_status_time_div : "",
+                        order_status_message : "",
+                        order_status_time_remaining : "",
+                        order_status_delivery_deadline : "",
+                        order_status_steps : "progress-elements",
+                        order_status_step : "",
+                        order_status_loading: ""
+                    }
+                }
+            />
             <p>{selectedStore?.storeName}</p>
             <p>배달 금액 : 3,500원</p>
             <p>주문 시간 : {selectedStore?.orderCreateDate}</p>

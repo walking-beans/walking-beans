@@ -49,7 +49,11 @@ public class RiderOrderStatusDTO {
     public void definingDeliveryDeadline() {
         LocalDateTime deadLine = orderModifiedDate.plusMinutes(storeMaxDeliveryTime);
 
-        this.deliveryDeadline = deadLine.getHour() + ":" + deadLine.getMinute();
+        if (deadLine.getHour() > 12) {
+            this.deliveryDeadline = "오후 " + (deadLine.getHour() - 12) + ":" + (deadLine.getMinute());
+        } else {
+           this.deliveryDeadline = "오전 " + deadLine.getHour() + ":" + deadLine.getMinute();
+        }
     }
 
 }
