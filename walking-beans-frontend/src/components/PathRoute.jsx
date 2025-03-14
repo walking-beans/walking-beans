@@ -113,7 +113,7 @@ function PathRoute() {
                                 {/* 주문하기 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
+                                <Route path="/user/order/payment/:orderId" element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
@@ -122,7 +122,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status" element={<UserDeliveryStatus/>}/>
+                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 

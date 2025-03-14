@@ -84,5 +84,11 @@ public class AddressAPIController {
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
     }
 
+    // 주문 기준으로 사용자가 선택한 주소 가져오기
+    @GetMapping("/user/order/{orderId}")
+    public Address getUserAddressByOrderId(@PathVariable("orderId") long orderId){
+        return addressService.getUserAddressByOrderId(orderId);
+    }
+
 
 }
