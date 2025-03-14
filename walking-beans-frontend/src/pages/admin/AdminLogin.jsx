@@ -163,17 +163,6 @@ const AdminLoginSocial = () => {
         }
     }, [KakaoCallback]);
 
-    /*
-    useEffect(() => {
-        if (code){
-            finalLogin();
-        }
-    }, [code]);
-
-    const finalLogin = () => {
-        apiUserService.kakaoCallback(code, setCallback);
-        navigate("/");
-    }*/
 
     const naverLogin = () => {
         apiUserService.naverLogin(setNaverCallback);
