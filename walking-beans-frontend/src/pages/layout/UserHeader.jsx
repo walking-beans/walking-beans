@@ -34,7 +34,7 @@ const UserHeader = ({user}) => {
         const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
         const storedUserId = localStorage.getItem("user");
         // JSON 문자열을 객체로 변환
-        const userObject = JSON.parse(storedUserId);
+        const userObject = storedUserId ? JSON.parse(storedUserId) : {user_id : "noId"} // user가 null이면 noId넣기
 
         // 객체에서 user_id를 가져옵니다.
         const userId = userObject.user_id;
