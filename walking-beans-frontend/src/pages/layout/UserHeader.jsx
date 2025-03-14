@@ -53,11 +53,10 @@ const UserHeader = ({user}) => {
             console.log("📩 새 알림 도착:", event.data); // event.data 로그로 실제 내용을 확인
             try {
                 const receivedData = JSON.parse(event.data);  // event.data를 JSON.parse로 변환
-                console.log(userId);
                 if (receivedData.userId === userId) {
                     setNotifications((prevNotifications) => [
                         ...prevNotifications,
-                        {message: receivedData.alarmContent, type: receivedData.alarmRole},
+                        {message: receivedData.alarmContent, type: receivedData.alarmRole, senderId: receivedData.alarmSenderId},// 알람리스트
                     ]);
 
                     setUnreadCount((prevCount) => prevCount + 1);
@@ -192,7 +191,7 @@ const UserHeader = ({user}) => {
                                                         //setNotifications([]);//알림 목록 비우기
                                                         setShowDropdown(false); // 알림목록 닫기
                                                     } else if (noti.type === 2) {
-                                                        navigate("/chat");
+                                                        navigate(`/chat/message/${noti.senderId}`);
                                                         setShowDropdown(false); // 알림목록 닫기
                                                     }
                                                 }

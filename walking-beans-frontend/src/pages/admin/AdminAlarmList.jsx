@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 
 const AdminAlarmList = () => {
@@ -70,7 +71,11 @@ const AdminAlarmList = () => {
                         <div style={style.AlarmList}>
                             <h3>{value.alarmRole === 1
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
-                            <p>{value.alarmContent}</p>
+                            <p>{value.alarmRole === 1
+                                ? <Link to="/link1">{value.alarmContent}</Link>
+                                : value.alarmRole === 2
+                                    ? <Link to="/link2">{value.alarmContent}</Link>
+                                    : value.alarmContent}</p>
                             <p>
                                 {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
