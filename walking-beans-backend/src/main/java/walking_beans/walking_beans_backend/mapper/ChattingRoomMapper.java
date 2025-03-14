@@ -3,7 +3,7 @@ package walking_beans.walking_beans_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
-import walking_beans.walking_beans_backend.model.vo.admin.UserChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
 
 import java.util.List;
 

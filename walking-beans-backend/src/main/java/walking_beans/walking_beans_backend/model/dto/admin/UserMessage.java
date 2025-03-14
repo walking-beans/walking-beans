@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.model.vo.admin;
+package walking_beans.walking_beans_backend.model.dto.admin;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

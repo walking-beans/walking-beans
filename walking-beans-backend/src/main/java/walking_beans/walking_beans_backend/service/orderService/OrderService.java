@@ -2,6 +2,7 @@ package walking_beans.walking_beans_backend.service.orderService;
 
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
 
@@ -16,6 +17,10 @@ public interface OrderService {
     Integer updateOrderStatus(long orderId, int orderStatus);
 
     List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty);
+
+    RiderOrderStatusDTO getOrderStatusWithRemainingTime(@Param("orderId") long orderId);
+
+    /****************************************************************************************/
 
 
 

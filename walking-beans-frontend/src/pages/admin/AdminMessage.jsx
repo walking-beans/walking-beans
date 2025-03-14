@@ -153,7 +153,7 @@ function AdminMessage({user}) {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/message?`, (message) => {
+            stompClient.current.subscribe(`/sub/chatroom/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -180,6 +180,7 @@ function AdminMessage({user}) {
 
     //메세지 전송
     const sendMessage = () => {
+        if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
                 roomId : roomId,
@@ -188,6 +189,7 @@ function AdminMessage({user}) {
                 messageContent : inputValue
             };
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
+            stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
             setInputValue('');
             return;
         } else if (stompClient.current && previewImage) {

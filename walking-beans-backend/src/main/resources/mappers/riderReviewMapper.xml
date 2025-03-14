@@ -7,4 +7,11 @@
         FROM riderreview
         WHERE rider_id = #{riderId}
     </select>
+
+    <insert id="insertRiderReview">
+        INSERT INTO riderreview (rider_id, order_id, rider_review_rating)
+        VALUES (3, 3, 4);
+    </insert>
+
+
 </mapper>

@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.model.vo.rider;
+package walking_beans.walking_beans_backend.model.dto.rider;
 
 import lombok.*;
 
