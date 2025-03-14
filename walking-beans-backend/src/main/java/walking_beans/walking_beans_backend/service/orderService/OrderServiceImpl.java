@@ -6,6 +6,7 @@ import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
 
@@ -49,6 +50,12 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    @Override
+    public RiderOrderStatusDTO getOrderStatusWithRemainingTime(long orderId) {
+        RiderOrderStatusDTO orderStatusDTO = orderMapper.getOrderStatusWithRemainingTime(orderId);
+        orderStatusDTO.definingTimeRemaining();
+        return orderStatusDTO;
+    }
 
     /****************************************  ****************************************/
 

@@ -2,7 +2,6 @@ package walking_beans.walking_beans_backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.Message;
-import walking_beans.walking_beans_backend.model.vo.admin.UserChattingRoom;
-import walking_beans.walking_beans_backend.model.vo.admin.UserMessage;
+import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.admin.UserMessage;
 import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
 

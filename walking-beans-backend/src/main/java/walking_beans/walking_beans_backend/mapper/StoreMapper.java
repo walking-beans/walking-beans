@@ -3,7 +3,7 @@ package walking_beans.walking_beans_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
 import java.util.List;
 

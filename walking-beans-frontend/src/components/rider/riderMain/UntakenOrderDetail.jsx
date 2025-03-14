@@ -1,8 +1,15 @@
 import {Link, useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import RiderOrderDetail from "./RiderOrderDetail";
+import RiderOrderStatus from "./RiderOrderStatus";
 
 const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("UntakenOrder selected Store : " + selectedStore);
+    }, []);
 
     const goToDetail = () => {
         navigate(`/rider/ontheway/${selectedStore.orderId}`);
@@ -26,6 +33,7 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     return (
         <div>
+            <RiderOrderStatus orderId={1} />
             <p>{selectedStore?.storeName}</p>
             <p>배달 금액 : 3,500원</p>
             <p>주문 시간 : {selectedStore?.orderCreateDate}</p>
