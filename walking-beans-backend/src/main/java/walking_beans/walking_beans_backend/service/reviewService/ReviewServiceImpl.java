@@ -1,4 +1,3 @@
-/*
 package walking_beans.walking_beans_backend.service.reviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     ReviewMapper reviewMapper;
 
-    @Value("${imgur.0d3ae8861e00828}")
+    @Value("${imgur.client.id}")
     private String imgurClientId;
 
     // 특정 매장 리뷰 조회
@@ -55,6 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.deleteReview(reviewId);
     }
 
+    // 이미지 파일 추가
     @Override
     public String uploadToImgur(MultipartFile file) throws IOException {
         String url = "https://api.imgur.com/3/image";
@@ -66,20 +66,19 @@ public class ReviewServiceImpl implements ReviewService {
         byte[] fileBytes = file.getBytes();
         String encodedImage = Base64.getEncoder().encodeToString(fileBytes);
 
-        JSONObject body = new JSONObject();
-        try {
-            body.put("image", encodedImage);
+        String requestBody = "{\"image\": \"" + encodedImage + "\"}";
 
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(body.toString(), headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
-        JSONObject jsonResponse = new JSONObject(response.getBody());
-        return jsonResponse.getJSONObject("data").getString("link"); // 업로드된 이미지 URL 반환
-    }  catch (JSONException e) {
-        throw new RuntimeException(e);
-    }
+
+            // ✅ JSON 응답에서 "link" 값만 추출
+        try {
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+            return jsonResponse.getJSONObject("data").getString("link"); // "https://i.imgur.com/Y7h9NAg.png" 만 반환
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
-*/
