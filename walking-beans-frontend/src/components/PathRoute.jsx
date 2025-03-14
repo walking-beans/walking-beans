@@ -50,11 +50,14 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import SearchHeader from "../pages/layout/SearchHeader";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+import UserReviewWrite from "../pages/user/UserReviewWrite";
 
 
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
+    const [selectedStoreId,setSelectedStoreId] = useState();
+    const [currentOrderId,setCurrentOrderId] = useState();
 
 
     const [user, setUser] = useState(() => {
@@ -115,7 +118,7 @@ function PathRoute() {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-                                {/* ✅ `searchResults`를 `UserSearchMap`에 전달 */}
+                                <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 

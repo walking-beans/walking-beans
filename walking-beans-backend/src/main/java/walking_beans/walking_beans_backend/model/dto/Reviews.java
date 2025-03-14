@@ -5,7 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -15,20 +15,23 @@ import java.security.Timestamp;
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reviewId;
+    private Long reviewId;
 
-    private long userId;
+    private Long orderId;
 
-    private long storeId;
+    private Long userId;
+
+    private Long storeId;
 
     private int reviewStarRating;
 
     private String reviewContent;
 
-    private Timestamp reviewCreatedDate;
+    private LocalDateTime reviewCreatedDate;  // 변경
 
-    private Timestamp reviewModifiedDate;
+    private LocalDateTime reviewModifiedDate;
 
     private String reviewPictureUrl;
+
 
 }

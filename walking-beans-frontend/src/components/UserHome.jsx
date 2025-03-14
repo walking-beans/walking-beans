@@ -97,9 +97,10 @@ const UserHome = ({ user: initialUser }) => {
 
     // 주소로 지도 가져오기
     useEffect(() => {
-        if (!userLat || !userLng) return; // 📌 대표 주소가 없으면 실행 X
+        const centerLat = userId ? userLat : userLocation?.lat;
+        const centerLng = userId ? userLng : userLocation?.lng;
 
-        console.log("대표 주소 위도:", userLat, "대표 주소 경도:", userLng);
+        if (!centerLat || !centerLng) return; // 📌 좌표가 없으면 실행 X
 
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -107,40 +108,39 @@ const UserHome = ({ user: initialUser }) => {
         document.head.appendChild(script);
 
         script.onload = () => {
-            console.log("카카오 지도 API 로드 완료");
             window.kakao.maps.load(() => {
-                console.log("지도 객체 생성 시도");
                 const mapContainer = document.getElementById("map");
-                if (!mapContainer) {
-                    console.error("지도 컨테이너가 존재하지 않습니다.");
-                    return;
+                if (!mapContainer) return;
+
+                let centerLat = userLat;
+                let centerLng = userLng;
+
+                // 🔹 로그인하지 않은 유저라면 현재 위치를 기본 중심으로 설정
+                if (!userId && userLocation) {
+                    centerLat = userLocation.lat;
+                    centerLng = userLocation.lng;
                 }
 
                 const mapOption = {
-                    center: new window.kakao.maps.LatLng(userLat, userLng), // 📌 대표 주소 중심
+                    center: new window.kakao.maps.LatLng(centerLat, centerLng),
                     level: 5,
                 };
                 const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
-                setMap(newMap); // 맵을 상태로 저장하여 재렌더링 방지
+                setMap(newMap);
 
+                // 🔹 지도에 마커 추가
                 new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(userLat, userLng),
+                    position: new window.kakao.maps.LatLng(centerLat, centerLng),
                     map: newMap,
-                    title: "대표 주소"
+                    title: userId ? "대표 주소" : "현재 위치"
                 });
-
-                console.log("지도 객체 생성 완료", newMap);
             });
-        };
-
-        script.onerror = (error) => {
-            console.error("카카오 지도 API 로드 실패:", error);
         };
 
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLat, userLng]);  // 📌 대표 주소 변경될 때마다 실행
+    }, [userLat, userLng, userLocation]);  // 📌 대표 주소 변경될 때마다 실행
 
     // 사용자 위치 업데이트 (Geolocation API를 통해 현재 위치를 설정)
     useEffect(() => {
@@ -190,16 +190,31 @@ const UserHome = ({ user: initialUser }) => {
     };
 
     const handleMapClick = () => {
-        navigate("user/search/map", { state: { lat: userLat, lng: userLng }  });
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+        navigate("user/search/map", { state: { lat: userLat, lng: userLng } });
     };
 
-
+    const handleUserAddress = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }else {
+            navigate("/user/insertAddress")
+        }
+    }
     return (
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
             <div className="d-flex align-items-center px-3 mb-2">
                 <h5 className="fw-bold mb-0"
-                    onClick={() => navigate("/user/insertAddress")}
+                    onClick={handleUserAddress}
                     style={{cursor: "pointer"}}>
                     {userAddress ? userAddress.address : "주소를 입력해주세요"}
                     <i className="bi bi-chevron-down ms-1"></i>
