@@ -13,6 +13,7 @@ import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
@@ -76,7 +77,13 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.getOrdersByRiderIdOnDuty(riderIdOnDuty));
     }
 
-    /* ***************************************  *************************************** */
+    @GetMapping("/riderOrderTimeRemaining")
+    public ResponseEntity<RiderOrderStatusDTO> getOrderStatusWithRemainingTime(@RequestParam("orderId") long orderId) {
+        log.info("=== getOrderStatusWithRemainingTime orderId: {} ===", orderId);
+        return ResponseEntity.ok(orderService.getOrderStatusWithRemainingTime(orderId));
+    }
+
+    /****************************************  ****************************************/
 
 
 

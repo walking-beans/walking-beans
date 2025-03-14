@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.riderReview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.RiderReviewMapper;
+import walking_beans.walking_beans_backend.model.dto.RiderReview;
 
 import java.util.List;
 
@@ -21,5 +22,10 @@ public class RiderReviewServiceImpl implements RiderReviewService{
         }
         ratingAverage /= riderAllStars.size();
         return ratingAverage;
+    }
+
+    @Override
+    public Integer insertRiderReview(RiderReview riderReview) {
+        return riderReviewMapper.insertRiderReview(riderReview);
     }
 }

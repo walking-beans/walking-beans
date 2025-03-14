@@ -6,6 +6,7 @@ import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
 
@@ -49,6 +50,16 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    @Override
+    public RiderOrderStatusDTO getOrderStatusWithRemainingTime(long orderId) {
+        RiderOrderStatusDTO orderStatusDTO = orderMapper.getOrderStatusWithRemainingTime(orderId);
+        // timeRemaining (배달 완료까지 남은 시간) 설정하는 method
+        if (orderStatusDTO.definingTimeRemaining()) {
+            // timeRemaining 이 0이 아니라면 deadline 시간 설정하기
+            orderStatusDTO.definingDeliveryDeadline();
+        }
+        return orderStatusDTO;
+    }
 
     /****************************************  ****************************************/
 

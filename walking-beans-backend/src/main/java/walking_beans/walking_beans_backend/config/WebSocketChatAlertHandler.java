@@ -1,14 +1,18 @@
 package walking_beans.walking_beans_backend.config;
 
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmService;
-import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -29,6 +33,7 @@ public class WebSocketChatAlertHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
+        session.getAttributes().put("userId", 1L);
         sessions.add(session);
         System.out.println("WebSocket connection established: " + session.getId());
     }
@@ -41,9 +46,18 @@ public class WebSocketChatAlertHandler extends TextWebSocketHandler {
         // 메시지 저장
         alarmService.sendMessage(receivedAlarm);
 
-        // 받아온 userId로 알림을 보냄
-        long targetUserId = receivedAlarm.getUserId(); // 받은 메시지에서 userId를 추출
-        sendAlertToUser(targetUserId, receivedAlarm);
+        // 모든 세션에 메시지 전달
+        for (WebSocketSession webSocketSession : sessions) {
+            if (webSocketSession.isOpen()) {
+                //webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(receivedAlarm)));
+                String jsonMessage = objectMapper.writeValueAsString(receivedAlarm);
+                webSocketSession.sendMessage(new TextMessage(jsonMessage));
+                System.out.println("Message sent to session: " + webSocketSession.getId());
+                System.out.println(jsonMessage);
+            }
+        }
+        // 알림 전송
+        //alertHandler.sendAlert("📩 새로운 채팅이 도착했습니다: " + receivedAlarm);
     }
 
     @Override
@@ -52,24 +66,4 @@ public class WebSocketChatAlertHandler extends TextWebSocketHandler {
         System.out.println("WebSocket connection closed: " + session.getId());
     }
 
-    // 특정 userId에게만 알림을 전송하는 메서드
-    public void sendAlertToUser(long targetUserId, Alarms receivedAlarm) {
-        for (WebSocketSession webSocketSession : sessions) {
-            if (webSocketSession.isOpen()) {
-                // 세션에서 userId 추출 (세션의 속성으로 저장된 userId가 있어야 함)
-                Long sessionUserId = (Long) webSocketSession.getAttributes().get("userId");
-
-                // userId가 일치하는 세션에만 메시지 전송
-                if (sessionUserId != null && sessionUserId.equals(targetUserId)) {
-                    try {
-                        webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(receivedAlarm)));
-                        System.out.println("Message sent to session: " + webSocketSession.getId() + " for user: " + targetUserId);
-                    } catch (IOException e) {
-                        System.err.println("Error sending alert: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
 }

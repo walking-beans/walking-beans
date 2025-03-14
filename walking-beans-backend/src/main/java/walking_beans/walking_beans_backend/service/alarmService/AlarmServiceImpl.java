@@ -30,14 +30,14 @@ public class AlarmServiceImpl implements AlarmService {
         alarm.setUserId(alarms.getUserId()); // 메시지를 보낸 사용자 ID
         alarm.setAlarmContent(alarms.getAlarmContent());
         alarm.setAlarmStatus(false);
-        alarm.setAlarmSenderId(alarms.getUserId()); // 보낸 사람 ID
+        alarm.setAlarmSenderId(alarms.getAlarmSenderId()); // 보낸 사람 ID
         alarm.setAlarmRole(alarms.getAlarmRole());
         alarm.setAlarmCreateDate(new Timestamp(System.currentTimeMillis()));
 
         alarmMapper.insertAlarm(alarm);
 
         // 웹소켓 알림 전송
-        webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+        webSocketAlertHandler.sendAlert(alarm);
     }
 
     @Override

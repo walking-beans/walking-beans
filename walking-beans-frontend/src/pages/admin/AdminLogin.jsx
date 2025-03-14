@@ -7,7 +7,7 @@ const AdminLogin = () => {
     return (
         <div>
             <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginSocial/>/*}{/*소셜 로그인*/}
         </div>
     )
 
@@ -163,17 +163,6 @@ const AdminLoginSocial = () => {
         }
     }, [KakaoCallback]);
 
-    /*
-    useEffect(() => {
-        if (code){
-            finalLogin();
-        }
-    }, [code]);
-
-    const finalLogin = () => {
-        apiUserService.kakaoCallback(code, setCallback);
-        navigate("/");
-    }*/
 
     const naverLogin = () => {
         apiUserService.naverLogin(setNaverCallback);
