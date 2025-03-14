@@ -131,8 +131,12 @@ function AdminMessage({user}) {
     // input disabled
     const [isDisabled, setIsDisabled] = useState(false);
 
+
     const [showSendAlarm, setShowSendAlarm] = useState(false);
     const [sendAlarmMessage, setSendAlarmMessage] = useState("");
+
+    /*** alarm 으로 보낼 내용 받을 senderId ***/
+    const [senderId, setSenderId] = useState(0);
 
     // 입력 필드에 변화가 있을 때마다 inputValue를 업데이트
     const handleInputChange = (event) => {
@@ -179,12 +183,18 @@ function AdminMessage({user}) {
                 setMessages(newMessage);
                 console.log(newMessage);
             });
+        apiRiderService.getAllChattingMembers(roomId,
+            1,
+            (chattingMemberList) => {
+                setSenderId(chattingMemberList[0].roomReceiverId);
+            });
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, []);
 
     //메세지 전송
     const sendMessage = () => {
+        console.log("sendMessage senderId : " + senderId);
         if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
@@ -222,6 +232,7 @@ function AdminMessage({user}) {
         }
         alert("메세지를 작성해주세요");
         // 알람 컴포넌트
+
     };
 
     return (

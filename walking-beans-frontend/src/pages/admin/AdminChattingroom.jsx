@@ -142,8 +142,6 @@ const AdminChattingroom = ({user}) => {
 };
 
 export default AdminChattingroom;*/
-
-import { useBeforeunload } from 'react-beforeunload';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
