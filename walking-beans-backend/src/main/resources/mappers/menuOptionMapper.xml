@@ -95,11 +95,11 @@
             </foreach>
     </insert>
 
-    <!--메뉴옵션 삭제하기 , 조건 menuId-->
+    <!--메뉴옵션 삭제하기 , 조건 optionId-->
     <delete id="deleteMenuOption">
-        DELETE *
+        DELETE
         FROM menuoption
-        WHERE menu_id =#{menuId}
+        WHERE option_id =#{optionId}
     </delete>
 
     <!-- 장바구니에 등록할 메뉴, 메뉴옵션 가져오기 -->

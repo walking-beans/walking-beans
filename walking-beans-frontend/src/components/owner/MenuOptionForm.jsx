@@ -60,7 +60,7 @@ const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
                     />
 
                     <input
-                        type='text'
+                        type='number'
                         placeholder='가격'
                         name='value'
                         value={field.optionPrice}

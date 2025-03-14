@@ -80,23 +80,11 @@ public class MenuOptionAPIController {
 
     /**삭제하기
      *
-     * @param menuId
-     */
-    @DeleteMapping("/delete")
-    public void deleteMenuOption(@PathVariable long menuId) {
-        menuOptionService.deleteMenuOption(menuId);
-    }
-
-
-    /**
-     * 사용자가 선택한 옵션 확인하기 옵션명이 유니크한 경우
      * @param optionId
-     * @return
      */
-
-    @GetMapping("/search/{optionId}")
-
-    public MenuOption selectMenuInfoToCart(@PathVariable long optionId) {
-        return menuOptionService.selectMenuInfoToCart(optionId);
+    @DeleteMapping("/{optionId}")
+    public void deleteMenuOption(@PathVariable long optionId) {
+        menuOptionService.deleteMenuOption(optionId);
     }
+
 }

@@ -96,7 +96,7 @@ public class MenuAPIController {
      * @param menuId
      */
     @DeleteMapping("/{menuId}")
-    public void deleteMenu(@RequestBody long menuId) {
+    public void deleteMenu(@PathVariable long menuId) {
         menuService.deleteMenu(menuId);
     }
 

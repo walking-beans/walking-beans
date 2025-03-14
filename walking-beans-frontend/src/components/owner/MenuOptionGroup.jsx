@@ -1,6 +1,6 @@
 
 
-const MenuOptionGroup = ({name,modifiedDate,price,handleDelete}) => {
+const MenuOptionGroup = ({optionId,name,modifiedDate,price,handleDelete}) => {
     //메뉴id에 속한 메뉴옵션들 그룹별로 표시
     return (
         <div className="row">
@@ -15,7 +15,7 @@ const MenuOptionGroup = ({name,modifiedDate,price,handleDelete}) => {
                     {price}
                 </div>
                 <div className={"col-2"}>
-                    <button onClick={handleDelete}>삭제</button>
+                    <button onClick={(e)=>handleDelete(e,optionId)}>삭제</button>
                 </div>
 
         </div>
