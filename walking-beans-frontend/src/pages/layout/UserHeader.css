@@ -146,6 +146,10 @@
     align-items: center;
 }
 
+.user-header-wrapper .AlarmNotificationItem:hover {
+    cursor: pointer;
+}
+
 .user-header-wrapper .AlarmBadge {
     position: absolute;
     top: -1px;

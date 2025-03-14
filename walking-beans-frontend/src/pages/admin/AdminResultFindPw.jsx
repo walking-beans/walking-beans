@@ -20,8 +20,8 @@ const AdminResultFindPw = () => {
             {/* 알람 전송 상태가 true일 때만 SendAlarm 컴포넌트 렌더링 */}
             {isAlarmSent && (
                 <SendAlarm
-                    userId="2"
-                    alarmRole="2"
+                    userId="1"
+                    alarmRole="1"
                     senderId="1"
                     messageContent="또다시테스팅을한다123"
                 />

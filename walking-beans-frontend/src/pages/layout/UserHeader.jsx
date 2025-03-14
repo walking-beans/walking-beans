@@ -57,7 +57,7 @@ const UserHeader = ({user}) => {
                 if (receivedData.userId === userId) {
                     setNotifications((prevNotifications) => [
                         ...prevNotifications,
-                        {message: receivedData.alarmContent, type: "채팅"},
+                        {message: receivedData.alarmContent, type: receivedData.alarmRole},
                     ]);
 
                     setUnreadCount((prevCount) => prevCount + 1);
@@ -153,10 +153,17 @@ const UserHeader = ({user}) => {
 
     //알람 토글
     const toggleAlarm = () => {
-        setShowDropdown(!showDropdown);
-        setUnreadCount(0);
-    }
+        if (showDropdown) { //true
+            setNotifications([]);// 알림 리스트를 초기화
+        } else {
+            // 알림을 열 때는 기존 알림 리스트를 비우지 않음
+            setUnreadCount(0);  // 알림 아이콘 배지 초기화
+        }
 
+        setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
+        //setShowDropdown(!showDropdown);
+        //setUnreadCount(0);
+    };
 
     return (
         <div className="user-header-wrapper">
@@ -179,15 +186,30 @@ const UserHeader = ({user}) => {
                                     <div className={"AlarmDropdown"}>
                                         {notifications.length > 0 ? (
                                             notifications.map((noti, index) => (
-                                                <div key={index} className={"AlarmNotificationItem"}>
-                                                    <strong>{noti.type === "채팅" ? "💬 채팅" : "🔔 알림"}:</strong> {noti.message}
+                                                <div key={index} className={"AlarmNotificationItem"} onClick={() => {
+                                                    if (noti.type === 1) {
+                                                        navigate("/alarmlist");
+                                                        //setNotifications([]);//알림 목록 비우기
+                                                        setShowDropdown(false); // 알림목록 닫기
+                                                    } else if (noti.type === 2) {
+                                                        navigate("/chat");
+                                                        setShowDropdown(false); // 알림목록 닫기
+                                                    }
+                                                }
+                                                }>
+                                                    <strong>{noti.type === 1 ? "🔔 알림" : noti.type === 2 ? "💬 채팅" : ""}:</strong><br /> {noti.message}
                                                 </div>
                                             ))
                                         ) : (
-                                            <p>알림이 없습니다.</p>
+                                            <div>
+                                                <p>알림이 없습니다.</p>
+                                                <Link to="/alarmlist" onClick={() => setShowDropdown(false)}>
+                                                    알림 목록 보기
+                                                </Link>
+                                            </div>
                                         )}
                                     </div>
-                                    )}
+                                )}
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>

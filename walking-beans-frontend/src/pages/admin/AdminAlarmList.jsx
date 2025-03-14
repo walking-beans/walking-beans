@@ -53,6 +53,15 @@ const AdminAlarmList = () => {
 
     return (
         <div className="user-home-container">
+            {AlarmList.length > 0 && (
+                <div style={style.AlarmDeleteContainer}>
+                    <button type={"submit"} onClick={deleteAllAlrams} style={style.AlarmDeleteBtn}>
+                        알림 모두 지우기
+                    </button>
+                </div>
+            )}
+
+            {/* 알림 리스트가 없을 때 */}
             {AlarmList.length === 0 ? (
                 <h3 style={style.NoAlarmList}>알람이 없습니다</h3>
             ) : (
@@ -60,7 +69,7 @@ const AdminAlarmList = () => {
                     <div key={index}>
                         <div style={style.AlarmList}>
                             <h3>{value.alarmRole === 1
-                                ? "알람" : value.alarmRole === 2 ? "메시지" : ""}</h3>
+                                ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
                             <p>{value.alarmContent}</p>
                             <p>
                                 {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
@@ -72,13 +81,6 @@ const AdminAlarmList = () => {
                         </div>
                     </div>
                 ))
-            )}
-            {AlarmList.length > 0 && (
-                <div style={style.AlarmDeleteContainer}>
-                    <button type={"submit"} onClick={deleteAllAlrams} style={style.AlarmDeleteBtn}>
-                        알림 모두 지우기
-                    </button>
-                </div>
             )}
         </div>
     );
@@ -95,17 +97,20 @@ const style = {
         backgroundColor: "#FAF1D0",
         padding: "8px",
     },
-    NoAlarmList : {
+    NoAlarmList: {
         textAlign: "center",
         minHeight: "70vh",
     },
 
-    AlarmDeleteContainer : {
+    AlarmDeleteContainer: {
         textAlign: "right",
     },
 
-    AlarmDeleteBtn : {
-
+    AlarmDeleteBtn: {
+        borderRadius: "10px",
+        backgroundColor: "#F6B8A1 ",
+        border: "none",
+        padding: "5px",
     }
 }
 export default AdminAlarmList;
