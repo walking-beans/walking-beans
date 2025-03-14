@@ -50,4 +50,13 @@
         AND A.user_id = #{userId}
         AND A.address_role = 1
     </select>
+
+    <!-- 주문 기준으로 사용자가 선택한 주소 가져오기 -->
+    <select id="getUserAddressByOrderId">
+        SELECT a.address_id, a.user_id, a.address, a.detailed_address, a.address_name, a.address_latitude, A.address_longitude, a.address_role
+        FROM address a
+                 JOIN orders o ON a.address_id = o.address_id
+        WHERE o.order_id = #{orderId}
+    </select>
+
 </mapper>

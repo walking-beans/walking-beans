@@ -119,7 +119,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status" element={<UserDeliveryStatus/>}/>
+                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
