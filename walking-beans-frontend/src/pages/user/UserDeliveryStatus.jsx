@@ -12,7 +12,7 @@ const UserDeliveryStatus = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [map, setMap] = useState(null);
     const [userId, setUserId] = useState(null);
-    const navigator = useNavigate();
+    const navigate = useNavigate();
     const {orderId} = useParams();
     const [userCoords, setUserCoords] = useState({lat: null, lng: null}); // 유저 주소
     const [storeCoords, setStoreCoords] = useState({lat: null, lng: null}); // 매장 주소
@@ -20,6 +20,7 @@ const UserDeliveryStatus = () => {
     const [address, setAddress] = useState([]);
     const [order, setOrder] = useState([]);
     const [cart, setCart] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState(null);
 
     // 로그인 확인
     useEffect(() => {
@@ -32,7 +33,7 @@ const UserDeliveryStatus = () => {
         } else {
             console.log("로그인 필요");
             alert("배달 현황 서비스를 이용하시려면 로그인이 필요합니다.");
-            navigator("/login");
+            navigate("/login");
         }
     }, []);
 
@@ -160,6 +161,17 @@ const UserDeliveryStatus = () => {
 
     }, [isLoaded, userCoords, storeCoords]);
 
+    // 로컬스토리지에서 결제 방식을 가져옵니다.
+    useEffect(() => {
+        const storedPaymentMethod = localStorage.getItem("paymentMethod");
+        if (storedPaymentMethod) {
+            setPaymentMethod(storedPaymentMethod);
+        } else {
+            alert("결제 방식이 선택되지 않았습니다.");
+            navigate(`/user/order/payment/${orderId}`); // 결제 페이지로 이동
+        }
+    }, []);
+
     return (
         <div className="user-delivery-status-container">
             {/* Kakao Map */}
@@ -193,11 +205,21 @@ const UserDeliveryStatus = () => {
                 <div>{order.orderRequests}</div>
             </div>
 
-            {/* 컴포넌트 만들어서 결제 방식에 따라 다르게 보이게 하기*/}
+            {/* 결제 방식에 따른 버튼 */}
             <div className="user-order-click-btn">
-                <button onClick={() => {}}>매장 채팅하기</button>
-                <button onClick={() => {}}>라이더 채팅하기</button>
-                <button onClick={() => {}}>만나서 결제 완료</button>
+                {paymentMethod === "tossPay" && (
+                    <>
+                        <button>매장 채팅하기</button>
+                        <button>라이더 채팅하기</button>
+                    </>
+                )}
+                {paymentMethod === "meetPayment" && (
+                    <>
+                        <button>매장 채팅하기</button>
+                        <button>라이더 채팅하기</button>
+                        <button>만나서 결제 완료</button>
+                    </>
+                )}
             </div>
         </div>
     );

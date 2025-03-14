@@ -110,7 +110,7 @@ function PathRoute() {
                                 {/* 주문하기 페이지 */}
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
+                                <Route path="/user/order/payment/:orderId" element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
