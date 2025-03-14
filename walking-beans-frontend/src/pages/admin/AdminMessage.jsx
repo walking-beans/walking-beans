@@ -119,6 +119,8 @@ import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefa
 import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
 import SendAlarm from "../../components/admin/SendAlarm";
 
+import sendAlarm from "../../components/admin/SendAlarm";
+
 function AdminMessage({user}) {
 
     const {roomId} = useParams();
@@ -129,6 +131,10 @@ function AdminMessage({user}) {
     const [inputValue, setInputValue] = useState('');
     // input disabled
     const [isDisabled, setIsDisabled] = useState(false);
+
+
+    const [showSendAlarm, setShowSendAlarm] = useState(false);
+    const [sendAlarmMessage, setSendAlarmMessage] = useState("");
 
     /*** alarm 으로 보낼 내용 받을 senderId ***/
     const [senderId, setSenderId] = useState(0);
@@ -200,7 +206,10 @@ function AdminMessage({user}) {
             };
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
             stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
+            setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
+            setShowSendAlarm(true); //알람 전송 트리거
+            return;
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
             reader.readAsDataURL(previewImage);
@@ -220,6 +229,9 @@ function AdminMessage({user}) {
             setIsDisabled(false);
         } else {
             alert("메세지를 작성해주세요");
+            setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
+            setShowSendAlarm(true); //알림 전송 트리거
+            return;
         }
         // 알람 컴포넌트
 
@@ -283,6 +295,14 @@ function AdminMessage({user}) {
                         >
                             전송
                         </button>
+                        {showSendAlarm &&
+                            <SendAlarm
+                                userId="3" //받는사람
+                                alarmRole="2" // 알림 타입
+                                senderId="1" //보낸사람(roomId)
+                                messageContent={sendAlarmMessage} // 알림 내용
+                            />
+                        }
                     </div>
                 </div>
             </ul>
