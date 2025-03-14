@@ -40,9 +40,9 @@ const apiRiderService = {
             )
     },
 
-    getOrderByOrderId : function (orderId, setOrders) {
+    getOrderStatusWithRemainingTime : function (orderId, setOrders) {
         axios
-            .get(`${API_URL}/orders?orderId=${orderId}`)
+            .get(`${API_URL}/orders/riderOrderTimeRemaining?orderId=${orderId}`)
             .then(
                 (res) => {
                     setOrders(res.data);
@@ -160,6 +160,22 @@ const apiRiderService = {
                 }
             );
     },
+
+    getAllChattingMembers : function (roomId, userId, setChattingMemberList) {
+        axios
+            .get(`${API_URL}/chattingmember?roomId=${roomId}&userId=${userId}`)
+            .then(
+                (res) => {
+                    setChattingMemberList(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    }
 }
 
 export default apiRiderService;

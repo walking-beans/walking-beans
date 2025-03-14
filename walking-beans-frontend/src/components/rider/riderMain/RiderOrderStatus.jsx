@@ -17,7 +17,7 @@ const RiderOrderStatus = ({orderId}) => {
     useEffect(() => {
         console.log("orderId : " + orderId)
         setOrderId(orderId);
-        apiRiderService.getOrderByOrderId(newOrderId, (no) => {
+        apiRiderService.getOrderStatusWithRemainingTime(newOrderId, (no) => {
             setOrderInfo(no);
             console.log("RiderOrderStatus order : " + no);
         });
@@ -31,7 +31,9 @@ const RiderOrderStatus = ({orderId}) => {
                     orderInfo ? (
                         <div>
                             <div>{orderInfo.orderStatus}</div>
-                            <div>{orderInfo.orderCreateDate}</div>
+                            <div>{orderInfo.orderModifiedDate}</div>
+                            <div>{orderInfo.storeMaxDeliveryTime}</div>
+                            <div>{orderInfo.timeRemaining}</div>
                         </div>
                     ) : (
                         <div>Loading...</div>
