@@ -201,10 +201,10 @@ const UserHeader = ({user}) => {
                                                 </div>
                                             ))
                                         ) : (
-                                            <div>
+                                            <div className={"NoAlarmNotificationItem"}>
                                                 <p>알림이 없습니다.</p>
-                                                <Link to="/alarmlist" onClick={() => setShowDropdown(false)}>
-                                                    알림 목록 보기
+                                                <Link to="/alarmlist" className={"AlarmLink"} onClick={() => setShowDropdown(false)}>
+                                                    목록 보기
                                                 </Link>
                                             </div>
                                         )}

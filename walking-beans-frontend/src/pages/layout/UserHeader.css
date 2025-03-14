@@ -146,9 +146,18 @@
     align-items: center;
 }
 
+.AlarmDropdown .NoAlarmNotificationItem {
+    text-align: center;
+}
+
 .user-header-wrapper .AlarmNotificationItem:hover {
     cursor: pointer;
 }
+
+.AlarmDropdown .AlarmLink {
+    text-decoration: none;
+}
+
 
 .user-header-wrapper .AlarmBadge {
     position: absolute;
