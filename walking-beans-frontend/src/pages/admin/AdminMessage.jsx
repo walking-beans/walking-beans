@@ -117,6 +117,7 @@ import "../../css/admin/AdminMessage.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 
 import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
+import SendAlarm from "../../components/admin/SendAlarm";
 
 function AdminMessage({user}) {
 
@@ -200,7 +201,6 @@ function AdminMessage({user}) {
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
             stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
             setInputValue('');
-            return;
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
             reader.readAsDataURL(previewImage);
@@ -218,9 +218,9 @@ function AdminMessage({user}) {
             setPreviewImage(null);
             // input disabled 해제하기
             setIsDisabled(false);
-            return;
+        } else {
+            alert("메세지를 작성해주세요");
         }
-        alert("메세지를 작성해주세요");
         // 알람 컴포넌트
 
     };
