@@ -29,15 +29,10 @@
 
     <!-- 메뉴에 속한 메뉴옵션 찾기, 메뉴에서 옵션보기-->
     <select id="findMenuOptionByMenuId">
-        SELECT (option_id,
-                menu_id,
-                option_name,
-                option_content,
-                option_price,
-                option_create_date,
-                option_modified_date)
+        SELECT *
         FROM menuoption
         WHERE menu_id =#{menuId}
+        ORDER BY option_content ASC;
     </select>
 
 
@@ -54,9 +49,8 @@
         WHERE menu_id = #{menuId}
     </update>
 
-    <!--메뉴옵션 추가하기 1개씩만 -->
-    <update id="addMenuOption">
-        INSERT INTO MenuOption (
+    <!--메뉴옵션 추가하기 1개씩만
+     NSERT INTO MenuOption (
                                 option_id,
                                 menu_id,
                                 option_name,
@@ -75,7 +69,31 @@
              NOW()
             )
 
-    </update>
+     -->
+    <!--여러개 동시 insert item명과 변수명 앞에 붙는 명칭이 동일해야함.-->
+    <insert id="addMenuOption" parameterType="java.util.List">
+        INSERT INTO MenuOption
+        (
+        menu_id,
+        option_name,
+        option_content,
+        option_price,
+        option_create_date,
+        option_modified_date
+        )
+        VALUES
+            <foreach collection="list" item="menuOptions" separator=",">
+            (
+
+            #{menuOptions.menuId},
+            #{menuOptions.optionName},
+            #{menuOptions.optionContent},
+            #{menuOptions.optionPrice},
+             NOW(),
+             NOW()
+            )
+            </foreach>
+    </insert>
 
     <!--메뉴옵션 삭제하기 , 조건 menuId-->
     <delete id="deleteMenuOption">

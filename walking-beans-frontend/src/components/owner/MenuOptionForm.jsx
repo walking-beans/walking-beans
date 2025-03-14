@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-const MenuOptionForm = ({option_content, onUpdate}) => {
+const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
     const {id} = useParams();
 
     // 입력필드
-    const[formField, setFormFields] = useState([{menuId : id ,name:'',price:'' ,option_content: option_content}]);
+    const[formField, setFormFields] = useState([{menuId : menuId ,optionName:'',optionPrice:'' ,optionContent: option_content}]);
 
     //필드추가기능
     const handleAddFields = () => {
-        const values = [...formField, {menuId : id, name:'',price:'', option_content: option_content}];
+        const values = [...formField, {menuId : menuId, optionName:'',optionPrice:'', optionContent: option_content}];
         setFormFields(values);
     };
 
@@ -31,9 +31,9 @@ const MenuOptionForm = ({option_content, onUpdate}) => {
         const values= [...formField];
 
         if(e.target.name === 'name'){
-            values[index].name = e.target.value;
+            values[index].optionName = e.target.value;
         } else {
-            values[index].price = e.target.value;
+            values[index].optionPrice = e.target.value;
         }
         setFormFields(values);
     };
@@ -54,7 +54,7 @@ const MenuOptionForm = ({option_content, onUpdate}) => {
                         type='text'
                         placeholder='옵션'
                         name='name'
-                        value={field.name}
+                        value={field.optionName}
                         onChange={(e) => handleInputChange(index, e)}
                         style={{ marginRight: 10 }}
                     />
@@ -63,7 +63,7 @@ const MenuOptionForm = ({option_content, onUpdate}) => {
                         type='text'
                         placeholder='가격'
                         name='value'
-                        value={field.price}
+                        value={field.optionPrice}
                         onChange={(e) => handleInputChange(index, e)}
                         style={{ marginRight: 10 }}
                     />

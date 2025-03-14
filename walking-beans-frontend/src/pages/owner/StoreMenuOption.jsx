@@ -1,12 +1,14 @@
 import MenuOptionForm from "../../components/owner/MenuOptionForm";
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import MenuCard from "../../components/owner/MenuCard";
+import MenuOptionGroup from "../../components/owner/MenuOptionGroup";
 
 
 const StoreMenuOption = () => {
     const {id} = useParams();
-
+    const [optionData,setOptionData] = useState({});
     // 상태관리
     // 이름저장
     const [optionGroups, setOptionGroups] = useState([
@@ -40,6 +42,7 @@ const StoreMenuOption = () => {
         delete updatedOptions[groupToRemove]; // 삭제된 그룹의 데이터도 제거
         setAllOptions(updatedOptions);
     };
+
     // 자식에서 데이터 업데이트 시 호출
     const handleOptionsUpdate = useCallback((groupName, options) => {
         setAllOptions(prev => {
@@ -51,6 +54,7 @@ const StoreMenuOption = () => {
         });
         console.log("Updating", groupName, options)
     },[]);
+
     // 모든 옵션 데이터를 서버에 제출
     const handelSubmitTotal = () => {
         // entries 객체를 배열로 변환해주는 메소드
@@ -65,7 +69,7 @@ const StoreMenuOption = () => {
             alert("저장할 옵션이 없습니다. 옵션을 추가해주세요.")
             return;
         }
-        console.log(totalOptions)
+        console.log("합친 최종값 제출전 확인: ",totalOptions)
         axios
             .post(`http://localhost:7070/api/option`,totalOptions)
             .then((res)=>{
@@ -77,14 +81,67 @@ const StoreMenuOption = () => {
                 alert("옵션 저장에 실패했습니다. 잠시후 다시 시도해주세요.")
             })
     }
+    // 메뉴에 등록되어있는 옵션 표시
+    useEffect(() => {
 
+            axios
+                .get(`http://localhost:7070/api/option/optionmenu/${id}`)
+                .then((res) => {
+                    const rawData = res.data ; // 그룹화 전 받은 데이터
+                    // forEach 방법과, reduce로 배열을 각 그룹컨텐츠 기준으로 정렬되는 객체로 변환 코드.
+                    // forEach는 변수에 담아서 변경하기 때문에 부가효과가 있을 수 있다고 한다.(리액트에서 유즈 이팩트쓰는 것처럼 부가효과가 발생할 수 있다는 이야기라는데, 아직 재대로 이해한것은 없음)
+                    // reduce는 해당 함수 안에서 모든 사항을 변경후에 반환값을 내주기때문에 부가효과가 없다고 함. 사용한 acc같은것은 함수에 포함된 인자. 다만 해당값이 외부 변수를 수정하면 동일하게 부수효과 발생한다고 함.
+                    /*
+                    const groupedData = {}; // 객체선언
+                    rawData.forEach( (item)=>{
+                        const groupName = item.optionContent; // 그룹이름 설정
+                        if (!groupedData[groupName]) groupedData[groupName] = []; //해당 그룹이름이 없으면 배열생성
+                        groupedData[groupName].push(item);
+                    })
+                    console.log("데이터 그룹화 확인 : ",groupedData);
+                    */
 
+                    const groupedData = rawData.reduce((acc, item) => {
+                        const group = item.optionContent; // 그룹 이름 결정, 그룹이름은 not null로 널값이 없음. 있는 경우 || 사용해서 기본값 구현
+                        if (!acc[group]) acc[group] = []; // 그룹이 없다면 배열 생성 <- 그룹이름을 딴 배열생성
+                        acc[group].push(item);  // 그룹에 항목 추가
+                        return acc; // 누적된 값 반환하기
+                    }, {});
+
+                    setOptionData(groupedData);
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+    }, []);
+
+    const handleDelete = (e) =>{
+            //삭제로직 구현을 어캐하지 그룹? 단일?
+    }
 
 
     return (
         <div style={{padding: "20px"}}>
             <h2>메뉴 옵션 관리 (Menu ID: {id})</h2>
+            {/* 기존 메뉴 옵션 보기 UI */}
+            {Object.entries(optionData).map(([optionContent, opts]) => (
+                <div key={optionContent} className="menu-group">
+                    <h4>{optionContent}</h4>
 
+                        {opts.map((opt) => (
+                            <MenuOptionGroup key={opt.optionContent}
+                                      {...opt}
+                                    name={opt.optionName}
+                                             modifiedDate={opt.optionModifiedDate}
+                                      price={opt.optionPrice}
+                                      handleDelete={handleDelete}
+                                      />
+
+                        ))}
+
+                </div>
+            ))}
             {/* 새로운 그룹 추가 UI */}
             <div>
                 <input
@@ -102,15 +159,16 @@ const StoreMenuOption = () => {
             {optionGroups.map((group, index) => (
                 <div key={index}>
 
-                        {group.option_content}{" "}
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveGroup(index)}
-                        >
-                            그룹 삭제
-                        </button>
+                    {group.option_content}{" "}
+                    <button
+                        type="button"
+                        onClick={() => handleRemoveGroup(index)}
+                    >
+                        그룹 삭제
+                    </button>
 
                     <MenuOptionForm
+                        menuId={id}
                         option_content={group.option_content}
                         onUpdate={(options) => handleOptionsUpdate(group.option_content, options)} // 실시간 업데이트
                     />

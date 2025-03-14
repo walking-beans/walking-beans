@@ -59,7 +59,7 @@ public class MenuOptionAPIController {
         return menuOptionService.findMenuOptionByMenuId(menuId);
     }
 
-    /**메뉴 수정하기
+    /**메뉴옵션 수정하기
      *
      * @param menuOption
      */
@@ -69,22 +69,22 @@ public class MenuOptionAPIController {
         menuOptionService.updateMenuOption(menuOption);
     }
 
-    /**추가하기
+    /**추가하기 (여러개)
      *
-     * @param menuOption
+     * @param menuOptions
      */
     @PostMapping
-    public void addMenuOption(@RequestBody MenuOption menuOption) {
-        menuOptionService.addMenuOption(menuOption);
+    public void addMenuOption(@RequestBody List<MenuOption> menuOptions) {
+        menuOptionService.addMenuOption(menuOptions);
     }
 
     /**삭제하기
      *
-     * @param optionId
+     * @param menuId
      */
     @DeleteMapping("/delete")
-    public void deleteMenuOption(@PathVariable long optionId) {
-        menuOptionService.deleteMenuOption(optionId);
+    public void deleteMenuOption(@PathVariable long menuId) {
+        menuOptionService.deleteMenuOption(menuId);
     }
 
 
