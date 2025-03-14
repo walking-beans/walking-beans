@@ -26,40 +26,30 @@ public class RiderOrderStatusDTO {
 
     private int timeRemaining;
 
-    public void definingTimeRemaining() {
-        /*StringTokenizer st = new StringTokenizer(this.orderModifiedDate, " ");
-        String s = LocalDate.now().toString();
-        String date = st.nextToken();
-        int difference = 0;
+    private String deliveryDeadline;
 
-        log.info("----- s : {}, time : {} -----", s, date);
-        if (!date.equals(s)) {
-            log.info("하루 경과됌");
-            difference = 1;
-        }
-
-        StringTokenizer timeST = new StringTokenizer(st.nextToken(), ":");
-        LocalTime time = LocalTime.now();
-        int currentHour = time.getHour();
-        int currentMinute = time.getMinute();
-
-        int orderHour = Integer.parseInt(timeST.nextToken());
-        int orderMinute = Integer.parseInt(timeST.nextToken());
-
-        log.info("ch : {}, cm : {}, oh : {}, om : {} ", currentHour, currentMinute, orderHour, orderMinute);*/
-
+    public boolean definingTimeRemaining() {
         LocalDateTime now = LocalDateTime.now();
 
         log.info("=== {} ===", orderModifiedDate.plusMinutes(storeMaxDeliveryTime));
 
-        if (now.isAfter(orderModifiedDate)) {
-            Duration duration = Duration.between(orderModifiedDate, now);
-            log.info("안지남 {} ", duration.toMinutes());
-            timeRemaining = (int) duration.toMinutes();
-        } else {
+        if (now.isAfter(orderModifiedDate.plusMinutes(storeMaxDeliveryTime))) {
             log.info("지남");
             timeRemaining = 0;
+            deliveryDeadline = null;
+            return false;
+        } else {
+            Duration duration = Duration.between(orderModifiedDate, now);
+            log.info("안지남 {} ", duration.toMinutes());
+            timeRemaining = (int) (storeMaxDeliveryTime - duration.toMinutes());
+            return true;
         }
+    }
+
+    public void definingDeliveryDeadline() {
+        LocalDateTime deadLine = orderModifiedDate.plusMinutes(storeMaxDeliveryTime);
+
+        this.deliveryDeadline = deadLine.getHour() + ":" + deadLine.getMinute();
     }
 
 }

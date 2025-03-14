@@ -53,7 +53,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public RiderOrderStatusDTO getOrderStatusWithRemainingTime(long orderId) {
         RiderOrderStatusDTO orderStatusDTO = orderMapper.getOrderStatusWithRemainingTime(orderId);
-        orderStatusDTO.definingTimeRemaining();
+        // timeRemaining (배달 완료까지 남은 시간) 설정하는 method
+        if (orderStatusDTO.definingTimeRemaining()) {
+            // timeRemaining 이 0이 아니라면 deadline 시간 설정하기
+            orderStatusDTO.definingDeliveryDeadline();
+        }
         return orderStatusDTO;
     }
 
