@@ -153,7 +153,7 @@ function AdminMessage({user}) {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
+            stompClient.current.subscribe(`/sub/message?`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -210,6 +210,7 @@ function AdminMessage({user}) {
             return;
         }
         alert("메세지를 작성해주세요");
+        // 알람 컴포넌트
     };
 
     return (
