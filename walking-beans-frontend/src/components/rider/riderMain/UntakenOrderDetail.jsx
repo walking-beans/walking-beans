@@ -36,6 +36,7 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
         <div className="untaken_order_detail_container">
             <RiderOrderStatus
                 orderId={1}
+
                 message="배달 시간이 초과되었습니다."
                 css={
                     {
