@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.service.reviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,3 +83,4 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 }
+*/

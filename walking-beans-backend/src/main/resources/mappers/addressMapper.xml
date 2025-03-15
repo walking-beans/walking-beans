@@ -39,17 +39,17 @@
         WHERE user_id = #{userId}
     </update>
     <!-- ========= Leo ========= -->
-
-    <!-- -->
     <select id="getUserMainAddress">
-        SELECT A.address_id, A.user_id, A.address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
+        SELECT A.address_id, A.user_id, A.address, A.detailed_address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
         FROM address A
-        JOIN orders O
-        ON A.user_id = O.user_id
+                 JOIN orders O
+                      ON A.user_id = O.user_id
         WHERE O.order_id = #{orderId}
-        AND A.user_id = #{userId}
-        AND A.address_role = 1
+          AND A.user_id = #{userId}
+          AND A.address_role = 1
     </select>
+    <!-- -->
+
 
     <!-- 주문 기준으로 사용자가 선택한 주소 가져오기 -->
     <select id="getUserAddressByOrderId">

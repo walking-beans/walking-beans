@@ -8,7 +8,7 @@ const apiRiderService = {
     // get user main address
     getUserMainAddressByOrderId : function (orderId, userId, setUserAddress) {
         axios
-            .get(`${API_URL}/addresses/userAddress/orderId?orderId=${orderId}&userId=${userId}`)
+            .get(`${API_URL}/addresses/main?orderId=${orderId}&userId=${userId}`)
             .then(
                 (res) => {
                     setUserAddress(res.data);

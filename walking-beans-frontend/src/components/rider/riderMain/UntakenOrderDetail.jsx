@@ -18,7 +18,6 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
     const getDistance = (lat1, lng1, lat2, lng2) => {
-        console.log("getdistance : ", {lat1, lng1, lat2, lng2});
         const R = 6371; // 지구 반지름(km)
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLng = (lng2 - lng1) * (Math.PI / 180);
@@ -34,9 +33,18 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     return (
         <div className="untaken_order_detail_container">
-            <RiderOrderStatus
-                orderId={1}
+            <p>배달료 {(parseInt(selectedStore.storeDeliveryTip)).toLocaleString()}원</p>
 
+            <p>{selectedStore?.storeName}</p>
+            <p>{(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>
+            <p>{selectedStore?.storeAddress}</p>
+
+            <p>고객</p>
+            <p>{(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</p>
+            <p>{userAddress?.address} {userAddress?.detailedAddress}</p>
+
+            <RiderOrderStatus
+                orderId={selectedStore.orderId}
                 message="배달 시간이 초과되었습니다."
                 css={
                     {
@@ -52,12 +60,6 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
                     }
                 }
             />
-            <p>{selectedStore?.storeName}</p>
-            <p>배달 금액 : 3,500원</p>
-            <p>주문 시간 : {selectedStore?.orderCreateDate}</p>
-            <p>가게 이미지 : {selectedStore?.storePictureUrl}</p>
-            <p>라이더 - 가게 거리 : {(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>
-            <p>가게 - 유저 거리 : {(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</p>
             <button onClick={goToDetail}>주문 수락</button>
         </div>
     )

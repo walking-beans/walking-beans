@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../apiRiderService";
-import {useNavigate} from "react-router-dom";
-import beforeKakaoMapStart from "./BeforeKakaoMapStart";
 import UntakenOrderDetail from "./UntakenOrderDetail";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
@@ -158,7 +156,6 @@ const RiderMainMap = () => {
 
     useEffect(() => {
         if (!selectedStore) return ;
-        console.log("getUserMainAddressByOrderId")
         apiRiderService.getUserMainAddressByOrderId(selectedStore.orderId, selectedStore.userId, setUserAddress);
         setCheckingSelectedStore(true);
     }, [selectedStore]);
