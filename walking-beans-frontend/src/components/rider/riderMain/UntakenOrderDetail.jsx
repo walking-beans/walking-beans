@@ -60,6 +60,7 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
                     }
                 }
             />
+
             <button onClick={goToDetail}>주문 수락</button>
         </div>
     )
