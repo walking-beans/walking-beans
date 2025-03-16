@@ -34,7 +34,6 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
     return (
         <div className="untaken_order_detail_container">
             <p>배달료 {(parseInt(selectedStore.storeDeliveryTip)).toLocaleString()}원</p>
-
             <p>{selectedStore?.storeName}</p>
             <p>{(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>
             <p>{selectedStore?.storeAddress}</p>
