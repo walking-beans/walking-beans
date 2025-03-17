@@ -1,5 +1,6 @@
 import React from "react";
 import UserMenuForm from "./UserMenuForm";
+import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
 
 const UserMenuCategory = ({ categoryName, menus, onMenuClick }) => {
     return (
@@ -12,6 +13,7 @@ const UserMenuCategory = ({ categoryName, menus, onMenuClick }) => {
                         key={menu.menuId}
                         menuName={menu.menuName}
                         menuPrice={menu.menuPrice}
+                        menuPictureUrl={menu.menuPictureUrl || defaultDetailImage}
                         onClick={() => onMenuClick(menu)}
                     />
                 ))}

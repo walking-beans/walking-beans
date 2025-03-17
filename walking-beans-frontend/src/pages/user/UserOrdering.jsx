@@ -1,42 +1,43 @@
-import tossPayLogo from "../../images/user/tossPay_Logo.svg";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import detailBtn from "../../images/user/detailbtn.svg";
-import React, {useEffect, useState} from "react";
+import React, {use, useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import UserCart from "./UserCart";
 import UserOrderMenuForm from "./UserOrderMenuForm";
 import "../../css/Cart.css";
 import "../../css/Order.css"
+import axios from "axios";
 
 const UserOrdering = () => {
-    const {userId, orderId, storeId, menuId, cartId} = useParams();
+    const orderId = useParams();
     const [address, setAddress] = useState("");
     const [store, setStore] = useState({});
     const [carts, setCarts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [userId, setUserId] = useState(null);
+    const [storeId, setStoreId] = useState(null);
+    const navigate = useNavigate();
+
+    // 로그인 확인
+    useEffect(() => {
+        // 로컬 스토리지에서 사용자 정보 불러오기
+        const cartsUser = localStorage.getItem("user");
+        console.log("로컬 스토리지에서 불러온 user:", cartsUser);
+
+        if (cartsUser) {
+            const user = JSON.parse(cartsUser);
+            console.log("로그인 user 정보", user);
+            setUserId(user.user_id);
+        } else {
+            console.log("로그인 필요");
+            alert("주문내역 서비스를 이용하시려면 로그인이 필요합니다.");
+            navigate("/login");
+        }
+    }, []);
 
     // 고객 배달 주소 가져오기
     useEffect(() => {
         apiUserOrderService.getOrderAddressByUserId(userId, setAddress)
     }, [userId]);
-
-    // 가게 데이터 가져오기
-    useEffect(() => {
-        apiUserOrderService.getStoreByOrderId(storeId, setStore);
-    }, [storeId]);
-
-    // option 데이터 가져오기
-    useEffect(() => {
-        if (orderId) {
-            apiUserOrderService.getUserOrderByOrderId(orderId, setCarts)
-                .then(() => {
-                    console.log("주문에 해당하는 장바구니 데이터 업데이트 완료");
-                })
-                .catch((err) => {
-                    console.error("getUserOrderByOrderId 에러 발생", err);
-                });
-        }
-    }, [orderId]);
 
     // 메뉴 총 금액 계산
     useEffect(() => {
@@ -50,6 +51,21 @@ const UserOrdering = () => {
     // 포맷팅 (숫자 , 넣기)
     const formattedTotalPrice = totalPrice.toLocaleString();
     const formattedTotal = total.toLocaleString();
+
+    // 선택한 카트 데이터 가져오기
+    useEffect(() => {
+        if (!userId) return;
+
+        axios
+            .get(`http://localhost:7070/api/carts/${userId}`)
+            .then((res) => {
+                console.log("카트 데이터 가져오기 성공 : ",res.data);
+                setCarts(res.data);
+            })
+            .catch((err) => {
+                console.log("카트 데이터 가져오기 실패 : ", err);
+            })
+    }, [userId]);
 
     return (
         <div className="user-ordering-container">
@@ -90,7 +106,7 @@ const UserOrdering = () => {
                                     menuPrice={cart.menuPrice}
                                     optionName={cart.optionName}
                                     optionPrice={cart.optionPrice}
-                                /*  삭제 기능 넣기  */
+                                    /*  삭제 기능 넣기  */
                                 />
 
                                 {/* 마지막 항목이 아니면 구분선 렌더링 */}
@@ -117,7 +133,7 @@ const UserOrdering = () => {
                     </div>
 
                     <div className="user-order-click-btn-one">
-                        <button className="user-order-btn-b">배달 주문하기</button>
+                        <Link to={`/user/ordering/payment/${orderId}`} className="user-order-btn-b">배달 주문하기</Link>
                     </div>
                 </div>
             </div>
