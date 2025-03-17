@@ -6,7 +6,7 @@ const RiderOntheway = () => {
         // Kakao SDK 초기화 (한 번만 실행)
         if (!window.Kakao) return;
         if (!window.Kakao.isInitialized()) {
-            window.Kakao.init("1cfadb6831a47f77795a00c42017b581"); // 여기에 본인의 JavaScript 키 입력
+            window.Kakao.init("78677225bd8d183bdf1a6eaebd34ea8d"); // 여기에 본인의 JavaScript 키 입력
         }
     }, []);
 
