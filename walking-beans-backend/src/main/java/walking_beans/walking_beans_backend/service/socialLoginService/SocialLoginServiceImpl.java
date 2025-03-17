@@ -89,7 +89,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         String phone = (String) kakaoAccount.get("phone_number");
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("role",1); // 롤 유저로 고정 입력받는걸로 수정하기
+        resultMap.put("role",0); // 롤 유저로 고정 입력받는걸로 수정하기
         resultMap.put("email", email);
         resultMap.put("name", name);
         resultMap.put("phone", phone);
@@ -147,7 +147,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         if (email == null) email = "이메일 없음";
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("role",1); // 롤 유저로 고정
+        resultMap.put("role",0); // 롤 유저로 고정
         resultMap.put("email", email);
         resultMap.put("nickname", nickname);
         resultMap.put("phone", phoneWithoutHyphen);

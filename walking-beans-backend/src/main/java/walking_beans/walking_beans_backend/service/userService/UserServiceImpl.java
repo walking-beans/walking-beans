@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
             // user_role을 문자열로 변환
             int userRoleInt = (int) loggedInUser.get("user_role");
             String userRoleStr = switch (userRoleInt) {
+                case 0 -> "noRole";   // 롤 등록 전 기본값
                 case 1 -> "user";     // 일반 사용자
                 case 2 -> "rider";    // 라이더
                 case 3 -> "owner";    // 매장 사장님

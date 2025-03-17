@@ -51,6 +51,7 @@ import SearchHeader from "../pages/layout/SearchHeader";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 import UserReviewWrite from "../pages/user/UserReviewWrite";
+import AdminChangeRole from "../pages/admin/AdminChangeRole";
 
 
 
@@ -101,6 +102,7 @@ function PathRoute() {
                                 <Route path="/login" element={<AdminLogin/>}/>
                                 <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
                                 <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
+                                <Route path="/updaterole" element={<AdminChangeRole />}/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
