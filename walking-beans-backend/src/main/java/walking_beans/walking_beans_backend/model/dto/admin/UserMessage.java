@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.model.vo.admin;
+package walking_beans.walking_beans_backend.model.dto.admin;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,8 +29,5 @@ public class UserMessage {
 
     private String userName;
 
-    public void timeChanged() {
-        LocalDateTime now = LocalDateTime.now();
-        log.info("Time changed from {} to {}", now, this.messageTime);
-    }
+    private String userPictureUrl;
 }

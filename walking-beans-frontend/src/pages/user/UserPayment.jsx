@@ -2,19 +2,20 @@ import "../../css/Order.css"
 import React, {useState} from "react";
 import tossPayLogo from "../../images/user/tossPay_Logo.svg";
 import detailBtn from "../../images/user/detailbtn.svg";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import checkBtnW from "../../images/user/checkBtnW.svg";
 import checkBtnB from "../../images/user/checkBtnB.svg";
-
 
 const UserPayment = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [clicked, setClicked] = useState(null);
     const navigate = useNavigate();
+    const {orderId} = useParams();
 
     // 결제 방법 선택
     const handlePayMethodClick = (method) => {
         setClicked(method);
+        localStorage.setItem("paymentMethod", method); // 선택된 결제 방식을 로컬스토리지에 저장
     };
 
     // 필수 약관 동의 클릭
@@ -29,8 +30,10 @@ const UserPayment = () => {
     const handlePaymentClick = () => {
         if (clicked === 'tossPay') {
             console.log('결제 수단 : tossPay');
+            navigate(`/user/delivery/status/${orderId}`); // 배달 현황 페이지로 이동
         } else if (clicked === 'meetPayment') {
             console.log('결제 수단 : 만나서 결제');
+            navigate(`/user/delivery/status/${orderId}`); // 배달 현황 페이지로 이동
         } else {
             // 결제 방법이 선택되지 않은 경우
             alert('결제 방법을 선택해주세요.');
@@ -80,6 +83,7 @@ const UserPayment = () => {
                         <img src={detailBtn} alt="약관동의 페이지 만들기"/>
                     </Link>
                 </div>
+
 
                 {/* 결제하기 */}
                 <div className="user-order-click-btn-one">

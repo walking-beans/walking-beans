@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
 
@@ -36,29 +36,34 @@ const UserHeader = ({user}) => {
 
     // 웹소켓 열기
     useEffect(() => {
-
         const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
+        const storedUserId = localStorage.getItem("user");
+        // JSON 문자열을 객체로 변환
+        const userObject = storedUserId ? JSON.parse(storedUserId) : {user_id : "noId"} // user가 null이면 noId넣기
+
+        // 객체에서 user_id를 가져옵니다.
+        const userId = userObject.user_id;
 
         wsAlert.onopen = () => {
             console.log("✅ 알림 WebSocket 연결 성공");
         };
 
         wsAlert.onmessage = (event) => {
-            console.log("📩 새 알림 도착:", event.data);
 
-            // prevNotifications 를 통해 이전 배열의 내용을 복사해서 새로운 배열로 만들어서 내용추가
-            // 즉 이전 내용에서 추가하기 위한것임
-            // 채팅 타입으로 이벤트가 발생한 내용을 넣는다.
-            // const notifications = [
-            //     { message: "새로운 메시지가 도착했음", type: "채팅" },
-            //     { message: "두 번째 메시지", type: "채팅" }
-            // ]; 이런식
-            setNotifications((prevNotifications) => [
-                ...prevNotifications,
-                { message: event.data, type: "채팅" },
-            ]);
+            console.log("📩 새 알림 도착:", event.data); // event.data 로그로 실제 내용을 확인
+            try {
+                const receivedData = JSON.parse(event.data);  // event.data를 JSON.parse로 변환
+                if (receivedData.userId === userId) {
+                    setNotifications((prevNotifications) => [
+                        ...prevNotifications,
+                        {message: receivedData.alarmContent, type: receivedData.alarmRole, senderId: receivedData.alarmSenderId},// 알람리스트
+                    ]);
 
-            setUnreadCount((prevCount) => prevCount + 1);
+                    setUnreadCount((prevCount) => prevCount + 1);
+                }
+            } catch (error) {
+                console.error("JSON 파싱 오류:", error);  // JSON.parse 오류 발생 시
+            }
         };
 
         //웹 소켓 연결 오류
@@ -80,9 +85,16 @@ const UserHeader = ({user}) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setCurrentUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setCurrentUser(parsedUser);
+            setUserId(parsedUser.user_id);
         }
     }, [user]);
+    //  userId가 설정된 후 대표 주소 가져오기
+    useEffect(() => {
+
+        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+    }, [userId]);
 
     /**
      * 네비게이션바 토글아이콘  함수
@@ -99,8 +111,7 @@ const UserHeader = ({user}) => {
 
     // 로그아웃 함수
     const handleLogout = () => {
-        localStorage.removeItem("user");
-        alert("로그아웃 되었습니다.");
+        apiUserService.logout();
         setCurrentUser(null);
         setNavOpen(false);
         navigate("/");
@@ -120,31 +131,38 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: "/mypage",
+            user: location.pathname === "/admin/mypage" ? "/" : "/admin/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
-            store: "/owner",
+            owner: location.pathname === "/owner" ? "/" : "/owner",
             admin: "/admin"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
-    // 기본주소 변경하는 함수
-    const fetchPrimaryAddress = () => {
-        apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
-    };
 
 
     // /user/search/map
     const handleOpenSearch = () => {
+        if (!userLat || !userLng) {
+            alert("대표 주소 정보를 불러올 수 없습니다.");
+            return;
+        }
         navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
     //알람 토글
     const toggleAlarm = () => {
-        setShowDropdown(!showDropdown);
-        setUnreadCount(0);
-    }
+        if (showDropdown) { //true
+            setNotifications([]);// 알림 리스트를 초기화
+        } else {
+            // 알림을 열 때는 기존 알림 리스트를 비우지 않음
+            setUnreadCount(0);  // 알림 아이콘 배지 초기화
+        }
 
+        setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
+        //setShowDropdown(!showDropdown);
+        //setUnreadCount(0);
+    };
 
     return (
         <div className="user-header-wrapper">
@@ -159,27 +177,38 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-
-
-
-
-                                <div onClick={toggleAlarm} style={styles.notificationContainer}>
+                                <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
-                                    {unreadCount > 0 && <span style={styles.badge}>{unreadCount}</span>}
+                                    {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
                                 </div>
                                 {showDropdown && (
-                                    <div style={styles.dropdown}>
+                                    <div className={"AlarmDropdown"}>
                                         {notifications.length > 0 ? (
                                             notifications.map((noti, index) => (
-                                                <div key={index} style={styles.notificationItem}>
-                                                    <strong>{noti.type === "채팅" ? "💬 채팅" : "🔔 알림"}:</strong> {noti.message}
+                                                <div key={index} className={"AlarmNotificationItem"} onClick={() => {
+                                                    if (noti.type === 1) {
+                                                        navigate("/alarmlist");
+                                                        //setNotifications([]);//알림 목록 비우기
+                                                        setShowDropdown(false); // 알림목록 닫기
+                                                    } else if (noti.type === 2) {
+                                                        navigate(`/chat/message/${noti.senderId}`);
+                                                        setShowDropdown(false); // 알림목록 닫기
+                                                    }
+                                                }
+                                                }>
+                                                    <strong>{noti.type === 1 ? "🔔 알림" : noti.type === 2 ? "💬 채팅" : ""}:</strong><br /> {noti.message}
                                                 </div>
                                             ))
                                         ) : (
-                                            <p>알림이 없습니다.</p>
+                                            <div className={"NoAlarmNotificationItem"}>
+                                                <p>알림이 없습니다.</p>
+                                                <Link to="/alarmlist" className={"AlarmLink"} onClick={() => setShowDropdown(false)}>
+                                                    목록 보기
+                                                </Link>
+                                            </div>
                                         )}
                                     </div>
-                                    )}
+                                )}
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>
@@ -220,58 +249,5 @@ const UserHeader = ({user}) => {
         </div>
     );
 };
-
-const styles = {
-    notificationContainer: {
-        position: "relative",
-        marginRight: "20px",
-        display: "flex",
-        alignItems: "center",
-    },
-    iconContainer: {
-        cursor: "pointer",
-        fontSize: "24px",
-        position: "relative",
-        padding: "10px",
-        borderRadius: "50%",
-        background: "#FFF",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transition: "0.2s",
-    },
-    badge: {
-        position: "absolute",
-        top: "-1px",
-        right: "-8px",
-        background: "red",
-        color: "white",
-        borderRadius: "50%",
-        padding: "4px 8px",
-        fontSize: "10px",
-        fontWeight: "bold",
-    },
-    dropdown: {
-        position: "absolute",
-        top: "50px",
-        right: "0",
-        width: "250px",
-        background: "#D2B595",
-        borderRadius: "10px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        padding: "15px",
-        zIndex: 9999,
-    },
-    notificationItem: {
-        border: "1px solid #ab7a44",
-        borderRadius : "3%",
-        marginTop : "5px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-        padding : "10px",
-        backgroundColor :"#F4EDDF",
-    }
-};
-
 
 export default UserHeader;

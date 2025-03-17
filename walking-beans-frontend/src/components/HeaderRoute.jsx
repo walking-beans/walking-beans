@@ -3,13 +3,15 @@ import {useLocation} from "react-router-dom";
 import UserHeader from "../pages/layout/UserHeader";
 import RiderHeader from "../pages/layout/RiderHeader";
 import SearchHeader from "../pages/layout/SearchHeader";
+
+import UserSearchMap from "../pages/user/UserSerachMap";
+
 import RiderLoginHeader from "../pages/layout/RiderLoginHeader";
+
 
 const HeaderRoute = ({user}) => {
     const location = useLocation(); // 현재 URL 확인
     const [currentHeader, setCurrentHeader] = useState(<UserHeader user={user}/>);
-    const [displayStores, setDisplayStores] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
 
 
 
@@ -20,7 +22,7 @@ const HeaderRoute = ({user}) => {
         /*if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}/>);
         } else if (location.pathname.startsWith("/user/search/map")){
-            setCurrentHeader(<SearchHeader  user={user}   />);
+            setCurrentHeader(<SearchHeader user={user}  />);
         }
         // 2. `/`로 돌아오면 UserHeader로 변경
         else {
@@ -28,40 +30,45 @@ const HeaderRoute = ({user}) => {
         }*/
 
         if (user) {
-           if (location.pathname.startsWith("/rider")) {
-               setCurrentHeader(<RiderLoginHeader user={user}/>);
-           } else if (location.pathname.startsWith("/owner")) {
-               /** 추후 변경 요망 **/
-               setCurrentHeader(<UserHeader user={user}/>);
-           } else if (location.pathname.startsWith("/user/search/map")) {
-               setCurrentHeader(<SearchHeader user={user}/>);
-           } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat")) {
-               if (user.user_role === "user") {
-                   setCurrentHeader(<UserHeader user={user}/>);
-               } else if (user.user_role === "rider") {
-                   setCurrentHeader(<RiderLoginHeader user={user}/>);
-               } else if (user.user_role === "owner") {
-                   /** 추후 변경 요망 **/
-                   setCurrentHeader(<UserHeader user={user}/>);
-               } else {
-                   // admin or default
-                   setCurrentHeader(<UserHeader user={user}/>);
-               }
-           } else {
-               setCurrentHeader(<UserHeader user={user}/>);
-           }
-       } else {
-           if (location.pathname.startsWith("/")) {
-               setCurrentHeader(<UserHeader user={user}/>);
-           } else if (location.pathname.startsWith("/rider")) {
-               setCurrentHeader(<RiderHeader user={user} />);
-           } else if (location.pathname.startsWith("/owner")) {
-               /** 추후 변경 요망 **/
-               setCurrentHeader(<UserHeader user={user}/>);
-           } else {
-               setCurrentHeader(<UserHeader user={user}/>);
-           }
-       }
+            // rider
+            if (location.pathname.startsWith("/rider")) {
+                setCurrentHeader(<RiderLoginHeader user={user}/>);
+                // /owner
+            } else if (location.pathname.startsWith("/owner")) {
+                /** 추후 변경 요망 **/
+                setCurrentHeader(<UserHeader user={user}/>);
+                // /user/search/map
+            } else if (location.pathname.startsWith("/user/search/map")) {
+                setCurrentHeader(<SearchHeader user={user}/>);
+                // /mypage || /chat
+            } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat")) {
+                if (user.user_role === "user") {
+                    setCurrentHeader(<UserHeader user={user}/>);
+                } else if (user.user_role === "rider") {
+                    setCurrentHeader(<RiderLoginHeader user={user}/>);
+                } else if (user.user_role === "owner") {
+                    /** 추후 변경 요망 **/
+                    setCurrentHeader(<UserHeader user={user}/>);
+                } else {
+                    // admin or default
+                    setCurrentHeader(<UserHeader user={user}/>);
+                }
+                // /
+            } else {
+                setCurrentHeader(<UserHeader user={user}/>);
+            }
+        } else {
+            // /rider
+            if (location.pathname.startsWith("/rider")) {
+                setCurrentHeader(<RiderHeader user={user}/>);
+            // /owner
+            } else if (location.pathname.startsWith("/owner")) {
+                /** 추후 변경 요망 **/
+                setCurrentHeader(<UserHeader user={user}/>);
+            } else {
+                setCurrentHeader(<UserHeader user={user}/>);
+            }
+        }
     }, [location.pathname, user]); // URL 변경될 때마다 실행
 
     return currentHeader;

@@ -10,7 +10,7 @@
     </select>
 
     <select id="getAllUserMessage">
-        SELECT M.message_id, M.room_id, M.user_id, M.message_role, M.message_content, M.message_time, U.user_name
+        SELECT M.message_id, M.room_id, M.user_id, M.message_role, M.message_content, M.message_time, U.user_name, U.user_picture_url
         FROM message M
                  JOIN users U
                       on M.user_id = U.user_id

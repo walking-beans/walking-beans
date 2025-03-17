@@ -114,8 +114,11 @@ import { Stomp } from "@stomp/stompjs";
 import apiRiderService from "../../components/rider/apiRiderService";
 import {useParams} from "react-router-dom";
 import "../../css/admin/AdminMessage.css";
+import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 
-import PictureButton from "../../assert/svg/adminNav/adminMessage-pictureButton.svg"
+import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-pictureButton.svg"
+import SendAlarm from "../../components/admin/SendAlarm";
+
 
 function AdminMessage({user}) {
 
@@ -127,6 +130,13 @@ function AdminMessage({user}) {
     const [inputValue, setInputValue] = useState('');
     // input disabled
     const [isDisabled, setIsDisabled] = useState(false);
+
+
+    const [showSendAlarm, setShowSendAlarm] = useState(false);
+    const [sendAlarmMessage, setSendAlarmMessage] = useState("");
+
+    /*** alarm 으로 보낼 내용 받을 senderId ***/
+    const [senderId, setSenderId] = useState(0);
 
     // 입력 필드에 변화가 있을 때마다 inputValue를 업데이트
     const handleInputChange = (event) => {
@@ -152,7 +162,7 @@ function AdminMessage({user}) {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
+            stompClient.current.subscribe(`/sub/chatroom/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -168,13 +178,24 @@ function AdminMessage({user}) {
     useEffect(() => {
         console.log("user : ", user);
         connect();
-        apiRiderService.getChattingMessageList(1, setMessages);
+        apiRiderService.getChattingMessageList(roomId,
+            (newMessage) => {
+                setMessages(newMessage);
+                console.log(newMessage);
+            });
+        apiRiderService.getAllChattingMembers(roomId,
+            1,
+            (chattingMemberList) => {
+                setSenderId(chattingMemberList[0].roomReceiverId);
+            });
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, []);
 
     //메세지 전송
     const sendMessage = () => {
+        console.log("sendMessage senderId : " + senderId);
+        if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
                 roomId : roomId,
@@ -183,7 +204,10 @@ function AdminMessage({user}) {
                 messageContent : inputValue
             };
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
+            stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
+            setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
+            setShowSendAlarm(true); //알람 전송 트리거
             return;
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
@@ -202,9 +226,14 @@ function AdminMessage({user}) {
             setPreviewImage(null);
             // input disabled 해제하기
             setIsDisabled(false);
+        } else {
+            alert("메세지를 작성해주세요");
+            setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
+            setShowSendAlarm(true); //알림 전송 트리거
             return;
         }
-        alert("메세지를 작성해주세요");
+        // 알람 컴포넌트
+
     };
 
     return (
@@ -214,10 +243,24 @@ function AdminMessage({user}) {
                 {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={(msg.userId === 1) ? "" : ""}
                     >
-                        <p>{msg.userName}</p>
-                        <p>{msg.messageContent}</p>
+                        {
+                            msg.userId !== 1 ? (
+                                <div
+                                    className="admin-message-notUserInput "
+                                >
+                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
+                                    <p>{msg.messageContent}</p>
+                                </div>
+                            ) : (
+                                <div
+                                    className="admin-message-userInput"
+                                >
+                                    <p>{msg.messageContent}</p>
+                                </div>
+                            )
+                        }
+
                     </div>
                 ))}
                 <div className="admin-message-previewImage">
@@ -232,8 +275,7 @@ function AdminMessage({user}) {
                         onChange={handleInputChange}
                         disabled={isDisabled}
                     />
-                    <div>
-                        <div id="img-preview"></div>
+                    <div className="admin-message-ImgAndBtnDiv">
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
@@ -252,6 +294,14 @@ function AdminMessage({user}) {
                         >
                             전송
                         </button>
+                        {showSendAlarm &&
+                            <SendAlarm
+                                userId={senderId} //받는사람
+                                alarmRole="2" // 알림 타입
+                                senderId={roomId} //보낸사람(roomId)
+                                messageContent={sendAlarmMessage} // 알림 내용
+                            />
+                        }
                     </div>
                 </div>
             </ul>

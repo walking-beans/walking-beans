@@ -6,6 +6,7 @@ import walking_beans.walking_beans_backend.mapper.AddressMapper;
 import walking_beans.walking_beans_backend.model.dto.Address;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -54,5 +55,11 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address getUserMainAddress(long orderId, long userId) {
         return addressMapper.getUserMainAddress(orderId, userId);
+    }
+
+    // 주문 기준으로 사용자가 선택한 주소 가져오기
+    @Override
+    public Address getUserAddressByOrderId(long orderId) {
+        return addressMapper.getUserAddressByOrderId(orderId);
     }
 }

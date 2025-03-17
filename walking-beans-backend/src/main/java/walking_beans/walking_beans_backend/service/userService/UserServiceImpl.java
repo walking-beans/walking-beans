@@ -133,6 +133,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserProfile(Long userId, String userPictureUrl){
+        userMapper.updateUserProfile(userId, userPictureUrl);
+    }
+
+    @Override
     public void updateUserInfo(Long userId, String userPhone) {
         userMapper.updateUserInfo(userId, userPhone); // DB에서 유저 정보 수정
     }
