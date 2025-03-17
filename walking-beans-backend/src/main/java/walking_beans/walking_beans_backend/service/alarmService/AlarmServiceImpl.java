@@ -9,6 +9,9 @@ import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
@@ -20,23 +23,31 @@ public class AlarmServiceImpl implements AlarmService {
     private AlarmMapper alarmMapper;
 
     @Override
-    public void sendMessage(Message message) {
-
-        // 채팅방의 마지막 메시지 업데이트
-        alarmMapper.updateLastMessage(message.getRoomId(), message.getMessageContent());
+    public void sendMessage(Alarms alarms) {
 
         // 채팅 알람 생성
         Alarms alarm = new Alarms();
-        alarm.setUserId(message.getUserId()); // 메시지를 보낸 사용자 ID
-        alarm.setAlarmContent("📩 새로운 메시지: " + message.getMessageContent());
+        alarm.setUserId(alarms.getUserId()); // 메시지를 보낸 사용자 ID
+        alarm.setAlarmContent(alarms.getAlarmContent());
         alarm.setAlarmStatus(false);
-        alarm.setAlarmSenderId(message.getUserId()); // 보낸 사람 ID
-        alarm.setAlarmRole(2);
+        alarm.setAlarmSenderId(alarms.getAlarmSenderId()); // 보낸 사람 ID
+        alarm.setAlarmRole(alarms.getAlarmRole());
+        alarm.setAlarmCreateDate(new Timestamp(System.currentTimeMillis()));
 
         alarmMapper.insertAlarm(alarm);
 
         // 웹소켓 알림 전송
-        webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+        webSocketAlertHandler.sendAlert(alarm);
+    }
+
+    @Override
+    public List<Alarms> getUserAlarmList(int userId) {
+        return alarmMapper.getUserAlarmList(userId);
+    }
+
+    @Override
+    public void deleteAllAlarm(byte userId) {
+        alarmMapper.deleteAllAlarm(userId);
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class StoreAPIController {
      * @return 매장 아이디로 조회
      */
     @GetMapping("/{storeId}")
-    public Stores findStoresById(@PathVariable long storeId) {
+    public Stores findStoresById(@PathVariable("storeId") long storeId) {
         return storeService.findStoresById(storeId);
     }
 
@@ -75,6 +75,20 @@ public class StoreAPIController {
     @GetMapping("/search")
     public List<Stores> searchStore(@RequestParam String keyword) {
         return storeService.searchStore(keyword);
+    }
+
+    /**
+     * 사용자 위치(lat, lng) 기준으로 주변 매장 검색
+     * @param lat
+     * @param lng
+     * @return
+     */
+    @GetMapping("/nearby")
+    public ResponseEntity<List<Stores>> findNearbyStores(
+            @RequestParam double lat,
+            @RequestParam double lng) {
+        List<Stores> nearbyStores = storeService.findNearbyStores(lat, lng);
+        return ResponseEntity.ok(nearbyStores);
     }
 
     /**************************************** Leo ****************************************/

@@ -20,5 +20,5 @@ public class RiderReview {
 
     private long orderId;
 
-    private int riderReviewerRating;
+    private int riderReviewRating;
 }

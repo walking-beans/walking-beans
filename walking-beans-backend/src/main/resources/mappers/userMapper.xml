@@ -30,17 +30,23 @@
 
     <!--  소셜 회원가입 -->
     <insert id="insertSocialUser">
-        INSERT INTO users (user_role,user_email,user_name, user_phone)
-        VALUES (#{userRole}, #{userEmail}, #{userName}, #{userPhone})
+        INSERT INTO users (user_role,user_email,user_password,user_name, user_phone)
+        VALUES (#{userRole}, #{userEmail}, #{userPassword}, #{userName}, #{userPhone})
     </insert>
 
     <!-- 회원 가입 유무 확인 -->
     <select id="checkEmailExists">
         SELECT COUNT(*)
-        FROM testingusers2
+        FROM users
         WHERE user_email = #{userEmail}
     </select>
 
+    <!-- 이메일로 유저 롤 변경하기 -->
+    <update id="updateUserRole">
+        UPDATE users
+        SET user_role = #{userRole}
+        WHERE user_email = #{userEmail}
+    </update>
 
     <!-- 회원 정보 조회 -->
     <select id="selectUserInfo">
@@ -49,6 +55,13 @@
         FROM users
         WHERE user_id = #{userId}
     </select>
+
+    <!-- 프로필 사진 변경 -->
+    <update id="updateUserProfile">
+        UPDATE users
+        SET user_picture_url = #{userPictureUrl}
+        WHERE user_id = #{userId}
+    </update>
 
 
 

@@ -94,7 +94,7 @@ const StoreMenuDetail = () => {
     }
 
     const handleDelete = () => {
-
+    // 메뉴삭제 작성필요
     }
     // 인풋 변경 제어
     const handleInputChange = (e) => {

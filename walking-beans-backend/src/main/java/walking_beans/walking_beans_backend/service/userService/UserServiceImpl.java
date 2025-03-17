@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePw(userEmail, userPassword);
     }
 
+    @Override
+    public void updateUserRole(String userEmail, byte userRole) {
+        userMapper.updateUserRole(userEmail, userRole);
+    }
+
 
     /************************이메일 인증**************************/
     /*
@@ -125,6 +130,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users selectUserInfo(Long userId) {
         return userMapper.selectUserInfo(userId); // DB에서 유저 정보 가져오기
+    }
+
+    @Override
+    public void updateUserProfile(Long userId, String userPictureUrl){
+        userMapper.updateUserProfile(userId, userPictureUrl);
     }
 
     @Override

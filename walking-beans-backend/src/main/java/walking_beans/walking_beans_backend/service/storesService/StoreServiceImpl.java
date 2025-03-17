@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.StoreMapper;
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
-import walking_beans.walking_beans_backend.service.storesService.StoreService;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
 import java.util.List;
 
@@ -59,6 +58,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void deleteStores(long storeId) {
         storeMapper.deleteStores(storeId);
+    }
+
+    // 반경 10km 내의 매장 검색
+    @Override
+    public List<Stores> findNearbyStores(double lat, double lng) {
+        return storeMapper.findNearbyStores(lat, lng, 10.0);
     }
 
     /**************************************** Leo ****************************************/

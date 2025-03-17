@@ -23,10 +23,15 @@ public class MenuOptionAPIController {
      * @return
      */
 
+//    @RequestMapping("/api/option")
+//    public class MenuOptionAPIController {
+
+
     @GetMapping
     public List<MenuOption>  findAllMenuOption(){
         return menuOptionService.findAllMenuOption();
     }
+
 
    
     /** 메뉴옵션 검색

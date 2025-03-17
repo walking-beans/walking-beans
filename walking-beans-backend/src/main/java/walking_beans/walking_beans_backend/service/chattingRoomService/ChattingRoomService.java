@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.chattingRoomService;
 
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface ChattingRoomService {
 
     int updateLastMessageOfChattingRoom(long roomId, String lastMessage);
 
-
+    List<UserChattingRoom> getUserChattingRoomByUserId(long userId, int receiverRelation);
 }

@@ -20,6 +20,8 @@ public class Address {
 
     private String address;
 
+    private String detailedAddress;
+
     private String addressName;
 
     private double addressLatitude;

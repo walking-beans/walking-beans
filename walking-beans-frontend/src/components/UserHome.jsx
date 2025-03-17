@@ -1,12 +1,13 @@
 import "./UserHome.css";
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
+import apiUserService from "../service/apiUserService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
-const UserHome = ({user: initialUser}) => {
+const UserHome = ({ user: initialUser }) => {
     const [userLocation, setUserLocation] = useState(null);
     const [store, setStore] = useState([]);
     const [displayStores, setDisplayStores] = useState([]);
@@ -19,6 +20,11 @@ const UserHome = ({user: initialUser}) => {
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
+
+    useEffect(() => {
+        console.log("받은 사용자 위치:", userLocation);
+
+    }, [userLocation]);
 
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
@@ -56,23 +62,7 @@ const UserHome = ({user: initialUser}) => {
 
     // 기본주소 변경하는 함수
     const fetchPrimaryAddress = () => {
-        if (userId) {
-            axios.get(`http://localhost:7070/api/addresses/${userId}`)
-                .then((res) => {
-                    console.log("API 응답 데이터:", res.data);
-                    const primaryAddress = res.data.find(addr => addr.addressRole === 1);
-                    if (primaryAddress) {
-                        setUserAddress(primaryAddress);
-                        setUserLat(primaryAddress.addressLatitude);
-                        setUserLng(primaryAddress.addressLongitude);
-                    } else {
-                        console.log("기본 주소가 없습니다.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("주소 목록 불러오기 오류:", error);
-                });
-        }
+       apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
     };
 
     useEffect(() => {
@@ -107,9 +97,10 @@ const UserHome = ({user: initialUser}) => {
 
     // 주소로 지도 가져오기
     useEffect(() => {
-        if (!userLat || !userLng) return; // 📌 대표 주소가 없으면 실행 X
+        const centerLat = userId ? userLat : userLocation?.lat;
+        const centerLng = userId ? userLng : userLocation?.lng;
 
-        console.log("대표 주소 위도:", userLat, "대표 주소 경도:", userLng);
+        if (!centerLat || !centerLng) return; // 📌 좌표가 없으면 실행 X
 
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -117,40 +108,39 @@ const UserHome = ({user: initialUser}) => {
         document.head.appendChild(script);
 
         script.onload = () => {
-            console.log("카카오 지도 API 로드 완료");
             window.kakao.maps.load(() => {
-                console.log("지도 객체 생성 시도");
                 const mapContainer = document.getElementById("map");
-                if (!mapContainer) {
-                    console.error("지도 컨테이너가 존재하지 않습니다.");
-                    return;
+                if (!mapContainer) return;
+
+                let centerLat = userLat;
+                let centerLng = userLng;
+
+                // 🔹 로그인하지 않은 유저라면 현재 위치를 기본 중심으로 설정
+                if (!userId && userLocation) {
+                    centerLat = userLocation.lat;
+                    centerLng = userLocation.lng;
                 }
 
                 const mapOption = {
-                    center: new window.kakao.maps.LatLng(userLat, userLng), // 📌 대표 주소 중심
+                    center: new window.kakao.maps.LatLng(centerLat, centerLng),
                     level: 5,
                 };
                 const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
-                setMap(newMap); // 맵을 상태로 저장하여 재렌더링 방지
+                setMap(newMap);
 
+                // 🔹 지도에 마커 추가
                 new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(userLat, userLng),
+                    position: new window.kakao.maps.LatLng(centerLat, centerLng),
                     map: newMap,
-                    title: "대표 주소"
+                    title: userId ? "대표 주소" : "현재 위치"
                 });
-
-                console.log("지도 객체 생성 완료", newMap);
             });
-        };
-
-        script.onerror = (error) => {
-            console.error("카카오 지도 API 로드 실패:", error);
         };
 
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLat, userLng]);  // 📌 대표 주소 변경될 때마다 실행
+    }, [userLat, userLng, userLocation]);  // 📌 대표 주소 변경될 때마다 실행
 
     // 사용자 위치 업데이트 (Geolocation API를 통해 현재 위치를 설정)
     useEffect(() => {
@@ -196,48 +186,40 @@ const UserHome = ({user: initialUser}) => {
 
     // 검색 기능
     const handleSearch = (e) => {
-        if (e.key === "Enter") {
-            axios.get(`http://localhost:7070/api/store/search?keyword=${searchKeyword}`)
-                .then((res) => {
-                    console.table(res.data);
-                    let sortedData = res.data.map(store => ({
-                        ...store,
-                        storeRating: store.storeRating ?? 0,
-                        storeReviewCount: store.storeReviewCount ?? 0,
-                        storeLatitude: store.storeLatitude ?? 0,
-                        storeLongitude: store.storeLongitude ?? 0
-                    }));
-                    if (sortType === "rating") {
-                        sortedData.sort((a, b) => b.storeRating - a.storeRating);
-                    } else if (sortType === "distance") {
-                        sortedData.sort((a, b) =>
-                            getDistance(userLocation.lat, userLocation.lng, a.storeLatitude, a.storeLongitude) -
-                            getDistance(userLocation.lat, userLocation.lng, b.storeLatitude, b.storeLongitude)
-                        );
-                    }
-                    setDisplayStores(sortedData);
-                })
-                .catch(() => alert("검색 데이터를 가져오지 못했습니다."));
-        }
+        apiStoreService.searchStore(e, searchKeyword, sortType, userLocation, setDisplayStores,getDistance)
     };
 
     const handleMapClick = () => {
-        navigate("user/search/map", {state: {userLocation, stores: displayStores}});
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+        navigate("user/search/map", { state: { lat: userLat, lng: userLng } });
     };
 
-
+    const handleUserAddress = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }else {
+            navigate("/user/insertAddress")
+        }
+    }
     return (
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
             <div className="d-flex align-items-center px-3 mb-2">
                 <h5 className="fw-bold mb-0"
-                    onClick={() => navigate("/user/insertAddress")}
+                    onClick={handleUserAddress}
                     style={{cursor: "pointer"}}>
                     {userAddress ? userAddress.address : "주소를 입력해주세요"}
                     <i className="bi bi-chevron-down ms-1"></i>
                 </h5>
             </div>
-
             {/*검색 공간*/}
             <div className="input-group mb-3 px-2">
                 <div className="d-flex">
@@ -248,7 +230,7 @@ const UserHome = ({user: initialUser}) => {
                 </div>
                 <input type="text"
                        className="form-control rounded-end"
-                       placeholder="가게 검색"
+                       placeholder="어떤 커피를 찾으시나요?"
                        value={searchKeyword}
                        onChange={(e) => setSearchKeyword(e.target.value)}
                        onKeyDown={handleSearch}/>
@@ -259,10 +241,9 @@ const UserHome = ({user: initialUser}) => {
                 {displayStores.map((store) => (
                     <li key={store.storeId} className="store-item">
                         <span className="store-name">{store.storeName}</span>
-                        <img className="store-picture" src={store.storePictureUrl} alt="store"/>
+                        <img className="store-picture" src={store.storePictureUrl} alt="store" />
                         <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
-                        <span
-                            className="store-distance">{userLocation ? getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1) : "-"} km</span>
+                        <span className="store-distance">{userLocation ? getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1) : "-"} km</span>
                     </li>
                 ))}
             </ul>

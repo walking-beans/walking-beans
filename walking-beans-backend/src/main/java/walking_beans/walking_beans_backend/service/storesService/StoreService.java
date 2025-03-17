@@ -1,7 +1,7 @@
 package walking_beans.walking_beans_backend.service.storesService;
 
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
 import java.util.List;
 
@@ -27,6 +27,9 @@ public interface StoreService {
 
     // 매장정보 삭제하기
     void deleteStores(long storeId);
+
+    // 위도경도 10km 매장
+    List<Stores> findNearbyStores(double lat, double lng);
 
     /**************************************** Leo ****************************************/
     // 매장 주소 가져오기 by order id

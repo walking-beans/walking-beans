@@ -6,6 +6,7 @@ import walking_beans.walking_beans_backend.mapper.AddressMapper;
 import walking_beans.walking_beans_backend.model.dto.Address;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -36,9 +37,29 @@ public class AddressServiceImpl implements AddressService {
         return addressMapper.getPrimaryAddressByUserId(userId);
     }
 
+    // 대표주소 1로 변경하기
+    @Override
+    public void updatePrimaryAddress(long userId ,long addressId) {
+        addressMapper.resetAddressRoles(userId);
+        addressMapper.updatePrimaryAddress(addressId);
+    }
 
+    // 모든 주소 0 으로 만들기
+    @Override
+    public void resetAddressRoles(long userId) {
+        addressMapper.resetAddressRoles(userId);
+    }
+
+
+    // 대표주소 변경
     @Override
     public Address getUserMainAddress(long orderId, long userId) {
         return addressMapper.getUserMainAddress(orderId, userId);
+    }
+
+    // 주문 기준으로 사용자가 선택한 주소 가져오기
+    @Override
+    public Address getUserAddressByOrderId(long orderId) {
+        return addressMapper.getUserAddressByOrderId(orderId);
     }
 }

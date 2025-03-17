@@ -2,10 +2,15 @@ package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +63,12 @@ public class UserAPIController {
         }
     }
 
+    //유저 롤 업데이트
+    @PutMapping("/{userEmail}/{userRole}")
+    public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
+        userService.updateUserRole(userEmail, userRole);
+    }
+
     /************************* 이메일 인증 ****************************/
     /*
     @PostMapping("/sendCode")
@@ -75,4 +86,65 @@ public class UserAPIController {
         return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
     }
     */
+
+    // 회원정보 수정
+    @PutMapping("/infoCorrection")
+    public void updateInfoCorrection(@RequestParam("userId") long userId,
+                                     @RequestParam("userPhone") String userPhone) {
+        userService.updateUserInfo(userId,userPhone);
+    }
+
+
+    @Value("${upload-img}")
+    private String uploadPath;
+
+    @PostMapping("/mypage/{userId}/uploadProfile")
+    public ResponseEntity<?> uploadProfileImage(@PathVariable Long userId,
+                                                @RequestParam("file") MultipartFile file) {
+
+        System.out.println("📢 [백엔드] 프로필 업로드 요청 도착! userId: " + userId);
+        System.out.println("📢 [백엔드] 요청 Headers: " + file);
+
+        // 🔍 file이 비어있는지 확인!
+        if (file == null || file.isEmpty()) {
+            System.out.println("❌ 파일이 전달되지 않았습니다!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일이 필요합니다!");
+        }
+        try {
+            String fileName = file.getOriginalFilename();
+
+            System.out.println("업로드된 파일: " + fileName);
+
+             // String filePath = "C:/uploaded/" + fileName;
+            String filePath = uploadPath + "/" + fileName;
+
+
+
+
+
+            file.transferTo(new File(filePath));
+            String profileUrl = "http://localhost:7070/uploaded/" + fileName;
+            userService.updateUserProfile(userId, profileUrl);
+            return ResponseEntity.ok(Map.of("프로필 사진 업로드 성공!", profileUrl));
+        }catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("프로필 업로드 실패", e.getMessage()));
+        }
+    }
+
+
+
+
+    @GetMapping("/mypage/{userId}")
+    public ResponseEntity<?> getMyPage(@PathVariable("userId") Long userId) {
+        Users user = userService.selectUserInfo(userId);
+
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found");
+        }
+
+        return ResponseEntity.ok(user);
+    }
 }
+
+
+

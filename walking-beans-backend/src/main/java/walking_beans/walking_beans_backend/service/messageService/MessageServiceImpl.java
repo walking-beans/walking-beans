@@ -4,10 +4,10 @@ package walking_beans.walking_beans_backend.service.messageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import walking_beans.walking_beans_backend.mapper.ChattingRoomMapper;
 import walking_beans.walking_beans_backend.mapper.MessageMapper;
 import walking_beans.walking_beans_backend.model.dto.Message;
+import walking_beans.walking_beans_backend.model.dto.admin.UserMessage;
 
 import java.util.List;
 
@@ -30,9 +30,11 @@ public class MessageServiceImpl implements MessageService {
 
         // messageRole checking -> 이미지 경로 재설정
 
-        // chattingroom update
-        chattingRoomMapper.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
-
         return messageMapper.insertMessageByRoomId(message);
+    }
+
+    @Override
+    public List<UserMessage> getAllUserMessage(long roomId) {
+        return messageMapper.getAllUserMessage(roomId);
     }
 }
