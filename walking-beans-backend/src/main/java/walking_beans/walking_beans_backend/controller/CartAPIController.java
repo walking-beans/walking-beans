@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.vo.CartItemDTO;
+import walking_beans.walking_beans_backend.model.vo.UserCartViewDTO;
 import walking_beans.walking_beans_backend.service.cartService.CartServiceImpl;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class CartAPIController {
     }
 
     // 장바구니 메뉴 데이터 가져오기
-    @GetMapping("/{cartId}")
+    @GetMapping("order/{cartId}")
     public CartItemDTO getCartInfoByCartId(@PathVariable("cartId") long cartId) {
         return cartService.getCartInfoByCartId(cartId);
     }
@@ -44,6 +45,12 @@ public class CartAPIController {
     @GetMapping("/order/{orderId}")
     public List<CartItemDTO> getCartInfoByOrderId(@PathVariable("orderId") long orderId) {
         return cartService.getCartInfoByOrderId(orderId);
+    }
+
+    // 유저가 선택한 장바구니 가져오기
+    @GetMapping("/{userId}")
+    public List<UserCartViewDTO> getCartByUserId(@PathVariable long userId) {
+        return cartService.getCartByUserId(userId);
     }
 
 }

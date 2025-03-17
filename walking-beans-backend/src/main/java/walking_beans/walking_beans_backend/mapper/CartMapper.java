@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.vo.CartItemDTO;
+import walking_beans.walking_beans_backend.model.vo.UserCartViewDTO;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface CartMapper {
 
     // 장바구니 주문자 기준 카트 데이터 가져오기
     List<CartItemDTO> getCartInfoByOrderId (long orderId);
+
+    // 유저가 선택한 장바구니 가져오기
+    List<UserCartViewDTO> getCartByUserId (long userId);
 }

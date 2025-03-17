@@ -36,18 +36,20 @@
     <!-- 장바구니 메뉴 데이터 가져오기 -->
     <select id="getCartInfoByCartId">
         SELECT c.cart_id,
+               COUNT(c.cart_quantity) AS total_quantity,
                mo.option_id,
                m.menu_id,
                m.user_id,
                mo.option_name,
+               mo.option_content,
                mo.option_price,
                m.menu_name,
-               m.menu_price
+               m.menu_price,
+               c.order_id
         FROM carts c
                  JOIN menuOption mo ON c.option_id = mo.option_id
                  JOIN menu m ON m.menu_id = mo.menu_id
-        WHERE c.cart_id = #{cartId};
-
+        WHERE c.cart_id = #{cartId}
     </select>
 
     <!-- 장바구니 주문자 기준 카트 데이터 가져오기 -->
@@ -64,7 +66,14 @@
         FROM carts c
                  JOIN menuOption mo ON c.option_id = mo.option_id
                  JOIN menu m ON m.menu_id = mo.menu_id
-        WHERE c.order_id = #{orderId};
+        WHERE c.order_id = #{orderId}
+    </select>
+
+    <!-- 유저가 선택한 장바구니 가져오기 -->
+    <select id="getCartByUserId">
+        SELECT *
+        FROM user_cart_view
+        WHERE user_id = #{userId}
     </select>
 
 </mapper>

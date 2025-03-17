@@ -109,8 +109,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 주문한 가게 정보 가져오기
     @Override
-    public Stores findStoreByOrderId(long orderId) {
-        return orderMapper.findStoreByOrderId(orderId);
+    public Stores findStoreByOrderId(long userId) {
+        return orderMapper.findStoreByOrderId(userId);
     }
 
     // 주문내역 내 오더 정보 가져오기

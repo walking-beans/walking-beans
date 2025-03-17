@@ -27,7 +27,7 @@ const apiUserOrderService = {
     // cart 데이터 가져오기
     getUserOrderByCartId: function (cartId) {
         return axios
-            .get(`${API_CART_URL}/${cartId}`)
+            .get(`${API_CART_URL}/order/${cartId}`)
             .then((res) => {
                 console.log("카트 데이터 연결 성공", res.data);
                 // 응답 데이터가 객체일 경우 배열로 감싸기
@@ -168,8 +168,29 @@ const apiUserOrderService = {
                 .catch((err) => {
                     console.log("주소 불러오기 실패 : ", err);
                 })
-        }
+        },
+
+    // 주문내역 내 오더 정보 가져오기
+    getOrderStatusByOrderId:
+        function (orderId) {
+            return axios
+                .get(`${API_ORDER_URL}/info/${orderId}`)
+                .then(
+                    (res) => {
+                        console.log("주문내역 가져오기 성공 : ", res.data);
+                        return res.data;
+                    }
+                )
+                .catch(
+                    (err) => {
+                        console.log("주문내역 가져오기 실패 : ", err);
+                        throw err;
+                    }
+                )
+        },
 }
+
+
 
 
 export default apiUserOrderService;

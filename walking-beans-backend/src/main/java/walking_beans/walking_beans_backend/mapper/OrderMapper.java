@@ -36,7 +36,7 @@ public interface OrderMapper {
     List<Orders> findOrdersByUserId(long userId);
 
     // 주문한 가게 정보 가져오기
-    Stores findStoreByOrderId(@Param("orderId") long orderId);
+    Stores findStoreByOrderId(long userId);
 
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);

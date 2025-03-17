@@ -113,9 +113,9 @@ public class OrderAPIController {
     }
 
     // 주문한 가게 정보 가져오기
-    @GetMapping("/storeInfo/{orderId}")
-    public Stores findStoreByOrderId(@PathVariable("orderId") long orderId) {
-        return orderService.findStoreByOrderId(orderId);
+    @GetMapping("/storeInfo/{userId}")
+    public Stores findStoreByOrderId(@PathVariable("userId") long userId) {
+        return orderService.findStoreByOrderId(userId);
     }
 
     // 주문내역 내 오더 정보 가져오기
