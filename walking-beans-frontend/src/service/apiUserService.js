@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {call} from "axios";
 import {Link} from "react-router-dom";
 
 const USER_API_URL = "http://localhost:7070/api/users"
@@ -59,17 +59,17 @@ const apiUserService = {
 
     // 유저 롤 수정하는 api
     updateRole:
-        function (userEmail, userRole) {
+        function (userEmail, userRole, callback) {
             axios
                 .put(`${USER_API_URL}/${userEmail}/${userRole}`)
                 .then(
                     (res) => {
-                        console.log("유저 롤이 수정되었습니다.");
+                        callback("success");
                     }
                 )
                 .catch(
                     (err) => {
-                        alert("유저 롤을 수정하는데 백엔드에서 문제가 생겼습니다.");
+                        alert("등급을 수정하는데 백엔드에서 문제가 생겼습니다.");
                     }
                 )
         },
