@@ -22,7 +22,7 @@ public class Menu {
 
     private long userId;
 
-    private String menuPrice;
+    private int menuPrice;
 
     private String menuPictureUrl;
 

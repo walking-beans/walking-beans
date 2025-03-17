@@ -23,7 +23,7 @@ public interface MenuOptionService {
     void updateMenuOption(MenuOption menuOption);
 
     // 메뉴옵션 추가하기
-    void addMenuOption(MenuOption menuOption);
+    void addMenuOption(List<MenuOption> menuOptions);
 
     // 메뉴옵션 삭제하기
     void deleteMenuOption(long optionId);
