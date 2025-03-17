@@ -50,14 +50,16 @@ const AdminMypage = () => {
     // }, [userId]);
 
         useEffect(() => {
+            console.log("🔍 user 상태 확인:", user);
             console.log("useEffect 실행됨 - 현재 userId 값:", userId);
-            if (userId === null) return; // userId가 없으면 실행하지 않음
+            if (!userId) return; // userId가 없으면 실행하지 않음
 
             console.log("userId 업데이트 완료 - API 요청 가능:", userId);
 
             apiUserService.mypage(
                 userId,
                 (data) => {
+                    console.log("📌 API 응답 데이터:", data);
                     setUser(data);
                     setLoading(false);
                 },
@@ -109,21 +111,21 @@ const AdminMypage = () => {
                 <input
                     type="file"
                     id="profileInput"
-                    style={{ display: "none" }}
+                    style={{display: "none"}}
                     onChange={handleProfileChange}
                 />
             </div>
-            <p>이름: {user?.user_name}</p>
-            <p>이메일: {user?.user_email}</p>
-            <p>전화번호: {user?.user_phone}</p>
-            <p>생일: {user?.user_birthday}</p>
+            <p>이름: {user.userName || "정보 없음"}</p>
+            <p>이메일: {user.userEmail || "정보 없음"}</p>
+            <p>전화번호: {user.userPhone || "정보 없음"}</p>
+            <p>생일: {user.userBirthday || "정보 없음"}</p>
 
             <div className="menu-links">
-                <button onClick={() => navigate("/edit-profile")}>회원정보 수정</button>
+                <button onClick={() => navigate("/certification")}>회원정보 수정</button>
                 <button onClick={() => navigate("/reviews")}>리뷰 관리</button>
                 <button onClick={() => navigate("/addresses")}>주소 관리</button>
                 <button onClick={() => navigate("/logout")}>로그아웃</button>
-                <button onClick={() => navigate("/delete-account")}>회원 탈퇴</button>
+                <button onClick={() => navigate("/unlink")}>회원 탈퇴</button>
                 <button onClick={() => navigate("/terms")}>약관 및 정책</button>
                 <button onClick={() => navigate("/support")}>고객 센터</button>
                 <button onClick={() => navigate("/faq")}>자주 묻는 질문</button>
