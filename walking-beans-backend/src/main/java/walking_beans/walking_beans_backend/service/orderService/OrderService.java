@@ -39,4 +39,6 @@ public interface OrderService {
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
 
+
+
 }

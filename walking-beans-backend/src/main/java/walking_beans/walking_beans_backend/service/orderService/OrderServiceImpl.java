@@ -16,6 +16,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+
     /**************************************** Leo ****************************************/
     @Override
     public Orders getOrderByOrderId(long orderId) {
@@ -75,9 +76,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void insertOrder(Orders order, List<Carts> cartList, Payments payment) {
 
-        // 주문 데이터 삽입
+        // 주문 데이터 삽입 mysql
         orderMapper.insertOrder(order);
 
+        // Redis 캐싱
+        redisService.cacheOrderForStore(order);
 
         // 주문에 대한 장바구니 데이터 삽입
         for (Carts cart : cartList) {
@@ -119,4 +122,24 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+    /*******************************************/
+    //redis
+    @Autowired
+    private RedisService redisService;
+
+    // storeId 로 최신 주문 확인 (long Polling 용)
+    public Orders getLatestOrderForStore(long storeId) {
+        Orders latestOrders = redisService.getLatestOrderForStore(storeId); // Redis 확인
+        if (latestOrders == null) {
+            latestOrders = orderMapper.findgetLatestOrderForStore(storeId); // MySql 조회
+            if (latestOrders == null) {
+                redisService.cacheOrderForStore(latestOrders);//MySql 에서 가져온값 캐싱
+            }
+        }
+        return latestOrders;
+    }
+
 }
+
+
+

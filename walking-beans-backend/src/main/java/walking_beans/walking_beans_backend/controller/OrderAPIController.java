@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
@@ -18,6 +19,7 @@ import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @RestController
@@ -124,6 +126,45 @@ public class OrderAPIController {
         return orderService.getOrderStatus(orderId);
     }
 
+
+
+    /************************************************************/
+    // 업주용 Long Polling
+    @GetMapping("/long-poll")
+    public DeferredResult<ResponseEntity<?>> getOrdersLongPoll(@RequestParam("storeId") long storeId) {
+        DeferredResult<ResponseEntity<?>> deferredResult = new DeferredResult<>(30000L); // 30초 타임아웃
+
+        deferredResult.onTimeout(() -> {
+            deferredResult.setResult(ResponseEntity.ok("새주문 없음"));
+        });
+
+        CompletableFuture.supplyAsync(()-> {
+            for (int i = 0; i < 5; i++) { // 6초 간격, 최대 30초
+                Orders newOrder = orderService.getLatestOrderForStore(storeId);
+                if (newOrder != null && newOrder.getOrderStatus() == 0) { // 접수된 주문만
+                    return newOrder;
+                }
+                try {
+                    Thread.sleep(6000); // 간격
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            return null;
+
+        }).thenAccept(result -> {
+            if (result != null) {
+                deferredResult.setResult(ResponseEntity.ok(result));
+            } else {
+                deferredResult.setResult(ResponseEntity.ok("새 주문 없음"));
+            }
+        }).exceptionally(throwable -> {
+            deferredResult.setErrorResult(ResponseEntity.status(500).body("서버 오류"));
+            return null;
+        });
+
+        return deferredResult;
+    }
 
 
 }

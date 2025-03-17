@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -16,7 +17,7 @@ import java.util.StringTokenizer;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orders {
+public class Orders implements Serializable { // Redis 캐싱을 위한 직렬화
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

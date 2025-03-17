@@ -117,4 +117,12 @@
         FROM orders
         WHERE order_id = #{orderId}
     </select>
+
+    <!-- 가게 id로 주문정보 가져오기-->
+    <select id="findgetLatestOrderForStore">
+        SELECT * FROM orders
+                 WHERE store_id = #{storeId}
+                   AND order_status = 1
+                 ORDER BY order_create_date DESC LIMIT 1
+    </select>
 </mapper>
