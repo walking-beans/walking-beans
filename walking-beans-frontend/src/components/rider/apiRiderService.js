@@ -3,7 +3,6 @@ import axios from "axios";
 const API_URL = "http://localhost:7070/api";
 
 const apiRiderService = {
-
     /***************** Address *****************/
     // get user main address
     getUserMainAddressByOrderId : function (orderId, userId, setUserAddress) {
