@@ -2,6 +2,7 @@ package walking_beans.walking_beans_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Menu;
 import walking_beans.walking_beans_backend.service.menuService.MenuServiceImpl;
 
@@ -51,31 +52,51 @@ public class MenuAPIController {
         return menuService.findMenuByStoreId(storeId);
     }
 
+    /**추가하기
+     *
+     * @param menuId
+     * @param menuPrice
+     * @param menuDescription
+     * @param menuCategory
+     * @param menuPictureUrl
+     */
+    @PostMapping
+    public void addMenu(@RequestParam("menuName") String menuName,
+                        @RequestParam("menuId") long menuId,
+                        @RequestParam("menuPrice") int menuPrice,
+                        @RequestParam("menuDescription") String menuDescription,
+                        @RequestParam("menuCategory") String menuCategory,
+                        @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
+                        ) {
+        menuService.addMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
+    }
+
+
     /**메뉴 수정하기
      *
      * @param menuId
+     *      * @param menuPrice
+     *      * @param menuDescription
+     *      * @param menuCategory
+     *      * @param menuPictureUrl
      */
-    @PutMapping("/update")
-    public void updateMenu(@PathVariable long menuId, @RequestBody Menu menu) {
-        menu.setMenuId(menuId);
-        menuService.updateMenu(menu);
-    }
+    @PutMapping("/{menuId}")
+    public void updateMenu(@PathVariable long menuId,
+                           @RequestParam("menuName") String menuName,
+                           @RequestParam("menuPrice") int menuPrice,
+                           @RequestParam("menuDescription") String menuDescription,
+                           @RequestParam("menuCategory") String menuCategory,
+                           @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl) {
 
-    /**추가하기
-     *
-     * @param menu
-     */
-    @PostMapping
-    public void addMenu(@RequestBody Menu menu) {
-        menuService.addMenu(menu);
+        menuService.updateMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
     }
 
     /**삭제하기
      *
      * @param menuId
      */
-    @DeleteMapping("/delete")
-    public void deleteMenu(@RequestBody long menuId) {
+    @DeleteMapping("/{menuId}")
+    public void deleteMenu(@PathVariable long menuId) {
         menuService.deleteMenu(menuId);
     }
 

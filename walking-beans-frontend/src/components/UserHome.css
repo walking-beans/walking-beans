@@ -48,7 +48,17 @@
     font-size: 12px;
     color: #888;
 }
+.user-home-container .form-control {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-size: 18px;
+}
 
+.user-home-container .form-select {
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
 .user-home-container .store-rating{
     color: #EE5A4C;
 }

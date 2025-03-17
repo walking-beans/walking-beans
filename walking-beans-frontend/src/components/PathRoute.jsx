@@ -6,10 +6,7 @@ import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
 import UserMenuCategory from "../pages/user/UserMenuCategory";
-import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
-import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
-import StoreMenuOptionForm from "../pages/owner/StoreMenuOptionForm";
 import StoreMyStore from "../pages/owner/StoreMyStore";
 import StoreRevenue from "../pages/owner/StoreRevenue";
 import StoreOrder from "../pages/owner/StoreOrder";
@@ -52,6 +49,7 @@ import SearchHeader from "../pages/layout/SearchHeader";
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 import UserReviewWrite from "../pages/user/UserReviewWrite";
 import AdminChangeRole from "../pages/admin/AdminChangeRole";
+import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 
 
 
@@ -170,26 +168,18 @@ function PathRoute() {
                                     </ProtectedRoute>
                                 }/>
 
-                                <Route path="/owner/menuform" element={
+                                <Route path="/owner/menu/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuForm/>
+                                        <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoption" element={
+                                {/* id는 연결되는 메뉴id */}
+                                <Route path="/owner/menuoption/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionDetail/>
-                                    </ProtectedRoute>
-                                }/>
-                                <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionForm/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/owner/mystore" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>

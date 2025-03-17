@@ -125,6 +125,7 @@ const apiUserService = {
         },
 
 
+    // 마이페이지
     mypage:
         function (userId, callback, errorCallback) {
             axios
@@ -138,6 +139,7 @@ const apiUserService = {
                 });
         },
 
+    // 프로필 사진
     uploadProfileImage:
         function (userId, file, callback, errorCallback) {
         const formData = new FormData();

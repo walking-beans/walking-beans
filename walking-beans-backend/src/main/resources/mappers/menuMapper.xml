@@ -36,13 +36,13 @@
     <!-- 메뉴 수정하기 -->
     <update id="updateMenu">
         UPDATE Menu
-            SET (
-                menu_price = #{menuPrice},
-                menu_picture_url = #{menuPictureUrl},
-                menu_name = #{menuName},
-                menu_category = #{menuCategory},
-                menu_description = #{menuDescription},
-                menu_modified_date = NOW())
+        SET
+            menu_name = #{menuName},
+            menu_price = #{menuPrice},
+            menu_category = #{menuCategory},
+            menu_description = #{menuDescription},
+            menu_picture_url = #{menuPictureUrl},
+            menu_modified_date = NOW()
         WHERE menu_id = #{menuId}
 
     </update>
@@ -83,11 +83,29 @@
         WHERE menu_id = #{menuId}
     </delete>
 
-    <!-- 대표메뉴 정보 가져오기 -->
-    <select id="findMainMenuByStoreId">
-        SELECT m.*, s.store_main_menu
-        FROM menu m
-                 JOIN stores s ON s.store_main_menu = m.menu_id
-        WHERE m.store_id = #{storeId}
+    <!-- 주문내역 : 사용자가 선택한 메뉴 정보 가져오기 mapper 추가 필요
+    <select id="getMenuByOrderId">
+        SELECT m.menu_id,
+               m.menu_name,
+               m.menu_price,
+               mo.option_id,
+               mo.option_name,
+               mo.option_price
+        FROM MENU m
+                 JOIN menuOption mo ON m.menu_id = mo.menu_id
+        WHERE m.menu_id = #{menuId}
+          AND mo.option_id IN (#{optionId})
     </select>
+ -->
+
+    <!--
+    <select id="getCategory">
+        SELECT m.menu_category
+        FROM menu m
+        JOIN stores s
+        ON m.user_id = s.user_id
+        GROUP by m.menu_category
+    </select>
+    -->
+
 </mapper>
