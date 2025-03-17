@@ -19,6 +19,12 @@ import java.util.Set;
 public class WebSocketAlertHandler extends TextWebSocketHandler {
 
     private static final Set<WebSocketSession> sessions = new HashSet<>();
+    private final ObjectMapper objectMapper;
+
+    public WebSocketAlertHandler(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -36,15 +42,20 @@ public class WebSocketAlertHandler extends TextWebSocketHandler {
         sessions.remove(session);
     }
 
-    public void sendAlert(String alertMessage) {
-        for (WebSocketSession session : sessions) {
-            try {
-                session.sendMessage(new TextMessage(alertMessage));
-                System.out.println("Sent alert to: " + session.getId());
-            } catch (IOException e) {
-                System.err.println("Error sending alert: " + e.getMessage());
-                e.printStackTrace();
+    public void sendAlert(Alarms alarms) {
+        try {
+            // Alarm 객체를 JSON 형식의 문자열로 변환
+            String jsonMessage = objectMapper.writeValueAsString(alarms);
+
+            for (WebSocketSession session : sessions) {
+                if (session.isOpen()) {
+                    session.sendMessage(new TextMessage(jsonMessage));
+                    System.out.println("Sent alert to: " + session.getId());
+                }
             }
+        } catch (IOException e) {
+            System.err.println("Error sending alert: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -48,6 +48,14 @@
         WHERE order_id = #{orderId}
     </update>
 
+    <select id="getOrderStatusWithRemainingTime">
+        SELECT O.order_status, O.order_modified_date, S.store_max_delivery_time
+        FROM orders O
+                 INNER JOIN stores S
+                            on O.store_id = S.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
     <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->

@@ -142,8 +142,6 @@ const AdminChattingroom = ({user}) => {
 };
 
 export default AdminChattingroom;*/
-
-import { useBeforeunload } from 'react-beforeunload';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
@@ -203,7 +201,7 @@ const AdminChattingroom = ({user}) => {
 
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
+            stompClient.current.subscribe(`/sub/chattingroom`, (message) => {
                 console.log("connected && message : ", message);
                 (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });

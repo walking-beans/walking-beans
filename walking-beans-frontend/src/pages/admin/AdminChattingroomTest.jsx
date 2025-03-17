@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
 import apiRiderService from "../../components/rider/apiRiderService";

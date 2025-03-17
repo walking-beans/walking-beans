@@ -50,11 +50,14 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import SearchHeader from "../pages/layout/SearchHeader";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+import UserReviewWrite from "../pages/user/UserReviewWrite";
 
 
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
+    const [selectedStoreId,setSelectedStoreId] = useState();
+    const [currentOrderId,setCurrentOrderId] = useState();
 
 
     const [user, setUser] = useState(() => {
@@ -115,7 +118,7 @@ function PathRoute() {
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
 
-                                {/* ✅ `searchResults`를 `UserSearchMap`에 전달 */}
+                                <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
@@ -127,7 +130,7 @@ function PathRoute() {
                                 <Route path="/rider" element={
                                     <RiderMain/>
                                 }/>
-                                <Route path="/rider/ontheway/:orderIdx" element={
+                                <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
                                         <RiderOntheway/>
                                     </ProtectedRoute>
@@ -204,7 +207,6 @@ function PathRoute() {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chat/chattingroom" element={user ? <AdminChattingroom user={user} /> : <div>Loading...</div>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
-
 
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST />}/>
                                 <Route path="/TEST/chattingroom" element={<AdminChattingroomTest />}/>

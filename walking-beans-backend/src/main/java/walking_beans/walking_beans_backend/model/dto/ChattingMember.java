@@ -16,7 +16,7 @@ public class ChattingMember {
 
     private long userId;
 
-    private long receiverId;
+    private long roomReceiverId;
 
     private int receiverRelation;
 }

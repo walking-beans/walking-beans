@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.model.vo.admin;
+package walking_beans.walking_beans_backend.model.dto.admin;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
