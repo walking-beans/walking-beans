@@ -11,5 +11,3 @@ root.render(
   <PathRoute/>
   </React.StrictMode>
 );
-
-
