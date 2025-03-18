@@ -5,6 +5,7 @@ import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     /**************************************** Leo  ****************************************/
@@ -39,4 +40,9 @@ public interface OrderService {
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
 
+    Long createOrder(Map<String, Object> requestData);
+
+    public interface ChatService {
+        void sendMessage(Message message);
+    }
 }

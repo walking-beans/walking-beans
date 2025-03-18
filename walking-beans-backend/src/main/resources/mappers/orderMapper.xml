@@ -58,6 +58,12 @@
 
     <!-- ****************************************  **************************************** -->
 
+
+    <insert id="createOrder">
+        INSERT INTO orders (user_id, store_id, address_id, order_number, order_requests, order_total_price, order_create_date, order_modified_date)
+        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber},#{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
+    </insert>
+
     <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price,

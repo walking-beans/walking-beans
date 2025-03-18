@@ -58,7 +58,7 @@ public class OrderAPIController {
                                                             @RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
-
+    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -123,4 +123,7 @@ public class OrderAPIController {
     public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
         return orderService.getOrderStatus(orderId);
     }
+
+
+
 }
