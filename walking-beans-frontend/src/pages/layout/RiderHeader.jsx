@@ -146,8 +146,8 @@ const RiderHeader = ({user}) => {
                         <ul className="rider-nav-menu list-unstyled">
                             {[
                                 {icon: person, text: "마이페이지", path: "/rider"},
-                                {icon: payment, text: "내 수입", path: "/rider/orderlist"},
-                                {icon: list, text: "배달기록", path: "/rider/income"},
+                                {icon: payment, text: "내 수입", path: "/rider/income"},
+                                {icon: list, text: "배달기록", path: "/rider/orderlist"},
                                 {icon: textsms, text: "채팅", path: "/chat/chattingroom"},
                                 {icon: supportAgent, text: "고객센터 문의하기", path: "/rider"}
                             ].map(({icon, text, path}) => (
