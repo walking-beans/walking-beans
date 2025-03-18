@@ -41,6 +41,7 @@ import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
+import UserStoreReview from "../pages/user/UserStoreReview";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -107,6 +108,7 @@ function PathRoute() {
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<FailPage />} />
 
+                                <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
                                 <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>

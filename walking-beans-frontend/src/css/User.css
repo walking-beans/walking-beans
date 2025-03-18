@@ -104,19 +104,36 @@
 
 /******************* userReviewWrite ********************/
 .user-review-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 10px;
+    width: 100%;
+    height: 70vh;
+    max-width: 100%;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #F4EDDF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
-/* ⭐ 별점 스타일 */
 .user-review-container .star-rating {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+.user-review-container .star-rating p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    text-align: center;
+}
+.user-review-container .star-container {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
 }
 
 .user-review-container .star {
@@ -124,27 +141,64 @@
     color: #ddd;
     cursor: pointer;
     transition: color 0.3s;
+    margin: 0 5px;
 }
 
 .user-review-container .star.filled {
-    color: #ff6347; /* 선택된 별 색상 */
+    color: #ff6347;
 }
 
 .user-review-container .star:hover {
     color: #ff4500;
 }
 
-/* ✍ 리뷰 입력 창 */
+
 .user-review-container textarea {
-    width: 100%;
-    height: 80px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 600px;
+    max-width: 500px;
+    height: 200px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
     resize: none;
+    outline: none;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    text-align: left;
+    vertical-align: top;
+    background-color: white;
+
 }
 
-/* ✅ 버튼 스타일 */
+.user-review-container .file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.user-review-container .file-upload label {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto 0 0;
+}
+
+.user-review-container input[type="file"] {
+   display: none;
+}
+.user-review-container .image-preview {
+    margin-top: 10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+}
+
 .user-review-container button {
     width: 100%;
     padding: 10px;
@@ -157,4 +211,146 @@
 
 .user-review-container button:hover {
     background-color: #d63e00;
+}
+.user-review-container .remove-image{
+    display: flex;
+    text-align: center;
+    background-color: red;
+    width: 30px;
+}
+
+/************** UserStoreReview ******************/
+.user-store-review {
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #F4EDDF;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.user-store-review h2 {
+    text-align: center;
+}
+
+.user-store-review .review-list {
+    margin-top: 20px;
+}
+
+.user-store-review .review-card {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-store-review .review-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.user-store-review .review-stars {
+    color: #ff4500;
+    font-size: 18px;
+}
+
+.user-store-review .review-content {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.user-store-review .review-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.user-store-review .no-reviews {
+    text-align: center;
+    font-size: 16px;
+    color: #999;
+}
+
+.user-store-review .review-summary {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.user-store-review .average-rating {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user-store-review .big-star {
+    font-size: 28px;
+    color: #ff4500;
+}
+
+.user-store-review .average-score {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.user-store-review .rating-bars {
+    margin-top: 10px;
+}
+
+.user-store-review .rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.user-store-review .star-text {
+    width: 40px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-store-review .progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.user-store-review .progress-fill {
+    height: 100%;
+    background-color: #ff4500;
+    transition: width 0.3s ease-in-out;
+}
+
+.user-store-review .count-text {
+    width: 40px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.user-store-review .delete-review-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.user-store-review .delete-review-btn:hover {
+    background-color: #cc0000;
 }
