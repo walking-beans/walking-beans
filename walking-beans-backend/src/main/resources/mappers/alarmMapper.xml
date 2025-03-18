@@ -22,4 +22,15 @@
         FROM Alarms
         WHERE user_id = #{userId}
     </delete>
+
+    <!-- 특정 가게의 알림 조회 -->
+    <select id="getNotificationsByStoreId">
+        SELECT * FROM Alarms WHERE user_id = #{userId} ORDER BY created_at DESC
+    </select>
+
+    <!-- 특정 알림 읽음 상태 업데이트 -->
+    <update id="markNotificationAsRead">
+        UPDATE Alarms SET alarm_status = TRUE WHERE alarm_id = #{alarmId}
+    </update>
+
 </mapper>

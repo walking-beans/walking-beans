@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.alarmService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.config.WebSocketAlertHandler;
@@ -11,7 +12,7 @@ import walking_beans.walking_beans_backend.service.messageService.MessageService
 
 import java.sql.Timestamp;
 import java.util.List;
-
+/*
 @Service
 @RequiredArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
@@ -53,5 +54,33 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public void sendAlarm(Alarms alarm) {
         alarmMapper.insertAlarm(alarm);
+    }
+}
+ */
+@Slf4j
+@Service
+public class AlarmServiceImpl implements AlarmService {
+
+    @Autowired
+    private  AlarmMapper alarmMapper;
+
+    // 알림 저장 (WebSocket으로 주문이 오면 이 함수 실행)
+    @Override
+    public void sendNotification(Long storeId, String message) {
+        alarmMapper.insertAlarm(storeId, message);
+        log.info("알림 저장 완료 - 매장 ID: {}, 메시지: {}", storeId, message);
+    }
+
+    // 특정 가게의 알림 목록 조회
+    @Override
+    public List<Alarms> getNotificationsByStoreId(Long storeId) {
+        return alarmMapper.getNotificationsByStoreId(storeId);
+    }
+
+    //  특정 알림 읽음 처리
+    @Override
+    public void markNotificationAsRead(Long notificationId) {
+        alarmMapper.markNotificationAsRead(notificationId);
+        log.info("알림 읽음 처리 완료 - 알림 ID: {}", notificationId);
     }
 }
