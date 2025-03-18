@@ -5,7 +5,7 @@ import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
 import apiUserService from "../service/apiUserService";
 
-const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
+const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
 
 const UserHome = ({ user: initialUser }) => {
     const [userLocation, setUserLocation] = useState(null);
@@ -103,7 +103,7 @@ const UserHome = ({ user: initialUser }) => {
         if (!centerLat || !centerLng) return; // 📌 좌표가 없으면 실행 X
 
         const script = document.createElement("script");
-        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
         document.head.appendChild(script);
 
