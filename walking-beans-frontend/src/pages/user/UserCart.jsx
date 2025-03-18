@@ -1,6 +1,7 @@
 import React from "react";
 import orderCartDeleteBtnIcon from "../../images/user/orderCartDeleteBtn.svg";
 import apiUserOrderService from "../../service/apiUserOrderService";
+import axios from "axios";
 
 const UserCart = ({
                       cartId,
@@ -9,11 +10,9 @@ const UserCart = ({
                       optionNames,
                       optionPrices,
                       totalQuantities,
-                      menuPictureUrl,
                       handleDelete,
                       userId,
                       storeId,
-                      menuId,
                       optionIds,
                       updateCart,
                   }) => {

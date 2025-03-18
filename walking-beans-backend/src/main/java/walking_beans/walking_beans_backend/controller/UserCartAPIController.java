@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/cart")
-public class UserCartController {
+public class UserCartAPIController {
 
     @Autowired
     private UserCartServiceImpl userCartService;
@@ -136,4 +137,19 @@ public class UserCartController {
 
 
  */
+
+    @DeleteMapping("/{userId}/store/{storeId}")
+    public ResponseEntity<Void> clearCartForDifferentStore(@PathVariable Long userId, @PathVariable Long storeId) {
+        log.info("다른 스토어로 이동하여 장바구니 자동 삭제 - userId: {}, storeId: {}", userId, storeId);
+        try {
+            userCartService.changeStoreIdAndMenu(storeId, userId);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } catch (EntityNotFoundException e) {
+            log.warn("장바구니 없음 - userId: {}, storeId: {}", userId, storeId);
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        } catch (Exception e) {
+            log.error("장바구니 삭제 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 Internal Server Error
+        }
+    }
 }

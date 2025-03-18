@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class UserCartDTO {
     private Long userId;
     private Long cartId;
+    private Long storeId;
     private Long cartQuantity;
     private String userName;
     private String userEmail;

@@ -94,7 +94,7 @@ function PathRoute() {
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
                                 {/* 유저 관련 라우트 */}
-                                <Route path="/user/order/:storeId" element={<UserOrder/>}/>
+                                <Route path="/user/order/:storeId" element={<UserOrder />} />
                                 {/* 주문하기 페이지 */}
                                 <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
