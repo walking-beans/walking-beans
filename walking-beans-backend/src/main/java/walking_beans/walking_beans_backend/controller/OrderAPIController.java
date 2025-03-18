@@ -47,6 +47,7 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.getOrdersByNullOfRiderIdInDuty());
     }
 
+
     /**
      * rider 가 '주문 받기' 수령시 therefore, 다른 라이더들이 수령 불가능
      * @param riderId : 주문 받기 누를 rider id
