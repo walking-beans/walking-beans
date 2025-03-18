@@ -24,7 +24,7 @@ const RiderMap = () => {
 
     const [testStore, setTestStore] = useState([]);
 
-    const [filteredStores, setFilteredStores] = useState([]);
+    const [selectedStore, setSelectedStore] = useState([]);
 
 
     // 현재 위치 가져오기
@@ -99,6 +99,8 @@ const RiderMap = () => {
 
     function handleStore(id) {
         console.log("id : " + id);
+        console.log("==== ==== : " + storeOrders["1"]);
+        setSelectedStore(storeOrders[id]);
     }
 
     return (
@@ -203,6 +205,16 @@ const RiderMap = () => {
                 }
             </div>
             <div>
+                {
+                    selectedStore?.map(order => (
+                        <li key={order.orderId}>
+                            <strong>매장번호:</strong> {order.storeId} ||
+                            <strong>매장:</strong> {order.storeName} ||
+                            <strong>storeLatitude:</strong> {order.storeLatitude} ||
+                            <strong>storeLongitude:</strong> {order.storeLongitude}
+                        </li>
+                    ))
+                }
 
             </div>
         </div>
