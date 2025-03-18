@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.insertOrder(order);
 
         // Redis 캐싱
-        redisService.cacheOrderForStore(order);
+        // redisService.cacheOrderForStore(order);
 
         // 주문에 대한 장바구니 데이터 삽입
         for (Carts cart : cartList) {
@@ -123,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /*******************************************/
+    /*
     //redis
     @Autowired
     private RedisService redisService;
@@ -138,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
         }
         return latestOrders;
     }
-
+    */
 }
 
 

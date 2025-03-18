@@ -43,7 +43,8 @@ public interface OrderMapper {
 
     /**************************************************************/
     // 가게 id로 주문정보 가져오기
-    Orders findgetLatestOrderForStore(long StoreId);
+
+    // Orders findgetLatestOrderForStore(long StoreId);
 
 
 

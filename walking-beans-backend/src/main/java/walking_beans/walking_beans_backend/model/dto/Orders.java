@@ -24,6 +24,9 @@ public class Orders implements Serializable { // Redis 캐싱을 위한 직렬�
     private long orderId; //PK
 
     private long userId; //FK
+
+    private long menuId;
+
     private long storeId; //FK
     private long addressId; //FK
 
@@ -32,7 +35,9 @@ public class Orders implements Serializable { // Redis 캐싱을 위한 직렬�
     private int orderStatus;
     private String orderRequests;
     private String orderTotalPrice;
+
     private String orderCreateDate;
+
     private String orderModifiedDate;
     private String RiderIdOnDuty;
 

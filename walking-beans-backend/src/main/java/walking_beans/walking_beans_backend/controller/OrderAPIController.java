@@ -129,6 +129,7 @@ public class OrderAPIController {
 
 
     /************************************************************/
+    /*
     // 업주용 Long Polling
     @GetMapping("/long-poll")
     public DeferredResult<ResponseEntity<?>> getOrdersLongPoll(@RequestParam("storeId") long storeId) {
@@ -165,6 +166,6 @@ public class OrderAPIController {
 
         return deferredResult;
     }
-
+    */
 
 }

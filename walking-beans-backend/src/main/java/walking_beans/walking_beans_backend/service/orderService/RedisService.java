@@ -1,14 +1,16 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import org.springframework.stereotype.Service;
+
+/*
 import jakarta.persistence.criteria.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.model.dto.Orders;
-
+*/
 @Service
 public class RedisService { // 업주 view 용
-
+    /*
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -25,4 +27,6 @@ public class RedisService { // 업주 view 용
         String key = "store:orders" + storeId;
         return (Orders) redisTemplate.opsForList().leftPop(key ,0); // 리스트의 0번만!
     }
+    */
+
 }
