@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import  "../../css/User.css";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
-import axios from "axios";
-import apiStoreService from "../../service/apiStoreService";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserSearchMap = () => {
-    const orderId = useParams();
-    const cartId = useParams();
-    const storeId = useParams(1);
     const location = useLocation();
     const { userLocation, stores } = location.state || {};
     const [map, setMap] = useState(null);
@@ -18,8 +13,11 @@ const UserSearchMap = () => {
     const [storeList, setStoreList] = useState([]);
     const navigate = useNavigate();
 
-
-    // 거리 계산 함수 추가
+    useEffect(() => {
+        console.log("📌 전달된 userLocation: ", userLocation);
+        console.log("📌 전달된 stores 목록: ", stores);
+    }, [userLocation, stores]);
+// 거리 계산 함수 (위도, 경도를 이용한 두 지점 간 거리 계산)
     const getDistance = (lat1, lng1, lat2, lng2) => {
         if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
 
@@ -35,13 +33,12 @@ const UserSearchMap = () => {
         return R * c; // 거리 (km)
     };
 
-    // 가게 목록에 거리 추가
     useEffect(() => {
         if (!userLocation || !stores) return;
 
         const updatedStores = stores.map((store) => ({
             ...store,
-            distance: getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude)
+            distance: getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude),
         }));
 
         updatedStores.sort((a, b) => a.distance - b.distance);
@@ -49,7 +46,9 @@ const UserSearchMap = () => {
     }, [userLocation, stores]);
 
     useEffect(() => {
-        if (!userLocation) return;
+        if (!userLocation || storeList.length === 0) return;
+
+        console.log("🗺️ 지도 마커 추가 시작! storeList:", storeList);
 
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -68,62 +67,56 @@ const UserSearchMap = () => {
                 const map = new window.kakao.maps.Map(mapContainer, mapOption);
                 setMap(map);
 
-                const userMarkerImage = new window.kakao.maps.MarkerImage(
-                    `${userCurrentLocation}`,
-                    new window.kakao.maps.Size(40, 42),
-                    { offset: new window.kakao.maps.Point(20, 42) }
-                );
-
-                new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                    map: map,
-                    title: "내 위치",
-                    image: userMarkerImage,
-                });
-
                 storeList.forEach((store) => {
+                    console.log("📍 마커 추가됨:", store.storeName);
+
                     const marker = new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
                         map: map,
                     });
 
                     window.kakao.maps.event.addListener(marker, "click", () => {
-                        if (!map) return;
-
                         map.setLevel(2);
                         map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
-
                         setSelectedStore(store);
                     });
                 });
             });
         };
 
-
         return () => {
             document.head.removeChild(script);
         };
     }, [userLocation, storeList]);
-    // const storeId = 1;
-    const handleStore = () =>{
-        navigate(`/user/order/${selectedStore.storeId}`);
-        console.log( "storeId 값 : " ,storeId);
-    }
+
+    const handleStoreClick = (store) => {
+        setSelectedStore(store);
+        navigate(`/user/order/${store.storeId}`);
+    };
 
     return (
-        <div>
-            <div id="search-map" style={{ width: "100%", height: "500px" }}></div>
-            {selectedStore && (
-                <div className="store-info">
-                    <h3 onClick={handleStore} className="cursor-pointer text-primary fw-bold">
-                        {selectedStore.storeName}
-                    </h3>
-                    <img className="store-picture" src={selectedStore.storePictureUrl}/>
-                    <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
-                    <p>{selectedStore.storeStatus} :  {selectedStore.storeOperationHours}</p>
-                    <p>거리: 약 {selectedStore.distance?.toFixed(1)} km</p>
-                </div>
-            )}
+        <div className="container mt-4">
+            {/* 지도 영역 */}
+            <div id="search-map" className="w-100 mb-4" style={{ height: "500px" }}></div>
+
+            {/* 가게 목록 (Bootstrap 카드 스타일 적용) */}
+            <div className="row">
+                {storeList.map((store) => (
+                    <div key={store.storeId} className="col-md-4 mb-3">
+                        <div className="card shadow-sm">
+                            <img src={store.storePictureUrl} className="card-img-top" alt={store.storeName} />
+                            <div className="card-body">
+                                <h5 className="card-title">{store.storeName}</h5>
+                                <p className="card-text">평점: ★ {store.storeRating} ({store.storeReviewCount} 리뷰)</p>
+                                <p className="card-text">거리: 약 {store.distance?.toFixed(1)} km</p>
+                                <button className="btn btn-primary w-100" onClick={() => handleStoreClick(store)}>
+                                    주문하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

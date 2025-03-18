@@ -9,11 +9,11 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
-import walking_beans.walking_beans_backend.model.dto.Carts;
-import walking_beans.walking_beans_backend.model.dto.Orders;
-import walking_beans.walking_beans_backend.model.dto.Payments;
-import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
+import walking_beans.walking_beans_backend.service.CartOrderService;
+import walking_beans.walking_beans_backend.service.CartOrderServiceImpl;
+import walking_beans.walking_beans_backend.service.cartService.CartServiceImpl;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.List;
 public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
+    private CartServiceImpl cartService;
 
     /**************************************** LEO ****************************************/
     /**
@@ -58,6 +59,27 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
 
+
+    // 특정 유저의 cartId 조회 API 추가
+    @GetMapping("/cart/user/{userId}")
+    public ResponseEntity<Long> getCartIdByUserId(@PathVariable("userId") long userId) {
+        Long cartId = orderService.findCartIdByUserId(userId);
+        if (cartId != null) {
+            return ResponseEntity.ok(cartId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+    @GetMapping("/{cartId}")
+    public ResponseEntity<?> getCartByCartId(@PathVariable("cartId") long cartId) {
+        Carts cart = cartService.findCartById(cartId);
+        if (cart == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("장바구니 데이터를 찾을 수 없습니다.");
+        }
+        return ResponseEntity.ok(cart);
+    }
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -77,10 +99,15 @@ public class OrderAPIController {
     }
 
     /* ***************************************  *************************************** */
+    @Autowired
+    private CartOrderServiceImpl cartOrderService;
 
-
-
-
+    @PostMapping("/create")
+    public ResponseEntity<CartOrderResponseDTO> addToCart(@RequestBody CartOrderRequestDTO requestDTO) {
+        CartOrderResponseDTO responseDTO = cartOrderService.addToCart(requestDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+/*
     // 주문 저장
     @PostMapping("/create")
     public String insertOrder(@RequestBody OrderRequest request) {
@@ -92,6 +119,8 @@ public class OrderAPIController {
         return "주문 등록 및 결제 정보 저장 완료";
     }
 
+
+ */
 
     // 주문 정보 가져오기
     @GetMapping("/{orderId}")

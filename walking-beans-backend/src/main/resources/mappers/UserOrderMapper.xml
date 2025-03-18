@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="walking_beans.walking_beans_backend.mapper.UserOrderMapper">
+    <!-- 유저의 기존 주문 내역리스트들 -->
+    <select id="getOrdersByUserId">
+        SELECT
+            user_id,
+            customer_name,
+            store_name,
+            order_date,
+            order_number,
+            delivery_address,
+            total_payment,
+            special_requests,
+            order_list
+        FROM user_orders_view
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 주문 내역 조회 -->
+    <select id="getOrderByOrderNumber">
+        SELECT
+            user_id,
+            customer_name,
+            store_name,
+            order_date,
+            order_number,
+            delivery_address,
+            total_payment,
+            special_requests,
+            order_list
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber}
+    </select>
+</mapper>

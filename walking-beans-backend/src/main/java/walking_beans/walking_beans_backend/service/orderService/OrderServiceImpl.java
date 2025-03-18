@@ -1,17 +1,27 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
+import walking_beans.walking_beans_backend.service.OrderNotificationService;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    @Autowired
+    private OrderNotificationService orderNotificationService;
     @Autowired
     private OrderMapper orderMapper;
 
@@ -108,4 +118,80 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+    @Override
+    public Long findCartIdByUserId(long userId) {
+        return cartMapper.findCartIdByUserId(userId);
+    }
+
+    @Override
+    public Long createOrder(Map<String, Object> requestData) {
+        log.info("주문 정보 저장 요청: {}", requestData);
+
+        try {
+            // 기본 데이터 타입 변환 (String → Long & int)
+            Long userId = Long.parseLong(requestData.get("userId").toString());
+            Long storeId = Long.parseLong(requestData.get("storeId").toString());
+            Long addressId = Long.parseLong(requestData.get("addressId").toString());
+            int orderTotalPrice = Integer.parseInt(requestData.get("orderTotalPrice").toString());
+
+            requestData.put("userId", userId);
+            requestData.put("storeId", storeId);
+            requestData.put("addressId", addressId);
+            requestData.put("orderTotalPrice", orderTotalPrice);
+
+            // `orders` 테이블에 주문 생성
+            orderMapper.createOrder(requestData);
+            String orderNumber = (String) requestData.get("orderNumber");
+            log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
+
+            // `cartItems` 데이터를 `order_items` 테이블에 저장
+            List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestData.get("cartItems");
+            log.info(" cartItems: {}", cartItems);
+
+            if (cartItems != null && !cartItems.isEmpty()) {
+                for (Map<String, Object> item : cartItems) {
+                    // `menuId` 변환
+                    Long menuId = Long.parseLong(item.get("menuId").toString());
+
+                    // `optionId` 처리 (여러 개일 경우 첫 번째 옵션만 저장)
+                    String optionIds = item.get("optionIds").toString();
+                    Long optionId = null;
+                    if (optionIds != null && !optionIds.isEmpty()) {
+                        String[] optionIdArray = optionIds.split(",");
+                        optionId = Long.parseLong(optionIdArray[0]); // 첫 번째 옵션만 저장
+                    }
+
+                    //  `quantity` 변환
+                    int quantity = Integer.parseInt(item.get("totalQuantities").toString());
+
+                    // `OrderItems` 객체 생성
+                    OrderItems orderItem = new OrderItems(null, orderNumber, menuId, optionId != null ? optionId.toString() : null, quantity);
+
+                    // MyBatis에 전달할 데이터 생성
+                    Map<String, Object> orderItemParams = new HashMap<>();
+                    orderItemParams.put("orderNumber", orderNumber);
+                    orderItemParams.put("menuId", orderItem.getMenuId());
+                    orderItemParams.put("optionId", orderItem.getOptionId());
+                    orderItemParams.put("quantity", orderItem.getQuantity());
+
+                    // `order_items` 테이블에 삽입
+                    orderMapper.insertOrderItem(orderItemParams);
+                    log.info("주문 아이템 저장 완료! 주문 번호: {}, 메뉴 ID: {}, 옵션 ID: {}, 수량: {}", orderNumber, menuId, optionId, quantity);
+
+                }
+            }
+
+            // 주문 저장 후 WebSocket을 통해 알림 전송
+            String notificationMessage = "새로운 주문이 들어왔습니다! 주문 번호: " + orderNumber + ", 총 금액: " + orderTotalPrice + "원";
+            orderNotificationService.sendOrderNotification(storeId, notificationMessage);
+            log.info("WebSocket 알림 전송 완료: {}", notificationMessage);
+
+            return userId;
+        } catch (Exception e) {
+            log.error("주문 저장 중 오류 발생: ", e);
+            throw new RuntimeException("주문 저장 실패");
+        }
+    }
+
 }
+

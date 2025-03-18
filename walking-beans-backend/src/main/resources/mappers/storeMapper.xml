@@ -30,7 +30,6 @@
     <select id="findStoresByuserId">
         SELECT *
         FROM stores
-        WHERE
         WHERE user_id = #{userId}
     </select>
 

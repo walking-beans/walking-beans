@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
-
+import axios from "axios"; //
 import bellIcon from "../../assert/svg/bell.svg";
 import chatBubble from "../../assert/svg/userNav/chat_bubble.svg";
 import logoImg from "../../assert/svg/userNav/walkingBeans.svg";
@@ -16,6 +16,7 @@ import searchIcon from "../../assert/svg/userNav/search.svg";
 import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import storeIcon from "../../assert/svg/ownerNav/storeIcon.svg";
+import OrderNotification from "../owner/teacherUi/OrderNotification";
 
 const OwnerHeader = ({user}) => {
     const location = useLocation();
@@ -23,7 +24,6 @@ const OwnerHeader = ({user}) => {
     const [currentUser, setCurrentUser] = useState(user);
     const [navOpen, setNavOpen] = useState(false);
 
-    // 유저 정보 로드
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -31,10 +31,7 @@ const OwnerHeader = ({user}) => {
         }
     }, [user]);
 
-    /**
-     * 네비게이션바 토글아이콘  함수
-     * toggleIcon from "../../assert/svg/togle.svg
-     */
+
     const handleToggleNav = () => {
         if (!localStorage.getItem("user")) {
             alert("로그인이 필요합니다.");
@@ -44,7 +41,6 @@ const OwnerHeader = ({user}) => {
         }
     };
 
-    // 로그아웃 함수
     const handleLogout = () => {
         localStorage.removeItem("user");
         alert("로그아웃 되었습니다.");
@@ -53,10 +49,7 @@ const OwnerHeader = ({user}) => {
         navigate("/");
     };
 
-    /**
-     * userIcon from "../../assert/svg/user.svg
-     * 사용자 아이콘 클릭 시 이동
-     */
+
     const handleUserIconClick = () => {
         const storedUser = localStorage.getItem("user");
         if (!storedUser) {
@@ -75,6 +68,43 @@ const OwnerHeader = ({user}) => {
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            console.log("로드된 사용자 정보:", parsedUser);
+
+            if (!parsedUser.storeId) {
+                console.warn("⚠ storeId가 없음. API에서 가져오는 중...");
+                fetchStoreId(parsedUser.user_id, parsedUser);
+            } else {
+                setCurrentUser(parsedUser);
+            }
+        } else {
+            console.warn("⚠ localStorage에서 사용자 정보를 찾을 수 없음.");
+        }
+    }, []);
+
+    const fetchStoreId = async (userId, parsedUser) => {
+
+        console.log("userId" ,userId);
+        try {
+            const response = await axios.get(`http://localhost:7070/api/store/mystore/${userId}`);
+            const storeId = response.data.storeId;
+
+            console.log("🏪 API에서 가져온 storeId:", storeId);
+
+            if (storeId) {
+                const updatedUser = { ...parsedUser, storeId };
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+                setCurrentUser(updatedUser);
+            } else {
+                console.warn("storeId를 가져올 수 없음.");
+            }
+        } catch (error) {
+            console.error("storeId를 가져오는 중 오류 발생:", error);
+        }
+    };
     return (
         <div className="user-header-wrapper">
             <header className="custom-header">
@@ -89,12 +119,12 @@ const OwnerHeader = ({user}) => {
                         <img src={logoImg} className="logo-img" alt="logo" onClick={() => navigate("/")}/>
                     </div>
                     <div className="user-menu-container">
-                        {currentUser && (
-                            <>
-                                <img src={bellIcon} className="header-icon" alt="notifications"/>
-                                <img src={searchIcon} className="header-icon" alt="search"/>
-                            </>
-                        )}
+                        {currentUser && currentUser.storeId ? (
+                            <OrderNotification storeId={currentUser.storeId} />
+                        ) : (
+                            console.warn("⚠ currentUser.storeId가 undefined입니다.")
+                        )
+                        }
                         <img src={toggleIcon} className="header-icon" alt="toggle" onClick={handleToggleNav}/>
                     </div>
                 </div>

@@ -220,9 +220,9 @@ const UserHome = ({user: initialUser}) => {
                 .catch(() => alert("검색 데이터를 가져오지 못했습니다."));
         }
     };
-
     const handleMapClick = () => {
-        navigate("user/search/map", {state: {userLocation, stores: displayStores}});
+            navigate("/user/search/map", { state: { userLocation, stores: displayStores } });
+
     };
 
 

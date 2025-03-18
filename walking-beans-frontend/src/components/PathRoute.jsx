@@ -2,10 +2,8 @@ import {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
-import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import UserMenuCategory from "../pages/user/UserMenuCategory";
 import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
 import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
@@ -21,8 +19,6 @@ import RiderOrderList from "../pages/rider/RiderOrderList";
 import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
-import UserOrder from "../pages/user/teacherJSX/UserOrder";
-import UserCart from "../pages/user/UserCart";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserOrderList from "../pages/user/UserOrderList";
@@ -34,17 +30,19 @@ import AdminMessage from "../pages/admin/AdminMessage";
 import AdminLogin from "../pages/admin/AdminLogin";
 
 import AdminMypage from "../pages/admin/AdminMypage";
-
-import UserMenuOption from "../pages/user/UserMenuOption";
-import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
-import AdminSignUp from "../pages/admin/AdminSignUp";
 import UserOrdering from "../pages/user/UserOrdering";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
-import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
+import UserOrder from "../pages/user/UserOrder";
+import {CheckoutPage} from "../pages/user/teacherJSX/CheckoutPage";
+import {FailPage} from "../pages/user/teacherJSX/Fail";
+import Success from "../pages/user/teacherJSX/Success";
+import OrderDetail from "../pages/user/teacherJSX/OrderDetail";
+import OrderList from "../pages/user/teacherJSX/OrderList";
+import AlarmPage from "../pages/owner/teacherUi/AlarmPage";
 
 
 function PathRoute() {
@@ -92,22 +90,34 @@ function PathRoute() {
 
                                 <Route path="/admin/mypage" element={<AdminMypage/>}/>
 
-                                {/* 유저 관련 라우트 */}
+                                {/* 유저 관련 라우트
+                                <Route path="/cart/:userId" element={<UserOrder />} />
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                {/* 메뉴 클릭 했을 때 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
-                                {/* 장바구니 담았을 때 페이지 */}
+                                */}
+                                <Route path="/user/order/:storeId/:userId?" element={<UserOrder />} />
+
+                                {/* 장바구니 담았을 때 페이지
                                 <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
+                                */}
                                 {/* 주문하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering"
+                                       element={<UserOrdering/>}/>
                                 {/* 결제하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
+                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment"
+                                       element={<UserPayment/>}/>
 
                                 <Route path="/user/orderlist" element={<UserOrderList/>}/>
                                 <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
+                                <Route path="/order/:orderNumber" element={<OrderDetail />} />
 
+
+                                <Route path="/owner/alarm" element={<AlarmPage />} />
+                                <Route path="/order" element={<OrderList />} />
+                                <Route path="/checkout" element={<CheckoutPage />} />
+                                <Route path="/sandbox/success" element={<Success />} />
+                                <Route path="/sandbox/fail" element={<FailPage />} />
                                 {/* 라이더 관련 라우트 */}
                                 <Route path="/rider" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
@@ -194,7 +204,7 @@ function PathRoute() {
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST/>}/>
                                 <Route path="/TEST/chattingroom/:roomId" element={<AdminChattingroomTest/>}/>
 
-                                <Route path="/alarmlist" element={<AdminAlarmList />}/>
+                                <Route path="/alarmlist" element={<AdminAlarmList/>}/>
                             </Routes>
                         </div>
                     </div>

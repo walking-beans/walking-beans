@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="walking_beans.walking_beans_backend.mapper.CartOrderMapper">
+    <!-- 주문 생성 -->
+    <insert id="createOrder">
+        INSERT INTO orders (user_id, store_id, order_total_price, order_requests, order_status, order_create_date)
+        VALUES (#{userId}, #{storeId}, #{totalPrice}, #{orderRequest}, 0, NOW());
+    </insert>
+
+    <!-- 마지막으로 생성된 orderId 조회 -->
+    <select id="getLastInsertedOrderId">
+        SELECT LAST_INSERT_ID();
+    </select>
+
+    <!-- 장바구니 추가 -->
+    <insert id="addToCart">
+        INSERT INTO carts (user_id, menu_id, option_id, order_id, store_id, cart_quantity, cart_create_date)
+        VALUES (#{userId}, #{item.menuId}, #{item.optionId}, #{orderId}, #{storeId}, #{item.cartQuantity}, NOW());
+    </insert>
+
+    <!-- 마지막으로 생성된 cartId 조회 -->
+    <select id="getLastInsertedCartId">
+        SELECT LAST_INSERT_ID();
+    </select>
+</mapper>

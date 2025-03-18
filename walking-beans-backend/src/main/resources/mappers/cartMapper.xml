@@ -66,5 +66,14 @@
                  JOIN menu m ON m.menu_id = mo.menu_id
         WHERE c.order_id = #{orderId};
     </select>
+    <select id="findCartIdByUserId" >
+        SELECT cart_id FROM carts
+        WHERE user_id = #{userId}
+        ORDER BY cart_create_date DESC
+            LIMIT 1
+    </select>
 
+    <select id="findCartById">
+        SELECT * FROM carts WHERE cart_id = #{cartId}
+    </select>
 </mapper>

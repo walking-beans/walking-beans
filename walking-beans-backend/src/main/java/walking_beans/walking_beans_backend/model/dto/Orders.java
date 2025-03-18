@@ -1,9 +1,6 @@
 package walking_beans.walking_beans_backend.model.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,24 +14,25 @@ import java.util.StringTokenizer;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Orders {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderId; //PK
+    private long orderId;
 
-    private long userId; //FK
-    private long storeId; //FK
-    private long addressId; //FK
+    private long userId;
+    private long menuId;
+    private long storeId;
+    private long addressId;
 
     @Column(unique = true)
     private String orderNumber;
+
     private int orderStatus;
     private String orderRequests;
-    private String orderTotalPrice;
-    private String orderCreateDate;
-    private String orderModifiedDate;
-    private String RiderIdOnDuty;
+    private int orderTotalPrice;
 
+    private String orderCreateDate;
+
+    private String orderModifiedDate;
     public void changeCreateDateFormat() {
         log.info("Change income date format");
 

@@ -146,6 +146,7 @@
 }
 
 .user-menu-option-modal-container {
+    max-width: 600px;
     max-height: 600px;
     display: flex;
     flex-direction: column;

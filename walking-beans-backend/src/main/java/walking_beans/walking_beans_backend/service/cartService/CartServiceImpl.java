@@ -39,6 +39,11 @@ public class CartServiceImpl implements CartService {
         return cartMapper.getCartInfoByCartId(cartId);
     }
 
+
+    @Override
+    public Carts findCartById(long cartId) {
+        return cartMapper.findCartById(cartId);
+    }
     // 장바구니 주문자 기준 카트 데이터 가져오기
     @Override
     public List<CartItemDTO> getCartInfoByOrderId(long orderId) {

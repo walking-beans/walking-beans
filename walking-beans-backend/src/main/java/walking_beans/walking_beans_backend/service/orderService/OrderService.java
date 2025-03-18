@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     /**************************************** Leo  ****************************************/
@@ -16,8 +17,6 @@ public interface OrderService {
     Integer updateOrderStatus(long orderId, int orderStatus);
 
     List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty);
-
-
 
     // 주문 데이터 저장
     void insertOrder(Orders order, List<Carts> cartList, Payments payments);
@@ -33,5 +32,9 @@ public interface OrderService {
 
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
+    Long findCartIdByUserId(long userId);
 
+
+
+    Long createOrder(Map<String, Object> requestData);
 }

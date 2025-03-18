@@ -17,7 +17,7 @@ public interface CartService {
 
     // 장바구니 메뉴 데이터 가져오기
     CartItemDTO getCartInfoByCartId (long cartId);
-
+    Carts findCartById(long cartId);
     // 장바구니 주문자 기준 카트 데이터 가져오기
     List<CartItemDTO> getCartInfoByOrderId (long orderId);
 }

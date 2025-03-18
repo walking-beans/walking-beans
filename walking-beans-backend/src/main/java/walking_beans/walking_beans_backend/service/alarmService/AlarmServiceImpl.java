@@ -3,11 +3,9 @@ package walking_beans.walking_beans_backend.service.alarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import walking_beans.walking_beans_backend.config.WebSocketAlertHandler;
 import walking_beans.walking_beans_backend.mapper.AlarmMapper;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Message;
-import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,8 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlarmServiceImpl implements AlarmService {
 
-    @Autowired
-    private WebSocketAlertHandler webSocketAlertHandler;
+
 
     @Autowired
     private AlarmMapper alarmMapper;
@@ -39,8 +36,7 @@ public class AlarmServiceImpl implements AlarmService {
 
         alarmMapper.insertAlarm(alarm);
 
-        // 웹소켓 알림 전송
-        webSocketAlertHandler.sendAlert(alarm.getAlarmContent());
+
     }
 
     @Override
