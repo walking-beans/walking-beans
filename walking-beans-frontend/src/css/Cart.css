@@ -3,7 +3,7 @@
     background-color: #F4EDDF;
     padding: 30px;
     border-radius: 30px;
-    margin-bottom: 30px;
+    margin-top: 30px;
     position: relative;
     min-height: 160px;
 }
@@ -46,33 +46,76 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
 }
 
-.user-cart-container .user-cart-detailtext {
+.user-cart-detailtext {
     font-size: 16px;
     color: #5A3D21;
-    position: absolute;
-    padding-bottom: 30px;
-}
-
-.user-cart-container .user-cart-remove {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: #555;
-    margin: 0 10px 30px 0;
-}
-
-.user-cart-container .user-cart-remove:hover {
-    content: url("../images/user/orderCartDeleteBtnHover.svg");
+    text-align: left;
 }
 
 .user-cart-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.user-cart-remove img:hover {
+    content: url("../images/user/orderCartDeleteBtnHoverMini.svg");
+}
+
+.user-cart-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-cart-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-cart-quantity-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #5A3D21;
+    border-radius: 30px;
+    height: 35px;
+    padding: 5px 10px;
+    width: 100px;
+    margin-top: 30px;
+}
+
+.user-cart-quantity-btn {
+    border: none;
+    background-color: transparent;
+    color: #5A3D21;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    margin: 0 4px 5px 4px;
+    width: auto;
+}
+
+.user-cart-quantity-btn:hover {
+    color: #D2B595;
+}
+
+.user-cart-quantity-btn img:hover {
+    cursor: pointer;
     border: none;
     background: none;
+}
+
+.user-cart-quantity-text {
+    font-size: 16px;
+    margin: 0 5px;
+    color: #5A3D21;
+    font-weight: bold;
 }
