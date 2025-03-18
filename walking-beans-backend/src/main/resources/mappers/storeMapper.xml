@@ -6,7 +6,6 @@
     <select id="findAllStores">
         SELECT *
         FROM stores
-
     </select>
 
     <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
@@ -135,6 +134,13 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
         WHERE store_id = #{storeId}
 
     </update>
+
+    <!-- 가게 정보(메뉴,메뉴옵션,가게) 조작 권한 검증-->
+    <select id="findByIdAndOwner">
+        SELECT store_id, user_id
+        FROM stores
+        WHERE store_id = #{storeId} AND user_id = #{userId}
+    </select>
 
     <!--매장정보 삭제하기 -->
     <delete id="deleteStores">

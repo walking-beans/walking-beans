@@ -25,6 +25,9 @@ public interface StoreService {
     // 매장정보 수정하기
     void updateStores(Stores stores);
 
+    // 가게 정보(메뉴,메뉴옵션,가게) 조작 권한 검증
+    boolean isStoreOwner(long storeId, long userId);
+
     // 매장정보 삭제하기
     void deleteStores(long storeId);
 

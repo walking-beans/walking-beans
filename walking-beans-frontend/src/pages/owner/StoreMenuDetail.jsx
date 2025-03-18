@@ -7,10 +7,11 @@ import {useParams} from "react-router-dom";
 
 const StoreMenuDetail = () => {
     // 메뉴 정보
-    const {id} = useParams();
+    const {storeId} = useParams();
+    const {menuId} = useParams();
     const [menus, setMenus] = useState({});
     const [formData, setFormData] = useState({
-        menu_id: id,
+        menu_id: menuId,
         menuName: "",
         menuPrice: 0,
         menuCategory: "",
@@ -19,34 +20,37 @@ const StoreMenuDetail = () => {
     });
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
-
+    const updateFormData = (data) =>{
+        setFormData({
+            menu_id: menuId,
+            menuName: data.menuName || "",
+            menuPrice: data.menuPrice || 0,
+            menuCategory: data.menuCategory || "",
+            menuDescription: data.menuDescription || "",
+            menuPictureUrl: data.menuPictureUrl || "",
+        });
+    };
     // const [isLoading, setIsLoading] = useState(true); // 로딩상태 관리
     // 초기값 가져오기
     useEffect(() => {
         console.log("renderingCheck")
-        if (id) {
+        if (menuId) {
+            apiMenu.findAllMenuById(menuId,setMenus,updateFormData);
+            /*
             axios
-                .get(`http://localhost:7070/api/menu/${id}`)
+                .get(`http://localhost:7070/api/menu/${menuId}`)
                 .then((res) => {
                     console.log(res)
                     setMenus(res.data);
-                    setFormData({
-                        menu_id: id,
-                        menuName: res.data.menuName || "",
-                        menuPrice: res.data.menuPrice || 0,
-                        menuCategory: res.data.menuCategory || "",
-                        menuDescription: res.data.menuDescription || "",
-                        menuPictureUrl: res.data.menuPictureUrl || "",
-                    });
+                    updateFormData(res.data);
                 })
                 .catch((err) => {
                     console.log(err)
-                })
+                })*/
             // setIsLoading(false);
 
         }
-
-    }, [id]);
+    }, [menuId]);
 
 
     const setThumbnail = (event) => {
@@ -64,7 +68,7 @@ const StoreMenuDetail = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const submitData = new FormData();
-        submitData.append("menu_id", id);
+        submitData.append("menu_id", menuId);
         submitData.append("menuName", formData.menuName);
         submitData.append("menuPrice", formData.menuPrice);
         submitData.append("menuCategory", formData.menuCategory);
@@ -74,7 +78,7 @@ const StoreMenuDetail = () => {
         }
         console.log(submitData);
         axios
-            .put(`http://localhost:7070/api/menu/${id}`,
+            .put(`http://localhost:7070/api/menu//owner/${storeId}/menu/${menuId}`,
                 submitData,
                 {
                     headers: {

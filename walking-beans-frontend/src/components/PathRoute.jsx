@@ -160,35 +160,36 @@ function PathRoute() {
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menu" element={
+                                {/*id = storeId */}
+                                <Route path="/owner/:id/menu" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/menu/:id" element={
+                                <Route path="/owner/:storeId/menu/:menuId" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
-                                {/* id는 연결되는 메뉴id */}
-                                <Route path="/owner/menuoption/:id" element={
+                                <Route path="/owner/:storeId/:menuId/menuoption" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/mystore" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/mystore/" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/order" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/order" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/revenue" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/revenue" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>

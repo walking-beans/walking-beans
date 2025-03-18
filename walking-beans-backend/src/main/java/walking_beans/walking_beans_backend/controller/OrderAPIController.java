@@ -129,6 +129,21 @@ public class OrderAPIController {
 
 
     /************************************************************/
+
+
+    //가게 id로 주문정보, 주문상태만 가져오기
+    @GetMapping("/store/{storeId}")
+    public List<Orders> findgetLatestOrderForStore(@PathVariable("storeId") long storeId) {
+        return orderService.findgetLatestOrderForStore(storeId);
+    }
+
+    //주문번호로 뷰 테이블에서 전체 정보 가져오기
+    @GetMapping("/ordernumber/{orderNumber}")
+    public Orders getOrderListForStore(@PathVariable String orderNumber) {
+        return orderService.getOrderListForStore(orderNumber);
+    }
+
+
     /*
     // 업주용 Long Polling
     @GetMapping("/long-poll")

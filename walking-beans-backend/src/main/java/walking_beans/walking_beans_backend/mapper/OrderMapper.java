@@ -42,10 +42,11 @@ public interface OrderMapper {
     Orders getOrderStatus(long orderId);
 
     /**************************************************************/
-    // 가게 id로 주문정보 가져오기
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    List<Orders> findgetLatestOrderForStore(long storeId);
 
-    // Orders findgetLatestOrderForStore(long StoreId);
-
+    // 주문번호로 전체 정보 가져오기
+    Orders getOrderListForStore(String orderNumber);
 
 
 }

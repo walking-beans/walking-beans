@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom"
 import {useState} from "react";
 
-const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
+const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
 
 
 
@@ -33,10 +33,10 @@ const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) =>
                                     <input className="form-control text-center me-3" id="inputQuantity" type="num"
                                            value="1"
                                            style={{maxWidth: 3 + 'rem'}}/>
-                                    <Link to={`/owner/menu/${menuId}`}>
+                                    <Link to={`/owner/${storeId}/menu/${menuId}`}>
                                         <button className="btn btn-outline-warning">수정하기</button>
                                     </Link>
-                                    <Link to={`/owner/menuoption/${menuId}`}>
+                                    <Link to={`/owner/${storeId}/${menuId}/menuoption`}>
                                         <button className="btn btn-outline-success">옵션관리</button>
                                     </Link>
                                     {/* ✅ 삭제 버튼 */}
@@ -66,10 +66,10 @@ const MenuCard = ({menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) =>
                     </Link>
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
-                            <Link to={`/owner/menu/${menuId}`}>
+                            <Link to={`/owner/${storeId}/menu/${menuId}`}>
                                 <button class="btn btn-outline-warning">수정</button>
                             </Link>
-                            <Link to={`/owner/menuoption/${menuId}`}>
+                            <Link to={`/owner/${storeId}/${menuId}/menuoption`}>
                             <button className="btn btn-outline-success">옵션관리</button>
                             </Link>
                             <button class="btn btn-outline-danger" onClick={handleDelete}>삭제</button>

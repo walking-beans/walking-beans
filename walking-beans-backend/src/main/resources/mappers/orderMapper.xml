@@ -118,11 +118,20 @@
         WHERE order_id = #{orderId}
     </select>
 
-    <!-- 가게 id로 주문정보 가져오기-->
+    <!-- 가게 id로 주문번호, 주문상태만 가져오기-->
     <select id="findgetLatestOrderForStore">
-        SELECT * FROM orders
-                 WHERE store_id = #{storeId}
-                   AND order_status = 1
-                 ORDER BY order_create_date DESC LIMIT 1
+        SELECT order_number, order_status
+        FROM orders
+        WHERE store_id = #{storeId}
+        ORDER BY order_create_date DESC;
     </select>
+
+    <!-- 주문번호로 전체 정보 가져오기 -->
+    <select id="getOrderListForStore">
+        SELECT *
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber};
+    </select>
+
+
 </mapper>

@@ -122,6 +122,31 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+
+
+
+    /********************************************/
+
+    /**가게 id로 주문정보, 주문상태만 가져오기
+     *
+     * @param storeId
+     * @return
+     */
+    @Override
+    public List<Orders> findgetLatestOrderForStore(long storeId) {
+        return orderMapper.findgetLatestOrderForStore(storeId);
+    }
+
+    /** 주문번호로 뷰 테이블에서 전체 정보 가져오기
+     *
+     * @param orderNumber
+     * @return
+     */
+    @Override
+    public Orders getOrderListForStore(String orderNumber) {
+        return orderMapper.getOrderListForStore(orderNumber);
+    }
+
     /*******************************************/
     /*
     //redis
