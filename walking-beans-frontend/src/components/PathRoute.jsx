@@ -43,6 +43,7 @@ import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
+import UserPayment from "../pages/user/UserPayment";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -102,7 +103,7 @@ function PathRoute() {
                                 <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
                                 {/* 1. checkout toss API KEY 인증*/}
-                                <Route path="/checkout" element={<CheckoutPage />} />
+                                <Route path="/checkout" element={<UserPayment />} />
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
                                 <Route path="/sandbox/success" element={<UserSuccess />} />

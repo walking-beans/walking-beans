@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import UserCart from "../user/UserCart";
@@ -40,7 +40,7 @@ const UserOrder = () => {
     const [groupedMenus, setGroupedMenus] = useState({});
     const [mainMenu, setMainMenu] = useState(null);
     const [orderId, setOrderId] = useState(null);
-    const [currentUser, setCurrentUser] = useState({});
+    const validCarts = carts.filter(cart => cart.cartId !== null);
 
     // 메뉴 클릭 시 메뉴 옵션 모달 열기
     const handleMenuClick = (menu) => {
@@ -184,6 +184,17 @@ const UserOrder = () => {
         navigate(`/user/ordering/${orderId}?totalAmount=${totalAmount}`)
     }
 
+    // 장바구니에 새로운 메뉴 추가됐을 때 제일 아래로 내리기
+    const cartMenuInfoRef = useRef(null);
+    const prevCartLength = useRef(carts.length); // 카트 길이 저장
+    useEffect(() => {
+        if (carts.length > prevCartLength.current && cartMenuInfoRef.current) {
+            cartMenuInfoRef.current.scrollTop = cartMenuInfoRef.current.scrollHeight;
+        }
+
+        prevCartLength.current = carts.length;
+    }, [carts]);
+
     return (
         <div className="user-order-container">
             <div className="user-order-background">
@@ -247,12 +258,11 @@ const UserOrder = () => {
                         </div>
                     </div>
                 )}
-
                 <div className="user-cart-background">
                     <div className="user-title">장바구니</div>
-                    <div className="user-cart-menuinfo">
-                        {carts.length > 0 ? (
-                            carts.map(cart => (
+                    <div className="user-cart-menuinfo" ref={cartMenuInfoRef}>
+                        {validCarts.length > 0 ? (
+                            validCarts.map(cart => (
                                 <UserCart
                                     key={cart.cartId}
                                     {...cart}
@@ -261,17 +271,25 @@ const UserOrder = () => {
                                 />
                             ))
                         ) : (
-                            <div>장바구니가 비어 있습니다.</div>
+                            <div className="user-order-click-btn-one">
+                            <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
+                            </div>
                         )}
-
-                        <div className="cart-fixed">
-                            <button
-                                className="user-order-btn"
-                                onClick={handleOrderNow}>
-                                주문하기
-                            </button>
-
+                    </div>
+                    <div className="cart-fixed">
+                        <div className="user-order-hr"></div>
+                        <div className="user-cart-grid">
+                            <div className="user-cart-pricetext">최종 결제 금액</div>
+                            <div className="user-title">{totalAmount.toLocaleString()}원</div>
                         </div>
+                    </div>
+
+                    <div className="user-order-click-btn-one">
+                    <button
+                        className="user-order-btn"
+                        onClick={handleOrderNow}>
+                        주문하기
+                    </button>
                     </div>
                 </div>
             </div>

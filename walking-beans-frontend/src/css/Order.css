@@ -75,7 +75,6 @@
 }
 
 .user-cart-menuinfo {
-    margin-top: 30px;
     max-height: 400px;
     overflow-y: auto;
     scrollbar-width: none;
@@ -183,6 +182,7 @@
 .user-order-click-btn-one {
     display: flex;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .user-mini-btn {
@@ -378,15 +378,6 @@
 .user-order-background,
 .user-ordering {
     max-width: 600px;
-}
-
-/* 버튼 크기를 반응형으로 조정 */
-.user-order-btn,
-.user-order-emptybtn,
-.user-order-btn-b {
-    width: 80%;
-    max-width: 411px;
-    font-size: 1.5rem;
 }
 
 @media (max-width: 768px) {

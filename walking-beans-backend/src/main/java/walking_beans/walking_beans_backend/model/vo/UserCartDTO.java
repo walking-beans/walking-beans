@@ -25,6 +25,7 @@ public class UserCartDTO {
     private String menuPrices;
     private String optionIds;
     private String optionNames;
+    private String optionContents;
     private String optionPrices;
     private String totalQuantities;
     private LocalDateTime cartCreateDate;
@@ -40,6 +41,10 @@ public class UserCartDTO {
 
     public List<String> getOptionNameList() {
         return optionNames != null ? Arrays.asList(optionNames.split(",")) : List.of();
+    }
+
+    public List<String> getOptionContentList() {
+        return optionContents != null ? Arrays.asList(optionContents.split(",")) : List.of();
     }
 
     public List<Integer> getOptionPriceList() {
