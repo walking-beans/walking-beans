@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:7077",
+  "proxy": "http://localhost:7070",
   "name": "walking-beans-frontend",
   "version": "0.1.0",
   "private": true,
