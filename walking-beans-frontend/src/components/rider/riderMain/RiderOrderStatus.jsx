@@ -42,8 +42,8 @@ const RiderOrderStatus = ({orderId, message, css}) => {
                         {
                             (orderInfo.timeRemaining !== 0) ?
                                 <div className={css.order_status_time_div}>
-                                    <span className={css.order_status_time_remaining}>{orderInfo.timeRemaining}분</span>
-                                    <span className={css.order_status_delivery_deadline}>{orderInfo.deliveryDeadline}</span>
+                                    <span className={css.order_status_time_remaining}>총 {orderInfo.timeRemaining}분 남음</span>
+                                    <span className={css.order_status_delivery_deadline}>{orderInfo.deliveryDeadline}까지</span>
                                 </div>
                                 :
                                 <div className={css.order_status_message}>
