@@ -154,11 +154,11 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     </select>
 
     <select id="getStoreInfoInRiderMain">
-        SELECT S.store_name, O.user_id, O.order_id, S.store_latitude, S.store_longitude, DATE_FORMAT(O.order_create_date, '%p %h:%i') AS order_create_date, S.store_picture_url
+        SELECT S.store_name, O.user_id, O.order_id, S.store_latitude, S.store_longitude, S.store_address, S.store_phone, DATE_FORMAT(O.order_create_date, '%p %h:%i') AS order_create_date, S.store_operation_hours, S.store_closed_dates, S.store_status, S.store_delivery_tip, S.store_max_delivery_time, S.store_picture_url
         FROM stores S
                  JOIN orders O
                       on O.store_id = S.store_id
-        WHERE O.rider_id_on_duty IS NULL;
+        WHERE O.rider_id_on_duty IS NULL
     </select>
     <!-- ************************************************************************************* -->
 

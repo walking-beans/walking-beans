@@ -2,14 +2,9 @@ import {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
-import Login from "../pages/custom-login/Login";
 import UserHome from "./UserHome";
 import StoreMain from "../pages/owner/StoreMain";
-import UserMenuCategory from "../pages/user/UserMenuCategory";
-import StoreMenuForm from "../pages/owner/StoreMenuForm";
 import StoreMenuOption from "../pages/owner/StoreMenuOption";
-import StoreMenuOptionDetail from "../pages/owner/StoreMenuOptionDetail";
-import StoreMenuOptionForm from "../pages/owner/StoreMenuOptionForm";
 import StoreMyStore from "../pages/owner/StoreMyStore";
 import StoreRevenue from "../pages/owner/StoreRevenue";
 import StoreOrder from "../pages/owner/StoreOrder";
@@ -22,10 +17,6 @@ import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
 import UserOrder from "../pages/user/UserOrder";
-import UserCart from "../pages/user/UserCart";
-import UserOrderDetail from "../pages/user/UserOrderDetail";
-import UserPayment from "../pages/user/UserPayment";
-import UserOrderList from "../pages/user/UserOrderList";
 
 import "./PathRoute.css";
 import UserSearchMap from "../pages/user/UserSerachMap";
@@ -35,24 +26,21 @@ import AdminLogin from "../pages/admin/AdminLogin";
 
 import AdminMypage from "../pages/admin/AdminMypage";
 
-import UserMenuOption from "../pages/user/UserMenuOption";
-import UserMenuOptionModal from "../pages/user/UserMenuOptionModal";
 import UserInsertAddress from "../pages/user/UserInsertAddress";
-import AdminSignUp from "../pages/admin/AdminSignUp";
 import UserOrdering from "../pages/user/UserOrdering";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
-import UserOrderMenuForm from "../pages/user/UserOrderMenuForm";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
 import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
-import SearchHeader from "../pages/layout/SearchHeader";
-
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 import UserReviewWrite from "../pages/user/UserReviewWrite";
-
-
+import AdminChangeRole from "../pages/admin/AdminChangeRole";
+import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
+import UserSuccess from "../pages/user/UserSuccess";
+import {FailPage} from "../pages/user/Failpage";
+import CheckoutPage from "../pages/user/CheckoutPage";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -101,28 +89,29 @@ function PathRoute() {
                                 <Route path="/login" element={<AdminLogin/>}/>
                                 <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
                                 <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
+                                <Route path="/updaterole" element={<AdminChangeRole />}/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
-                                {/* 메뉴 클릭 했을 때 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId" element={<UserOrder/>}/>
-                                {/* 장바구니 담았을 때 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId" element={<UserOrder/>}/>
                                 {/* 주문하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/ordering" element={<UserOrdering />}/>
+                                <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
                                 {/* 결제하기 페이지 */}
-                                <Route path="/user/order/:storeId/:menuId/:orderId/:cartId/:userId/payment" element={<UserPayment/>}/>
+                                {/* 1. checkout toss API KEY 인증*/}
+                                <Route path="/checkout" element={<CheckoutPage />} />
 
-                                <Route path="/user/orderlist" element={<UserOrderList/>}/>
-                                <Route path="/user/orderlist/:orderId" element={<UserOrderDetail/>}/>
+                                {/*2. 인증 완료되었을 경우 결제 실행*/}
+                                <Route path="/sandbox/success" element={<UserSuccess />} />
+
+                                {/*3. 인증 실패 결제 실패*/}
+                                <Route path="/sandbox/fail" element={<FailPage />} />
 
                                 <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status" element={<UserDeliveryStatus/>}/>
+                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
@@ -130,7 +119,7 @@ function PathRoute() {
                                 <Route path="/rider" element={
                                     <RiderMain/>
                                 }/>
-                                <Route path="/rider/ontheway/:orderIdx" element={
+                                <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
                                         <RiderOntheway/>
                                     </ProtectedRoute>
@@ -168,26 +157,18 @@ function PathRoute() {
                                     </ProtectedRoute>
                                 }/>
 
-                                <Route path="/owner/menuform" element={
+                                <Route path="/owner/menu/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuForm/>
+                                        <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoption" element={
+                                {/* id는 연결되는 메뉴id */}
+                                <Route path="/owner/menuoption/:id" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menuoptiondetail" element={
-                                    <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionDetail/>
-                                    </ProtectedRoute>
-                                }/>
-                                <Route path="/owner/menuoptiondeform" element={
-                                    <ProtectedRoute allowedRoles={["owner"]}>
-                                        <StoreMenuOptionForm/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/owner/mystore" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
@@ -207,7 +188,6 @@ function PathRoute() {
                                 {/* 관리자 관련 라우트 */}
                                 <Route path="/chat/chattingroom" element={user ? <AdminChattingroom user={user} /> : <div>Loading...</div>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
-
 
                                 <Route path="/TEST/message/:roomId" element={<AdminMessageTEST />}/>
                                 <Route path="/TEST/chattingroom" element={<AdminChattingroomTest />}/>

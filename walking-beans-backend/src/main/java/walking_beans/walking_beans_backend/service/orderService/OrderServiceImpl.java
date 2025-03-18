@@ -1,15 +1,17 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
+import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
-
+import java.util.Map;
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -65,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Autowired
-    private CartMapper cartMapper;
+    private UserCartMapper userCartMapper;
 
     @Autowired
     private PaymentMapper paymentMapper;
@@ -82,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
         // 주문에 대한 장바구니 데이터 삽입
         for (Carts cart : cartList) {
             cart.setOrderId(order.getOrderId());
-            cartMapper.insertCart(cart);
+            userCartMapper.insertCart(cart);
         }
 
         // 결제 정보 설정
@@ -117,6 +119,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Orders getOrderStatus(long orderId) {
         return orderMapper.getOrderStatus(orderId);
+    }
+
+    @Override
+    public Long createOrder(Map<String, Object> requestData) {
+
+        log.info("주문 정보 저장 요청: {}", requestData);
+
+        Long orderId = orderMapper.createOrder(requestData);
+        log.info(" 주문 저장 완료! 주문 ID: {}", orderId);
+
+        return orderId;
     }
 
 }
