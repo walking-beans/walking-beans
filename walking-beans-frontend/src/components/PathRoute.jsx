@@ -35,6 +35,11 @@ import AdminAlarmList from "../pages/admin/AdminAlarmList";
 import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+
+
+
 import UserReviewWrite from "../pages/user/UserReviewWrite";
 import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
@@ -44,6 +49,7 @@ import CheckoutPage from "../pages/user/CheckoutPage";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
+import UserStoreReview from "../pages/user/UserStoreReview";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -95,6 +101,7 @@ function PathRoute() {
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
@@ -111,10 +118,14 @@ function PathRoute() {
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<FailPage />} />
 
+
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+
+
+                                <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
 
                                 <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
