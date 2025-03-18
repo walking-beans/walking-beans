@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const OrderList = () => {
@@ -17,14 +17,16 @@ const OrderList = () => {
             return;
         }
 
-        const fetchOrders = async () => {
-            try {
-                const response = await axios.get(`/api/order/user/${userId}`);
-                setOrders(response.data);
-            } catch (error) {
-                console.error("주문 목록을 불러오는 중 오류 발생:", error);
-            }
+        const fetchOrders = () => {
+            axios.get(`/api/order/user/${userId}`)
+                .then(response => {
+                    setOrders(response.data);
+                })
+                .catch(error => {
+                    console.error("주문 목록을 불러오는 중 오류 발생:", error);
+                });
         };
+
 
         fetchOrders();
     }, [userId, navigate]);

@@ -9,7 +9,8 @@ const OrderDetail = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(`/api/order/${orderNumber}`)
+        axios
+            .get(`/api/order/${orderNumber}`)
             .then((response) => {
                 setOrder(response.data || {});
             })
