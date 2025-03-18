@@ -147,7 +147,7 @@ const UserSearchMap = () => {
     // ✅ 매장 상세 정보 보기
     const handleStore = () => {
         if (!selectedStore?.storeId) return;
-        navigate(`/user/order/${selectedStore.storeId}`);
+        navigate(`/store/${selectedStore.storeId}`);
     };
 
 
