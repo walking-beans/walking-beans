@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import apiUserOrderService from "../../service/apiUserOrderService"
 const UserSuccess = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -31,15 +31,45 @@ const UserSuccess = () => {
                     return;
                 }
 
-                console.log("결제 승인 요청:", { paymentKey, orderId, orderTotalPrice, userId, storeId, addressId });
-                // oderStatus 설정  response = controller 에서 requestData 로 전달됨
+                const cartItemsRaw = await apiUserOrderService.getUserCartByUserId(userId);
+                console.log("원본 장바구니 데이터:", cartItemsRaw);
+
+                const cartItems = cartItemsRaw.map(cart => {
+                    const menuIdArray = cart.menuIds ? cart.menuIds.split(",") : [];
+                    return {
+                        userId: cart.userId,
+                        cartId: cart.cartId,
+                        cartQuantity: cart.cartQuantity,
+                        userName: cart.userName,
+                        userEmail: cart.userEmail,
+                        userPhone: cart.userPhone,
+                        menuId: menuIdArray.length > 0 ? menuIdArray[0] : null,
+                        menuNames: cart.menuNames,
+                        menuCategories: cart.menuCategories,
+                        menuPrices: cart.menuPrices,
+                        optionIds: cart.optionIds,
+                        optionNames: cart.optionNames,
+                        optionPrices: cart.optionPrices,
+                        totalQuantities: cart.totalQuantities,
+                        cartCreateDate: cart.cartCreateDate,
+                        menuIdList: menuIdArray,
+                        menuNameList: cart.menuNames ? cart.menuNames.split(",") : [],
+                        optionNameList: cart.optionNames ? cart.optionNames.split(",") : [],
+                        optionPriceList: cart.optionPrices ? cart.optionPrices.split(",").map(Number) : [],
+                        totalQuantityList: cart.totalQuantities ? cart.totalQuantities.split(",").map(Number) : []
+                    };
+                });
+
+                console.log("가공된 장바구니 데이터:", cartItems);
+
                 const response = await axios.post("http://localhost:7070/api/payment/confirm", {
                     paymentKey,
-                    orderId,
+                    orderNumber : orderId,
                     orderTotalPrice,
                     userId,
                     storeId,
-                    addressId
+                    addressId,
+                    cartItems
                 });
 
                 console.log("결제 승인 성공:", response.data);

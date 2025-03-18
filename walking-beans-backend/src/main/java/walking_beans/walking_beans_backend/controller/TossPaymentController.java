@@ -49,13 +49,11 @@ public class TossPaymentController {
             boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
             Map<String, Object> response = tossPaymentService.confirmPayment(requestData, isApiPayment);
 
-
             if (response.get("error") == null) {
                 // Orders 테이블로 주문서 저장
                 Long orderId = orderService.createOrder(requestData);
                 response.put("orderId", orderId);
                 log.info("주문 생성 완료! 주문 ID: {}", orderId);
-
 
                 Long userId = Long.valueOf(requestData.get("userId").toString());
                 // 기존에 저장된 장바구니 비우기

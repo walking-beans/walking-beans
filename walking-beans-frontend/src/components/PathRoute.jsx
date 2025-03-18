@@ -41,6 +41,8 @@ import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
+import UserOrderList from "../pages/user/UserOrderList";
+import UserOrderDetail from "../pages/user/UserOrderDetail";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -106,6 +108,11 @@ function PathRoute() {
 
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<FailPage />} />
+
+                                {/*주문 목록 리스트*/}
+                                <Route path="/order" element={<UserOrderList />} />
+                                {/*주문 상세정보*/}
+                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
 
                                 <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
