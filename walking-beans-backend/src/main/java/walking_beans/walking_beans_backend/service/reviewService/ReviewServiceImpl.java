@@ -1,4 +1,3 @@
-/*
 package walking_beans.walking_beans_backend.service.reviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,12 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.deleteReview(reviewId);
     }
 
+    @Override
+    public Reviews findReviewById(long reviewId) {
+        return reviewMapper.findReviewById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+    }
+
     // 이미지 파일 추가
     @Override
     public String uploadToImgur(MultipartFile file) throws IOException {
@@ -83,4 +88,3 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 }
-*/

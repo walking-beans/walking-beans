@@ -60,8 +60,15 @@
 
 
     <insert id="createOrder">
-        INSERT INTO orders (user_id, store_id, address_id, order_number, order_requests, order_total_price, order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber},#{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
+        INSERT INTO orders (user_id, store_id, address_id, order_number, order_requests, order_total_price,
+                            order_create_date, order_modified_date)
+        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, #{orderRequests}, #{orderTotalPrice}, NOW(),
+                NOW());
+    </insert>
+
+    <insert id="insertOrderItem">
+        INSERT INTO order_items (order_number, menu_id, option_id, quantity)
+        VALUES (#{orderNumber}, #{menuId}, #{optionId}, #{quantity});
     </insert>
 
     <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
@@ -83,10 +90,10 @@
     <!-- 주문 완료 데이터 저장 (주문 상태는 2로 설정, 결제정보 함께 저장) -->
     <update id="updateOrderInfo">
         UPDATE orders
-        SET address_id        = #{addressId},
-            order_status      = 2,
-            order_requests    = #{orderRequests},
-            order_total_price = #{order_total_price},
+        SET address_id          = #{addressId},
+            order_status        = 2,
+            order_requests      = #{orderRequests},
+            order_total_price   = #{order_total_price},
             order_modified_date = NOW()
         WHERE order_id = #{orderId}
     </update>
@@ -107,7 +114,13 @@
 
     <!-- 주문내역, 주문상세 내역 : 주문한 가게 정보 가져오기 -->
     <select id="findStoreByOrderId">
-        SELECT s.store_id, s.store_name, s.store_picture_url, s.store_main_menu, s.store_address, s.store_latitude, s.store_longitude
+        SELECT s.store_id,
+               s.store_name,
+               s.store_picture_url,
+               s.store_main_menu,
+               s.store_address,
+               s.store_latitude,
+               s.store_longitude
         FROM stores s
         WHERE s.store_id = (SELECT o.store_id
                             FROM orders o
@@ -122,5 +135,35 @@
                order_Requests
         FROM orders
         WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 유저의 기존 주문 내역리스트들 -->
+    <select id="getOrdersByUserId">
+        SELECT user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               delivery_address,
+               total_payment,
+               special_requests,
+               order_list
+        FROM user_orders_view
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 주문 내역 조회 -->
+    <select id="getOrderByOrderNumber">
+        SELECT user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               delivery_address,
+               total_payment,
+               special_requests,
+               order_list
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber}
     </select>
 </mapper>

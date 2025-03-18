@@ -27,4 +27,6 @@ public interface UserCartMapper {
     void deleteFromCart(Long cartId);
 
     void insertCart(Carts cart);
+
+    void changeStoreIdAndMenu(Long userId, Long storeId);
 }
