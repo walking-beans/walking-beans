@@ -41,6 +41,7 @@ import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
+import RiderMap from "../pages/rider/t/RiderMap";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -116,6 +117,8 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
                                 {/* 라이더 관련 라우트 */}
+                                <Route path="/r/map" element={<RiderMap />} />
+
                                 <Route path="/rider" element={
                                     <RiderMain/>
                                 }/>
