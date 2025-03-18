@@ -62,6 +62,7 @@ public class RiderOrderStatusDTO {
         } else {
             this.deliveryDeadline += deadLine.getMinute();
         }
+
     }
 
 }
