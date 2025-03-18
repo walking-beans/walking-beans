@@ -20,6 +20,7 @@ const RiderMap = () => {
     const [location, setLocation] = useState({ lat: 37.498095, lng: 127.028391 });
     const [orders, setOrders] = useState([]);
     const [storeOrders, setStoreOrders] = useState([]);
+    const [testOrders, setTestOrders] = useState({});
 
     // 현재 위치 가져오기
     useEffect(() => {
@@ -59,6 +60,14 @@ const RiderMap = () => {
                 return acc;
             }, {});
         }
+
+        fetch("http://localhost:7070/api/order/riderIdOnDuty")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("test data : " + data);
+                setTestOrders(data);
+            })
+            .catch((error) => console.error("데이터 불러오기 오류:", error));
 
         fetch("http://localhost:7070/api/order/rider")
             .then((response) => response.json())
@@ -140,6 +149,21 @@ const RiderMap = () => {
                         </div>
                     ))
                 }
+            </div>
+            <div>
+                {
+                    Object.entries(testOrders).map(([storeId, os]) => (
+                        <div key={storeId}>
+                            <h2>가게 ID: {storeId}</h2>
+                            <ul>
+                                {os.map((order) => (
+                                    <li key={order.id}>key = {order.storeId} && orderNumber = {order.orderNumber}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+
             </div>
         </div>
     );
