@@ -11,22 +11,9 @@ const AdminMypage = () => {
     const [userId, setuserId] = useState(null);
 
     useEffect(() => {
-
-            console.log("AdminMypage.jsx에서 sessionData 호출!");
-            console.log("localStorage 값 확인:", localStorage.getItem("user"));
-            console.log("sessionStorage 값 확인:", sessionStorage.getItem("user"));
-
-
         apiUserService.sessionData((response) => {  //  sessionData() 올바르게 호출
-            console.log("sessionData에서 받은 값:", response);
             if (response && response.user_id) {
                 setuserId(response.user_id);  //  userId 설정
-                console.log(" userId 상태 업데이트 요청:", response.user_id);
-
-                setTimeout(() => {
-                    console.log("100ms 후 userId 값 확인:", response.user_id);
-                    setuserId(response.user_id);
-                }, 100);
             } else {
                 alert("로그인이 필요합니다.");
                 navigate("/login");  //  로그인 페이지로 이동
@@ -50,16 +37,12 @@ const AdminMypage = () => {
     // }, [userId]);
 
         useEffect(() => {
-            console.log("🔍 user 상태 확인:", user);
-            console.log("useEffect 실행됨 - 현재 userId 값:", userId);
-            if (!userId) return; // userId가 없으면 실행하지 않음
 
-            console.log("userId 업데이트 완료 - API 요청 가능:", userId);
+            if (!userId) return; // userId가 없으면 실행하지 않음
 
             apiUserService.mypage(
                 userId,
                 (data) => {
-                    console.log("📌 API 응답 데이터:", data);
                     setUser(data);
                     setLoading(false);
                 },
@@ -87,13 +70,6 @@ const AdminMypage = () => {
         }
     };
 
-    // const handleProfileChange = (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         // 프로필 이미지 변경 로직 추가 가능 (예: 서버에 업로드)
-    //         console.log("선택된 파일:", file);
-    //     }
-    // };
 
     if (loading) return <p>로딩 중...</p>;
     if (error) return <p>{error}</p>;

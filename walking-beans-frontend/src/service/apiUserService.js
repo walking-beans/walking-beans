@@ -165,6 +165,22 @@ const apiUserService = {
             });
         },
 
+
+    infoCorrection:
+    function (userId, userPhone, callback, errorCallback ) {
+        axios
+            .put(`${USER_API_URL}/infoCorrection`,null,{
+                params: { userId: userId, userPhone: userPhone }
+            })
+            .then((res) => {
+            callback(res.data)
+        })
+            .catch((err) => {
+                errorCallback("전화번호 수정에 실패하였습니다.")
+            })
+    },
+
+
     primaryAddress:
     function (userId,setUserAddress,setUserLat,setUserLng){
         if (userId) {

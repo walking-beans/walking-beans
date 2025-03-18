@@ -49,6 +49,7 @@ import AdminAlarmList from "../pages/admin/AdminAlarmList";
 import SearchHeader from "../pages/layout/SearchHeader";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
 
 
 
@@ -101,6 +102,7 @@ function PathRoute() {
                                 <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
