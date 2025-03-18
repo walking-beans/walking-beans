@@ -22,6 +22,11 @@ const RiderMap = () => {
     const [storeOrders, setStoreOrders] = useState([]);
     const [testOrders, setTestOrders] = useState({});
 
+    const [testStore, setTestStore] = useState([]);
+
+    const [filteredStores, setFilteredStores] = useState([]);
+
+
     // 현재 위치 가져오기
     useEffect(() => {
         if (navigator.geolocation) {
@@ -38,7 +43,7 @@ const RiderMap = () => {
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 10000,
+                    timeout: 1000,
                     maximumAge: 0,
                 }
             );
@@ -50,6 +55,8 @@ const RiderMap = () => {
     }, []);
 
     useEffect(() => {
+        if (!location) return;
+
         const groupByStores = (orders, key) => {
             return orders.reduce((acc, item) => {
                 const groupKey = item[key];
@@ -61,10 +68,17 @@ const RiderMap = () => {
             }, {});
         }
 
-        fetch("http://localhost:7070/api/order/riderIdOnDuty")
+        fetch(`http://localhost:7070/api/order/riderIdOnDuty`)
             .then((response) => response.json())
             .then((data) => {
-                console.log("test data : " + data);
+                const firstOrders = Object.values(data)
+                    .map(group => group[0]) // 각 배열의 첫 번째 요소만 가져옴
+                    .filter(Boolean);
+                const filteredOrders = firstOrders.filter(order =>
+                    getDistance(location.lat, location.lng, order.orderLatitude, order.orderLongitude) <= 20
+                );
+                setTestStore(filteredOrders);
+                console.log("testOrders : " + testStore);
                 setTestOrders(data);
             })
             .catch((error) => console.error("데이터 불러오기 오류:", error));
@@ -82,6 +96,10 @@ const RiderMap = () => {
             })
             .catch((error) => console.error("데이터 불러오기 오류:", error));
     }, [location]);
+
+    function handleStore(id) {
+        console.log("id : " + id);
+    }
 
     return (
         <div>
@@ -110,13 +128,13 @@ const RiderMap = () => {
                     </div>
                 </MapMarker>
 
-                {orders.length === 0 ? (
+                {testStore.length === 0 ? (
                     <p style={{ textAlign: "center", color: "red" }}>📢 반경 10km 이내에 주문이 없습니다.</p>
                 ) : (
-                    orders.map((order) => (
+                    testStore.map((order) => (
                         <MapMarker
                             key={order.orderId}
-                            position={{ lat: order.orderLatitude, lng: order.orderLongitude }}
+                            position={{ lat: order.storeLatitude, lng: order.storeLongitude }}
                             image={{
                                 src: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
                                 size: { width: 30, height: 30 }
@@ -130,13 +148,19 @@ const RiderMap = () => {
                                 whiteSpace: "nowrap",
                                 display: "inline-block",
                             }}>
-                                {order.storeName ? `${order.storeName} (₩${order.orderTotalPrice})` : "가게 정보 없음"}
+                                {order.storeName ?
+                                    <button
+                                        onClick={() => handleStore(order.storeId)}
+                                    >`${order.storeName} (₩${order.orderTotalPrice})`
+                                    </button> :
+                                    "가게 정보 없음"
+                                }
                             </div>
                         </MapMarker>
                     ))
                 )}
             </Map>
-            <div>
+            {/*<div>
                 {
                     Object.entries(storeOrders).map(([storeId, os]) => (
                         <div key={storeId}>
@@ -163,6 +187,22 @@ const RiderMap = () => {
                         </div>
                     ))
                 }
+
+            </div>
+*/}
+            <div>
+                {
+                    testStore?.map(order => (
+                        <li key={order.orderId}>
+                            <strong>매장번호:</strong> {order.storeId} ||
+                            <strong>매장:</strong> {order.storeName} ||
+                            <strong>storeLatitude:</strong> {order.storeLatitude} ||
+                            <strong>storeLongitude:</strong> {order.storeLongitude}
+                        </li>
+                    ))
+                }
+            </div>
+            <div>
 
             </div>
         </div>

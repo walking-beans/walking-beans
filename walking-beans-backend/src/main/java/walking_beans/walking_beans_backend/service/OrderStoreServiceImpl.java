@@ -26,7 +26,6 @@ public class OrderStoreServiceImpl implements OrderStoreService {
 
         Map<Long, List<OrderStoreDTO>> groupedOrders = ordersList.stream().collect(Collectors.groupingBy(OrderStoreDTO::getStoreId));
 
-
         return groupedOrders;
     }
 }
