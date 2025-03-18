@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import apiRiderService from "../../components/rider/apiRiderService";
+import "../../css/rider/RiderIncome.css";
 
 const RiderIncome = () => {
 //테스트
@@ -41,14 +42,16 @@ const RiderIncome = () => {
     }
 
     return (
-        <div>
+        <div className="rider_income_container">
             <div>
                 <span onClick={MonthDown}>&lt;  </span><span> {todaysYear}년 {todaysMonth}월 </span><span onClick={MonthUp}>  &gt;</span>
 
             </div>
-            <h5>총 수입</h5>
-            <div>{totalPrice} 원</div>
-            <div>배달횟수 {incomeList.length}회</div>
+            <div className="rider_income_total_container">
+                <h5>총 수입</h5>
+                <div>{totalPrice} 원</div>
+                <div>배달횟수 {incomeList.length}회</div>
+            </div>
             <div className="-container">
                 <table>
                     <thead>
