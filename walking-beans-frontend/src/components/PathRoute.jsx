@@ -35,12 +35,18 @@ import AdminAlarmList from "../pages/admin/AdminAlarmList";
 import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
+
+import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+
+
+
 import UserReviewWrite from "../pages/user/UserReviewWrite";
 import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
+
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -92,6 +98,7 @@ function PathRoute() {
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/user/order/:storeId" element={<UserOrder/>}/>
