@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.StoreMapper;
 import walking_beans.walking_beans_backend.model.dto.Stores;
-import walking_beans.walking_beans_backend.model.vo.rider.RiderMainStoreInfo;
-import walking_beans.walking_beans_backend.service.storesService.StoreService;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
 import java.util.List;
 

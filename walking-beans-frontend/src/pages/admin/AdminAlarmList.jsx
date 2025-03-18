@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
+import "../../css/admin/AdminAlarmList.css";
 
 
 const AdminAlarmList = () => {
@@ -52,16 +54,29 @@ const AdminAlarmList = () => {
     }
 
     return (
-        <div className="user-home-container">
+        <div className="AlarmListcontainer">
+            {AlarmList.length > 0 && (
+                <div className="AlarmDeleteContainer">
+                    <button type={"submit"} onClick={deleteAllAlrams} className="AlarmDeleteBtn">
+                        알림 모두 지우기
+                    </button>
+                </div>
+            )}
+
+            {/* 알림 리스트가 없을 때 */}
             {AlarmList.length === 0 ? (
-                <h3 style={style.NoAlarmList}>알람이 없습니다</h3>
+                <h3 className="NoAlarmList">알람이 없습니다</h3>
             ) : (
                 AlarmList.map((value, index) => (
                     <div key={index}>
-                        <div style={style.AlarmList}>
+                        <div className="AlarmList">
                             <h3>{value.alarmRole === 1
-                                ? "알람" : value.alarmRole === 2 ? "메시지" : ""}</h3>
-                            <p>{value.alarmContent}</p>
+                                ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
+                            <p>{value.alarmRole === 1
+                                ? <Link to="/link1">{value.alarmContent}</Link>
+                                : value.alarmRole === 2
+                                    ? <Link to={`/chat/message/${value.alarmSenderId}`}>{value.alarmContent}</Link>
+                                    : value.alarmContent}</p>
                             <p>
                                 {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
@@ -73,39 +88,9 @@ const AdminAlarmList = () => {
                     </div>
                 ))
             )}
-            {AlarmList.length > 0 && (
-                <div style={style.AlarmDeleteContainer}>
-                    <button type={"submit"} onClick={deleteAllAlrams} style={style.AlarmDeleteBtn}>
-                        알림 모두 지우기
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
 // 메세지 발신인 띄우기
 // DB문제 해결 -> null 문제
-
-const style = {
-    AlarmList: {
-        border: "1px solid #5A3D21",
-        borderRadius: "35px",
-        margin: "20px",
-        textAlign: "center",
-        backgroundColor: "#FAF1D0",
-        padding: "8px",
-    },
-    NoAlarmList : {
-        textAlign: "center",
-        minHeight: "70vh",
-    },
-
-    AlarmDeleteContainer : {
-        textAlign: "right",
-    },
-
-    AlarmDeleteBtn : {
-
-    }
-}
 export default AdminAlarmList;

@@ -5,8 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.*;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -20,6 +22,8 @@ public interface OrderMapper {
     Integer updateOrderStatus(@Param("orderId") long orderId, @Param("orderStatus") int orderStatus);
 
     List<Orders> getOrdersByRiderIdOnDuty(@Param("riderIdOnDuty") long riderIdOnDuty);
+
+    RiderOrderStatusDTO getOrderStatusWithRemainingTime(@Param("orderId") long orderId);
 
     /****************************************  ****************************************/
 
@@ -37,5 +41,7 @@ public interface OrderMapper {
 
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
+
+    Long createOrder(Map<String, Object> requestData);
 
 }

@@ -48,7 +48,21 @@
         WHERE order_id = #{orderId}
     </update>
 
+    <select id="getOrderStatusWithRemainingTime">
+        SELECT O.order_status, O.order_modified_date, S.store_max_delivery_time
+        FROM orders O
+                 INNER JOIN stores S
+                            on O.store_id = S.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
     <!-- ****************************************  **************************************** -->
+
+
+    <insert id="createOrder">
+        INSERT INTO orders (user_id, store_id, address_id, order_number, order_requests, order_total_price, order_create_date, order_modified_date)
+        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber},#{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
+    </insert>
 
     <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
@@ -93,7 +107,7 @@
 
     <!-- 주문내역, 주문상세 내역 : 주문한 가게 정보 가져오기 -->
     <select id="findStoreByOrderId">
-        SELECT s.store_id, s.store_name, s.store_picture_url, s.store_main_menu
+        SELECT s.store_id, s.store_name, s.store_picture_url, s.store_main_menu, s.store_address, s.store_latitude, s.store_longitude
         FROM stores s
         WHERE s.store_id = (SELECT o.store_id
                             FROM orders o

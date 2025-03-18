@@ -29,7 +29,10 @@ const apiStoreService ={
                         storeRating: store.storeRating ?? 0,
                         storeReviewCount: store.storeReviewCount ?? 0,
                         storeLatitude: store.storeLatitude ?? 0,
-                        storeLongitude: store.storeLongitude ?? 0
+                        storeLongitude: store.storeLongitude ?? 0,
+                        storeOperationHours: store.storeOperationHours ?? "운영시간 정보 없음",
+                        storeStatus: store.storeStatus ?? "운영 상태 정보 없음",
+                        storePhone: store.storePhone ?? "연락처 없음"
                     }));
 
                     if (sortType === "rating") {

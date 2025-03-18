@@ -68,6 +68,9 @@ const AdminLoginNomal = () => {
                 case "owner":
                     navigate("/owner");
                     break;
+                case "noRole":
+                    navigate("/updaterole");
+                    break;
                 default:
                     navigate("/");
                     break;
@@ -163,17 +166,6 @@ const AdminLoginSocial = () => {
         }
     }, [KakaoCallback]);
 
-    /*
-    useEffect(() => {
-        if (code){
-            finalLogin();
-        }
-    }, [code]);
-
-    const finalLogin = () => {
-        apiUserService.kakaoCallback(code, setCallback);
-        navigate("/");
-    }*/
 
     const naverLogin = () => {
         apiUserService.naverLogin(setNaverCallback);
@@ -196,6 +188,9 @@ const AdminLoginSocial = () => {
                     break;
                 case "owner":
                     navigate("/owner");
+                    break;
+                case "noRole":
+                    navigate("/updaterole");
                     break;
                 default:
                     navigate("/");

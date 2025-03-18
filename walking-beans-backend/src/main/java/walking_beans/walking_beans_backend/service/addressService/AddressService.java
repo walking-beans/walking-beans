@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.addressService;
 import walking_beans.walking_beans_backend.model.dto.Address;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AddressService {
 
@@ -28,4 +29,7 @@ public interface AddressService {
     /********** LEO **********/
     // 유저 대표 주소 가져오기 by order_id
     Address getUserMainAddress(long orderId, long userId);
+
+    // 주문 기준으로 사용자가 선택한 주소 가져오기
+    Address getUserAddressByOrderId(long orderId);
 }

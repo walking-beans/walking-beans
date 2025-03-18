@@ -1,0 +1,140 @@
+.untaken_order_detail_container {
+    background-color: black;
+    color:white;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.untaken_order_detail_div {
+    margin : 0 40px;
+}
+
+.untaken_order_detail_div_deliveryfee {
+    font-size : 20px;
+    font-weight: bold;
+    text-align: center;
+    padding : 15px 0 0 0;
+}
+
+.store_circle_span {
+    display: inline-block;
+    background-color: #5895F0;
+    width : 15px;
+    height : 15px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.store_name, .client_name {
+    font-weight: bold;
+    font-size : 18px;
+}
+
+.store_address, .client_address {
+    margin-left : 20px;
+    color : #A0A0A0;
+}
+
+.store_distance {
+    margin-left : 5px;
+}
+
+.client_distance {
+    margin-left : 10px;
+}
+
+.btw_circles_container {
+    margin-bottom : 15px;
+}
+
+.btw_circles {
+    display: block;
+    background-color: #A0A0A0;
+    width : 2px;
+    height : 10px;
+    border-radius: 50%;
+    margin : 5px 3px;
+
+}
+
+.client_circle_span {
+    display: inline-block;
+    background-color: #E95D45;
+    width : 15px;
+    height : 15px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.order_status {
+}
+
+.order_status_content {
+    margin : 0 40px;
+
+}
+
+.order_status_time_div {
+    margin-bottom : 10px;
+
+}
+
+.order_status_time_remaining {
+    font-size : 20px;
+    font-weight: bold;
+}
+
+.order_status_delivery_deadline {
+    margin : 10px;
+    font-size : 15px;
+}
+
+.order_status_message {
+    font-size : 20px;
+    padding : 0 0 10px 0;
+    font-weight : bold;
+
+}
+
+.riderOrderStatus-container {
+
+}
+
+.order_status_steps {
+    display: flex;
+    justify-content: space-between;
+    padding : 10px 0;
+}
+
+.order_status_step {
+
+}
+
+.order_status_loading {
+
+}
+
+.untaken_order_detail_btns {
+    display: flex;
+    justify-content: center;
+    margin : 0 40px;
+
+}
+
+.untaken_order_detail_btn {
+    font-weight : bold;
+    font-size : 20px;
+    margin : 10px 40px;
+    background: #99D6F0;
+    color : #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+}
+
+.untaken_order_detail_btn:hover {
+    font-weight : bold;
+    font-size : 20px;
+    background: #5895F0;
+    color : #FFFFFF;
+}
+
+

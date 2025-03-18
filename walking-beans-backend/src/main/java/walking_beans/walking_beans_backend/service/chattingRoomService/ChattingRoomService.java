@@ -1,8 +1,7 @@
 package walking_beans.walking_beans_backend.service.chattingRoomService;
 
-import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
-import walking_beans.walking_beans_backend.model.vo.admin.UserChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
 
 import java.util.List;
 

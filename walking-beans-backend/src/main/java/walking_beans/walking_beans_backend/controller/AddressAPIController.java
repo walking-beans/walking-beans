@@ -77,11 +77,19 @@ public class AddressAPIController {
      * @param userId : user id
      * @return : ResponseEntity.ok(Address)
      */
-    @GetMapping("/userAddress/orderId")
+    @GetMapping("/main")
     public ResponseEntity<Address> getUserMainAddressByOrderId(@RequestParam("orderId") long orderId,
                                                       @RequestParam("userId") long userId){
         log.info("=== /api/addresses/userAddress?orderId={}&userId={} ===", orderId, userId);
         return ResponseEntity.ok(addressService.getUserMainAddress(orderId, userId));
+    }
+
+    /*************************************************************************************/
+
+    // 주문 기준으로 사용자가 선택한 주소 가져오기
+    @GetMapping("/user/order/{orderId}")
+    public Address getUserAddressByOrderId(@PathVariable("orderId") long orderId){
+        return addressService.getUserAddressByOrderId(orderId);
     }
 
 

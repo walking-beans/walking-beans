@@ -1,8 +1,16 @@
 import {Link, useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import RiderOrderDetail from "./RiderOrderDetail";
+import RiderOrderStatus from "./RiderOrderStatus";
+import "../../../css/rider/RiderOrderStatus.css";
 
 const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("UntakenOrder selected Store : " + selectedStore);
+    }, []);
 
     const goToDetail = () => {
         navigate(`/rider/ontheway/${selectedStore.orderId}`);
@@ -10,7 +18,6 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
 
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
     const getDistance = (lat1, lng1, lat2, lng2) => {
-        console.log("getdistance : ", {lat1, lng1, lat2, lng2});
         const R = 6371; // 지구 반지름(km)
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLng = (lng2 - lng1) * (Math.PI / 180);
@@ -25,14 +32,56 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
     };
 
     return (
-        <div>
-            <p>{selectedStore?.storeName}</p>
-            <p>배달 금액 : 3,500원</p>
-            <p>주문 시간 : {selectedStore?.orderCreateDate}</p>
-            <p>가게 이미지 : {selectedStore?.storePictureUrl}</p>
-            <p>라이더 - 가게 거리 : {(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</p>
-            <p>가게 - 유저 거리 : {(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</p>
-            <button onClick={goToDetail}>주문 수락</button>
+        <div className="untaken_order_detail_container">
+            <div className="untaken_order_detail_div">
+                <p className="untaken_order_detail_div_deliveryfee">배달료 {(parseInt(selectedStore.storeDeliveryTip)).toLocaleString()}원</p>
+                <hr />
+                <div>
+                    <span className="store_circle_span"></span>
+                    <span className="store_name">{selectedStore?.storeName}</span>
+                    <span className="store_distance">{(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</span>
+                    <p className="store_address">{selectedStore?.storeAddress}</p>
+                </div>
+                <div className="btw_circles_container">
+                    <p className="btw_circles"></p>
+                    <p className="btw_circles"></p>
+                    <p className="btw_circles"></p>
+                </div>
+                <div>
+                    <span className="client_circle_span"></span>
+                    <span className="client_name">고객</span>
+                    <span className="client_distance">{(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</span>
+                    <p className="client_address">{userAddress?.address} {userAddress?.detailedAddress}</p>
+                    <hr />
+                </div>
+
+            </div>
+
+            <RiderOrderStatus
+                orderId={7}
+                message="배달 시간이 초과되었습니다."
+                css={
+                    {
+                        order_status : "order_status",
+                        order_status_content : "order_status_content",
+                        order_status_time_div : "order_status_time_div",
+                        order_status_time_remaining : "order_status_time_remaining",
+                        order_status_delivery_deadline : "order_status_delivery_deadline",
+                        order_status_message : "order_status_message",
+                        order_status_steps : "order_status_steps",
+                        order_status_step : "order_status_step",
+                        order_status_loading: "order_status_loading",
+                    }
+                }
+            />
+
+            <div className="d-grid gap-2">
+                <button
+                    className="btn untaken_order_detail_btn"
+                    onClick={goToDetail}
+                >주문 수락
+                </button>
+            </div>
         </div>
     )
 };

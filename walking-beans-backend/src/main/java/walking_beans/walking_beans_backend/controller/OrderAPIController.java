@@ -13,6 +13,7 @@ import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
@@ -57,7 +58,7 @@ public class OrderAPIController {
                                                             @RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
-
+    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -76,7 +77,13 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.getOrdersByRiderIdOnDuty(riderIdOnDuty));
     }
 
-    /* ***************************************  *************************************** */
+    @GetMapping("/riderOrderTimeRemaining")
+    public ResponseEntity<RiderOrderStatusDTO> getOrderStatusWithRemainingTime(@RequestParam("orderId") long orderId) {
+        log.info("=== getOrderStatusWithRemainingTime orderId: {} ===", orderId);
+        return ResponseEntity.ok(orderService.getOrderStatusWithRemainingTime(orderId));
+    }
+
+    /****************************************  ****************************************/
 
 
 
@@ -116,4 +123,7 @@ public class OrderAPIController {
     public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
         return orderService.getOrderStatus(orderId);
     }
+
+
+
 }

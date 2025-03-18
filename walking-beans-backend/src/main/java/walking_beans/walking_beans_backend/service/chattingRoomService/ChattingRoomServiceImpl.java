@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.ChattingRoomMapper;
 import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
-import walking_beans.walking_beans_backend.model.vo.admin.UserChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
 
 import java.util.List;
 
