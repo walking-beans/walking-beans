@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
-import "./HeaderAlarm.css";
+//import "./HeaderAlarm.css";
 import {Link, useNavigate} from "react-router-dom";
 import bellIcon from "../../assert/svg/bell.svg";
 import alarmIcon from "../../assert/svg/alarm.svg";
+import "../../pages/layout/UserHeader.css";
 
 
 const HeaderAlarm = ({userId}) => {
@@ -17,14 +18,14 @@ const HeaderAlarm = ({userId}) => {
     useEffect(() => {
         console.log("🔌 WebSocket 연결 시도...");
 
-        const socket = new SockJS("http://localhost:7070/ws-order");
+        const socket = new SockJS("http://localhost:7070/ws-alarm");
         const stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
             onConnect: () => {
                 console.log("✅ WebSocket 연결 성공");
-                stompClient.subscribe(`/topic/orders/${userId}`, (message) => {
-                    console.log("📩 주문 알림 수신:", message.body);
+                stompClient.subscribe(`/topic/alarms/${userId}`, (message) => {
+                    console.log("알림 수신:", message.body);
                     //setUnreadCount((prev) => prev + 1);
                     //setAlarmMessages((prev) => [...prev, message.body]);
                     const receivedData = JSON.parse(message.body)

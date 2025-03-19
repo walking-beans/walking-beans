@@ -1,4 +1,4 @@
-/*
+
 import apiUserService from "../../service/apiUserService";
 import {useState} from "react";
 // 유저 롤 업데이트 테스트용
@@ -22,4 +22,4 @@ const AdminSignUp = () => {
     )
 }
 
-export default AdminSignUp;*/
+export default AdminSignUp;

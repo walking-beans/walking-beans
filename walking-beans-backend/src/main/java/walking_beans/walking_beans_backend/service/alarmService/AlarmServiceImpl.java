@@ -71,12 +71,6 @@ public class AlarmServiceImpl implements AlarmService {
         log.info("알림 저장 완료" + alarm);
     }
 
-    // 특정 가게의 알림 목록 조회
-    /*@Override
-    public List<Alarms> getNotificationsByStoreId(Long userId) {
-        return alarmMapper.getNotificationsByStoreId(userId);
-    }*/
-
     //  특정 알림 읽음 처리
     @Override
     public void markNotificationAsRead(Long alarmId) {
@@ -84,11 +78,13 @@ public class AlarmServiceImpl implements AlarmService {
         log.info("알림 읽음 처리 완료 - 알림 ID: {}", alarmId);
     }
 
+    //알람 리스트 가져오기
     @Override
     public List<Alarms> getUserAlarmList(int userId) {
         return alarmMapper.getUserAlarmList(userId);
     }
 
+    // 알람 리스트 전체 삭제하기
     @Override
     public void deleteAllAlarm(byte userId) {
         alarmMapper.deleteAllAlarm(userId);
