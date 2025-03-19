@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import "../../css/rider/RiderIncome.css";
 
 const RiderIncome = () => {
@@ -43,39 +43,58 @@ const RiderIncome = () => {
 
     return (
         <div className="rider_income_container">
-            <div>
-                <span onClick={MonthDown}>&lt;  </span><span> {todaysYear}년 {todaysMonth}월 </span><span onClick={MonthUp}>  &gt;</span>
-
+            <div className="rider_income_dates">
+                <div className="rider_income_dates_myIncome">내 수입</div>
+                <span
+                    onClick={MonthDown}
+                    className="rider_income_dates_left"
+                > &lt; </span>
+                <span>
+                    {todaysYear}년 {todaysMonth}월
+                </span>
+                <span
+                    onClick={MonthUp}
+                    className="rider_income_dates_right"
+                >  &gt;</span>
             </div>
             <div className="rider_income_total_container">
-                <h5>총 수입</h5>
-                <div>{totalPrice} 원</div>
-                <div>배달횟수 {incomeList.length}회</div>
+                <h5 className="rider_income_total_title">총 수입</h5>
+                <div className="rider_income_total_price">{totalPrice.toLocaleString()}원</div>
+                <div className="rider_income_total_times">배달횟수 {incomeList.length}회</div>
             </div>
             <div className="-container">
-                <table>
+                <table className="rider_income_table row">
                     <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>날짜</th>
-                        <th>수입</th>
-                    </tr>
+                        <tr className="rider_income_table_thead col-12">
+                            <th>No</th>
+                            <th>날짜</th>
+                            <th>수입</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {
                         (incomeList.length > 0 && incomeList) ? (
                             incomeList.map((income, index) => {
                                 return (
-                                    <tr key={income.incomeIndex}>
-                                        <td>{income.incomeIndex}</td>
-                                        <td>{income.incomeDate}</td>
-                                        <td>{(income.incomeAmount).toLocaleString()}원</td>
+                                    <tr
+                                        className="rider_income_table_tr col-12"
+                                        key={income.incomeIndex}
+                                    >
+                                        <td className="rider_income_table_tr_income_index">{income.incomeIndex}</td>
+                                        <td className="rider_income_table_tr_income_date">{income.incomeDate}</td>
+                                        <td className="rider_income_table_tr_income_amount">{(income.incomeAmount).toLocaleString()}원</td>
                                     </tr>
                                 )
                             })
                         ) : (
-                            <tr>
-                                <td colSpan="3" style={{textAlign: 'center'}}>일한 기록이 없습니다.</td>
+                            <tr
+                                className="rider_income_table_nodata_container"
+                            >
+                                <td
+                                    className ="rider_income_table_nodata col-12"
+                                    colSpan="3"
+                                >일한 기록이 없습니다.
+                                </td>
                             </tr>
                         )
                     }

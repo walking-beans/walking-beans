@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 
 const AdminChattingroomTest = () => {
 

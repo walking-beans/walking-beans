@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class OrderStoreServiceImpl implements OrderStoreService {
-    final static int MAX_RADIUS = 10;
+    final static int MAX_RADIUS = 30;
 
     @Autowired
     private OrderStoreMapper orderMapper;

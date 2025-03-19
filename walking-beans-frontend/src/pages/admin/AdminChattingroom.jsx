@@ -145,7 +145,7 @@ export default AdminChattingroom;*/
 import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 

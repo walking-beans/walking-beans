@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import {useNavigate} from "react-router-dom";
+import apiRiderService from "../../../service/apiRiderService";
 
-const getDistance = (lat1, lon1, lat2, lon2) => {
+/*const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // 지구 반지름 (km)
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -14,21 +15,19 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-};
+};*/
 
 const RiderMap = () => {
     const navigate = useNavigate();
 
     // 기본 위치: 강남구 테헤란로 14길 7
     const [location, setLocation] = useState({ lat: 37.498095, lng: 127.028391 });
-    const [orders, setOrders] = useState([]);
-    const [storeOrders, setStoreOrders] = useState([]);
-    const [testOrders, setTestOrders] = useState({});
 
-    const [testStore, setTestStore] = useState([]);
-
+    const [orders, setOrders] = useState({});
+    const [stores, setStores] = useState([]);
     const [selectedStore, setSelectedStore] = useState([]);
-
+    // const [storeOrders, setStoreOrders] = useState([]);
+    // const [orders, setorders] = useState({});
 
     // 현재 위치 가져오기
     useEffect(() => {
@@ -60,30 +59,30 @@ const RiderMap = () => {
     useEffect(() => {
         if (!location) return;
 
-        const groupByStores = (orders, key) => {
-            return orders.reduce((acc, item) => {
-                const groupKey = item[key];
-                if (!acc[groupKey]) {
-                    acc[groupKey] = [];
-                }
-                acc[groupKey].push(item);
-                return acc;
-            }, {});
-        }
-
         fetch(`http://localhost:7070/api/order/riderIdOnDuty?lat=${location.lat}&lng=${location.lng}`)
             .then((response) => response.json())
             .then((data) => {
                 const firstOrders = Object.values(data)
                     .map(group => group[0]) // 각 배열의 첫 번째 요소만 가져옴
                     .filter(Boolean);
-                setTestStore(firstOrders);
-                console.log("testOrders : " + testStore);
-                setTestOrders(data);
+                setStores(firstOrders);
+                console.log("orders : " + stores);
+                setOrders(data);
             })
             .catch((error) => console.error("데이터 불러오기 오류:", error));
 
-        fetch("http://localhost:7070/api/order/rider")
+        /* const groupByStores = (orders, key) => {
+           return orders.reduce((acc, item) => {
+               const groupKey = item[key];
+               if (!acc[groupKey]) {
+                   acc[groupKey] = [];
+               }
+               acc[groupKey].push(item);
+               return acc;
+           }, {});
+       }*/
+
+        /*fetch("http://localhost:7070/api/order/rider")
             .then((response) => response.json())
             .then((data) => {
                 console.log("주문 데이터:", data);
@@ -94,17 +93,18 @@ const RiderMap = () => {
                 setOrders(filteredOrders);
                 setStoreOrders(groupByStores(filteredOrders, "storeId"));
             })
-            .catch((error) => console.error("데이터 불러오기 오류:", error));
+            .catch((error) => console.error("데이터 불러오기 오류:", error));*/
     }, [location]);
 
     function handleStore(id) {
         console.log("id : " + id);
-        console.log("==== ==== : " + storeOrders["1"]);
-        setSelectedStore(storeOrders[id]);
+        console.log("==== ==== : " + orders[id]);
+        setSelectedStore(orders[id]);
     }
 
     function handleTakingOrder (id) {
         console.log("id : " + id);
+        apiRiderService.updateOrdersByRiderIdAndOrderId(1, id);
         navigate(`/rider/ontheway/${id}`);
     }
 
@@ -135,10 +135,10 @@ const RiderMap = () => {
                     </div>
                 </MapMarker>
 
-                {testStore.length === 0 ? (
+                {stores.length === 0 ? (
                     <p style={{ textAlign: "center", color: "red" }}>📢 반경 10km 이내에 주문이 없습니다.</p>
                 ) : (
-                    testStore.map((order) => (
+                    stores.map((order) => (
                         <MapMarker
                             key={order.orderId}
                             position={{ lat: order.storeLatitude, lng: order.storeLongitude }}
@@ -183,7 +183,7 @@ const RiderMap = () => {
             </div>
             <div>
                 {
-                    Object.entries(testOrders).map(([storeId, os]) => (
+                    Object.entries(orders).map(([storeId, os]) => (
                         <div key={storeId}>
                             <h2>가게 ID: {storeId}</h2>
                             <ul>
@@ -196,10 +196,9 @@ const RiderMap = () => {
                 }
 
             </div>
-*/}
             <div>
                 {
-                    testStore?.map(order => (
+                    stores?.map(order => (
                         <li key={order.orderId}>
                             <strong>매장번호:</strong> {order.storeId} ||
                             <strong>매장:</strong> {order.storeName} ||
@@ -211,6 +210,7 @@ const RiderMap = () => {
                     ))
                 }
             </div>
+*/}
             <div>
                 {
                     selectedStore?.map(order => (
