@@ -46,6 +46,7 @@ import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
 import CheckoutPage from "../pages/user/CheckoutPage";
+import AdminSignUp from "../pages/admin/AdminSignUp";
 import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
@@ -97,9 +98,8 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
-                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
+                                <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>

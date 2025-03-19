@@ -9,9 +9,15 @@ import java.util.List;
 @Mapper
 public interface AlarmMapper {
 
+    // 알림 저장
     void insertAlarm(Alarms alarm);
 
+    // 알림 리스트 가져오기
     List<Alarms> getUserAlarmList(int userId);
 
+    // 알림 전체 삭제
     void deleteAllAlarm(byte userId);
+
+    // 특정 알림을 읽음 처리
+    void markNotificationAsRead(@Param("alarmId") Long alarmId);
 }
