@@ -50,7 +50,7 @@ public class MenuAPIController {
      *
      */
     @GetMapping("/storemenu/{storeId}")
-    public List<Menu> findMenuByStoreId(@PathVariable("storeId") long storeId) {
+    public List<Menu> findMenuByStoreId(@PathVariable long storeId) {
         return menuService.findMenuByStoreId(storeId);
     }
 
@@ -107,9 +107,11 @@ public class MenuAPIController {
         menuService.deleteMenu(menuId);
     }
 
+
     // 대표메뉴 정보 가져오기
     @GetMapping("/mainmenu/{storeId}")
     public List<Menu> findMainMenuByStoreId(@PathVariable("storeId") long storeId) {
         return menuService.findMainMenuByStoreId(storeId);
     }
+
 }
