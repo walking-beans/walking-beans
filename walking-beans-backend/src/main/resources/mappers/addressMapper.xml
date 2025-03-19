@@ -38,6 +38,13 @@
         SET address_role = 0
         WHERE user_id = #{userId}
     </update>
+
+    <!-- 주소 삭제 -->
+    <delete id="deleteAddress">
+        DELETE FROM address WHERE address_id = #{addressId}
+    </delete>
+
+
     <!-- ========= Leo ========= -->
     <select id="getUserMainAddress">
         SELECT A.address_id, A.user_id, A.address, A.detailed_address, A.address_name, A.address_latitude, A.address_longitude, A.address_role
