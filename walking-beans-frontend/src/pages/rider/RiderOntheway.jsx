@@ -45,10 +45,26 @@ const RiderOntheway = () => {
 */
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import {useParams} from "react-router-dom";
+import apiRiderService from "../../service/apiRiderService";
 
 const RiderOntheway = () => {
-    const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
+    const {orderId} = useParams();
+
+    const [location, setLocation] = useState({ lat: 37.495901, lng: 127.032541 });
     const [path, setPath] = useState([]);
+    const [store, setStore] = useState(null);
+
+    useEffect(() => {
+        apiRiderService.getStoreAddressByOrderId(orderId, (newStore) => {
+            setStore(newStore);
+            const newLocation = {
+                lat: newStore.storeLatitude,
+                lng: newStore.storeLongitude,
+            };
+            setPath((prevPath) => [...prevPath, newLocation]);
+        });
+    }, [orderId]);
 
     useEffect(() => {
         // 현재 위치 가져오기
