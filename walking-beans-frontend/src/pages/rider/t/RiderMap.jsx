@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import {useNavigate} from "react-router-dom";
 
 const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // 지구 반지름 (km)
@@ -16,6 +17,8 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 const RiderMap = () => {
+    const navigate = useNavigate();
+
     // 기본 위치: 강남구 테헤란로 14길 7
     const [location, setLocation] = useState({ lat: 37.498095, lng: 127.028391 });
     const [orders, setOrders] = useState([]);
@@ -68,16 +71,13 @@ const RiderMap = () => {
             }, {});
         }
 
-        fetch(`http://localhost:7070/api/order/riderIdOnDuty`)
+        fetch(`http://localhost:7070/api/order/riderIdOnDuty?lat=${location.lat}&lng=${location.lng}`)
             .then((response) => response.json())
             .then((data) => {
                 const firstOrders = Object.values(data)
                     .map(group => group[0]) // 각 배열의 첫 번째 요소만 가져옴
                     .filter(Boolean);
-                const filteredOrders = firstOrders.filter(order =>
-                    getDistance(location.lat, location.lng, order.orderLatitude, order.orderLongitude) <= 20
-                );
-                setTestStore(filteredOrders);
+                setTestStore(firstOrders);
                 console.log("testOrders : " + testStore);
                 setTestOrders(data);
             })
@@ -101,6 +101,11 @@ const RiderMap = () => {
         console.log("id : " + id);
         console.log("==== ==== : " + storeOrders["1"]);
         setSelectedStore(storeOrders[id]);
+    }
+
+    function handleTakingOrder (id) {
+        console.log("id : " + id);
+        navigate(`/rider/ontheway/${id}`);
     }
 
     return (
@@ -200,6 +205,8 @@ const RiderMap = () => {
                             <strong>매장:</strong> {order.storeName} ||
                             <strong>storeLatitude:</strong> {order.storeLatitude} ||
                             <strong>storeLongitude:</strong> {order.storeLongitude}
+                            <strong>orderId:</strong> {order.orderId}
+
                         </li>
                     ))
                 }
@@ -212,6 +219,7 @@ const RiderMap = () => {
                             <strong>매장:</strong> {order.storeName} ||
                             <strong>storeLatitude:</strong> {order.storeLatitude} ||
                             <strong>storeLongitude:</strong> {order.storeLongitude}
+                            <button onClick={() => {handleTakingOrder(order.orderId)}}>주문 받기</button>
                         </li>
                     ))
                 }
