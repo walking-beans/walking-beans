@@ -12,7 +12,7 @@ const UserOrderMenuForm = ({cartId, menuName, menuPrice, optionName, optionPrice
             <div className="user-order-menu-form">
                 <div>
                     <div className="user-order-basic-text-m-0">{menuName}</div>
-                    <div className="store-menu-price">{optionContent}(+{Number(optionPrice).toLocaleString()}원)</div>
+                    <div className="store-menu-price">{optionName} {optionContent}(+{Number(optionPrice).toLocaleString()}원)</div>
                     <div className="user-order-basic-text-m-0">{totalPrice.toLocaleString()}원</div>
                 </div>
 

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
@@ -27,7 +27,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminMypage from "../pages/admin/AdminMypage";
 
 import UserInsertAddress from "../pages/user/UserInsertAddress";
-import UserOrdering from "../pages/user/UserOrdering";
+import UserOrderCheckout from "../pages/user/UserOrderCheckout";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
@@ -45,7 +45,6 @@ import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
-import CheckoutPage from "../pages/user/CheckoutPage";
 import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
@@ -106,9 +105,10 @@ function PathRoute() {
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
-                                {/*<Route path="/user/order/:storeId" element={<UserOrder />} />*/}
+
                                 {/* 주문하기 페이지 */}
-                                <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
+                                <Route path="/order/checkout/:userId" element={<UserOrderCheckout />}/>
+
                                 {/* 결제하기 페이지 */}
                                 {/* 1. checkout toss API KEY 인증*/}
                                 <Route path="/checkout" element={<UserPayment />} />
@@ -123,7 +123,7 @@ function PathRoute() {
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
                                 {/*주문 상세정보*/}
-                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+                                <Route path="/order/:orderId" element={<UserOrderDetail />} />
 
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
