@@ -120,7 +120,7 @@ import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-p
 import SendAlarm from "../../components/admin/SendAlarm";
 
 
-function AdminMessage({user}) {
+const AdminMessage = ({user}) => {
 
     const {roomId} = useParams();
     const stompClient = useRef(null);
@@ -205,10 +205,9 @@ function AdminMessage({user}) {
             };
             stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
             stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
-            setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
+            // setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
-            setShowSendAlarm(true); //알람 전송 트리거
-            return;
+            // setShowSendAlarm(true); //알람 전송 트리거
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
             reader.readAsDataURL(previewImage);
@@ -228,9 +227,8 @@ function AdminMessage({user}) {
             setIsDisabled(false);
         } else {
             alert("메세지를 작성해주세요");
-            setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
-            setShowSendAlarm(true); //알림 전송 트리거
-            return;
+            // setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
+            // setShowSendAlarm(true); //알림 전송 트리거
         }
         // 알람 컴포넌트
 
