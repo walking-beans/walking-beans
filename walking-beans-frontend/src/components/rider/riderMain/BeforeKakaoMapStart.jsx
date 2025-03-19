@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
-// 692e181593cf35ad46f4a1b3e5489d60
-const KAKAO_MAP_API_KEY = "";
+//
+const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 
 const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
 
