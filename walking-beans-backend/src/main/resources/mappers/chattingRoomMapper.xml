@@ -43,4 +43,10 @@
         FROM RankedMessages
         WHERE rn = 1;
     </select>
+
+    <select id="getRoomIdByOrderId">
+        SELECT room_id
+        FROM chattingroom
+        WHERE order_id = #{orderId}
+    </select>
 </mapper>

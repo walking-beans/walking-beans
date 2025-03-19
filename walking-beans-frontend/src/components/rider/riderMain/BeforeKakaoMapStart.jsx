@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
+//
+const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
-
-const BeforeKakaoMapStart = ({setGetReady}) => {
+const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
 
@@ -68,7 +68,7 @@ const BeforeKakaoMapStart = ({setGetReady}) => {
     return (
         <div>
             <div id="map" style={{ width: "100%", height: "650px" }}></div>
-            <button onClick={()=> {setGetReady(true)}} className="btn btn-info">운행 시작</button>
+            <button onClick={()=> {setRiderOnDuty(true)}} className="btn btn-info">운행 시작</button>
         </div>
     );
 };

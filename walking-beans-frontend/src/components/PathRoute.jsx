@@ -37,6 +37,8 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
+import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
 
 
 
@@ -45,6 +47,8 @@ import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccess from "../pages/user/UserSuccess";
 import {FailPage} from "../pages/user/Failpage";
+import CheckoutPage from "../pages/user/CheckoutPage";
+import AdminSignUp from "../pages/admin/AdminSignUp";
 import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
@@ -55,6 +59,10 @@ function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedStoreId,setSelectedStoreId] = useState();
     const [currentOrderId,setCurrentOrderId] = useState();
+
+    /*** rider ***/
+    // 운행 중 or 퇴근
+    const [riderOnDuty, setRiderOnDuty] = useState(false);
 
 
     const [user, setUser] = useState(() => {
@@ -87,7 +95,10 @@ function PathRoute() {
     return (
         <div className="layout-container">
             <BrowserRouter>
-                <HeaderRoute user={user}/>
+                <HeaderRoute user={user}
+                             riderOnDuty={riderOnDuty}
+                             setRiderOnDuty={setRiderOnDuty}
+                />
                 <div className="content-wrapper">
                     <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
@@ -96,12 +107,14 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
-                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
+                                <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                                <Route path="/unlink" element={<AdminMypageUnlink/>}/>
+                                <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
@@ -140,7 +153,11 @@ function PathRoute() {
                                 <Route path="/r/map" element={<RiderMap />} />
 
                                 <Route path="/rider" element={
-                                    <RiderMain/>
+                                    <RiderMain
+                                        user={user}
+                                        riderOnDuty={riderOnDuty}
+                                        setRiderOnDuty={setRiderOnDuty}
+                                    />
                                 }/>
                                 <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>

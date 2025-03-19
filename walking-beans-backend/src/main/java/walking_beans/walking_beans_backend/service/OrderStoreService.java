@@ -8,5 +8,5 @@ import java.util.Map;
 public interface  OrderStoreService {
     List<OrderStoreDTO> getOrdersForRider();
 
-    Map<Long, List<OrderStoreDTO>> getOrdersByRiderIdOnDuty();
+    Map<Long, List<OrderStoreDTO>> getOrdersByRiderIdOnDuty(double lat, double lng);
 }

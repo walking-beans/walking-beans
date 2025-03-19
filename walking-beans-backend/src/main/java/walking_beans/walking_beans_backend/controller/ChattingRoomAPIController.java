@@ -34,4 +34,10 @@ public class ChattingRoomAPIController {
 
         return ResponseEntity.ok(chattingRoomService.getAllChattingRoomByReceiverRelation(userId, receiverRelation));
     }
+
+    @GetMapping("/roomId")
+    public ResponseEntity<Long> getRoomIdByOrderId(@RequestParam("orderId") long orderId) {
+        log.info("=== /api/chattingroom?orderId=" + orderId);
+        return ResponseEntity.ok(chattingRoomService.getRoomIdByOrderId(orderId));
+    }
 }

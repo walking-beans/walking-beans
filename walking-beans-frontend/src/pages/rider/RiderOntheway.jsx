@@ -1,3 +1,4 @@
+/*
 import {useEffect} from "react";
 
 const RiderOntheway = () => {
@@ -41,5 +42,97 @@ const RiderOntheway = () => {
         </div>
     );
 }
+*/
+/*
+import React, { useEffect, useState } from "react";
+import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import {useParams} from "react-router-dom";
+import apiRiderService from "../../service/apiRiderService";
 
-export default RiderOntheway;
+const RiderOntheway = () => {
+    const {orderId} = useParams();
+
+    const [location, setLocation] = useState({ lat: 37.495901, lng: 127.032541 });
+    const [path, setPath] = useState([]);
+    const [store, setStore] = useState(null);
+
+    useEffect(() => {
+        apiRiderService.getStoreAddressByOrderId(orderId, (newStore) => {
+            setStore(newStore);
+            const newLocation = {
+                lat: newStore.storeLatitude,
+                lng: newStore.storeLongitude,
+            };
+            setPath((prevPath) => [...prevPath, newLocation]);
+        });
+    }, [orderId]);
+
+    useEffect(() => {
+        // 현재 위치 가져오기
+        if (navigator.geolocation) {
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const newLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+
+                    setLocation(newLocation);
+                    setPath((prevPath) => [...prevPath, newLocation]);
+                },
+                (error) => {
+                    console.error("위치 정보를 가져올 수 없습니다.", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 10000,
+                    timeout: 5000,
+                }
+            );
+
+            return () => navigator.geolocation.clearWatch(watchId);
+        } else {
+            console.error("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
+        }
+    }, []);
+
+    return (
+        <Map
+            center={location}
+            style={{ width: "100%", height: "500px" }}
+            level={3}
+        >
+            <MapMarker position={location}>
+                <div style={{ padding: "5px", color: "#000" }}>현재 위치</div>
+            </MapMarker>
+
+            {path.length > 1 && (
+                <Polyline
+                    path={path}
+                    strokeWeight={5}
+                    strokeColor={"#FF0000"}
+                    strokeOpacity={0.7}도
+                    strokeStyle={"solid"}
+                />
+            )}
+        </Map>
+    );
+};
+
+/!*const startNavigation = (start, end) => {
+        const appKey = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 여기에 본인의 카카오 앱 키 입력
+        const url = `https://map.kakao.com/link/to/${end.name},${end.lat},${end.lng}`;
+
+        // 모바일 환경인지 확인 후, 내비게이션 실행
+        window.location.href = url;
+    };
+
+    return (
+        <button onClick={() => startNavigation({ lat: 37.5665, lng: 126.9780 },
+            { name: "강남역", lat: 37.4979, lng: 127.0276 })}>
+            내비게이션 시작
+        </button>
+    )*!/
+
+export default RiderOntheway;*/
+

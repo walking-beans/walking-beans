@@ -111,7 +111,7 @@ export default AdminMessage;
 */
 import React, { useEffect, useState, useRef } from "react";
 import { Stomp } from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import {useParams} from "react-router-dom";
 import "../../css/admin/AdminMessage.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import {Link} from "react-router-dom";
 
 const RiderOrderList = ({riderId}) => {

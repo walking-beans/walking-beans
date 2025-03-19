@@ -4,7 +4,7 @@ import "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
 import axios from "axios";
 
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
+const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserSearchMap = () => {
     const location = useLocation();
@@ -142,9 +142,9 @@ const UserSearchMap = () => {
             infoWindowsRef.current.push(infoWindow);
         });
 
-    }, [searchResults, stores]); // ✅ stores가 변경될 때 실행
+    }, [searchResults, stores]); // stores가 변경될 때 실행
 
-    // ✅ 매장 상세 정보 보기
+    //  매장 상세 정보 보기
     const handleStore = () => {
         if (!selectedStore?.storeId) return;
         navigate(`/store/${selectedStore.storeId}`);

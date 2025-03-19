@@ -55,8 +55,8 @@ public class OrderAPIController {
      * @param orderId : order id
      * @return ResponseEntity.ok(Integer) : 변경 갯수
      */
-    @PutMapping("/onme")
-    public ResponseEntity<Integer> getOrdersByRiderIdInDuty(@RequestParam("riderId") long riderId,
+    @PatchMapping("/onme")
+    public ResponseEntity<Integer> updateOrdersByRiderIdAndOrderId(@RequestParam("riderId") long riderId,
                                                             @RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
@@ -67,7 +67,7 @@ public class OrderAPIController {
      * @param orderStatus : order status
      * @return ResponseEntity.ok(Integer) : 변경 갯수
      */
-    @PutMapping("/orderStatus")
+    @PatchMapping("/orderStatus")
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
 

@@ -64,13 +64,14 @@ const UserReviewWrite = () => {
     // 🖼 파일 선택 핸들러 (여러 개 추가)
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-        const newImages = files.map((file) => ({
+        const previewFiles = files.map((file) => ({
             file,
-            preview: URL.createObjectURL(file),
+            preview: URL.createObjectURL(file), // ✅ 미리보기 URL 생성
         }));
 
-        setSelectedImages((prevImages) => [...prevImages, ...newImages]);
+        setSelectedImages((prevImages) => [...prevImages, ...previewFiles]); // 기존 이미지에 추가
     };
+
 
     //  개별 이미지 삭제
     const removeImage = (index) => {
@@ -98,21 +99,27 @@ const UserReviewWrite = () => {
             formData.append(`file${index}`, img.file);
         });
 
-        axios.post("http://localhost:7070/api/reviews", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        })
-            .then(() => {
+        // 🖼 여러 개의 이미지 추가
+        selectedImages.forEach((file) => {
+            formData.append("file", file); // 백엔드에서 `@RequestParam("file") MultipartFile file`으로 받음
+        });
+
+        axios
+            .post("http://localhost:7070/api/reviews", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+            .then((res) => {
                 alert("리뷰가 성공적으로 등록되었습니다!");
                 setNewReview((prevReview) => ({
                     ...prevReview,
                     reviewStarRating: 5,
                     reviewContent: "",
                 }));
-                setSelectedImages([]);
+                setSelectedImages([]); // 이미지 초기화
             })
             .catch((err) => {
+                console.error("리뷰 저장 실패", err);
                 alert("백엔드에 리뷰를 저장하지 못했습니다.");
-                console.error(err);
             });
 
         axios.post("http://localhost:7070/api/riderReview", newRiderReview, {
@@ -165,10 +172,10 @@ const UserReviewWrite = () => {
                     <div className="image-preview-container">
                         {selectedImages.map((img, index) => (
                             <div key={index} className="image-preview-wrapper">
-                                <button type="button" className="remove-image" onClick={() => removeImage(index)}>
+                                <div className="remove-image" onClick={() => removeImage(index)}>
                                     ❌
-                                </button>
-                                <img src={img.preview} alt={`업로드 ${index}`} className="image-preview" />
+                                </div>
+                                <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview" />
                             </div>
                         ))}
                     </div>

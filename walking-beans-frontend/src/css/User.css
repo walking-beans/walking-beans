@@ -212,11 +212,25 @@
 .user-review-container button:hover {
     background-color: #d63e00;
 }
-.user-review-container .remove-image{
+.user-review-container .image-preview-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.user-review-container .remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
     display: flex;
-    text-align: center;
-    background-color: red;
-    width: 30px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 /************** UserStoreReview ******************/
@@ -339,6 +353,11 @@
     text-align: left;
     font-size: 14px;
 }
+.user-store-review .review-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .user-store-review .delete-review-btn {
     background-color: #ff4d4d;
@@ -353,4 +372,10 @@
 
 .user-store-review .delete-review-btn:hover {
     background-color: #cc0000;
+}
+
+.user-store-review .review-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin: 5px;
 }

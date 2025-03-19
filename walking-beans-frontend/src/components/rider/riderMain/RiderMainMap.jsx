@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
-import apiRiderService from "../apiRiderService";
+import apiRiderService from "../../../service/apiRiderService";
 import UntakenOrderDetail from "./UntakenOrderDetail";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d"; // 본인 카카오 API 키
-
+const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
+// 692e181593cf35ad46f4a1b3e5489d60
 
 // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
 const getDistance = (lat1, lng1, lat2, lng2) => {
