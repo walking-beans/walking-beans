@@ -4,7 +4,7 @@ import "../../css/User.css";
 import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
 import axios from "axios";
 
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
+const KAKAO_MAP_API_KEY = "08bc5c5b47cde603dc91b98af55fe0e8";
 
 const UserSearchMap = () => {
     const location = useLocation();

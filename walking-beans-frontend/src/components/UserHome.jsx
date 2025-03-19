@@ -5,7 +5,7 @@ import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
 import apiUserService from "../service/apiUserService";
 
-const KAKAO_MAP_API_KEY = "78677225bd8d183bdf1a6eaebd34ea8d";
+const KAKAO_MAP_API_KEY = "08bc5c5b47cde603dc91b98af55fe0e8";
 
 const UserHome = ({ user: initialUser }) => {
     const [userLocation, setUserLocation] = useState(null);
