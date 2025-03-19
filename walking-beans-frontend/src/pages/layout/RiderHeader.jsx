@@ -12,7 +12,7 @@ import supportAgent from "../../assert/svg/riderNav/support_agent.svg";
 import textsms from "../../assert/svg/riderNav/textsms.svg";
 import toggleIcon from "../../assert/svg/menu_black.svg";
 
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import starRatingPath from "../../components/star/starPath";
 
 

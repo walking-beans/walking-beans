@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import {useNavigate} from "react-router-dom";
+import apiRiderService from "../../../service/apiRiderService";
 
 const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // 지구 반지름 (km)
@@ -103,6 +104,7 @@ const RiderMap = () => {
 
     function handleTakingOrder (id) {
         console.log("id : " + id);
+        apiRiderService.updateOrdersByRiderIdAndOrderId(1, id);
         navigate(`/rider/ontheway/${id}`);
     }
 
