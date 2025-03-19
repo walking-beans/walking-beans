@@ -15,8 +15,8 @@ import toggleIcon from "../../assert/svg/menu_black.svg";
 import apiRiderService from "../../service/apiRiderService";
 import starRatingPath from "../../components/star/starPath";
 import apiUserService from "../../service/apiUserService";
-import alarmIcon from "../../assert/svg/alarm.svg";
-import bellIcon from "../../assert/svg/bell.svg";
+import alarmIcon from "../../assert/svg/riderAlarm.svg";
+import bellIcon from "../../assert/svg/riderBell.svg";
 import searchIcon from "../../assert/svg/userNav/search.svg";
 
 

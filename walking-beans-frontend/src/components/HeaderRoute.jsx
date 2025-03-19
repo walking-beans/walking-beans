@@ -38,7 +38,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
         } else if (location.pathname.startsWith("/user/search/map")) {
             setCurrentHeader(<SearchHeader user={user}/>);
             // /mypage || /chat
-        } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat")) {
+        } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat") || location.pathname.startsWith("/alarmlist")) {
             if (user.user_role === "user") {
                 setCurrentHeader(<UserHeader user={user}/>);
             } else if (user.user_role === "rider") {
