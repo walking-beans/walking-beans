@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -135,10 +138,15 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Transactional
     public Long createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
+            // 주문번호(랜덤) 생성)
+            String orderNumber = UUID.randomUUID().toString().replace("-","").substring(0, 8).toUpperCase();
+            requestData.put("orderNumber", orderNumber);
+
             // 기본 데이터 타입 변환 (String → Long & int)
             Long userId = Long.parseLong(requestData.get("userId").toString());
             Long storeId = Long.parseLong(requestData.get("storeId").toString());
@@ -152,7 +160,6 @@ public class OrderServiceImpl implements OrderService {
 
             // `orders` 테이블에 주문 생성
             orderMapper.createOrder(requestData);
-            String orderNumber = (String) requestData.get("orderNumber");
             log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
 
             // `cartItems` 데이터를 `order_items` 테이블에 저장

@@ -1,20 +1,19 @@
-import React from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import orderCartDeleteBtnIconMini from "../../images/user/orderCartDeleteBtnIconMini.svg";
 
-const UserCart = ({
-                      cartId,
-                      menuNames,
-                      menuPrices,
-                      optionNames,
-                      optionPrices,
-                      totalQuantities,
-                      optionContents,
-                      handleDelete,
-                      userId,
-                      optionIds,
-                      updateCart,
-                  }) => {
+const UserSelectMenu = ({
+                            cartId,
+                            menuNames,
+                            menuPrices,
+                            optionNames,
+                            optionPrices,
+                            totalQuantities,
+                            optionContents,
+                            handleDelete,
+                            userId,
+                            optionIds,
+                            updateCart,
+                        }) => {
     const menuList = menuNames ? menuNames.split(",") : [];
     const priceList = menuPrices ? menuPrices.split(",").map(Number) : [];
     const optionList = optionNames ? optionNames.split(",") : [];
@@ -45,7 +44,6 @@ const UserCart = ({
             console.error("장바구니 수량 변경 실패:", error);
         }
     };
-
     return (
         <div>
             {menuList.map((menu, index) => {
@@ -67,22 +65,23 @@ const UserCart = ({
                 const totalPrice = (menuPrice + totalOptionPrice) * quantity;
 
                 return (
-                    <div key={index} className="user-cart-container">
-                        <div className="user-cart-grid">
-                            <div className="user-cart-pricetext">{menu}</div>
-                            <div className="user-cart-pricetext">{totalPrice.toLocaleString()}원</div>
-                        </div>
-
-                        <div className="user-cart-options">
+                    <div key={index} className="user-select-menu-container">
+                        <div className="user-select-mid-text">{menu}</div>
+                        <div className="user-select-options">
                             <div>
                                 {options.length > 0 ? (
-                                    options.map((option, optionIndex) => (
-                                        <div key={optionIndex} className="user-cart-detailtext">
-                                            {`${option} ${optionContents[optionIndex] || ''}`}
-                                            {` (+${(optionPrices[optionIndex] || 0).toLocaleString()}원)`}
-                                        </div>
-                                    ))
+                                    options.map((option, optionIndex) => {
+                                        const isLastOption = optionIndex === options.length - 1;
+                                        return (
+                                            <span key={optionIndex} className="user-cart-detailtext">
+                                                { `${option} ${optionContents[optionIndex] || ''}`}
+                                                { `(+${(optionPrices[optionIndex] || 0).toLocaleString()}원)`}
+                                                {!isLastOption && ', '}
+                                            </span>
+                                        );
+                                    })
                                 ) : null}
+                                <div className="user-select-mid-text">{totalPrice.toLocaleString()}원</div>
                             </div>
 
                             <div className="user-cart-quantity-line">
@@ -132,4 +131,4 @@ const UserCart = ({
     );
 };
 
-export default UserCart;
+export default UserSelectMenu;

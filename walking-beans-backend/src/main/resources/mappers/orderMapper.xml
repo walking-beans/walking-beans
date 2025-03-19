@@ -78,7 +78,6 @@
         VALUES (#{userId}, #{storeId}, #{addressId}, 0, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
     </insert>
 
-
     <!-- 장바구니 내 주문하기 클릭 시 주문 중으로 상태 업데이트-->
     <update id="updateOrderStatusToCart">
         UPDATE orders

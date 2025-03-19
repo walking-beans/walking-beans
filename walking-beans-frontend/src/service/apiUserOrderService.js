@@ -6,14 +6,12 @@ const API_MENU_URL = "http://localhost:7070/api/menu";
 const API_STORE_URL = "http://localhost:7070/api/store";
 const API_OPTION_URL = "http://localhost:7070/api/option";
 const API_ADDRESS_URL = "http://localhost:7070/api/addresses";
-// 추후 이름 수정
-const API_BASE_URL = "http://localhost:7070/api/cart";
 
 const apiUserOrderService = {
 
     getUserCartByUserId: async (userId) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/${userId}`);
+            const response = await axios.get(`${API_CART_URL}/${userId}`);
             console.log("장바구니 데이터 가져오기 성공:", response.data);
             return response.data;
         } catch (error) {
@@ -52,7 +50,7 @@ const apiUserOrderService = {
 
             // 장바구니에 추가
             console.log("장바구니에 추가된 데이터 : ", cartItem);
-            const response = await axios.post(`${API_BASE_URL}/add`, cartItem, {
+            const response = await axios.post(`${API_CART_URL}/add`, cartItem, {
                 headers: {"Content-Type": "application/json"}
             });
             return response.data;
@@ -66,7 +64,7 @@ const apiUserOrderService = {
     addToCart: async (cartItem) => {
         try {
             console.log("장바구니에 추가된 데이터 : ", cartItem);
-            const response = await axios.post(`${API_BASE_URL}/add`, cartItem, {
+            const response = await axios.post(`${API_CART_URL}/add`, cartItem, {
                 headers: {"Content-Type": "application/json"}
             });
             return response.data;
@@ -95,7 +93,7 @@ const apiUserOrderService = {
 
     deleteUserOrderCart: async (cartId) => {
         try {
-            await axios.delete(`${API_BASE_URL}/delete/${cartId}`);
+            await axios.delete(`${API_CART_URL}/delete/${cartId}`);
         } catch (error) {
             console.error("장바구니 삭제 실패:", error);
         }
@@ -105,7 +103,7 @@ const apiUserOrderService = {
         try {
             console.log(`API 요청: 수량 변경 - cartId=${cartId}, cartQuantity=${cartQuantity}`);
 
-            const response = await axios.patch(`${API_BASE_URL}/update`,
+            const response = await axios.patch(`${API_CART_URL}/update`,
                 {cartId, cartQuantity},
                 {headers: {"Content-Type": "application/json"}}
             );
@@ -173,6 +171,19 @@ const apiUserOrderService = {
             setAddress(filteredAddress || "기본 주소가 없습니다. 설정해 주세요");
         } catch (error) {
             console.error("주소 불러오기 실패:", error);
+        }
+    },
+
+    insertOrder: async () => {
+        try {
+            const response = await axios .post(`${API_ORDER_URL}/create`,{
+                headers: {"Content-Type": "application/json"}
+            });
+
+            const data = await response.data;
+            console.log("주문 저장 성공 : ", data.orderId)
+        } catch (error) {
+            console.log("주문 저장 실패 : ", error)
         }
     },
 
