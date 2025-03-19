@@ -4,7 +4,7 @@ import LogoutButton from "./LogoutButton";
 const managementLinks = [
     { text: "메뉴 수정", path: "/owner/menu" },
     { text: "옵션 관리", path: "/owner/menuoption" },
-    { text: "이벤트 설정", path: "/owner/mystore" }
+    { text: "내 가게 정보보기", path: "/owner/mystore" }
 ];
 
 const StoreManagement = ({ ownerName }) => {

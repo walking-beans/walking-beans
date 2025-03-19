@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
 const statusLinks = [
-    { text: "주문 준비중", path: "/owner/order?role=1,2" },
+    { text: "접수대기 주문", path: "/owner/order?role=1,2" },
     { text: "완료된 주문", path: "/owner/order?role=5" },
     { text: "임시영업중지", path: "/owner/mystore" },
     { text: "매출조회", path: "/owner/revenue" },
-    { text: "일정관리", path: "/owner/mystore" },
+    { text: "1:1 채팅", path: "/owner/mystore" },
     { text: "알림", path: "/owner/alarm" }
 ];
 

@@ -1,7 +1,9 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import walking_beans.walking_beans_backend.config.WebSocketHandlerOrder;
 import walking_beans.walking_beans_backend.mapper.CartMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
@@ -15,6 +17,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    // 웹소켓
+    @Autowired
+    private WebSocketHandlerOrder webSocketHandler;
+
 
 
     /**************************************** Leo ****************************************/
@@ -30,12 +37,35 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId) {
+
+
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
     }
 
     @Override
     public Integer updateOrderStatus(long orderId, int orderStatus) {
-        return orderMapper.updateOrderStatus(orderId, orderStatus);
+
+        Integer updatedRows = orderMapper.updateOrderStatus(orderId, orderStatus);
+        System.out.println("업데이트된 행 수: " + updatedRows + ", 상태: " + orderStatus); // 로그
+        //알림받을 조건
+        System.out.println("if 블록 진입 직전");
+        if (orderStatus > 1 ) { // 주문상태 2이상인 주문들만 필터
+            System.out.println("if 블록 진입 성공");
+            try {
+                // 주문 정보 조회 (알림에 필요한 데이터)
+                Orders order = orderMapper.findOrderById(orderId);
+                if (order != null) {
+                    String message = "{\"orderId\": " + orderId +
+                            ", \"orderNumber\": \"" + order.getOrderNumber() +
+                            "\", \"orderStatus\": " + orderStatus + "}";
+                    webSocketHandler.sendOrderUpdate(message);
+                }
+            } catch (Exception e) {
+                System.out.println("예외처리 : "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return updatedRows;
     }
 
     @Override
@@ -165,6 +195,9 @@ public class OrderServiceImpl implements OrderService {
         return latestOrders;
     }
     */
+
+
+
 }
 
 

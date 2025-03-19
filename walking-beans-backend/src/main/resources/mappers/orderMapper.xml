@@ -120,10 +120,9 @@
 
     <!-- 가게 id로 주문번호, 주문상태만 가져오기-->
     <select id="findgetLatestOrderForStore">
-        SELECT order_number, order_status
+        SELECT order_number, order_status, order_id, order_modified_date
         FROM orders
         WHERE store_id = #{storeId}
-        ORDER BY order_create_date DESC;
     </select>
 
     <!-- 주문번호로 전체 정보 가져오기 -->
