@@ -156,6 +156,22 @@
     white-space: nowrap;
 }
 
+.rider-unstatus-btn {
+    background-color: grey;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    white-space: nowrap;
+}
+
 .rider-header-wrapper .rider-status-btn:hover {
     background-color: #FFC107;
 }

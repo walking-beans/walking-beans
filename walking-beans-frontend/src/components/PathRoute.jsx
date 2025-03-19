@@ -57,6 +57,10 @@ function PathRoute() {
     const [selectedStoreId,setSelectedStoreId] = useState();
     const [currentOrderId,setCurrentOrderId] = useState();
 
+    /*** rider ***/
+    // 운행 중 or 퇴근
+    const [riderOnDuty, setRiderOnDuty] = useState(false);
+
 
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
@@ -88,7 +92,10 @@ function PathRoute() {
     return (
         <div className="layout-container">
             <BrowserRouter>
-                <HeaderRoute user={user}/>
+                <HeaderRoute user={user}
+                             riderOnDuty={riderOnDuty}
+                             setRiderOnDuty={setRiderOnDuty}
+                />
                 <div className="content-wrapper">
                     <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
@@ -140,7 +147,11 @@ function PathRoute() {
                                 <Route path="/r/map" element={<RiderMap />} />
 
                                 <Route path="/rider" element={
-                                    <RiderMain/>
+                                    <RiderMain
+                                        user={user}
+                                        riderOnDuty={riderOnDuty}
+                                        setRiderOnDuty={setRiderOnDuty}
+                                    />
                                 }/>
                                 <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>

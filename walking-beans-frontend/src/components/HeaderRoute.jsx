@@ -5,7 +5,7 @@ import RiderHeader from "../pages/layout/RiderHeader";
 import SearchHeader from "../pages/layout/SearchHeader";
 
 
-const HeaderRoute = ({user}) => {
+const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation(); // 현재 URL 확인
     const [currentHeader, setCurrentHeader] = useState(<UserHeader user={user}/>);
 
@@ -27,7 +27,9 @@ const HeaderRoute = ({user}) => {
 
         // rider
         if (location.pathname.startsWith("/rider")) {
-            setCurrentHeader(<RiderHeader user={user}/>);
+            setCurrentHeader(<RiderHeader user={user}
+                                          riderOnDuty={riderOnDuty}
+                                          setRiderOnDuty={setRiderOnDuty}/>);
             // /owner
         } else if (location.pathname.startsWith("/owner")) {
             /** 추후 변경 요망 **/
@@ -40,7 +42,9 @@ const HeaderRoute = ({user}) => {
             if (user.user_role === "user") {
                 setCurrentHeader(<UserHeader user={user}/>);
             } else if (user.user_role === "rider") {
-                setCurrentHeader(<RiderHeader user={user}/>);
+                setCurrentHeader(<RiderHeader user={user}
+                                              riderOnDuty={riderOnDuty}
+                                              setRiderOnDuty={setRiderOnDuty}/>);
             } else if (user.user_role === "owner") {
                 /** 추후 변경 요망 **/
                 setCurrentHeader(<UserHeader user={user}/>);

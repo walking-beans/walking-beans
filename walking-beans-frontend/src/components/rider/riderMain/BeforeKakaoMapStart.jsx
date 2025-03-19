@@ -3,7 +3,7 @@ import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
 
 const KAKAO_MAP_API_KEY = "08bc5c5b47cde603dc91b98af55fe0e8";
 
-const BeforeKakaoMapStart = ({setGetReady}) => {
+const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
 
@@ -68,7 +68,7 @@ const BeforeKakaoMapStart = ({setGetReady}) => {
     return (
         <div>
             <div id="map" style={{ width: "100%", height: "650px" }}></div>
-            <button onClick={()=> {setGetReady(true)}} className="btn btn-info">운행 시작</button>
+            <button onClick={()=> {setRiderOnDuty(true)}} className="btn btn-info">운행 시작</button>
         </div>
     );
 };

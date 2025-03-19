@@ -16,7 +16,7 @@ import apiRiderService from "../../service/apiRiderService";
 import starRatingPath from "../../components/star/starPath";
 
 
-const RiderHeader = ({user}) => {
+const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(user);
@@ -135,12 +135,27 @@ const RiderHeader = ({user}) => {
                                     </div>
                                 </div>
                                 <div className="rider-stars">
-                                    <img src={starPath}/>
+                                    <img style={{ width: "100px" }} src={starPath}/>
                                 </div>
                             </div>
-                            <button className="rider-status-btn">
-                                운행 중
-                            </button>
+                            {
+                                riderOnDuty ? (
+                                    <button
+                                        className="rider-status-btn"
+                                        onClick={() => setRiderOnDuty(true)}
+                                    >
+                                        운행 중
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="rider-unstatus-btn"
+                                        onClick={() => setRiderOnDuty(false)}
+                                    >
+                                        운행 종료
+                                    </button>
+                                )
+                            }
+
                         </div>
 
                         <ul className="rider-nav-menu list-unstyled">

@@ -36,7 +36,7 @@
 .rider_income_total_container {
     display : block;
     padding : 20px;
-    margin : 0 20px;
+    margin : 0 20px 10px 20px;
     width : 560px;
     height : 170px;
     border-radius : 50px;
@@ -96,4 +96,12 @@
 
 .rider_income_table_tr_income_amount {
 
+}
+
+
+.rider_income_table_nodata {
+    padding: 20px 0;
+    color : red;
+    text-align : center;
+    font-size : 20px;
 }

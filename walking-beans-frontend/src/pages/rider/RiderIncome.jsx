@@ -87,8 +87,14 @@ const RiderIncome = () => {
                                 )
                             })
                         ) : (
-                            <tr>
-                                <td colSpan="3" style={{textAlign: 'center'}}>일한 기록이 없습니다.</td>
+                            <tr
+                                className="rider_income_table_nodata_container"
+                            >
+                                <td
+                                    className ="rider_income_table_nodata col-12"
+                                    colSpan="3"
+                                >일한 기록이 없습니다.
+                                </td>
                             </tr>
                         )
                     }
