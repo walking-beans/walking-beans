@@ -23,6 +23,7 @@ public interface ReviewService {
 
     // 리뷰 삭제
     void deleteReview(long reviewId);
+    Reviews findReviewById(long reviewId);
 
     // 이미지 업로드
     String uploadToImgur(MultipartFile file) throws IOException;

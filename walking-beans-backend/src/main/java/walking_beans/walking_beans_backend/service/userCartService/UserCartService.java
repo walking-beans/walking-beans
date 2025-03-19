@@ -18,4 +18,7 @@ public interface UserCartService {
     List<Carts> findUserCart(Long userId);
     void deleteAllCartsByUserId(Long userId);
 
+    void changeStoreIdAndMenu(Long userId, Long storeId);
+
+
 }

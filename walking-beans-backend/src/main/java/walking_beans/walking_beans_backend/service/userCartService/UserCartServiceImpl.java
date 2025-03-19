@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.userCartService;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
@@ -86,5 +87,10 @@ public class UserCartServiceImpl implements UserCartService {
     @Override
     public void deleteAllCartsByUserId(Long userId) {
         userCartMapper.deleteAllCartsByUserId(userId);
+    }
+
+    @Override
+    public void changeStoreIdAndMenu(Long userId, Long storeId) {
+        userCartMapper.changeStoreIdAndMenu(userId, storeId);
     }
 }

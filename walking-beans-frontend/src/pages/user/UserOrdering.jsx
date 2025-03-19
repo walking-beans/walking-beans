@@ -16,6 +16,8 @@ const UserOrdering = () => {
     const [userId, setUserId] = useState(null);
     const [storeId, setStoreId] = useState(null);
     const navigate = useNavigate();
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [user, setUser] = useState(null);
 
     // 로그인 확인
     useEffect(() => {
@@ -66,6 +68,11 @@ const UserOrdering = () => {
                 console.log("카트 데이터 가져오기 실패 : ", err);
             })
     }, [userId]);
+
+    // 결제하기
+    const handlePayment = () => {
+        navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}&addressId=${user.addressId}`)
+    }
 
     return (
         <div className="user-ordering-container">
