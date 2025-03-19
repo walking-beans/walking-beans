@@ -95,9 +95,11 @@ public class UserAPIController {
     }
 
 
+    // 업로드할 이미지
     @Value("${upload-img}")
     private String uploadPath;
 
+    // 프로필 업로드
     @PostMapping("/mypage/{userId}/uploadProfile")
     public ResponseEntity<?> uploadProfileImage(@PathVariable Long userId,
                                                 @RequestParam("file") MultipartFile file) {
@@ -132,8 +134,7 @@ public class UserAPIController {
     }
 
 
-
-
+    // 마이페이지
     @GetMapping("/mypage/{userId}")
     public ResponseEntity<?> getMyPage(@PathVariable("userId") Long userId) {
         Users user = userService.selectUserInfo(userId);
@@ -144,7 +145,14 @@ public class UserAPIController {
 
         return ResponseEntity.ok(user);
     }
+
+    // 회원 탈퇴
+    @DeleteMapping("/unlink/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        userService.deleteUserAccount(userId);
+        return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
+    }
+
+
 }
-
-
 
