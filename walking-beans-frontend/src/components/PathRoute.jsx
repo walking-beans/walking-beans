@@ -37,6 +37,8 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
+import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
 
 
 
@@ -109,7 +111,10 @@ function PathRoute() {
                                 <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                                <Route path="/unlink" element={<AdminMypageUnlink/>}/>
+                                <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
                                 {/* 유저 관련 라우트 */}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
