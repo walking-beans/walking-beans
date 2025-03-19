@@ -1,3 +1,4 @@
+/*
 import {useEffect, useState} from "react";
 
 
@@ -46,4 +47,4 @@ const AdminNewAlarm = () => {
         </div>
     )
 }
-export default AdminNewAlarm;
+export default AdminNewAlarm;*/
