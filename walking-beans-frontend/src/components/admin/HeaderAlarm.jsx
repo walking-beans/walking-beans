@@ -18,7 +18,7 @@ const HeaderAlarm = ({userId}) => {
     useEffect(() => {
         console.log("🔌 WebSocket 연결 시도...");
 
-        const socket = new SockJS("http://localhost:7070/ws-alarm");
+        const socket = new SockJS("https://localhost:7070/ws-alarm");
         const stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
