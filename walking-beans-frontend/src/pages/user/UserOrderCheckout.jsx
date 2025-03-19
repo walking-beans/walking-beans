@@ -9,6 +9,7 @@ import axios from "axios";
 import UserCart from "./UserCart";
 import {selectOptions} from "@testing-library/user-event/dist/select-options";
 import UserSelectMenu from "./UserSelectMenu";
+import tossPayLogo from "../../images/user/tossPay_Logo.svg";
 
 const UserOrderCheckout = () => {
     const [store, setStore] = useState({});
@@ -23,6 +24,7 @@ const UserOrderCheckout = () => {
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;
     const [storeId, setStoreId] = useState(null);
+    const [clicked, setClicked] = useState(null);
 
     // 메뉴 총 금액 계산
     useEffect(() => {
@@ -62,10 +64,10 @@ const UserOrderCheckout = () => {
         if (!userId) return;
 
         axios.get(`http://localhost:7070/api/cart/store/${userId}`)
-            .then(res => {
-                setStoreId(res.data[0].storeId);
-                console.log("setStoreId", setStoreId);
-            })
+    .then(res => {
+            setStoreId(res.data[0].storeId);
+            console.log("setStoreId", setStoreId);
+        })
             .catch(err => console.error("storeId 가져오기 실패:", err));
 
         if (userId && typeof userId !== "string") {
@@ -79,10 +81,10 @@ const UserOrderCheckout = () => {
 
         axios
             .get(`http://localhost:7070/api/cart/${userId}`)
-            .then((res) => {
-                console.log("카트 데이터 가져오기 성공 : ", res.data);
-                setCarts(res.data);
-            })
+    .then((res) => {
+            console.log("카트 데이터 가져오기 성공 : ", res.data);
+            setCarts(res.data);
+        })
             .catch((err) => {
                 console.log("카트 데이터 가져오기 실패 : ", err);
             })
@@ -100,10 +102,25 @@ const UserOrderCheckout = () => {
             .catch(err => console.error("장바구니 삭제 오류:", err));
     };
 
-    // 결제하기
-    const handlePayment = () => {
-        navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}&addressId=${user.addressId}`)
-    }
+    // 결제 방법 선택
+    const handlePayMethodClick = (method) => {
+        setClicked(method);
+        localStorage.setItem("paymentMethod", method); // 선택된 결제 방식을 로컬스토리지에 저장
+    };
+
+    // 결제하기 버튼 클릭
+    const handlePaymentClick = () => {
+        if (clicked === 'tossPay') {
+            console.log('결제 수단 : tossPay');
+            navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}`); // 카드 결제 페이지로 이동
+        } else if (clicked === 'meetPayment') {
+            console.log('결제 수단 : 만나서 결제');
+            navigate(`/sandbox/success`); // 배달 현황 페이지로 이동
+        } else {
+            // 결제 방법이 선택되지 않은 경우
+            alert('결제 방법을 선택해주세요.');
+        }
+    };
 
     return (
         <div className="user-ordering-container">
@@ -121,7 +138,7 @@ const UserOrderCheckout = () => {
                         <div>
                             {/* 기본 주소 선택하면 돌아올 수 있도록 설정 필요 */}
                             <Link to={`/user/insertAddress`}><img src={detailBtn}
-                                                                  alt="배달 주소 리스트"/></Link>
+                                                                alt="배달 주소 리스트"/></Link>
                         </div>
                     </div>
 
@@ -168,7 +185,37 @@ const UserOrderCheckout = () => {
                         <div className="user-order-basic-text-m-0">{store.storeDeliveryTip}원</div>
                     </div>
 
-                    <div className="user-order-click-btn-one" onClick={handlePayment}>
+                    <div className="user-order-hr" alt="구분선"></div>
+
+                    <div className="user-order-bordtext">결제수단</div>
+                    <div className="user-order-margin"></div>
+                    <div className="user-order-click-btn">
+
+                        {/* tossPay */}
+                        <button className={`user-payment-mini-btn ${clicked === 'tossPay' ? 'selected' : ''}`}
+                                onClick={() => handlePayMethodClick('tossPay')}>
+                            <input
+                                type="radio"
+                                className="user-order-btn-none"
+                                checked={clicked === 'tossPay'}
+                            />
+                            신용카드
+                        </button>
+
+                        {/* 만나서 결제 */}
+                        <button className={`user-payment-mini-btn ${clicked === 'meetPayment' ? 'selected' : ''}`}
+                                onClick={() => handlePayMethodClick('meetPayment')}>
+                            <input
+                                type="radio"
+                                className="user-order-btn-none"
+                                checked={clicked === 'meetPayment'}
+                                readOnly
+                            />
+                            만나서 결제
+                        </button>
+                    </div>
+
+                    <div className="user-order-click-btn-one" onClick={handlePaymentClick}>
                         <button className="user-order-btn-b">배달 주문하기</button>
                     </div>
                 </div>

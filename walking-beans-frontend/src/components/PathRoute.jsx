@@ -116,15 +116,15 @@ function PathRoute() {
                                 <Route path="/unlink" element={<AdminMypageUnlink/>}/>
                                 <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
-                                {/* 유저 관련 라우트 */}
+                                {/* 유저 관련 라우트 구현 완료*/}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
 
-                                {/* 주문하기 페이지 */}
+                                {/* 주문하기 페이지 구현 완료*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout />}/>
 
-                                {/* 결제하기 페이지 */}
+                                {/* 결제하기 페이지 구현 중*/}
                                 {/* 1. checkout toss API KEY 인증*/}
-                                <Route path="/checkout" element={<UserPayment />} />
+                                <Route path="/checkout" element={<CheckoutPage />} />
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
                                 <Route path="/sandbox/success" element={<UserSuccess />} />
@@ -132,6 +132,7 @@ function PathRoute() {
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<FailPage />} />
 
+                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
 
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
@@ -145,7 +146,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
+
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
