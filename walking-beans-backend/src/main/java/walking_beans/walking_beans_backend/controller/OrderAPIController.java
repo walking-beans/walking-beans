@@ -15,6 +15,7 @@ import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
+import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class OrderAPIController {
     public ResponseEntity<List<Orders>> getOrdersByNullOfRiderIdInDuty() {
         return ResponseEntity.ok(orderService.getOrdersByNullOfRiderIdInDuty());
     }
+
 
     /**
      * rider 가 '주문 받기' 수령시 therefore, 다른 라이더들이 수령 불가능
@@ -108,8 +110,12 @@ public class OrderAPIController {
 
     // 주문한 유저 정보 가져오기
     @GetMapping("/user/{userId}")
-    public List<Orders> findOrdersByUserId(@PathVariable long userId) {
-        return orderService.findOrdersByUserId(userId);
+    public ResponseEntity<List<UserOrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
+        List<UserOrderDTO> orders = orderService.getOrdersByUserId(userId);
+        if (orders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(orders);
     }
 
     // 주문한 가게 정보 가져오기
@@ -123,6 +129,16 @@ public class OrderAPIController {
     public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
         return orderService.getOrderStatus(orderId);
     }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<UserOrderDTO> getOrder(@PathVariable String orderNumber) {
+        UserOrderDTO order = orderService.getOrderByOrderNumber(orderNumber);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(order);
+    }
+
 
 
 

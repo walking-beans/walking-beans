@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -44,4 +45,9 @@ public interface OrderMapper {
 
     Long createOrder(Map<String, Object> requestData);
 
+    void insertOrderItem(Map<String, Object> orderItemParams);
+
+    UserOrderDTO getOrderByOrderNumber(String orderNumber);
+
+    List<UserOrderDTO> getOrdersByUserId(Long userId);
 }

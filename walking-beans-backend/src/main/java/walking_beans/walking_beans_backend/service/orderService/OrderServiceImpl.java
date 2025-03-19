@@ -8,7 +8,10 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.OrderItems;
+import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Slf4j
@@ -72,6 +75,15 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PaymentMapper paymentMapper;
 
+    // 오더 리스트
+    @Override
+    public UserOrderDTO getOrderByOrderNumber(String orderNumber) {
+        return orderMapper.getOrderByOrderNumber(orderNumber);
+    }
+    @Override
+    public List<UserOrderDTO> getOrdersByUserId(Long userId) {
+        return orderMapper.getOrdersByUserId(userId);
+    }
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
@@ -121,15 +133,69 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+
     @Override
     public Long createOrder(Map<String, Object> requestData) {
-
         log.info("주문 정보 저장 요청: {}", requestData);
 
-        Long orderId = orderMapper.createOrder(requestData);
-        log.info(" 주문 저장 완료! 주문 ID: {}", orderId);
+        try {
+            // 기본 데이터 타입 변환 (String → Long & int)
+            Long userId = Long.parseLong(requestData.get("userId").toString());
+            Long storeId = Long.parseLong(requestData.get("storeId").toString());
+            Long addressId = Long.parseLong(requestData.get("addressId").toString());
+            int orderTotalPrice = Integer.parseInt(requestData.get("orderTotalPrice").toString());
 
-        return orderId;
+            requestData.put("userId", userId);
+            requestData.put("storeId", storeId);
+            requestData.put("addressId", addressId);
+            requestData.put("orderTotalPrice", orderTotalPrice);
+
+            // `orders` 테이블에 주문 생성
+            orderMapper.createOrder(requestData);
+            String orderNumber = (String) requestData.get("orderNumber");
+            log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
+
+            // `cartItems` 데이터를 `order_items` 테이블에 저장
+            List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestData.get("cartItems");
+            log.info(" cartItems: {}", cartItems);
+
+            if (cartItems != null && !cartItems.isEmpty()) {
+                for (Map<String, Object> item : cartItems) {
+                    // `menuId` 변환
+                    Long menuId = Long.parseLong(item.get("menuId").toString());
+
+                    // `optionId` 처리 (여러 개일 경우 첫 번째 옵션만 저장)
+                    String optionIds = item.get("optionIds").toString();
+                    Long optionId = null;
+                    if (optionIds != null && !optionIds.isEmpty()) {
+                        String[] optionIdArray = optionIds.split(",");
+                        optionId = Long.parseLong(optionIdArray[0]); // 첫 번째 옵션만 저장
+                    }
+
+                    //  `quantity` 변환
+                    int quantity = Integer.parseInt(item.get("totalQuantities").toString());
+
+                    // `OrderItems` 객체 생성
+                    OrderItems orderItem = new OrderItems(null, orderNumber, menuId, optionId != null ? optionId.toString() : null, quantity);
+
+                    // MyBatis에 전달할 데이터 생성
+                    Map<String, Object> orderItemParams = new HashMap<>();
+                    orderItemParams.put("orderNumber", orderNumber);
+                    orderItemParams.put("menuId", orderItem.getMenuId());
+                    orderItemParams.put("optionId", orderItem.getOptionId());
+                    orderItemParams.put("quantity", orderItem.getQuantity());
+
+                    // `order_items` 테이블에 삽입
+                    orderMapper.insertOrderItem(orderItemParams);
+                    log.info("주문 아이템 저장 완료! 주문 번호: {}, 메뉴 ID: {}, 옵션 ID: {}, 수량: {}", orderNumber, menuId, optionId, quantity);
+                }
+            }
+
+            return userId;
+        } catch (Exception e) {
+            log.error("❌ 주문 저장 중 오류 발생: ", e);
+            throw new RuntimeException("주문 저장 실패");
+        }
     }
 
 }
