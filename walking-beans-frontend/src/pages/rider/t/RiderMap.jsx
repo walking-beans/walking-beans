@@ -3,7 +3,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import {useNavigate} from "react-router-dom";
 import apiRiderService from "../../../service/apiRiderService";
 
-const getDistance = (lat1, lon1, lat2, lon2) => {
+/*const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // 지구 반지름 (km)
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -15,7 +15,7 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-};
+};*/
 
 const RiderMap = () => {
     const navigate = useNavigate();
