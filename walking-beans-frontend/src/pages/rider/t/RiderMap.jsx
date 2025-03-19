@@ -71,16 +71,13 @@ const RiderMap = () => {
             }, {});
         }
 
-        fetch(`http://localhost:7070/api/order/riderIdOnDuty`)
+        fetch(`http://localhost:7070/api/order/riderIdOnDuty?lat=${location.lat}&lng=${location.lng}`)
             .then((response) => response.json())
             .then((data) => {
                 const firstOrders = Object.values(data)
                     .map(group => group[0]) // 각 배열의 첫 번째 요소만 가져옴
                     .filter(Boolean);
-                const filteredOrders = firstOrders.filter(order =>
-                    getDistance(location.lat, location.lng, order.orderLatitude, order.orderLongitude) <= 20
-                );
-                setTestStore(filteredOrders);
+                setTestStore(firstOrders);
                 console.log("testOrders : " + testStore);
                 setTestOrders(data);
             })
