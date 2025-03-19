@@ -10,6 +10,7 @@ import walking_beans.walking_beans_backend.service.reviewService.ReviewService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +34,22 @@ public class ReviewAPIController {
             @RequestParam("orderId") Long orderId,
             @RequestParam("reviewStarRating") int reviewStarRating,
             @RequestParam("reviewContent") String reviewContent,
-            @RequestParam(value = "file", required = false) MultipartFile file
+            @RequestParam(value = "file", required = false) MultipartFile[] files // 🔥 여러 개의 파일 받기
     ) {
         try {
-            // 이미지 업로드 (있을 경우)
-            String imageUrl = (file != null && !file.isEmpty()) ? reviewService.uploadToImgur(file) : null;
+            List<String> imageUrls = new ArrayList<>();
+
+            // ✅ 여러 개의 이미지 업로드 처리
+            if (files != null) {
+                for (MultipartFile file : files) {
+                    if (!file.isEmpty()) {
+                        String imageUrl = reviewService.uploadToImgur(file);
+                        if (imageUrl != null) {
+                            imageUrls.add(imageUrl);
+                        }
+                    }
+                }
+            }
 
             // ✅ `Reviews` 객체 생성 후 `setter` 사용
             Reviews review = new Reviews();
@@ -46,7 +58,7 @@ public class ReviewAPIController {
             review.setOrderId(orderId);
             review.setReviewStarRating(reviewStarRating);
             review.setReviewContent(reviewContent);
-            review.setReviewPictureUrl(imageUrl);
+            review.setReviewPictureUrl(String.join(",", imageUrls)); // ⭐ 여러 개의 이미지 URL을 쉼표로 구분하여 저장
             review.setReviewCreatedDate(LocalDateTime.now());
             review.setReviewModifiedDate(LocalDateTime.now());
 

@@ -112,20 +112,24 @@ const UserStoreReview = () => {
                         <div key={review.reviewId} className="review-card">
                             <div className="review-header">
                                 <span className="review-user">{review.userName || "익명"}</span>
-                                <span className="review-date">{review.reviewCreatedDate?.split("T")[0]}</span>
+                                <div className="review-right">
+                                    <span className="review-date">{review.reviewCreatedDate?.split("T")[0]}</span>
+                                    {userId === review.userId && (
+                                        <button className="delete-review-btn" onClick={() => handleDeleteReview(review.reviewId)}>
+                                            삭제
+                                        </button>
+                                    )}
+                                </div>
                             </div>
+
                             <div className="review-stars">
                                 {"★".repeat(review.reviewStarRating)}{"☆".repeat(5 - review.reviewStarRating)}
                             </div>
                             <p className="review-content">{review.reviewContent}</p>
-                            {review.reviewPictureUrl && (
-                                <img src={review.reviewPictureUrl} alt="리뷰 이미지" className="review-image" />
-                            )}
-                            {userId === review.userId && (
-                                <button className="delete-review-btn" onClick={() => handleDeleteReview(review.reviewId)}>
-                                    삭제
-                                </button>
-                            )}
+                            {review.reviewPictureUrl && review.reviewPictureUrl.split(",").map((url, idx) => (
+                                <img key={idx} src={url.trim()} alt={`리뷰 이미지 ${idx}`} className="review-image" />
+                            ))}
+
                         </div>
                     ))
                 ) : (
