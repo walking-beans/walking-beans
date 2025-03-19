@@ -11,12 +11,12 @@ public interface AlarmService {
     void sendAlarm(Alarms alarm);
 
     void sendMessage(Alarms alarms);
-
+*/
     List<Alarms> getUserAlarmList(int userId);
 
     void deleteAllAlarm(byte userId);
-*/
-    void sendNotification(Long storeId, String message);
-    List<Alarms> getNotificationsByStoreId(Long storeId);
+
+    void sendNotification(Alarms alarm);
+    //List<Alarms> getNotificationsByStoreId(Long storeId);
     void markNotificationAsRead(Long notificationId);
 }

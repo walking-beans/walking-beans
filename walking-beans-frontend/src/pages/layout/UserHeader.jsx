@@ -15,6 +15,7 @@ import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import userIcon from "../../assert/svg/user.svg";
 import apiUserService from "../../service/apiUserService";
+import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
 const UserHeader = ({user}) => {
     const location = useLocation();
@@ -176,7 +177,7 @@ const UserHeader = ({user}) => {
                     </div>
                     <div className="user-menu-container">
                         {currentUser && (
-                            <>
+                            <>{/*
                                 <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
                                     {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
@@ -208,7 +209,8 @@ const UserHeader = ({user}) => {
                                             </div>
                                         )}
                                     </div>
-                                )}
+                                )}*/}
+                                <HeaderAlarm userId={currentUser.user_id} />
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>

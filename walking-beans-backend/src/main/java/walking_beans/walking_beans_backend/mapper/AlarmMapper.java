@@ -16,10 +16,10 @@ public interface AlarmMapper {
     void deleteAllAlarm(byte userId);
 
     //  알림 저장
-    void insertAlarm(@Param("userId") Long userId, @Param("alarmContent") String alarmContent);
+    //void insertAlarm(@Param("userId") Long userId, @Param("alarmContent") String alarmContent);
 
     //  특정 가게의 알림 조회
-    List<Alarms> getNotificationsByStoreId(@Param("userId") Long userId);
+    //List<Alarms> getNotificationsByStoreId(@Param("userId") Long userId);
 
     // 특정 알림을 읽음 처리
     void markNotificationAsRead(@Param("alarmId") Long alarmId);

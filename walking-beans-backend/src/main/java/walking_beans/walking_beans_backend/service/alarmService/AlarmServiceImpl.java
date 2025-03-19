@@ -66,21 +66,31 @@ public class AlarmServiceImpl implements AlarmService {
 
     // 알림 저장 (WebSocket으로 주문이 오면 이 함수 실행)
     @Override
-    public void sendNotification(Long storeId, String message) {
-        alarmMapper.insertAlarm(storeId, message);
-        log.info("알림 저장 완료 - 매장 ID: {}, 메시지: {}", storeId, message);
+    public void sendNotification(Alarms alarm) {
+        alarmMapper.insertAlarm(alarm);
+        log.info("알림 저장 완료" + alarm);
     }
 
     // 특정 가게의 알림 목록 조회
-    @Override
-    public List<Alarms> getNotificationsByStoreId(Long storeId) {
-        return alarmMapper.getNotificationsByStoreId(storeId);
-    }
+    /*@Override
+    public List<Alarms> getNotificationsByStoreId(Long userId) {
+        return alarmMapper.getNotificationsByStoreId(userId);
+    }*/
 
     //  특정 알림 읽음 처리
     @Override
-    public void markNotificationAsRead(Long notificationId) {
-        alarmMapper.markNotificationAsRead(notificationId);
-        log.info("알림 읽음 처리 완료 - 알림 ID: {}", notificationId);
+    public void markNotificationAsRead(Long alarmId) {
+        alarmMapper.markNotificationAsRead(alarmId);
+        log.info("알림 읽음 처리 완료 - 알림 ID: {}", alarmId);
+    }
+
+    @Override
+    public List<Alarms> getUserAlarmList(int userId) {
+        return alarmMapper.getUserAlarmList(userId);
+    }
+
+    @Override
+    public void deleteAllAlarm(byte userId) {
+        alarmMapper.deleteAllAlarm(userId);
     }
 }
