@@ -43,6 +43,7 @@ const RiderOntheway = () => {
     );
 }
 */
+/*
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import {useParams} from "react-router-dom";
@@ -118,4 +119,20 @@ const RiderOntheway = () => {
     );
 };
 
-export default RiderOntheway;
+/!*const startNavigation = (start, end) => {
+        const appKey = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 여기에 본인의 카카오 앱 키 입력
+        const url = `https://map.kakao.com/link/to/${end.name},${end.lat},${end.lng}`;
+
+        // 모바일 환경인지 확인 후, 내비게이션 실행
+        window.location.href = url;
+    };
+
+    return (
+        <button onClick={() => startNavigation({ lat: 37.5665, lng: 126.9780 },
+            { name: "강남역", lat: 37.4979, lng: 127.0276 })}>
+            내비게이션 시작
+        </button>
+    )*!/
+
+export default RiderOntheway;*/
+
