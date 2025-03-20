@@ -1,10 +1,9 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import RiderOrderDetail from "./RiderOrderDetail";
 import RiderOrderStatus from "./RiderOrderStatus";
 import "../../../css/rider/RiderOrderStatus.css";
 
-const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
+const UntakenOrderDetail = ({selectedStore, riderLocation}) => {
 
     const navigate = useNavigate();
 
@@ -50,8 +49,8 @@ const UntakenOrderDetail = ({userAddress, selectedStore, riderLocation}) => {
                 <div>
                     <span className="client_circle_span"></span>
                     <span className="client_name">고객</span>
-                    <span className="client_distance">{(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, userAddress?.addressLatitude, userAddress?.addressLongitude)).toFixed(1)}km</span>
-                    <p className="client_address">{userAddress?.address} {userAddress?.detailedAddress}</p>
+                    <span className="client_distance">{(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, selectedStore?.orderLatitude, selectedStore?.orderLongitude)).toFixed(1)}km</span>
+                    <p className="client_address">{selectedStore?.orderAddress} {selectedStore?.orderDetailedAddress}</p>
                     <hr />
                 </div>
 
