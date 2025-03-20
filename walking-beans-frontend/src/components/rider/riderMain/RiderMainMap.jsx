@@ -31,12 +31,16 @@ const RiderMainMap = () => {
     const [riderLocation, setRiderLocation] = useState({lat: 37.498095, lng: 127.028391});
     // untaken orders
     const [stores, setStores] = useState([]);
-    // rider 가 선택한 untaken order detail
-    const [selectedStore, setSelectedStore] = useState(null);
-    // rider 가 untaken order detail 선택했는지 확인
-    const [checkingSelectedStore, setCheckingSelectedStore] = useState(false);
 
     const [orders, setOrders] = useState({});
+
+    // rider 가 untaken order detail 선택했는지 확인
+    const [checkingSelectedStore, setCheckingSelectedStore] = useState(false);
+    const [checkingSelectedOrder, setCheckingSelectedOrder] = useState(false);
+
+    const [selectedStoreId, setSelectedStoreId] = useState(0);
+
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
    /* // apiRiderService.getStoreInfoInRiderMain(setStores) 로 현재 주문 내역들 가져오기
     useEffect(() => {
@@ -164,9 +168,8 @@ const RiderMainMap = () => {
                         // map 중심 가게 중심으로 바꾸기
                         map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
 
-                        setSelectedStore(store);
                         setCheckingSelectedStore(true);
-
+                        setSelectedStoreId(store.storeId);
                     });
 
                 });
@@ -185,12 +188,16 @@ const RiderMainMap = () => {
 
             {/* 가게에 따른 untaken 주문들 출력 */}
             {
-                checkingSelectedStore && <RiderMainSelectedStore selectedStore={selectedStore} />
+                checkingSelectedStore && <RiderMainSelectedStore orders={orders}
+                                                                 storeId={selectedStoreId}
+                                                                 setSelectedOrder={setSelectedOrder}
+                                                                 setCheckingSelectedOrder={setCheckingSelectedOrder}/>
             }
 
             {/* untaken 주문들 중 하나 클릭했을 때 보여줄 UI && 주문 받기 */}
             {
-
+                checkingSelectedOrder && <UntakenOrderDetail selectedOrder={selectedOrder}
+                                                             riderLocation={riderLocation}/>
             }
         </div>
     );

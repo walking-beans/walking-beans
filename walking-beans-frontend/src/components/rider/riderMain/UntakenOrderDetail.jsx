@@ -3,16 +3,16 @@ import {useEffect} from "react";
 import RiderOrderStatus from "./RiderOrderStatus";
 import "../../../css/rider/RiderOrderStatus.css";
 
-const UntakenOrderDetail = ({selectedStore, riderLocation}) => {
+const UntakenOrderDetail = ({selectedOrder, riderLocation}) => {
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("UntakenOrder selected Store : " + selectedStore);
+        console.log("UntakenOrder selected Store : " + selectedOrder);
     }, []);
 
     const goToDetail = () => {
-        navigate(`/rider/ontheway/${selectedStore.orderId}`);
+        navigate(`/rider/ontheway/${selectedOrder.orderId}`);
     }
 
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
@@ -33,13 +33,13 @@ const UntakenOrderDetail = ({selectedStore, riderLocation}) => {
     return (
         <div className="untaken_order_detail_container">
             <div className="untaken_order_detail_div">
-                <p className="untaken_order_detail_div_deliveryfee">배달료 {(parseInt(selectedStore.storeDeliveryTip)).toLocaleString()}원</p>
+                <p className="untaken_order_detail_div_deliveryfee">배달료 {(parseInt(selectedOrder.storeDeliveryTip)).toLocaleString()}원</p>
                 <hr />
                 <div>
                     <span className="store_circle_span"></span>
-                    <span className="store_name">{selectedStore?.storeName}</span>
-                    <span className="store_distance">{(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedStore?.storeLatitude, selectedStore?.storeLongitude)).toFixed(1)}km</span>
-                    <p className="store_address">{selectedStore?.storeAddress}</p>
+                    <span className="store_name">{selectedOrder?.storeName}</span>
+                    <span className="store_distance">{(getDistance(riderLocation?.lat,  riderLocation?.lng, selectedOrder?.storeLatitude, selectedOrder?.storeLongitude)).toFixed(1)}km</span>
+                    <p className="store_address">{selectedOrder?.storeAddress}</p>
                 </div>
                 <div className="btw_circles_container">
                     <p className="btw_circles"></p>
@@ -49,15 +49,15 @@ const UntakenOrderDetail = ({selectedStore, riderLocation}) => {
                 <div>
                     <span className="client_circle_span"></span>
                     <span className="client_name">고객</span>
-                    <span className="client_distance">{(getDistance(selectedStore?.storeLatitude, selectedStore?.storeLongitude, selectedStore?.orderLatitude, selectedStore?.orderLongitude)).toFixed(1)}km</span>
-                    <p className="client_address">{selectedStore?.orderAddress} {selectedStore?.orderDetailedAddress}</p>
+                    <span className="client_distance">{(getDistance(selectedOrder?.storeLatitude, selectedOrder?.storeLongitude, selectedOrder?.orderLatitude, selectedOrder?.orderLongitude)).toFixed(1)}km</span>
+                    <p className="client_address">{selectedOrder?.orderAddress} {selectedOrder?.orderDetailedAddress}</p>
                     <hr />
                 </div>
 
             </div>
 
             <RiderOrderStatus
-                orderId={selectedStore?.orderId}
+                orderId={selectedOrder?.orderId}
                 message="배달 시간이 초과되었습니다."
                 css={
                     {
