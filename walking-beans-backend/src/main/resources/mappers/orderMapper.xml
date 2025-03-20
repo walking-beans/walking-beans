@@ -145,7 +145,7 @@
                order_number,
                delivery_address,
                total_payment,
-               special_requests,
+               order_requests,
                order_list
         FROM user_orders_view
         WHERE user_id = #{userId}
@@ -161,7 +161,7 @@
                order_number,
                delivery_address,
                total_payment,
-               special_requests,
+               order_requests,
                order_list
         FROM user_orders_view
         WHERE order_number = #{orderNumber}

@@ -16,6 +16,6 @@ public class UserOrderDTO {
     private String orderNumber;
     private String deliveryAddress;
     private int totalPayment;
-    private String specialRequests;
+    private String orderRequests;
     private String orderList;
 }
