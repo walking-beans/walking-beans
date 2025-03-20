@@ -1,11 +1,14 @@
 package walking_beans.walking_beans_backend.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.service.orderService.OrderService;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.List;
@@ -17,6 +20,23 @@ public class StoreAPIController {
 
     @Autowired
     private StoreServiceImpl storeService;
+    @Autowired
+    private OrderService orderService;
+/*
+    /**소유권 확인용도
+     *
+     * @param session
+     * @return
+
+    @GetMapping("/owner")
+    public ResponseEntity<?> getStoreOwner(HttpSession session) {
+        long userId = (long) session.getAttribute("userId");
+        if (userId == 0) {return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인필요");}
+        Long storeId = storeService.getStoreIdByUserId(userId);
+        return ResponseEntity.ok("가게 Id : " + storeId);
+    }
+
+*/
 
     /**매장 전체정보 불러오기
      * List<Stores>

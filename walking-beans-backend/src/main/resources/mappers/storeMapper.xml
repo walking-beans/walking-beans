@@ -136,10 +136,10 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     </update>
 
     <!-- 가게 정보(메뉴,메뉴옵션,가게) 조작 권한 검증-->
-    <select id="findByIdAndOwner">
-        SELECT store_id, user_id
+    <select id="getStoreIdByUserId">
+        SELECT store_id AS storeId, user_id As userId
         FROM stores
-        WHERE store_id = #{storeId} AND user_id = #{userId}
+        WHERE user_id = #{userId}
     </select>
 
     <!--매장정보 삭제하기 -->

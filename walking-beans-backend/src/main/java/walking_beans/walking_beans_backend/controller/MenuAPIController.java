@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
 import walking_beans.walking_beans_backend.model.dto.Menu;
 import walking_beans.walking_beans_backend.service.menuService.MenuServiceImpl;
 
@@ -83,17 +84,16 @@ public class MenuAPIController {
      *      * @param menuPictureUrl
      */
     @PutMapping("/owner/{storeId}/menu/{menuId}")
-    public ResponseEntity updateMenu( @PathVariable("storeId")long storeId,
-                                      @PathVariable("menuId") long menuId,
-                                     @RequestParam("menuName") String menuName,
-                                     @RequestParam("menuPrice") int menuPrice,
-                                     @RequestParam("menuDescription") String menuDescription,
-                                     @RequestParam("menuCategory") String menuCategory,
-                                     @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl,
-                                    HttpSession session) {
-        String userId = (String)session.getAttribute("userId");// 세션에 저장된 userId
-
-        menuService.updateMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
+    @OwnershipCheck
+    public ResponseEntity<?> updateMenu(   HttpSession session,
+                                           @PathVariable("storeId")long storeId,
+                                           @PathVariable("menuId") long menuId,
+                                           @RequestParam("menuName") String menuName,
+                                           @RequestParam("menuPrice") int menuPrice,
+                                           @RequestParam("menuDescription") String menuDescription,
+                                           @RequestParam("menuCategory") String menuCategory,
+                                           @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
+                                  ) {
 
         return ResponseEntity.ok("메뉴 수정 완료");
     }

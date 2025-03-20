@@ -54,6 +54,11 @@ public class StoreServiceImpl implements StoreService {
         storeMapper.updateStores(stores);
     }
 
+    @Override
+    public long getStoreIdByUserId(long userId) {
+        return 0;
+    }
+
     // 수정시 권한검증
     @Override
     public boolean isStoreOwner(long storeId, long userId) {

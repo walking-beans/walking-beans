@@ -132,5 +132,11 @@
         WHERE order_number = #{orderNumber};
     </select>
 
+    <!-- 가게 주인 확인용 -->
+    <select id="findByUserId">
+        SELECT store_id, user_id
+        FROM stores
+        WHERE user_id = #{userId}
+    </select>
 
 </mapper>

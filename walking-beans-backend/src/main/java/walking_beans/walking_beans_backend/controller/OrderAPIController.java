@@ -16,7 +16,9 @@ import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
+import walking_beans.walking_beans_backend.service.paymentService.PaymentServiceImpl;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,7 +29,8 @@ import java.util.concurrent.CompletableFuture;
 public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
-
+    @Autowired
+    private AlarmServiceImpl alarmService;
     /**************************************** LEO ****************************************/
     /**
      * 주문 번호에 따른 주문 정보
@@ -71,7 +74,9 @@ public class OrderAPIController {
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
 
+
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
+
     }
 
     @GetMapping("/riderIdOnDuty")

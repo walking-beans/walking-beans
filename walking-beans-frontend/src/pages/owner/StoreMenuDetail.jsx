@@ -78,7 +78,7 @@ const StoreMenuDetail = () => {
         }
         console.log(submitData);
         axios
-            .put(`http://localhost:7070/api/menu//owner/${storeId}/menu/${menuId}`,
+            .put(`http://localhost:7070/api/menu/owner/${storeId}/menu/${menuId}`,
                 submitData,
                 {
                     headers: {
