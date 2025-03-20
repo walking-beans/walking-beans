@@ -12,7 +12,7 @@ import riderBellIcon from "../../assert/svg/riderBell.svg";
 import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
 
 
-const HeaderAlarm = ({userId, bell = false}) => {
+const HeaderAlarm = ({userId, bell}) => {
     const [alarmMessages, setAlarmMessages] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글

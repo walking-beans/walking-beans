@@ -128,7 +128,7 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-                                <HeaderAlarm userId={currentUser.user_id} />
+                                <HeaderAlarm userId={currentUser.user_id} bell={false} />
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>
