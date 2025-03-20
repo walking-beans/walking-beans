@@ -84,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
     public UserOrderDTO getOrderByOrderNumber(String orderNumber) {
         return orderMapper.getOrderByOrderNumber(orderNumber);
     }
+
     @Override
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
@@ -140,19 +141,28 @@ public class OrderServiceImpl implements OrderService {
     // orderNumber 영어 대문자, 숫자 랜덤 8자리
     public class OrderNumberGenerator {
         public static String generateOrderNumber() {
-            return UUID.randomUUID().toString().replace("-","").substring(0, 8).toUpperCase();
+            return UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
         }
     }
 
     @Override
-    @Transactional
     public Long createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
             // 주문번호(랜덤) 생성)
-            String orderNumber = OrderNumberGenerator.generateOrderNumber();
+            String orderNumber = requestData.get("orderNumber").toString();
+            if (orderNumber == null || orderNumber.isEmpty()) {
+                orderNumber = OrderNumberGenerator.generateOrderNumber();
+            }
             requestData.put("orderNumber", orderNumber);
+
+            // 요청사항
+            if (requestData.containsKey("orderRequests")) {
+                log.info("요청사항: {}", requestData.get("orderRequests"));
+            } else {
+                log.warn("요청사항이 없습니다.");
+            }
 
             // 기본 데이터 타입 변환 (String → Long & int)
             Long userId = Long.parseLong(requestData.get("userId").toString());

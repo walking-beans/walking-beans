@@ -147,6 +147,20 @@ const UserOrderCheckout = () => {
         }
     };
 
+    // 작성한 요청사항 유지
+    useEffect(() => {
+        const savedRequests = localStorage.getItem("orderRequests");
+        if (savedRequests) {
+            setOrderRequests(savedRequests);
+        }
+    }, []);
+
+    const handleRequestsChange = (e) => {
+        const newValue = e.target.value;
+        setOrderRequests(newValue);
+        localStorage.setItem("orderRequests", newValue);
+    };
+
     return (
         <div className="user-ordering-container">
             <div className="user-ordering">
@@ -175,7 +189,7 @@ const UserOrderCheckout = () => {
                         type="text"
                         placeholder="예) 견과류는 빼주시고 문 앞에 놔주세요 (초인종 X)"
                         value={orderRequests}
-                        onChange={(e) => setOrderRequests(e.target.value)}
+                        onChange={handleRequestsChange}
                     />
 
                     <div className="user-order-hr" alt="구분선"></div>
