@@ -1,10 +1,13 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
@@ -43,6 +46,7 @@ public class TossPaymentController {
      * @return
      */
     @PostMapping("/confirm")
+    @Transactional
     public ResponseEntity<Map<String, Object>> confirmPayment(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
         try {
             log.info("결제 승인 요청: {}", requestData);
@@ -64,9 +68,12 @@ public class TossPaymentController {
             }
 
             return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            log.error("결제 승인 실패:", e);
-            return ResponseEntity.badRequest().body(Map.of("error", "결제 승인 실패"));
+        } catch (Exception e) {
+            log.error("결제 승인 실패: {}", e.getMessage());
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "주문 처리 실패: " + e.getMessage()
+            );
         }
     }
 

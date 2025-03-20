@@ -450,8 +450,20 @@
 
 .user-order-loading {
     display: block;
+    text-align: center;
 }
 
 .user-order-loading img{
+    display: inline-block;
+    margin: 30px auto;
+}
+
+.user-order-a-text {
+    font-size: 20px;
+    color: #5A3D21;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    text-decoration-line: none;
     margin: 30px;
 }

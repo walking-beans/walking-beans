@@ -9,6 +9,7 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
 import walking_beans.walking_beans_backend.model.vo.OrderItems;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
@@ -136,6 +137,12 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+    // orderNumber 영어 대문자, 숫자 랜덤 8자리
+    public class OrderNumberGenerator {
+        public static String generateOrderNumber() {
+            return UUID.randomUUID().toString().replace("-","").substring(0, 8).toUpperCase();
+        }
+    }
 
     @Override
     @Transactional
@@ -144,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             // 주문번호(랜덤) 생성)
-            String orderNumber = UUID.randomUUID().toString().replace("-","").substring(0, 8).toUpperCase();
+            String orderNumber = OrderNumberGenerator.generateOrderNumber();
             requestData.put("orderNumber", orderNumber);
 
             // 기본 데이터 타입 변환 (String → Long & int)
@@ -161,6 +168,7 @@ public class OrderServiceImpl implements OrderService {
             // `orders` 테이블에 주문 생성
             orderMapper.createOrder(requestData);
             log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
+            log.info("▶ orders 테이블 삽입 데이터: {}", requestData);
 
             // `cartItems` 데이터를 `order_items` 테이블에 저장
             List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestData.get("cartItems");

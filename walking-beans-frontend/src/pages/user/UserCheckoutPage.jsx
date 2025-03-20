@@ -2,17 +2,22 @@ import React, {useEffect, useRef, useState} from "react";
 import {loadTossPayments, ANONYMOUS} from "@tosspayments/tosspayments-sdk";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
-const generateRandomString = () => window.btoa(Math.random()).slice(0, 20);
+const generateOrderNumber = () => {
+    const uuid = uuidv4().replace(/-/g, '');
+    return uuid.substring(0, 8).toUpperCase();  // 8자리만 사용
+};
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 
-export function CheckoutPage() {
+export function UserCheckoutPage() {
     const location = useLocation();
     const navigate = useNavigate();
     const totalAmount = new URLSearchParams(location.search).get("totalAmount") || "0";
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;
+    const [orderRequests, setOrderRequests] = useState("");
 
     const [widgets, setWidgets] = useState(null);
     const [amount, setAmount] = useState({
@@ -29,13 +34,13 @@ export function CheckoutPage() {
 
     useEffect(() => {
         async function fetchPaymentWidgets() {
-            if (widgetInitialized.current) return; // ✅ 이미 위젯이 생성되었으면 다시 실행하지 않음
+            if (widgetInitialized.current) return; // 이미 위젯이 생성되었으면 다시 실행하지 않음
 
             const tossPayments = await loadTossPayments(clientKey);
             const newWidgets = tossPayments.widgets({customerKey: ANONYMOUS});
 
             setWidgets(newWidgets);
-            widgetInitialized.current = true; // ✅ 위젯이 생성되었음을 표시
+            widgetInitialized.current = true;
         }
 
         fetchPaymentWidgets();
@@ -99,7 +104,7 @@ export function CheckoutPage() {
                             className="user-order-btn-b"
                             onClick={async () => {
                                 try {
-                                    const orderId = generateRandomString();
+                                    const orderId = generateOrderNumber();
                                     const orderName = "장바구니 결제";
                                     const totalAmountValue = Number(totalAmount);
                                     const customerEmail = user?.user_email || "customer123@gmail.com";
@@ -111,7 +116,8 @@ export function CheckoutPage() {
                                         customerEmail,
                                         userId,
                                         storeId,
-                                        addressId
+                                        addressId,
+                                        orderRequests
                                     });
 
                                     const response = await axios.post("http://localhost:7070/api/payment/request", {
@@ -121,7 +127,8 @@ export function CheckoutPage() {
                                         customerEmail,
                                         userId,
                                         storeId,
-                                        addressId
+                                        addressId,
+                                        orderRequests
                                     });
 
                                     console.log("결제 요청 성공:", response.data);
@@ -159,4 +166,4 @@ export function CheckoutPage() {
     );
 }
 
-export default CheckoutPage;
+export default UserCheckoutPage;
