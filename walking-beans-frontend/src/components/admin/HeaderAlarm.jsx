@@ -7,8 +7,11 @@ import bellIcon from "../../assert/svg/bell.svg";
 import alarmIcon from "../../assert/svg/alarm.svg";
 import "../../pages/layout/UserHeader.css";
 
+import riderBellIcon from "../../assert/svg/riderBell.svg";
+import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
 
-const HeaderAlarm = ({userId}) => {
+
+const HeaderAlarm = ({userId, bell}) => {
     const [alarmMessages, setAlarmMessages] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
@@ -18,7 +21,7 @@ const HeaderAlarm = ({userId}) => {
     useEffect(() => {
         console.log("🔌 WebSocket 연결 시도...");
 
-        const socket = new SockJS("https://localhost:7070/ws-alarm");
+        const socket = new SockJS("http://localhost:7070/ws-alarm");
         const stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
