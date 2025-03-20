@@ -10,10 +10,14 @@
 
     <!-- 리뷰 추가 -->
     <insert id="insertReview">
-        INSERT INTO Reviews (user_id, store_id, review_star_rating, review_content, review_picture_url)
-        SELECT #{userId}, #{storeId}, #{reviewStarRating}, #{reviewContent}, #{reviewPictureUrl}
-        FROM Stores
-        WHERE store_id = #{storeId}
+        INSERT INTO Reviews (
+            order_id, user_id, store_id, review_star_rating, review_content,
+            review_created_date, review_modified_date, review_picture_url
+        )
+        VALUES (
+                   #{orderId}, #{userId}, #{storeId}, #{reviewStarRating}, #{reviewContent},
+                   NOW(), NOW(), #{reviewPictureUrl}
+               );
     </insert>
 
     <!-- 리뷰 수정 -->
@@ -30,5 +34,9 @@
     <delete id="deleteReview" >
         DELETE FROM Reviews WHERE review_id = #{reviewId}
     </delete>
+
+    <select id="findReviewById">
+        SELECT * FROM Reviews WHERE review_id = #{reviewId}
+    </select>
 
 </mapper>

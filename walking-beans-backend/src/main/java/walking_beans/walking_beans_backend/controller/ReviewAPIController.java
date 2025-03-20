@@ -1,12 +1,18 @@
 package walking_beans.walking_beans_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Reviews;
 import walking_beans.walking_beans_backend.service.reviewService.ReviewService;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/reviews")
@@ -22,19 +28,74 @@ public class ReviewAPIController {
 
     //리뷰 작성
     @PostMapping
-public ResponseEntity<Reviews> insertReview(@RequestBody Reviews review) {
-    return ResponseEntity.ok(reviewService.insertReview(review));}
+    public ResponseEntity<Reviews> insertReview(
+            @RequestParam("userId") Long userId,
+            @RequestParam("storeId") Long storeId,
+            @RequestParam("orderId") Long orderId,
+            @RequestParam("reviewStarRating") int reviewStarRating,
+            @RequestParam("reviewContent") String reviewContent,
+            @RequestParam(value = "file", required = false) MultipartFile[] files // 🔥 여러 개의 파일 받기
+    ) {
+        try {
+            List<String> imageUrls = new ArrayList<>();
+
+            // ✅ 여러 개의 이미지 업로드 처리
+            if (files != null) {
+                for (MultipartFile file : files) {
+                    if (!file.isEmpty()) {
+                        String imageUrl = reviewService.uploadToImgur(file);
+                        if (imageUrl != null) {
+                            imageUrls.add(imageUrl);
+                        }
+                    }
+                }
+            }
+
+            // ✅ `Reviews` 객체 생성 후 `setter` 사용
+            Reviews review = new Reviews();
+            review.setUserId(userId);
+            review.setStoreId(storeId);
+            review.setOrderId(orderId);
+            review.setReviewStarRating(reviewStarRating);
+            review.setReviewContent(reviewContent);
+            review.setReviewPictureUrl(String.join(",", imageUrls)); // ⭐ 여러 개의 이미지 URL을 쉼표로 구분하여 저장
+            review.setReviewCreatedDate(LocalDateTime.now());
+            review.setReviewModifiedDate(LocalDateTime.now());
+
+            // DB에 저장
+            Reviews savedReview = reviewService.insertReview(review);
+
+            return ResponseEntity.ok(savedReview);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     // 리뷰 수정
     @PutMapping("/{reviewId}")
     public ResponseEntity<Reviews> updateReview(@PathVariable long reviewId, @RequestBody Reviews review) {
         return ResponseEntity.ok(reviewService.updateReview(reviewId, review));
     }
-    
+
+
     // 리뷰 삭제
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable long reviewId) {
-        reviewService.deleteReview(reviewId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteReview(@PathVariable long reviewId,  @RequestBody Map<String, Long> payload) {
+        try {
+            long userId = payload.get("userId");
+            // 1 삭제하려는 리뷰 조회
+            Reviews review = reviewService.findReviewById(reviewId);
+
+            // 2 요청한 userId와 리뷰 작성자의 userId가 일치하는지 확인
+            if (!review.getUserId().equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제할 권한이 없습니다.");
+            }
+
+            // 3 일치하면 리뷰 삭제 실행
+            reviewService.deleteReview(reviewId);
+            return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 실패");
+        }
     }
 }

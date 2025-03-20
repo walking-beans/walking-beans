@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import walking_beans.walking_beans_backend.model.dto.Reviews;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface ReviewMapper {
@@ -18,4 +19,5 @@ public interface ReviewMapper {
 
     // 리뷰 삭제
     void deleteReview(long reviewId);
+    Optional<Reviews> findReviewById(long reviewId);
 }

@@ -1,7 +1,9 @@
 package walking_beans.walking_beans_backend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
 import java.util.List;
 
@@ -29,7 +31,17 @@ public interface StoreMapper {
     // 매장정보 삭제하기
     void deleteStores(long storeId);
 
+    // 반경 10km 내의 매장 검색
+    List<Stores> findNearbyStores(
+            @Param("lat") double lat,
+            @Param("lng") double lng,
+            @Param("radius") double radius
+    );
+
     /**************************************** Leo ****************************************/
     // 매장 주소 가져오기 by order id
     Stores getStoreAddressByOrderId(long orderId);
+
+    // 라이더가 필요한 주문 접수 중 매장 주소 가져오기
+    List<RiderMainStoreInfo> getStoreInfoInRiderMain();
 }

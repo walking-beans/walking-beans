@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.service.menuService;
 
 
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Menu;
 
 import java.util.List;
@@ -17,14 +18,17 @@ public interface MenuService {
     Menu findMenuById(long menuId);
 
     // 가게에 속한 메뉴 찾기
-    Menu findMenuByStoreId(long StoreId);
+    List<Menu> findMenuByStoreId(long StoreId);
 
     // 메뉴 수정하기
-    void updateMenu(Menu menu);
+    void updateMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile imagePath);
 
     // 메뉴 추가하기
-    void addMenu(Menu menu);
+    void addMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile imagePath);
 
     // 메뉴 삭제하기
-    void deleteMenu(Menu menu);
+    void deleteMenu(long menuId);
+
+    // 대표메뉴 정보 가져오기
+    Menu findMainMenuByStoreId(long storeId);
 }

@@ -14,7 +14,8 @@
     <select id="searchMenu">
         SELECT *
         FROM MENU
-        WHERE  menu_name = #{keyword}
+        WHERE  menu_name LIKE CONCAT('%',#{keyword},'%')
+        or menu_description LIKE CONCAT('%',#{keyword},'%');
     </select>
 
     <!-- ID 로 메뉴 찾기 , long menuId-->
@@ -35,13 +36,13 @@
     <!-- 메뉴 수정하기 -->
     <update id="updateMenu">
         UPDATE Menu
-            SET (
-                menu_price = #{menuPrice},
-                menu_picture_url = #{menuPictureUrl},
-                menu_name = #{menuName},
-                menu_category = #{menuCategory},
-                menu_description = #{menuDescription},
-                menu_modified_date = NOW())
+        SET
+            menu_name = #{menuName},
+            menu_price = #{menuPrice},
+            menu_category = #{menuCategory},
+            menu_description = #{menuDescription},
+            menu_picture_url = #{menuPictureUrl},
+            menu_modified_date = NOW()
         WHERE menu_id = #{menuId}
 
     </update>
@@ -82,5 +83,11 @@
         WHERE menu_id = #{menuId}
     </delete>
 
-
+    <!-- 메인 메뉴 조회 -->
+    <select id="findMainMenuByStoreId" resultType="Menu">
+        SELECT m.menu_id, m.menu_name, m.menu_price, m.menu_picture_url
+        FROM menu m
+                 JOIN stores s ON m.menu_id = s.store_main_menu
+        WHERE s.store_id = #{storeId}
+    </select>
 </mapper>

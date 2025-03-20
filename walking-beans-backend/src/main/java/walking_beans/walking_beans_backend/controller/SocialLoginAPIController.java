@@ -1,19 +1,27 @@
 package walking_beans.walking_beans_backend.controller;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.service.socialLoginService.SocialLoginServiceImpl;
+import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+
+import java.io.IOException;
 import java.util.Map;
+
 
 @RestController
 public class SocialLoginAPIController {
+/*
+    @Autowired
+    SocialLoginServiceImpl socialLoginService;
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
@@ -24,9 +32,17 @@ public class SocialLoginAPIController {
     @Value("${kakao.client-secret}")
     private String kakaoClientSecret;
 
-    @Autowired
-    private SocialLoginServiceImpl socialLoginService;
+    @Value("${naver.client-id}")
+    private String naverClientId;
 
+    @Value("${naver.client-secret}")
+    private String naverClientSecret;
+
+    @Value("${naver.redirect-url}")
+    private String naverRedirectUrl;
+*/
+    /******************** 카카오 로그인 **************************/
+/*
     @GetMapping("/oauth/kakao/login")
     public ResponseEntity<?> getKakaoLoginUrl() {
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
@@ -35,27 +51,87 @@ public class SocialLoginAPIController {
     }
 
     @GetMapping("/oauth/kakao/callback")
-    public String handleCallback(@RequestParam String code) {
-        // Service를 통해 카카오 사용자 정보 가져오기
-        Map<String, Object> userInfo = socialLoginService.handleCallback(code);
+    public void handleCallback(@RequestParam("code") String code, HttpServletResponse response){
+        Map<String, Object> userMap = socialLoginService.KakaoCallback(code);
 
-        // 가져온 사용자 정보에서 필요한 값 추출
-        String nickname = (String) userInfo.get("nickname");
-        String profileImg = (String) userInfo.get("profileImg");
-        String email = (String) userInfo.get("email");
-        String name = (String) userInfo.get("name");
-        String gender = (String) userInfo.get("gender");
-        String birthday = (String) userInfo.get("birthday");
+        int checkUser = socialLoginService.checkEmailExists(userMap.get("email").toString());
 
-        // 데이터가 잘 반환되었는지 확인
-        System.out.println("User Info: " + userInfo);
+        Integer roleInt = (Integer) userMap.get("role");
+        byte role = roleInt.byteValue();
+        String phone = (String) userMap.get("phone");
 
-        // 회원가입 페이지로 리다이렉트
-        return "redirect:/signup/kakao?nickname=" + URLEncoder.encode(nickname, StandardCharsets.UTF_8)
-                + "&email=" + email
-                + "&profileImg=" + profileImg
-                + "&name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
-                + "&gender=" + gender
-                + "&birthday=" + birthday;
+        if (checkUser == 0) {
+            // DB에 데이터가 없으면 새 사용자 등록하기
+            Users users = new Users();
+            users.setUserRole(role);
+            users.setUserEmail(userMap.get("email").toString());
+            users.setUserPassword("0000");
+            users.setUserName(userMap.get("name").toString());
+            if (phone == null) {
+                users.setUserPhone("no phone"); //전화번호가 없으면 no phone 입력
+            } else {
+                users.setUserPhone(phone);
+            }
+
+            socialLoginService.insertSocialUser(users); // DB에 정보 저장
+        }
+
+        String kakaoEmail = userMap.get("email").toString();
+        try {
+            System.out.println("성공");
+
+
+            response.sendRedirect("http://localhost:3000/login?email=" + kakaoEmail);
+        } catch (IOException e) {
+            System.out.println("오류");
+            throw new RuntimeException(e);
+        }
     }
+*/
+    /**************** 네이버 로그인 *******************************/
+/*
+    @GetMapping("/oauth/naver/login")
+    public ResponseEntity<?> getNaverLoginUrl() {
+        String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code" +
+                "&client_id=" + naverClientId + "&redirect_uri=" + naverRedirectUrl +
+                "&state=xyz123";
+        return ResponseEntity.ok(url);
+    }
+
+    @GetMapping("/oauth/naver/callback")
+    public void handleCallback(@RequestParam("code") String code,
+                                 @RequestParam("state") String state, HttpServletResponse response) {
+        try {
+            Map<String, Object> userInfo = socialLoginService.NaverCallback(code, state);
+
+            int checkUser = socialLoginService.checkEmailExists(userInfo.get("email").toString());
+
+            System.out.println(checkUser);
+
+            Integer roleInt = (Integer) userInfo.get("role");
+            byte role = roleInt.byteValue();
+            String phone = (String) userInfo.get("phone");
+
+            if (checkUser == 0) {
+                Users users = new Users();
+                users.setUserRole(role);
+                users.setUserEmail(userInfo.get("email").toString());
+                users.setUserPassword("0000");
+                users.setUserName(userInfo.get("nickname").toString());
+
+                if (phone == null) {
+                    users.setUserPhone("no phone");
+                } else {
+                    users.setUserPhone(phone);
+                }
+                socialLoginService.insertSocialUser(users);
+            }
+            String naverEmail = userInfo.get("email").toString();
+            response.sendRedirect("http://localhost:3000/login?email=" + naverEmail);
+        } catch (Exception e) {
+            System.err.println("🚨 네이버 로그인 처리 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+*/
 }

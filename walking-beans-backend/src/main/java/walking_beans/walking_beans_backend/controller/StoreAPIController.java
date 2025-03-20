@@ -1,13 +1,16 @@
 package walking_beans.walking_beans_backend.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/store")
 public class StoreAPIController {
@@ -30,7 +33,7 @@ public class StoreAPIController {
      * @return 매장 아이디로 조회
      */
     @GetMapping("/{storeId}")
-    public Stores findStoresById(@PathVariable long storeId) {
+    public Stores findStoresById(@PathVariable("storeId") long storeId) {
         return storeService.findStoresById(storeId);
     }
 
@@ -48,7 +51,7 @@ public class StoreAPIController {
      *  유저 정보 추가후 재검증 필요 외래키 부족
      * @param stores
      */
-    @PostMapping("/addstore")
+    @PostMapping()
     public void addStore(@RequestBody Stores stores) {
         storeService.addStore(stores);
     }
@@ -63,10 +66,29 @@ public class StoreAPIController {
         stores.setStoreId(storeId);
         storeService.updateStores(stores);
     }
-    // 메인메뉴에서 매장 검색
+
+    /** 메인메뉴에서 매장 검색
+     *
+     * @param keyword
+     * @return
+     */
     @GetMapping("/search")
     public List<Stores> searchStore(@RequestParam String keyword) {
         return storeService.searchStore(keyword);
+    }
+
+    /**
+     * 사용자 위치(lat, lng) 기준으로 주변 매장 검색
+     * @param lat
+     * @param lng
+     * @return
+     */
+    @GetMapping("/nearby")
+    public ResponseEntity<List<Stores>> findNearbyStores(
+            @RequestParam double lat,
+            @RequestParam double lng) {
+        List<Stores> nearbyStores = storeService.findNearbyStores(lat, lng);
+        return ResponseEntity.ok(nearbyStores);
     }
 
     /**************************************** Leo ****************************************/
@@ -78,6 +100,13 @@ public class StoreAPIController {
     @GetMapping("/address/orderId/{orderId}")
     public ResponseEntity<Stores> getStoreAddressByOrderId(@PathVariable("orderId") long orderId) {
         return ResponseEntity.ok(storeService.getStoreAddressByOrderId(orderId));
+    }
+
+
+    @GetMapping("/riderMain")
+    public ResponseEntity<List<RiderMainStoreInfo>> getStoreInfoInRiderMain() {
+        log.info("=== /api/store/riderMain ===");
+        return ResponseEntity.ok(storeService.getStoreInfoInRiderMain());
     }
 }
 

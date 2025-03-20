@@ -9,26 +9,34 @@ public interface UserService {
     // 로그인 정보 가져오기
     Map<String, Object> loginUser(String userEmail, String userPassword);
 
+    //Map<String, Object> loginUser(String userEmail, String userPassword);
+
     // 아이디 찾기
     String findId (String userName, String userPhone);
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
-/*
-    //랜덤 난수 생성
-    String randomCode();
 
-    // 보낼 이메일 내용 작성
-    void sendEmail(String email, String code);
+    //유저 롤 변경
+    void updateUserRole(String email, byte userRole);
+    /*
+        //랜덤 난수 생성
+        String randomCode();
 
-    // 보낸 이메일 & 인증코드 저장하는 메서드
-    void saveEmailCode(String email, String code);
+        // 보낼 이메일 내용 작성
+        void sendEmail(String email, String code);
 
-    //일치 여부 확인
-    boolean verifyCodeWithVo(Vertification vertification);
-*/
+        // 보낸 이메일 & 인증코드 저장하는 메서드
+        void saveEmailCode(String email, String code);
+
+        //일치 여부 확인
+        boolean verifyCodeWithVo(Vertification vertification);
+    */
     // 마이페이지 사용자 정보 조회
     Users selectUserInfo(Long userId);
+
+    // 프로필 수정
+    void updateUserProfile(Long userId, String userPictureUrl);
 
     // 마이페이지 사용자 정보 수정
     void updateUserInfo(Long userId, String userPhone);

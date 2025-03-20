@@ -1,64 +1,173 @@
-import {useState} from "react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
 
-import logoImg from "../../images/walkingBeans.svg";
-import userIcon from "../../images/user.svg";
-import storeIcon from "../../images/store.svg";
-import riderIcon from "../../images/rider.svg";
-import alarmIcon from "../../images/alarm.svg";
-import searchIcon from "../../images/search.svg";
-import toggleIcon from "../../images/togle.svg";
+import chatBubble from "../../assert/svg/userNav/chat_bubble.svg";
+import logoImg from "../../assert/svg/userNav/walkingBeans.svg";
+import packages from "../../assert/svg/userNav/package.svg";
+import person from "../../assert/svg/riderNav/person.svg";
+import receipt from "../../assert/svg/userNav/receipt.svg";
+import searchIcon from "../../assert/svg/userNav/search.svg";
+import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
+import toggleIcon from "../../assert/svg/togle.svg";
+import userIcon from "../../assert/svg/user.svg";
+import apiUserService from "../../service/apiUserService";
+import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
-
-const UserHeader = ({ user }) => {
-    const [isToggleOpen, setIsToggleOpen] = useState(false); // 상태 추가
+const UserHeader = ({user}) => {
+    const location = useLocation();
     const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(user);
+    const [navOpen, setNavOpen] = useState(false);
+    const [userLocation, setUserLocation] = useState(null);
+    const [displayStores, setDisplayStores] = useState([]);
 
-    // role에 따라 왼쪽 아이콘 변경
-    const getRoleIcon = () => {
-        if (!user) return userIcon; // 비회원 (기본 사용자 아이콘)
-        switch (user.role) {
-            case "store":
-                return storeIcon; // 점주 아이콘
-            case "rider":
-                return riderIcon; // 라이더 아이콘
-            default:
-                return userIcon; // 기본 사용자 아이콘
+    const [unreadCount, setUnreadCount] = useState(0); //알림 개수
+    const [showDropdown, setShowDropdown] = useState(false); //토글
+    const [notifications, setNotifications] = useState([]); //알림 리스트
+
+    const [userAddress, setUserAddress] = useState(null);  // 주소 상태 관리
+    const [userId, setUserId] = useState(null);  // userId 상태
+    const [userLat, setUserLat] = useState(null);
+    const [userLng, setUserLng] = useState(null);
+
+    // 유저 정보 로드
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setCurrentUser(parsedUser);
+            setUserId(parsedUser.user_id);
+        }
+    }, [user]);
+    //  userId가 설정된 후 대표 주소 가져오기
+    useEffect(() => {
+
+        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+    }, [userId]);
+
+    /**
+     * 네비게이션바 토글아이콘  함수
+     * toggleIcon from "../../assert/svg/togle.svg
+     */
+    const handleToggleNav = () => {
+        if (!localStorage.getItem("user")) {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+        } else {
+            setNavOpen((prev) => !prev);
         }
     };
 
-    // 토글 버튼 클릭 이벤트
-    const handleToggleClick = () => {
-        if (!user) {
+    // 로그아웃 함수
+    const handleLogout = () => {
+        apiUserService.logout();
+        setCurrentUser(null);
+        setNavOpen(false);
+        navigate("/");
+    };
+
+    /**
+     * userIcon from "../../assert/svg/user.svg
+     * 사용자 아이콘 클릭 시 이동
+     */
+    const handleUserIconClick = () => {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
             alert("로그인이 필요합니다.");
             navigate("/login");
             return;
         }
-        setIsToggleOpen((prev) => !prev);
+
+        const parsedUser = JSON.parse(storedUser);
+        const rolePaths = {
+            user: location.pathname === "/admin/mypage" ? "/" : "/admin/mypage",
+            rider: location.pathname === "/rider" ? "/" : "/rider",
+            owner: location.pathname === "/owner" ? "/" : "/owner",
+            admin: "/admin"
+        };
+        navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
 
-    return (
-        <header className="user-header">
-            {/*왼쪽 아이콘*/}
-            <div className="left-icons">
-                <img src={getRoleIcon()}  className="header-icon" />
-            </div>
-            {/*메인 로고*/}
-            <div className="MainLogo">
-                <img src={logoImg}  className="logo-img" />
-            </div>
 
-            {/* 오른쪽 아이콘 */}
-            <div className="user-right-icons">
-                <img src={alarmIcon}  className="header-icon" />
-                <img src={searchIcon}  className="header-icon" />
-                <img src={toggleIcon}  className="header-icon" onClick={handleToggleClick}  />
-            </div>
-        </header>
+    // /user/search/map
+    const handleOpenSearch = () => {
+        if (!userLat || !userLng) {
+            alert("대표 주소 정보를 불러올 수 없습니다.");
+            return;
+        }
+        navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
+    };
+
+    //알람 토글
+    const toggleAlarm = () => {
+        if (showDropdown) { //true
+            setNotifications([]);// 알림 리스트를 초기화
+        } else {
+            // 알림을 열 때는 기존 알림 리스트를 비우지 않음
+            setUnreadCount(0);  // 알림 아이콘 배지 초기화
+        }
+
+        setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
+        //setShowDropdown(!showDropdown);
+        //setUnreadCount(0);
+    };
+
+    return (
+        <div className="user-header-wrapper">
+            <header className="custom-header">
+                <div className="custom-header-container">
+                    <div className="left-icons">
+                        <img src={userIcon} className="header-icon" alt="role-icon" onClick={handleUserIconClick}/>
+                    </div>
+                    <div className="center-logo">
+                        <img src={logoImg} className="logo-img" alt="logo" onClick={() => navigate("/")}/>
+                    </div>
+                    <div className="user-menu-container">
+                        {currentUser && (
+                            <>
+                                <HeaderAlarm userId={currentUser.user_id} />
+                                <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
+
+                            </>
+                        )}
+                        <img src={toggleIcon} className="header-icon" alt="toggle" onClick={handleToggleNav}/>
+                    </div>
+                </div>
+
+                <div className={`side-nav ${navOpen ? "open" : ""}`}>
+                    <div className="side-nav-content">
+                        {/*
+                        <button className="close-btn" onClick={handleToggleNav}>
+                            <img src={closeIcon} alt="닫기" />
+                        </button>
+                        */}
+                        <ul className="nav-menu list-unstyled">
+                            {[
+                                {icon: person, text: "마이페이지", path: "/"},
+                                {icon: shoppingBasket, text: "장바구니", path: "/"},
+                                {icon: packages, text: "주문현황", path: "/"},
+                                {icon: receipt, text: "주문내역", path: "/"},
+                                {icon: chatBubble, text: "채팅", path: "/"}
+                            ].map(({icon, text, path}) => (
+                                <li key={text}>
+                                    <a href={path}>
+                                        <img src={icon} alt={text}/> {text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <button className="nav-logout-btn" onClick={handleLogout}>
+                            로그아웃
+                        </button>
+                    </div>
+                </div>
+            </header>
+        </div>
     );
 };
-export default UserHeader;
 
+export default UserHeader;

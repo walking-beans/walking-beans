@@ -6,21 +6,38 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/chattingroom", "/queue"); // /chattingroom : 모든 유저 && /queue : 특정 클라이언트
-        registry.setApplicationDestinationPrefixes("/app"); // /app 경로로 메시지를 보내면 이 메시지는 @MessageMapping 어노테이션이 붙은 곳으로 향한다.
-        registry.setUserDestinationPrefix("/user");
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")      // 커넷션을 맺는 경로 설정
-                .setAllowedOriginPatterns("*")
-                .withSockJS();                 // react 에서 SockJS 를 사용하기 위해
+        registry.addEndpoint("/ws-order")
+                .setAllowedOrigins(
+                        "http://1.221.88.20:3000",  // 외부 IP
+                        "http://192.168.0.6:3000", // 내부 IP
+                        "http://localhost:3000",    // 로컬 개발 환경
+                        "https://1.221.88.20:3000",  // 외부 IP
+                        "https://192.168.0.6:3000", // 내부 IP
+                        "https://localhost:3000"    // 로컬 개발 환경
+                );
+
+        registry.addEndpoint("/ws-order")
+                .setAllowedOrigins(
+                        "http://1.221.88.20:3000",  // 외부 IP
+                        "http://192.168.0.6:3000", // 내부 IP
+                        "http://localhost:3000",    // 로컬 개발 환경
+                        "https://1.221.88.20:3000",  // 외부 IP
+                        "https://192.168.0.6:3000", // 내부 IP
+                        "https://localhost:3000"    // 로컬 개발 환경
+                )
+                .withSockJS();
     }
 }

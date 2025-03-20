@@ -7,14 +7,14 @@
     <!-- 로그인해서 세션에 넣을 데이터 가져오기-->
     <select id="loginUser">
         SELECT user_role, user_name, user_email, user_id
-        FROM Users
+        FROM users
         WHERE user_email = #{userEmail}
           AND user_password = #{userPassword}
     </select>
 
     <!-- 비밀번호 변경하기-->
     <update id="updatePw">
-        Update Users
+        Update users
         SET
             user_password = #{userPassword}
         WHERE user_email = #{userEmail}
@@ -23,10 +23,30 @@
     <!-- 아이디 찾기-->
     <select id="findId">
         SELECT user_email
-        FROM Users
+        FROM users
         WHERE user_name = #{userName}
           AND user_phone = #{userPhone}
     </select>
+
+    <!--  소셜 회원가입 -->
+    <insert id="insertSocialUser">
+        INSERT INTO users (user_role,user_email,user_password,user_name, user_phone)
+        VALUES (#{userRole}, #{userEmail}, #{userPassword}, #{userName}, #{userPhone})
+    </insert>
+
+    <!-- 회원 가입 유무 확인 -->
+    <select id="checkEmailExists">
+        SELECT COUNT(*)
+        FROM users
+        WHERE user_email = #{userEmail}
+    </select>
+
+    <!-- 이메일로 유저 롤 변경하기 -->
+    <update id="updateUserRole">
+        UPDATE users
+        SET user_role = #{userRole}
+        WHERE user_email = #{userEmail}
+    </update>
 
     <!-- 회원 정보 조회 -->
     <select id="selectUserInfo">
@@ -36,6 +56,13 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 프로필 사진 변경 -->
+    <update id="updateUserProfile">
+        UPDATE users
+        SET user_picture_url = #{userPictureUrl}
+        WHERE user_id = #{userId}
+    </update>
+
 
 
 
@@ -43,7 +70,7 @@
 
     <update id="updateUserInfo" >
         UPDATE users
-        SET phone_number = #{userPhone}
+        SET user_phone = #{userPhone}
         WHERE user_id = #{userId}
     </update>
 
@@ -56,5 +83,7 @@
         DELETE FROM users
         WHERE user_id = #{userId};
     </delete>
+
+
 </mapper>
 
