@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const UserOrderDetail = () => {
-    const { orderNumber } = useParams();
+    const { orderId } = useParams();
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:7070/api/orders/${orderNumber}`)
+        axios.get(`http://localhost:7070/api/orders/${orderId}`)
             .then((response) => {
                 setOrder(response.data || {});
             })
@@ -20,7 +20,7 @@ const UserOrderDetail = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [orderNumber]);
+    }, [orderId]);
 
     if (loading) return <p>주문 정보를 불러오는 중...</p>;
     if (error) return <p style={{ color: "red" }}>{error}</p>;

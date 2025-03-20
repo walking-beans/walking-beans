@@ -5,7 +5,7 @@ import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom"; // 또는 다른 HTTP 클라이언트 라이브러리
 
 function InfoCorrectionPage() {
-    const [userId, setuserId] = useState('');
+    const [userId, setuserId] = useState('null');
     const [userPhone, setUserPhone] = useState('');
     const [Update, setUpdate] = useState(false)
     const navigate = useNavigate();

@@ -145,7 +145,6 @@ const apiUserService = {
         const formData = new FormData();
         formData.append("file",file);
 
-            console.log("📢 업로드 요청 URL:", `${USER_API_URL}/mypage/${userId}/uploadProfile`);
             console.log("📢 업로드할 파일:", file);
 
             axios
@@ -165,7 +164,7 @@ const apiUserService = {
             });
         },
 
-
+    // 회원정보 수정
     infoCorrection:
     function (userId, userPhone, callback, errorCallback ) {
         axios
@@ -176,10 +175,20 @@ const apiUserService = {
             callback(res.data)
         })
             .catch((err) => {
+                console.log("오류",err)
                 errorCallback("전화번호 수정에 실패하였습니다.")
             })
     },
 
+    // 회원 탈퇴
+    delete:
+    function (userId, callback, errorCallback) {
+        axios
+            .delete(`${USER_API_URL}/unlink/${userId}`)
+            .then((res)=>callback&&callback(res.data))
+            .catch((err)=>errorCallback&&errorCallback(err));
+
+    },
 
     primaryAddress:
     function (userId,setUserAddress,setUserLat,setUserLng){

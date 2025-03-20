@@ -142,9 +142,9 @@ const UserSearchMap = () => {
             infoWindowsRef.current.push(infoWindow);
         });
 
-    }, [searchResults, stores]); // ✅ stores가 변경될 때 실행
+    }, [searchResults, stores]); // stores가 변경될 때 실행
 
-    // ✅ 매장 상세 정보 보기
+    //  매장 상세 정보 보기
     const handleStore = () => {
         if (!selectedStore?.storeId) return;
         navigate(`/store/${selectedStore.storeId}`);
