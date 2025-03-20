@@ -24,6 +24,10 @@ const UserDeliveryStatus = () => {
     const queryParams = new URLSearchParams(location.search);
     const { orderNumber } = useParams();
     const [orderId, setOrderId] = useState(null);
+    // const orderNumber = queryParams.get('orderNumber');
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
@@ -39,13 +43,61 @@ const UserDeliveryStatus = () => {
             const address = JSON.parse(addressUser);
             console.log("로그인 user 정보", address);
             setUserId(address.user_id);
-            setOrderId(address.orderId);
         } else {
             console.log("로그인 필요");
             alert("배달 현황 서비스를 이용하시려면 로그인이 필요합니다.");
             navigate("/login");
         }
     }, []);
+
+    // orderId 가져오기 orderNumber 로 바꿀지 고민
+    useEffect(() => {
+        const fetchOrderDetails = async () => {
+            if (!orderNumber) {
+                setError("주문 번호가 없습니다.");
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                // orderNumber를 사용하여 주문 정보를 가져옵니다.
+                const orderResponse = await axios.get(`http://localhost:7070/api/orders/${orderNumber}`);
+                if (orderResponse.data) {
+                    setOrderDetails(orderResponse.data);
+                    setOrderId(orderResponse.data.orderId); // 데이터베이스의 orderId를 설정합니다.
+
+                    // orderId를 사용하여 추가 정보를 가져옵니다.
+                    const [addressResponse, storeResponse] = await Promise.all([
+                        axios.get(`http://localhost:7070/api/addresses/user/order/${orderResponse.data.orderId}`),
+                        axios.get(`http://localhost:7070/api/orders/storeInfo/${orderResponse.data.orderId}`)
+                    ]);
+
+                    setUserCoords({
+                        lat: addressResponse.data.addressLatitude,
+                        lng: addressResponse.data.addressLongitude
+                    });
+                    setAddress(addressResponse.data);
+
+                    setStoreCoords({
+                        lat: storeResponse.data.storeLatitude,
+                        lng: storeResponse.data.storeLongitude
+                    });
+                    setStore(storeResponse.data);
+
+                } else {
+                    setError("주문 정보를 찾을 수 없습니다.");
+                }
+            } catch (err) {
+                setError("데이터를 불러오는 중 오류가 발생했습니다.");
+                console.error("Error fetching data:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOrderDetails();
+    }, [orderNumber]);
+
 
 
     // 주문한 유저 주소 가져오기

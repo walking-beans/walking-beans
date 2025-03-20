@@ -83,22 +83,8 @@ const UserSuccessPage = () => {
                         userId,
                         storeId,
                         addressId,
-                        orderRequests: orderRequests || queryParams.get("request") || "",
-
-                        orders: {
-                            userId: userId,
-                            storeId: storeId,
-                            addressId: addressId,
-                            orderNumber: orderId,
-                            orderStatus: 1, // 결제완료 상태
-                            orderRequests: orderRequests || queryParams.get("request") || "",
-                            orderTotalPrice: parseInt(orderTotalPrice)
-                        },
-                        cartList: cartItems, // 장바구니 아이템 배열
-                        payments: {
-                            paymentMethod: paymentKey ? "tossPay" : "meetPayment",
-                            paymentStatus: "완료"
-                        }
+                        orderRequests,
+                        cartList: cartItems
                     });
                     console.log("만나서 결제 승인:", response.data);
                     alert("주문이 성공적으로 완료되었습니다!");
@@ -111,21 +97,8 @@ const UserSuccessPage = () => {
                         userId,
                         storeId,
                         addressId,
-                        orderRequests: orderRequests || queryParams.get("request") || "",
-                        orders: {
-                            userId: userId,
-                            storeId: storeId,
-                            addressId: addressId,
-                            orderNumber: orderId,
-                            orderStatus: 1, // 결제완료 상태
-                            orderRequests: orderRequests || queryParams.get("request") || "",
-                            orderTotalPrice: parseInt(orderTotalPrice)
-                        },
-                        cartList: cartItems, // 장바구니 아이템 배열
-                        payments: {
-                            paymentMethod: paymentKey ? "tossPay" : "meetPayment",
-                            paymentStatus: "완료"
-                        }
+                        orderRequests,
+                        cartList: cartItems
                     });
                     console.log("결제 승인 성공:", response.data);
                     alert("결제가 성공적으로 완료되었습니다!");

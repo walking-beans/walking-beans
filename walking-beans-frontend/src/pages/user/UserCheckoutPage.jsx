@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const generateOrderNumber = () => {
     const uuid = uuidv4().replace(/-/g, '');
-    return uuid.substring(0, 8).toUpperCase();// 8자리만 사용
+    return uuid.substring(0, 8).toUpperCase(); // 8자리만 사용
 };
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 

@@ -180,40 +180,53 @@ public class OrderServiceImpl implements OrderService {
             log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
             log.info("▶ orders 테이블 삽입 데이터: {}", requestData);
 
-            // `cartItems` 데이터를 `order_items` 테이블에 저장
-            List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestData.get("cartItems");
-            log.info(" cartItems: {}", cartItems);
+            // `cartList` 데이터를 `order_items` 테이블에 저장
+            Object cartListObj = requestData.get("cartList");
 
-            if (cartItems != null && !cartItems.isEmpty()) {
+            if (cartListObj instanceof List) {
+                List<Map<String, Object>> cartItems = (List<Map<String, Object>>) cartListObj;
+                log.info("cartItems 개수: {}", cartItems.size());
+
                 for (Map<String, Object> item : cartItems) {
-                    // `menuId` 변환
-                    Long menuId = Long.parseLong(item.get("menuId").toString());
+                    // `menuId` 처리
+                    Object menuIdObj = item.get("menuId");
+                    if (menuIdObj == null) {
+                        log.warn("메뉴 ID가 없는 아이템 스킵");
+                        continue;
+                    }
+                    Long menuId = Long.parseLong(menuIdObj.toString());
 
-                    // `optionId` 처리 (여러 개일 경우 첫 번째 옵션만 저장)
-                    String optionIds = item.get("optionIds").toString();
+                    // `optionId` 처리
+                    String optionIds = item.containsKey("optionIds")
+                            ? item.get("optionIds").toString()
+                            : null;
                     Long optionId = null;
                     if (optionIds != null && !optionIds.isEmpty()) {
                         String[] optionIdArray = optionIds.split(",");
-                        optionId = Long.parseLong(optionIdArray[0]); // 첫 번째 옵션만 저장
+                        optionId = Long.parseLong(optionIdArray[0]);
                     }
 
-                    //  `quantity` 변환
-                    int quantity = Integer.parseInt(item.get("totalQuantities").toString());
-
-                    // `OrderItems` 객체 생성
-                    OrderItems orderItem = new OrderItems(null, orderNumber, menuId, optionId != null ? optionId.toString() : null, quantity);
+                    // `quantity` 처리
+                    Object quantityObj = item.get("totalQuantities");
+                    if (quantityObj == null) {
+                        log.warn("수량 정보가 없는 아이템 스킵");
+                        continue;
+                    }
+                    int quantity = Integer.parseInt(quantityObj.toString());
 
                     // MyBatis에 전달할 데이터 생성
                     Map<String, Object> orderItemParams = new HashMap<>();
                     orderItemParams.put("orderNumber", orderNumber);
-                    orderItemParams.put("menuId", orderItem.getMenuId());
-                    orderItemParams.put("optionId", orderItem.getOptionId());
-                    orderItemParams.put("quantity", orderItem.getQuantity());
+                    orderItemParams.put("menuId", menuId);
+                    orderItemParams.put("optionId", optionId);
+                    orderItemParams.put("quantity", quantity);
 
                     // `order_items` 테이블에 삽입
                     orderMapper.insertOrderItem(orderItemParams);
-                    log.info("주문 아이템 저장 완료! 주문 번호: {}, 메뉴 ID: {}, 옵션 ID: {}, 수량: {}", orderNumber, menuId, optionId, quantity);
+                    log.info("주문 아이템 저장 완료: {}", orderItemParams);
                 }
+            } else {
+                log.warn("cartList가 List 타입이 아닙니다.");
             }
 
             return userId;
@@ -222,5 +235,4 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("주문 저장 실패");
         }
     }
-
 }
