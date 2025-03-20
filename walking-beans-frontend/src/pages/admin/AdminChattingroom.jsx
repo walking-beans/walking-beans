@@ -201,7 +201,7 @@ const AdminChattingroom = ({user}) => {
 
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chattingroom`, (message) => {
+            stompClient.current.subscribe(`/topic/chattingroom`, (message) => {
                 console.log("connected && message : ", message);
                 (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });

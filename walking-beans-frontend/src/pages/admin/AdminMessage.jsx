@@ -162,7 +162,7 @@ const AdminMessage = ({user}) => {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/${roomId}`, (message) => {
+            stompClient.current.subscribe(`/topic/chatroom/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -203,8 +203,8 @@ const AdminMessage = ({user}) => {
                 messageRole : 1,
                 messageContent : inputValue
             };
-            stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
-            stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
+            stompClient.current.send(`/app/message`, {}, JSON.stringify(body));
+            stompClient.current.send(`/app/chatting`, {}, JSON.stringify(body));
             // setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
             // setShowSendAlarm(true); //알람 전송 트리거

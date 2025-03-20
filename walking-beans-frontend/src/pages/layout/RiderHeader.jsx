@@ -44,7 +44,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
 
     // 웹소켓 열기
     useEffect(() => {
-        const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
+        const wsAlert = new WebSocket("wss://localhost:7070/ws/alert");
         const storedUserId = localStorage.getItem("user");
         // JSON 문자열을 객체로 변환
         const userObject = storedUserId ? JSON.parse(storedUserId) : {user_id : "noId"} // user가 null이면 noId넣기
