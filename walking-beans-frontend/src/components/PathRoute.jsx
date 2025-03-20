@@ -93,10 +93,10 @@ function PathRoute() {
     return (
         <div className="layout-container">
             <BrowserRouter>
-                {/*<HeaderRoute user={user}
+                <HeaderRoute user={user}
                              riderOnDuty={riderOnDuty}
                              setRiderOnDuty={setRiderOnDuty}
-                />*/}
+                />
                 <div className="content-wrapper">
                     <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
