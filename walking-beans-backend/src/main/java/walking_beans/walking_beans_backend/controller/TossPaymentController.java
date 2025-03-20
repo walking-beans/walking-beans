@@ -1,15 +1,20 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,21 +47,58 @@ public class TossPaymentController {
      * @param request
      * @return
      */
+    private void validatePaymentData(Map<String, Object> requestData) {
+        // 필수 필드 체크
+        String[] requiredFields = {
+                "orderNumber", "userId", "storeId",
+                "addressId", "orderTotalPrice", "cartList"
+        };
+
+        for (String field : requiredFields) {
+            if (!requestData.containsKey(field) ||
+                    requestData.get(field) == null ||
+                    (requestData.get(field) instanceof String &&
+                            ((String) requestData.get(field)).trim().isEmpty())) {
+                throw new IllegalArgumentException(field + " 결제 정보가 누락되었습니다.");
+            }
+        }
+
+        // cartList 추가 검증
+        List<Map<String, Object>> cartList = (List<Map<String, Object>>) requestData.get("cartList");
+        if (cartList == null || cartList.isEmpty()) {
+            throw new IllegalArgumentException("장바구니 정보가 없습니다.");
+        }
+
+        // 각 cartItem 필수 정보 검증
+        for (Map<String, Object> item : cartList) {
+            if (!item.containsKey("menuId") ||
+                    item.get("menuId") == null) {
+                throw new IllegalArgumentException("메뉴 정보가 누락되었습니다.");
+            }
+        }
+    }
+
     @PostMapping("/confirm")
-    public ResponseEntity<Map<String, Object>> confirmPayment(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
+    @Transactional
+    public ResponseEntity<Map<String, Object>> confirmPayment(
+            @RequestBody Map<String, Object> requestData,
+            HttpServletRequest request
+    ) {
         try {
-            log.info("결제 승인 요청: {}", requestData);
+            log.info("결제 승인 요청 데이터: {}", requestData);
+
+            // 데이터 검증
+            validatePaymentData(requestData);
+
             boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
             Map<String, Object> response = tossPaymentService.confirmPayment(requestData, isApiPayment);
 
             if (response.get("error") == null) {
-                // Orders 테이블로 주문서 저장
                 Long orderId = orderService.createOrder(requestData);
                 response.put("orderId", orderId);
                 log.info("주문 생성 완료! 주문 ID: {}", orderId);
 
                 Long userId = Long.valueOf(requestData.get("userId").toString());
-                // 기존에 저장된 장바구니 비우기
                 if (userId != null) {
                     cartService.deleteAllCartsByUserId(userId);
                     log.info("userId={}의 장바구니 삭제 완료", userId);
@@ -64,9 +106,16 @@ public class TossPaymentController {
             }
 
             return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            log.error("결제 승인 실패:", e);
-            return ResponseEntity.badRequest().body(Map.of("error", "결제 승인 실패"));
+        } catch (IllegalArgumentException e) {
+            log.error("결제 정보 검증 실패: {}", e.getMessage());
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            log.error("결제 승인 실패: {}", e.getMessage(), e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "서버 처리 중 오류 발생"));
         }
     }
 
