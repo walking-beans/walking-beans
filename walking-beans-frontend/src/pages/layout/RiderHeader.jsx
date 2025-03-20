@@ -109,7 +109,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
             setUserId(parsedUser.user_id);
         }
     }, [user]);
-    console.log(userId);
+
     /**
      * 네비게이션바 토글아이콘  함수
      * toggleIcon from "../../assert/svg/togle.svg
@@ -231,7 +231,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                         )}
                                     </div>
                                 )}*/}
-                                <HeaderAlarm userId={userId} />
+                                <HeaderAlarm userId={userId} bell={true}/>
                             </>
                         )}
                         <img src={toggleIcon}
