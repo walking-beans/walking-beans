@@ -15,7 +15,7 @@ public class OrderStoreDTO {
     private Timestamp orderModifiedDate;
 
     // 고객 정보
-    private Long customerId;
+    private Long customerId; //userId
     private String customerName;
     private String customerPhone;
     private String customerEmail;

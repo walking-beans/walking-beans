@@ -71,7 +71,7 @@ public class UserAPIController {
     //유저 롤 업데이트
     @PutMapping("/{userEmail}/{userRole}")
     public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
-        alarmNotificationService.sendOrderNotification(Alarms.create(15,1,"롤이 변경되었습니다."));
+        alarmNotificationService.sendOrderNotification(Alarms.create(15,1,"롤이 변경되었습니다.",15,"testUrl"));
         userService.updateUserRole(userEmail, userRole);
     }
 
