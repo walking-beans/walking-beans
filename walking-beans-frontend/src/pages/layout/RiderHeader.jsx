@@ -231,7 +231,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                         )}
                                     </div>
                                 )}*/}
-                                <HeaderAlarm userId={userId} bell={true}/>
+                                <HeaderAlarm userId={userId} />
                             </>
                         )}
                         <img src={toggleIcon}
