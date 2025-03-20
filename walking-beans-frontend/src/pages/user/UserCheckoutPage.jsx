@@ -142,7 +142,7 @@ export function UserCheckoutPage() {
                                         orderName,
                                         customerName: user?.user_name || "홍길동",
                                         customerEmail,
-                                        successUrl: `${window.location.origin}/sandbox/success?orderId=${orderId}&totalAmount=${totalAmountValue}&storeId=${storeId}&addressId=${addressId}`,
+                                        successUrl: `${window.location.origin}/sandbox/success?totalAmount=${totalAmountValue}&storeId=${storeId}&addressId=${addressId}`,
                                         failUrl: `${window.location.origin}/sandbox/fail`
                                     });
                                 } catch (error) {

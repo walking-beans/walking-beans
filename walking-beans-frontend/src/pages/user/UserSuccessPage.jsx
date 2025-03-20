@@ -122,8 +122,7 @@ const UserSuccessPage = () => {
             <div className="user-order-loading">
                 <img src={loadingIcon}/>
                 <p className="user-title-center">주문이 완료 되었습니다.</p>
-                <p>주문 번호: {orderData.orderId}</p>
-                <p>주문 금액: {orderData.totalAmount}</p>
+                <p>주문 번호: {orderId}</p>
             </div>
         </div>
     )
