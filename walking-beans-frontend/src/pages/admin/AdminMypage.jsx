@@ -37,6 +37,7 @@ const AdminMypage = () => {
     // }, [userId]);
 
         useEffect(() => {
+            console.log("마이페이지 userId:", userId);
 
             if (!userId) return; // userId가 없으면 실행하지 않음
 

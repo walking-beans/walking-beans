@@ -10,6 +10,7 @@ const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 const UserHome = ({ user: initialUser }) => {
     const [userLocation, setUserLocation] = useState(null);
     const [store, setStore] = useState([]);
+    const [stores, setStores] = useState([]);
     const [displayStores, setDisplayStores] = useState([]);
     const [map, setMap] = useState(null);
     const [searchKeyword, setSearchKeyword] = useState("");
@@ -20,11 +21,11 @@ const UserHome = ({ user: initialUser }) => {
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
+    const [ratingStats, setRatingStats] = useState({ average: 0, counts: [0, 0, 0, 0, 0] });
+    const [reviews, setReviews] = useState([]);
 
-    useEffect(() => {
-        console.log("받은 사용자 위치:", userLocation);
 
-    }, [userLocation]);
+
 
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
@@ -115,7 +116,7 @@ const UserHome = ({ user: initialUser }) => {
                 let centerLat = userLat;
                 let centerLng = userLng;
 
-                // 🔹 로그인하지 않은 유저라면 현재 위치를 기본 중심으로 설정
+                //  로그인하지 않은 유저라면 현재 위치를 기본 중심으로 설정
                 if (!userId && userLocation) {
                     centerLat = userLocation.lat;
                     centerLng = userLocation.lng;
@@ -128,7 +129,7 @@ const UserHome = ({ user: initialUser }) => {
                 const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
                 setMap(newMap);
 
-                // 🔹 지도에 마커 추가
+                //  지도에 마커 추가
                 new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(centerLat, centerLng),
                     map: newMap,
@@ -161,32 +162,94 @@ const UserHome = ({ user: initialUser }) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (!userLocation || store.length === 0) return;
-        const filtered = store.filter((s) =>
-            getDistance(userLocation.lat, userLocation.lng, s.storeLatitude, s.storeLongitude) <= 10
-        );
-        setDisplayStores(filtered.sort(() => 0.5 - Math.random()).slice(0, 5));
-    }, [userLocation, store]);
+    // 리뷰 리스트 가져오기
+    const fetchReviews = (storeId, callback) => {
+        axios.get(`http://localhost:7070/api/reviews/${storeId}`)
+            .then((res) => {
+                const reviewsData = res.data;
+                const totalScore = reviewsData.reduce((sum, review) => sum + review.reviewStarRating, 0);
+                const average = reviewsData.length > 0 ? (totalScore / reviewsData.length).toFixed(1) : "0.0";
+                const reviewCount = reviewsData.length; // 리뷰 개수 계산
+                callback(average, reviewCount); // 평균 별점과 리뷰 개수를 함께 반환
+            })
+            .catch((err) => {
+                console.error(`리뷰 정보를 불러오지 못했습니다. storeId: ${storeId}`, err);
+                callback("0.0");
+            });
+    };
 
-    //  거리 계산 함수 추가 (두 좌표 간의 거리 계산)
+    // 별점 통계 업데이트
+    const updateStoresWithRatings = (storesData) => {
+        let updatedStores = [];
+        let remainingStores = storesData.length;
+
+        storesData.forEach((store) => {
+            fetchReviews(store.storeId, (rating,reviewCount) => {
+                updatedStores.push({
+                    ...store,
+                    storeRating: rating,
+                    storeReviewCount: reviewCount
+                });
+                remainingStores--;
+
+                if (remainingStores === 0) {
+                    setStores(updatedStores);
+                    setDisplayStores(updatedStores.slice(0, 5));
+                }
+            });
+        });
+    };
+
+    //대표 주소(위도, 경도) 기반 매장 불러오기 함수 추가
+    const fetchNearbyStores = (lat, lng) => {
+        axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
+            .then((res) => {
+                console.log("📌 주변 매장 데이터:", res.data);
+                setStores(res.data); // 매장 데이터 상태 업데이트
+                updateStoresWithRatings(res.data)
+            })
+            .catch((error) => console.error("❌ 매장 정보 불러오기 오류:", error));
+    };
+
+    // 대표 주소가 설정되면 주변 매장 불러오기
+    useEffect(() => {
+        if (userLat && userLng) {
+            fetchNearbyStores(userLat, userLng);
+        }
+    }, [userLat, userLng]); // 대표 주소 위도/경도가 변경될 때 실행
+
+    //  가져온 매장에서 랜덤으로 5개 선택
+    useEffect(() => {
+        if (stores.length > 0) {
+            const shuffled = [...stores].sort(() => 0.5 - Math.random()); // 랜덤 정렬
+            setDisplayStores(shuffled.slice(0, 5)); // 최대 5개 선택
+        }
+    }, [stores]);
+
+    useEffect(() => {
+        console.log("받은 매장 데이터:", displayStores);
+    }, [displayStores]);
+
+    //  위도, 경도를 이용한 거리 계산 함수 (Haversine 공식)
     const getDistance = (lat1, lng1, lat2, lng2) => {
-        if (!lat1 || !lng1 || !lat2 || !lng2) return 0;
+        if (!lat1 || !lng1 || !lat2 || !lng2) return null; // 좌표가 없으면 null 반환
+
         const R = 6371; // 지구 반지름 (km)
         const dLat = (lat2 - lat1) * (Math.PI / 180);
         const dLng = (lng2 - lng1) * (Math.PI / 180);
+
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * (Math.PI / 180)) *
-            Math.cos(lat2 * (Math.PI / 180)) *
-            Math.sin(dLng / 2) *
-            Math.sin(dLng / 2);
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // 거리 (km)
+        return (R * c).toFixed(1);
     };
+
 
     // 검색 기능
     const handleSearch = (e) => {
-        apiStoreService.searchStore(e, searchKeyword, sortType, userLocation, setDisplayStores,getDistance)
+        apiStoreService.searchStore(e, searchKeyword, sortType, userLocation, setDisplayStores)
     };
 
     const handleMapClick = () => {
@@ -209,6 +272,15 @@ const UserHome = ({ user: initialUser }) => {
             navigate("/user/insertAddress")
         }
     }
+
+    const handleStore = (storeId) => {
+        if (!storeId) return; // storeId가 없으면 실행하지 않음
+        navigate(`/store/${storeId}`);
+    };
+
+
+
+
     return (
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
@@ -223,7 +295,7 @@ const UserHome = ({ user: initialUser }) => {
             {/*검색 공간*/}
             <div className="input-group mb-3 px-2">
                 <div className="d-flex">
-                    <select className="form-select rounded-start" select onChange={(e) => setSortType(e.target.value)}>
+                    <select className="form-select rounded-start"  onChange={(e) => setSortType(e.target.value)}>
                         <option value="rating">평점순</option>
                         <option value="distance">거리순</option>
                     </select>
@@ -240,10 +312,16 @@ const UserHome = ({ user: initialUser }) => {
             <ul className="store-list">
                 {displayStores.map((store) => (
                     <li key={store.storeId} className="store-item">
-                        <span className="store-name">{store.storeName}</span>
+                         <span className="store-name" onClick={() => handleStore(store.storeId)}>
+                {store.storeName}
+            </span>
                         <img className="store-picture" src={store.storePictureUrl} alt="store" />
                         <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
-                        <span className="store-distance">{userLocation ? getDistance(userLocation.lat, userLocation.lng, store.storeLatitude, store.storeLongitude).toFixed(1) : "-"} km</span>
+                        <span className="store-distance">
+                {userLat && userLng
+                    ? `${getDistance(userLat, userLng, store.storeLatitude, store.storeLongitude)} km`
+                    : "-"}
+            </span>
                     </li>
                 ))}
             </ul>

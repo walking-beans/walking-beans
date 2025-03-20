@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
@@ -27,7 +27,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminMypage from "../pages/admin/AdminMypage";
 
 import UserInsertAddress from "../pages/user/UserInsertAddress";
-import UserOrdering from "../pages/user/UserOrdering";
+import UserOrderCheckout from "../pages/user/UserOrderCheckout";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
@@ -37,6 +37,8 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
+import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
 
 
 
@@ -109,16 +111,20 @@ function PathRoute() {
                                 <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                                <Route path="/unlink" element={<AdminMypageUnlink/>}/>
+                                <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
-                                {/* 유저 관련 라우트 */}
+                                {/* 유저 관련 라우트 구현 완료*/}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
-                                {/*<Route path="/user/order/:storeId" element={<UserOrder />} />*/}
-                                {/* 주문하기 페이지 */}
-                                <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
-                                {/* 결제하기 페이지 */}
+
+                                {/* 주문하기 페이지 구현 완료*/}
+                                <Route path="/order/checkout/:userId" element={<UserOrderCheckout />}/>
+
+                                {/* 결제하기 페이지 구현 중*/}
                                 {/* 1. checkout toss API KEY 인증*/}
-                                <Route path="/checkout" element={<UserPayment />} />
+                                <Route path="/checkout" element={<CheckoutPage />} />
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
                                 <Route path="/sandbox/success" element={<UserSuccess />} />
@@ -126,11 +132,12 @@ function PathRoute() {
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<FailPage />} />
 
+                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
 
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
                                 {/*주문 상세정보*/}
-                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+                                <Route path="/order/:orderId" element={<UserOrderDetail />} />
 
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
@@ -139,7 +146,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
+
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 

@@ -18,6 +18,7 @@ import apiUserService from "../../service/apiUserService";
 import alarmIcon from "../../assert/svg/riderAlarm.svg";
 import bellIcon from "../../assert/svg/riderBell.svg";
 import searchIcon from "../../assert/svg/userNav/search.svg";
+import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
 
 const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
@@ -43,7 +44,8 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const [starPath, setStarPath] = useState("");
 
     // 웹소켓 열기
-    useEffect(() => {
+   /* useEffect(() => {
+
         const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
         const storedUserId = localStorage.getItem("user");
         // JSON 문자열을 객체로 변환
@@ -88,6 +90,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
 
         return () => wsAlert.close();
     }, []);
+        */
 
     /*// 유저 정보 로드
     useEffect(() => {
@@ -106,7 +109,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
             setUserId(parsedUser.user_id);
         }
     }, [user]);
-
+    console.log(userId);
     /**
      * 네비게이션바 토글아이콘  함수
      * toggleIcon from "../../assert/svg/togle.svg
@@ -195,7 +198,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                     </div>
                     <div className="rider-menu-container">
                         {currentUser && (
-                            <>
+                            <>{/*
                                 <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
                                     <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
                                     {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
@@ -227,7 +230,8 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                             </div>
                                         )}
                                     </div>
-                                )}
+                                )}*/}
+                                <HeaderAlarm userId={userId} bell={true}/>
                             </>
                         )}
                         <img src={toggleIcon}
