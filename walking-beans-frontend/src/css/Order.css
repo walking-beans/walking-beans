@@ -434,3 +434,24 @@
         font-size: 20px;
     }
 }
+
+.user-order-margin {
+    margin-bottom: 30px;
+}
+
+.user-order-paymethod-text {
+    font-size: 18px;
+    color: #5A3D21;
+    font-weight: bold;
+    text-align: center;
+    background: none;
+    border: none;
+}
+
+.user-order-loading {
+    display: block;
+}
+
+.user-order-loading img{
+    margin: 30px;
+}

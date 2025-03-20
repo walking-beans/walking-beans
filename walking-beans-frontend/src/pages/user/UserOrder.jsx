@@ -41,6 +41,7 @@ const UserOrder = () => {
     const [mainMenu, setMainMenu] = useState(null);
     const [orderId, setOrderId] = useState(null);
     const validCarts = carts.filter(cart => cart.cartId !== null);
+    const [orderNumber, setOrderNumber] = useState(0);
 
     // 메뉴 클릭 시 메뉴 옵션 모달 열기
     const handleMenuClick = (menu) => {
@@ -80,26 +81,20 @@ const UserOrder = () => {
     // 총합
     const calculateTotalAmount = (cartItems) => {
         const total = cartItems.reduce((sum, cart) => {
-            const validMenuPrice = cart.menuPrices ? Number(cart.menuPrices) : 0;
-            const validOptionPrice = cart.optionPrices ? Number(cart.optionPrices) : 0;
-            const validQuantity = cart.totalQuantities ? Number(cart.totalQuantities) : 1;
-            return sum + (validMenuPrice + validOptionPrice) * validQuantity;
+            const menuPrice = Number(cart.menuPrices) || 0;
+            const optionPrices = cart.optionPrices ? cart.optionPrices.split(',').reduce((acc, price) => acc + (Number(price) || 0), 0) : 0;
+            const quantity = Number(cart.totalQuantities) || 1;
+            return sum + (menuPrice + optionPrices) * quantity;
         }, 0);
-        setTotalAmount(total);
+        return total;
     };
 
-    // 주문 가져오기
+    // 장바구니 총합
     useEffect(() => {
-        if (orderId) {
-            apiUserOrderService.getUserOrderByOrderId(orderId)
-                .then((data) => {
-                    if (Array.isArray(data)) {
-                        setCarts(data);
-                    }
-                })
-                .catch((err) => console.error("주문 데이터 오류:", err));
-        }
-    }, [orderId]);
+        const total = calculateTotalAmount(carts);
+        setTotalAmount(total);
+        console.log("총 결제 금액 계산:", total);
+    }, [carts]);
 
     // 장바구니 메뉴 삭제
     const handleDelete = (deleteCartId) => {
@@ -111,22 +106,6 @@ const UserOrder = () => {
             })
             .catch(err => console.error("장바구니 삭제 오류:", err));
     };
-
-    // 장바구니 총합
-    useEffect(() => {
-        if (carts.length > 0) {
-            const total = carts.reduce((sum, cart) => {
-                const validMenuPrice = cart.menuPrices ? Number(cart.menuPrices) || 0 : 0;
-                const validOptionPrice = cart.optionPrices ? Number(cart.optionPrices) || 0 : 0;
-                const validQuantity = cart.totalQuantities ? Number(cart.totalQuantities) || 1 : 1;
-                return sum + (validMenuPrice + validOptionPrice) * validQuantity;
-            }, 0);
-            console.log("총 결제 금액 계산:", total);
-            setTotalAmount(total);
-        } else {
-            setTotalAmount(0);
-        }
-    }, [carts]);
 
     useEffect(() => {
         if (storeId) {
@@ -181,7 +160,13 @@ const UserOrder = () => {
 
     // 주문하기
     const handleOrderNow = () => {
-        navigate(`/user/ordering/${orderId}?totalAmount=${totalAmount}`)
+        if (carts.length === 0 || validCarts.length === 0) {
+            alert("장바구니가 비어있습니다.")
+            console.log("카트", carts)
+            return;
+        }
+        apiUserOrderService.insertOrder()
+        navigate(`/order/checkout/${userId}?totalAmount=${totalAmount}`);
     }
 
     // 장바구니에 새로운 메뉴 추가됐을 때 제일 아래로 내리기
@@ -272,7 +257,7 @@ const UserOrder = () => {
                             ))
                         ) : (
                             <div className="user-order-click-btn-one">
-                            <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
+                                <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
                             </div>
                         )}
                     </div>
@@ -285,11 +270,11 @@ const UserOrder = () => {
                     </div>
 
                     <div className="user-order-click-btn-one">
-                    <button
-                        className="user-order-btn"
-                        onClick={handleOrderNow}>
-                        주문하기
-                    </button>
+                        <button
+                            className="user-order-btn"
+                            onClick={handleOrderNow}>
+                            주문하기
+                        </button>
                     </div>
                 </div>
             </div>

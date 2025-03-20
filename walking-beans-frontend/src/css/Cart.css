@@ -23,7 +23,13 @@
     font-weight: bold;
 }
 
-.user-cart-bic-pricetext {
+.user-select-mid-text {
+    font-size: 17px;
+    color: #5A3D21;
+    font-weight: bold;
+}
+
+.user-cart-big-pricetext {
     font-size: 23px;
     color: #5A3D21;
     font-weight: bold;
@@ -118,4 +124,15 @@
     margin: 0 5px;
     color: #5A3D21;
     font-weight: bold;
+}
+
+.user-select-menu-container {
+    position: relative;
+    min-height: 80px;
+}
+
+.user-select-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
 }
