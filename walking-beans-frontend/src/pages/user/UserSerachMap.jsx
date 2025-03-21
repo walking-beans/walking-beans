@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/User.css";
-import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
+import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
 import axios from "axios";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";

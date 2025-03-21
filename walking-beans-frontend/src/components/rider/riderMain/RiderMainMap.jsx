@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
-import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
+import userCurrentLocation from "../../../assert/images/rider/userCurrentLocation.svg";
+import storeDefault from "../../../assert/images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../../../service/apiRiderService";
 import UntakenOrderDetail from "./UntakenOrderDetail";
 import RiderMainSelectedStore from "./RiderMainSelectedStore";
+import apiOrdersStoresService from "../../../service/apiOrdersStoresService";
 // 백엔드 카카오 API 와 프론트엔드 카카오 API 키 값이 다름
 // 백엔드 프로젝트 포트 :7070        카카오 프로젝트 포트 : 3000
 // 본인 카카오 API 키  내 애플리케이션>앱 설정>플랫폼>Web>사이트 도메인 http://localhost:3000 으로 되어있어야 함
@@ -99,6 +100,7 @@ const RiderMainMap = () => {
         if (!riderLocation) return;
 
         const  intervalId = setInterval(() => {
+            // apiOrdersStoresService.getOrdersByRiderIdOnDuty(riderLocation.lat, riderLocation.lng, setStores, setOrders);
             fetch(`http://localhost:7070/api/order/riderIdOnDuty?lat=${riderLocation.lat}&lng=${riderLocation.lng}`)
                 .then((response) => response.json())
                 .then((data) => {

@@ -2,7 +2,6 @@ import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import detailBtn from "../../images/user/detailbtn.svg";
 import React, {use, useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import UserOrderMenuForm from "./UserOrderMenuForm";
 import "../../css/Cart.css";
 import "../../css/Order.css"
 import axios from "axios";
@@ -25,6 +24,7 @@ const UserOrderCheckout = () => {
     const userId = user ? user.user_id : null;
     const [storeId, setStoreId] = useState(null);
     const [clicked, setClicked] = useState(null);
+    const [orderRequests, setOrderRequests] = useState("");
 
     // 메뉴 총 금액 계산
     useEffect(() => {
@@ -64,10 +64,10 @@ const UserOrderCheckout = () => {
         if (!userId) return;
 
         axios.get(`http://localhost:7070/api/cart/store/${userId}`)
-    .then(res => {
-            setStoreId(res.data[0].storeId);
-            console.log("setStoreId", setStoreId);
-        })
+            .then(res => {
+                setStoreId(res.data[0].storeId);
+                console.log("setStoreId", setStoreId);
+            })
             .catch(err => console.error("storeId 가져오기 실패:", err));
 
         if (userId && typeof userId !== "string") {
@@ -81,10 +81,10 @@ const UserOrderCheckout = () => {
 
         axios
             .get(`http://localhost:7070/api/cart/${userId}`)
-    .then((res) => {
-            console.log("카트 데이터 가져오기 성공 : ", res.data);
-            setCarts(res.data);
-        })
+            .then((res) => {
+                console.log("카트 데이터 가져오기 성공 : ", res.data);
+                setCarts(res.data);
+            })
             .catch((err) => {
                 console.log("카트 데이터 가져오기 실패 : ", err);
             })
@@ -110,16 +110,55 @@ const UserOrderCheckout = () => {
 
     // 결제하기 버튼 클릭
     const handlePaymentClick = () => {
+        if (!orderRequests) {
+            alert("요청사항을 입력해주세요!"); // 요청사항이 비어 있으면 경고
+            return;
+        }
+
+        // 주문 정보 데이터
+        const orderData = {
+            userId,
+            storeId,
+            totalAmount: total,
+            paymentMethod: clicked,
+            orderRequests,
+        };
+
         if (clicked === 'tossPay') {
             console.log('결제 수단 : tossPay');
-            navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}`); // 카드 결제 페이지로 이동
+            navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}&request=${encodeURIComponent(orderRequests)}`, {replace: true}); // 카드 결제 페이지로 이동
         } else if (clicked === 'meetPayment') {
             console.log('결제 수단 : 만나서 결제');
-            navigate(`/sandbox/success`); // 배달 현황 페이지로 이동
+
+            axios.post(`http://localhost:7070/api/orders/create`, orderData)
+                .then((res) => {
+                    console.log("주문 저장 성공", res);
+                    const orderNumber = res.data.orderNumber;
+
+                    navigate(`/user/delivery/status/${orderNumber}`, {replace: true} );
+                })
+                .catch((err) => {
+                    console.error("주문 저장 실패", err);
+                    alert("주문하기에 오류가 생겼습니다.");
+                });
         } else {
             // 결제 방법이 선택되지 않은 경우
             alert('결제 방법을 선택해주세요.');
         }
+    };
+
+    // 작성한 요청사항 유지
+    useEffect(() => {
+        const savedRequests = localStorage.getItem("orderRequests");
+        if (savedRequests) {
+            setOrderRequests(savedRequests);
+        }
+    }, []);
+
+    const handleRequestsChange = (e) => {
+        const newValue = e.target.value;
+        setOrderRequests(newValue);
+        localStorage.setItem("orderRequests", newValue);
     };
 
     return (
@@ -138,14 +177,20 @@ const UserOrderCheckout = () => {
                         <div>
                             {/* 기본 주소 선택하면 돌아올 수 있도록 설정 필요 */}
                             <Link to={`/user/insertAddress`}><img src={detailBtn}
-                                                                alt="배달 주소 리스트"/></Link>
+                                                                  alt="배달 주소 리스트"/></Link>
                         </div>
                     </div>
 
                     <div className="user-order-hr" alt="구분선"></div>
 
                     <div className="user-cart-bordtext">요청사항</div>
-                    <input className="user-order-requests" type="text" placeholder="예) 견과류는 빼주시고 문 앞에 놔주세요 (초인종 X)"/>
+                    <input
+                        className="user-order-requests"
+                        type="text"
+                        placeholder="예) 견과류는 빼주시고 문 앞에 놔주세요 (초인종 X)"
+                        value={orderRequests}
+                        onChange={handleRequestsChange}
+                    />
 
                     <div className="user-order-hr" alt="구분선"></div>
                     <div className="user-cart-bordtext">{store?.storeName}</div>

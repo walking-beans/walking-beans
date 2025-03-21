@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-import walking_beans.walking_beans_backend.mapper.PaymentMapper;
-import walking_beans.walking_beans_backend.model.dto.Carts;
 import walking_beans.walking_beans_backend.model.dto.Orders;
-import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
@@ -57,10 +54,11 @@ public class OrderAPIController {
      */
     @PatchMapping("/onme")
     public ResponseEntity<Integer> updateOrdersByRiderIdAndOrderId(@RequestParam("riderId") long riderId,
-                                                            @RequestParam("orderId") long orderId) {
+                                                                   @RequestParam("orderId") long orderId) {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
     // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
+
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -70,6 +68,20 @@ public class OrderAPIController {
     @PatchMapping("/orderStatus")
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
+        log.info("=== /orderStatus/orderId: {} ===", orderId);
+
+        if (orderStatus == 4) {
+            // 유저 알림 보내기
+
+            // 라이더 알림 보내기
+
+        } else if (orderStatus == 5) {
+            // 유저한테 알림 보내기
+        } else if (orderStatus == 6) {
+            // 유저한테 알림 보내기
+
+            // 매장한테 알림 보내기
+        }
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
@@ -87,18 +99,20 @@ public class OrderAPIController {
 
     /****************************************  ****************************************/
 
-
-
-
     // 주문 저장
     @PostMapping("/create")
-    public String insertOrder(@RequestBody OrderRequest request) {
-        if (request.getPayments() == null) {
-            return "결제 정보가 누락되었습니다.";
-        }
+    public ResponseEntity<String> insertOrder(@RequestBody OrderRequest request) {
+        try {
+            if (request.getPayments() == null) {
+                return ResponseEntity.badRequest().body("결제 정보가 누락되었습니다.");
+            }
 
-        orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
-        return "주문 등록 및 결제 정보 저장 완료";
+            orderService.insertOrder(request.getOrders(), request.getCartList(), request.getPayments());
+            return ResponseEntity.ok("주문 등록 및 결제 정보 저장 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("주문 처리 중 오류가 발생했습니다.");
+        }
     }
 
     // 주문 정보 가져오기
@@ -137,8 +151,4 @@ public class OrderAPIController {
         }
         return ResponseEntity.ok(order);
     }
-
-
-
-
 }

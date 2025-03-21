@@ -53,6 +53,7 @@ public class ChatController {
         // 메시지를 해당 채팅방 구독자들에게 전송
         messagingTemplate.convertAndSend("/topic/chatroom/" + message.getRoomId(), message);
         messageService.insertMessageByRoomId(message);
+      
         ChattingInfoDTO infoUser = alarmService.getChattingUserInfo(message.getRoomId(), message.getUserId());
         System.out.println("메세지 유저 아이디:" + message.getUserId());
         System.out.println(infoUser);
@@ -65,10 +66,10 @@ public class ChatController {
             System.out.println("2번 실행");
         }
 
-        return ResponseEntity.ok().
 
-    build();
-}
+     
+        return ResponseEntity.ok().build();
+    }
 
 @MessageMapping("/chatting")
 @SendTo("/topic/chattingroom")

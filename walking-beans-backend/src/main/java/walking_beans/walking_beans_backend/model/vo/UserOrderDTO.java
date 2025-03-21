@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class UserOrderDTO {
+    private long orderId;
     private Long userId;
     private String customerName;
     private String storeName;
@@ -15,6 +16,6 @@ public class UserOrderDTO {
     private String orderNumber;
     private String deliveryAddress;
     private int totalPayment;
-    private String specialRequests;
+    private String orderRequests;
     private String orderList;
 }

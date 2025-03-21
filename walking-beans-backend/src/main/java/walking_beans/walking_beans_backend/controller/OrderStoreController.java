@@ -2,6 +2,7 @@ package walking_beans.walking_beans_backend.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,14 +23,20 @@ public class OrderStoreController {
 
     // 라이더가 배달 가능한 주문 목록 조회
     @GetMapping("/rider")
-    public List<OrderStoreDTO> getOrdersForRider() {
-        return orderStoreService.getOrdersForRider();
+    public  ResponseEntity<List<OrderStoreDTO>> getOrdersForRider() {
+        return ResponseEntity.ok(orderStoreService.getOrdersForRider());
     }
 
     @GetMapping("/riderIdOnDuty")
-    public Map<Long, List <OrderStoreDTO>> getOrdersByRiderIdOnDuty(@RequestParam("lat") double lat,
+    public ResponseEntity<Map<Long, List <OrderStoreDTO>>> getOrdersByRiderIdOnDuty(@RequestParam("lat") double lat,
                                                                     @RequestParam("lng") double lng) {
         log.info("======== /api/order/riderIdOnDuty?lat={}&lng={}", lat, lng);
-        return orderStoreService.getOrdersByRiderIdOnDuty(lat, lng);
+        return ResponseEntity.ok(orderStoreService.getOrdersByRiderIdOnDuty(lat, lng));
+    }
+
+    @GetMapping
+    public ResponseEntity<OrderStoreDTO> getOrderByOrderId(@RequestParam("orderId") long orderId) {
+
+        return ResponseEntity.ok(orderStoreService.getOrderByOrderId(orderId));
     }
 }
