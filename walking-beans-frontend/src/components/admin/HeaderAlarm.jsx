@@ -43,7 +43,7 @@ const HeaderAlarm = ({userId, bell}) => {
                             {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
-                                senderId: receivedData.alarmSenderId,
+                                url: receivedData.alarmUrl
                             },
                         ])
 
@@ -93,10 +93,9 @@ const HeaderAlarm = ({userId, bell}) => {
                             <div key={index} className={"AlarmNotificationItem"} onClick={() => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
-                                    //setNotifications([]);//알림 목록 비우기
                                     setShowDropdown(false); // 알림목록 닫기
                                 } else if (noti.type === 2) {
-                                    navigate(`/chat/message/${noti.senderId}`);
+                                    navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
                                 }
                             }
