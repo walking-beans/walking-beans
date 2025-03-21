@@ -92,18 +92,23 @@ public class OrderServiceImpl implements OrderService {
 
         // 주문 데이터 삽입
         orderMapper.insertOrder(order);
-
+        log.info("주문 저장 완료: {}", order.getOrderId());
 
         // 주문에 대한 장바구니 데이터 삽입
         for (Carts cart : cartList) {
             cart.setOrderId(order.getOrderId());
             userCartMapper.insertCart(cart);
         }
+        log.info("장바구니 데이터 저장 완료: {} 개 항목", cartList.size());
 
         // 결제 정보 설정
         payment.setOrderId(order.getOrderId());
 
+        log.info("결제 정보 저장 전 확인: orderId={}, method={}, status={}",
+                payment.getOrderId(), payment.getPaymentMethod(), payment.getPaymentStatus());
+
         // 결제 정보 삽입
+        log.info("Payments 정보: {}", payment);
         paymentMapper.insertPayments(payment);
 
     }

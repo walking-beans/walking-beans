@@ -19,5 +19,4 @@ public class UserOrderDTO {
     private String orderRequests;
     private String orderList;
     private int quantity;
-    private String paymentMethod;
 }

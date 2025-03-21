@@ -5,7 +5,6 @@ import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import apiRiderService from "../../service/apiRiderService";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
@@ -25,6 +24,7 @@ const UserDeliveryStatus = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const [orderId, setOrderId] = useState(null);
+    const [payments, setPayments] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -109,6 +109,18 @@ const UserDeliveryStatus = () => {
 
         fetchOrderDetails();
     }, [orderNumber]);
+
+    // 결제 정보 조회
+    useEffect(() => {
+        axios.get(`http://localhost:7070/api/payment/method/${orderId}`)
+            .then(res => {
+                console.log("결제 정보 조회 성공", res.data);
+                setPaymentMethod(res.data);
+            })
+            .catch(err => {
+                console.log("결제 정보 조회 실패", err);
+            })
+    }, [orderId])
 
     // 카카오 맵 기본 생성
     useEffect(() => {
@@ -212,7 +224,7 @@ const UserDeliveryStatus = () => {
             {/* 결제 방식에 따른 버튼 */}
             <div className="user-order-click-btn">
 
-                {order?.paymentMethod === "tossPay" && (
+                {payments?.paymentMethod === "tossPay" && (
                     <>
                         <button
                             className="btn btn-outline-info btn-lg"
@@ -232,7 +244,7 @@ const UserDeliveryStatus = () => {
                         </button>
                     </>
                 )}
-                {order?.paymentMethod === "meetPayment" && (
+                {payments?.paymentMethod === "meetPayment" && (
                     <>
                         <button
                             className="btn btn-outline-info btn-lg"
