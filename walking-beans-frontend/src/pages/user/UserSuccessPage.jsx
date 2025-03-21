@@ -17,8 +17,8 @@ const UserSuccessPage = () => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user?.user_id || null;
-    const orderRequests = queryParams.get("orderRequests");
     const [isConfirmed, setIsConfirmed] = useState(false);
+    const orderRequests = queryParams.get("orderRequests");
 
     useEffect(() => {
         const confirmPayment = async () => {
