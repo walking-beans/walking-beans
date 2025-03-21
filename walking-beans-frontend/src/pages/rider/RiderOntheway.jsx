@@ -24,6 +24,7 @@ const RiderOntheway = () => {
     const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
     const [storeRoomId, setStoreRoomId] = useState(0);
     const [userRoomId, setUserRoomId] = useState(0);
+    const [chattingMemberList, setChattingMemberList] = useState({});
 
     const navigate = useNavigate();
 
@@ -63,9 +64,20 @@ const RiderOntheway = () => {
         return () => clearInterval(intervalId);
     }, [location]);
 
+    useEffect(() => {
+        if (!order) return;
+
+        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
+        setStoreRoomId(chattingMemberList?.["3"] ?? "0");
+        setUserRoomId(chattingMemberList?.["1"] ?? "0");
+
+    }, [order])
+
     // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
         if (!order) return;
+
+
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -145,7 +157,7 @@ const RiderOntheway = () => {
 
         <div>
             {
-                order ? (
+                (order && (userRoomId !== "0") && (storeRoomId !== ("0"))) ? (
                     <div>
                         {/* 맵 출력 */}
                         <div id="map" style={{ width: "100%", height: "650px" }}></div>
