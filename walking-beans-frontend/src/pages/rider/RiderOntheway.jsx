@@ -1,10 +1,18 @@
 import React, {useEffect, useState} from "react"
 import {useNavigate, useParams} from "react-router-dom";
+
+import RiderOrderStatus from "../../components/rider/riderMain/RiderOrderStatus";
+
 import apiRiderService from "../../service/apiRiderService";
+import apiOrdersStoresService from "../../service/apiOrdersStoresService";
+
 import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
 import pickingupIcon from "../../assert/images/rider/pickingupIcon.svg";
 import deliveryIcon from "../../assert/images/rider/deliveryIcon.svg";
-import apiOrdersStoresService from "../../service/apiOrdersStoresService";
+
+import "../../css/rider/RiderOntheway.css";
+import "../../css/rider/RiderOrderStatus.css";
+
 
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
 
@@ -14,6 +22,8 @@ const RiderOntheway = () => {
     const {orderId} = useParams();
     const [order, setOrder] = useState(null);
     const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
+    const [storeRoomId, setStoreRoomId] = useState(0);
+    const [userRoomId, setUserRoomId] = useState(0);
 
     const navigate = useNavigate();
 
@@ -139,26 +149,85 @@ const RiderOntheway = () => {
                     <div>
                         {/* 맵 출력 */}
                         <div id="map" style={{ width: "100%", height: "650px" }}></div>
-                        {
-                            onDelivery ? (
-                                <button
-                                    onClick={() => {navigate(`/rider/result/${orderId}`)}}
-                                >배달 완료
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={() => {handlePickingOrder()}}
-                                >픽업 완료
-                                </button>
-                            )
-                        }
 
-                        <button onClick={openKakaoNavi} className="btn btn-primary">
-                            카카오 내비 실행
-                        </button>
+                        <div className="riderontheway-text-container">
+                            <div className="riderontheway-orderdetail">
+                                <p className="riderontheway-orderdetail-deliveryfee">배달료 {(parseInt(order.storeDeliveryTip)).toLocaleString()}원</p>
+                                <hr />
+                                <div className="riderontheway-orderdetail-request-div">
+                                    <p
+                                        className="riderontheway-orderdetail-requests-title"
+                                    >요청사항</p>
+                                    {
+                                        order.orderRequests ? (
+                                            <p className="riderontheway-orderdetail-requests-content">{order.orderRequests}</p>
+                                        ) : (
+                                            <p className="riderontheway-orderdetail-requests-content">없음</p>
+                                        )
+                                    }
+                                </div>
+                                <hr />
+                                <RiderOrderStatus
+                                    orderId={order.orderId}
+                                    message="배달 시간이 초과되었습니다."
+                                    css={
+                                        {
+                                            order_status : "order_status",
+                                            order_status_content : "order_status_content",
+                                            order_status_time_div : "order_status_time_div",
+                                            order_status_time_remaining : "order_status_time_remaining",
+                                            order_status_delivery_deadline : "order_status_delivery_deadline",
+                                            order_status_message : "order_status_message",
+                                            order_status_steps : "order_status_steps",
+                                            order_status_step : "order_status_step",
+                                            order_status_loading: "order_status_loading",
+                                        }
+                                    }
+                                />
+                            </div>
+                            <hr />
+                            <div className="btn-container">
+                                {/* 픽업 완료 btn || 배달 완료 btn */}
+                                {
+                                    onDelivery ? (
+                                        <button
+                                            className="btn btn-success btn-lg pickingup-delivery-btn"
+                                            onClick={() => {navigate(`/rider/result/${orderId}`)}}
+                                        >배달 완료
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn btn-warning btn-lg pickingup-delivery-btn"
+                                            onClick={() => {handlePickingOrder()}}
+                                        >픽업 완료
+                                        </button>
+                                    )
+                                }
+                            </div>
+                            <div className="btn-container">
+                                <button
+                                    className="btn btn-outline-info btn-lg"
+                                    onClick={() => {navigate(`/chat/message/${storeRoomId}`)}}
+                                >
+                                    매장 채팅하기
+                                </button>
+                                <button
+                                    className="btn btn-outline-danger btn-lg"
+                                    onClick={() => {navigate(`/chat/message/${userRoomId}`)}}
+                                >
+                                    고객 채팅하기
+                                </button>
+                            </div>
+                            <div className="btn-container">
+                                {/* 카카오 내비 url 이동 */}
+                                <button onClick={openKakaoNavi } className="btn btn-primary kakao-btn">
+                                    카카오 내비 실행
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 ) : (
-                    <div>로딩 중...</div>
+                    <div className="loading">로딩 중...</div>
                 )
             }
         </div>
