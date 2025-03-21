@@ -9,10 +9,13 @@ const StoreMain = () => {
     const [storeStatus, setStoreStatus] = useState("준비중");
     const [ownerName, setOwnerName] = useState("");
 
+
+
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             const userData = JSON.parse(storedUser);
+        console.log(storedUser)
             setOwnerName(userData.ownerName || "사장님");
         } else {
             setOwnerName("사장님");

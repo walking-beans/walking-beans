@@ -31,9 +31,8 @@ public class UserAPIController {
         Map<String, Object> loginResult = userService.loginUser(userEmail, userPassword);
 
         if ("success".equals(loginResult.get("status"))) {
-            session.setAttribute("user", loginResult.get("user"));
-
-            Map<String, Object> response = new HashMap<>();
+            session.setAttribute("user", loginResult.get("user")); // 세션에 값을 user키로 저장. 없는 세션 호출시 스프링에서 자동생성.
+            Map<String, Object> response = new HashMap<>(); // 리스폰스생성
             response.put("status", "success");
             response.put("user", loginResult.get("user"));
             return ResponseEntity.ok(response);
