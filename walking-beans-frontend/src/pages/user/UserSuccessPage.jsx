@@ -8,7 +8,6 @@ const UserSuccessPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
-
     const paymentKey = queryParams.get("paymentKey");
     const orderId = queryParams.get("orderId");
     const orderTotalPrice = queryParams.get("totalAmount");
@@ -19,7 +18,7 @@ const UserSuccessPage = () => {
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user?.user_id || null;
     const orderRequests = queryParams.get("orderRequests");
-    const [isConfirmed, setIsConfirmed] = useState(false)
+    const [isConfirmed, setIsConfirmed] = useState(false);
 
     useEffect(() => {
         const confirmPayment = async () => {
@@ -34,6 +33,7 @@ const UserSuccessPage = () => {
                         userId,
                         storeId,
                         addressId,
+                        orderRequests,
                     });
                     alert("결제 정보가 올바르지 않습니다.");
                     navigate("/sandbox/fail", {replace: true});

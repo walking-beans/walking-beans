@@ -135,7 +135,7 @@ const UserOrderCheckout = () => {
 
             if (clicked === 'tossPay') {
                 console.log('결제 수단 : tossPay');
-                navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}&request=${encodeURIComponent(orderRequests)}`, {replace: true});
+                navigate(`/checkout?totalAmount=${total}&storeId=${storeId}&request=${encodeURIComponent(orderRequests)}`, {replace: true});
             } else if (clicked === 'meetPayment') {
                 console.log('결제 수단 : 만나서 결제');
 
