@@ -7,13 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import walking_beans.walking_beans_backend.mapper.PaymentMapper;
+import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,7 @@ public class TossPaymentController {
     private final TossPaymentService tossPaymentService;
     private final OrderServiceImpl orderService;
     private final UserCartServiceImpl cartService;
+    private final PaymentMapper paymentMapper;
 
 
     @PostMapping("/request")
@@ -45,7 +46,7 @@ public class TossPaymentController {
      *  기존 Cart 데이터 비우기
      *  다시 react 로 전송
      * @param requestData = Carts 테이블
-     * @param request
+     * @param requestData
      * @return
      */
     private void validatePaymentData(Map<String, Object> requestData) {

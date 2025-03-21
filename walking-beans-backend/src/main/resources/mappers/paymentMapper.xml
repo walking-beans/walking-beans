@@ -5,7 +5,7 @@
 
     <!-- 결제 정보 저장하기 저장된 orderId 같이 저장-->
     <insert id="insertPayments">
-        INSERT INTO payments(order_id, payment_method, payment_status)
-        VALUES (#{orderId},#{paymentMethod}, #{paymentStatus})
+        INSERT INTO payments(order_number, payment_method, payment_status)
+        VALUES (#{orderNumber},#{paymentMethod}, #{paymentStatus})
     </insert>
 </mapper>

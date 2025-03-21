@@ -201,7 +201,9 @@ const UserOrderCheckout = () => {
                         storeId,
                         addressId,
                         orderRequests,
-                        cartList: cartItems
+                        cartList: cartItems,
+                        paymentMethod: "meetPayment",
+                        paymentStatus: "완료"
                     });
                     console.log("만나서 결제 승인:", response.data);
                     alert("주문이 성공적으로 완료되었습니다!");
