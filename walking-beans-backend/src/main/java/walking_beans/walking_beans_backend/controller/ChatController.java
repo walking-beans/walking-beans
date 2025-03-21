@@ -48,7 +48,11 @@ public class ChatController {
         // 메시지를 해당 채팅방 구독자들에게 전송
         messagingTemplate.convertAndSend("/topic/chatroom/" + message.getRoomId(), message);
         messageService.insertMessageByRoomId(message);
+
+        // MessageChattingDto MCD = messageChattingDtoService.getMCDbyRoomIdAndUserId(message.getRoomId(), message.getUserId());
+        // alarmNotificationService.sendOrderNotification(Alarms.create(MCD.getSenderId, 2, message.getLastMessage())); //알람 저장 및 송신
         alarmNotificationService.sendOrderNotification(Alarms.create(3, 2, message.getMessageContent(),3,"testUrl")); //알람 저장 및 송신
+
         return ResponseEntity.ok().build();
     }
 
