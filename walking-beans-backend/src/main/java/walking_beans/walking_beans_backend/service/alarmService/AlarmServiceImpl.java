@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.config.WebSocketAlertHandler;
 import walking_beans.walking_beans_backend.mapper.AlarmMapper;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.ChattingInfoDTO;
 import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.service.messageService.MessageService;
 
@@ -76,6 +77,12 @@ public class AlarmServiceImpl implements AlarmService {
     public void markNotificationAsRead(Long alarmId) {
         alarmMapper.markNotificationAsRead(alarmId);
         log.info("알림 읽음 처리 완료 - 알림 ID: {}", alarmId);
+    }
+
+    // 채팅 유저들 정보 가져오기
+    @Override
+    public ChattingInfoDTO getChattingUserInfo(long roomId, long senderId) {
+        return alarmMapper.getChattingUserInfo(roomId, senderId);
     }
 
     //알람 리스트 가져오기
