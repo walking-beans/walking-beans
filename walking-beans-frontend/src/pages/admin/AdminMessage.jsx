@@ -176,7 +176,6 @@ const AdminMessage = ({user}) => {
     };
 
     useEffect(() => {
-        console.log("user : ", user);
         connect();
         apiRiderService.getChattingMessageList(roomId,
             (newMessage) => {
@@ -195,11 +194,15 @@ const AdminMessage = ({user}) => {
     //메세지 전송
     const sendMessage = () => {
         console.log("sendMessage senderId : " + senderId);
+        if (!user) {
+            alert("에러 발생 잠시 후 다시 실행해주세요");
+            return;
+        }
         if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
                 roomId : roomId,
-                userId : 1,
+                userId : user.user_id,
                 messageRole : 1,
                 messageContent : inputValue
             };
@@ -243,7 +246,7 @@ const AdminMessage = ({user}) => {
                         key={index}
                     >
                         {
-                            msg.userId !== 1 ? (
+                            msg.userId !== user.user_id ? (
                                 <div
                                     className="admin-message-notUserInput "
                                 >
