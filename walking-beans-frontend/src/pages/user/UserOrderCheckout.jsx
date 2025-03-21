@@ -29,7 +29,7 @@ const UserOrderCheckout = () => {
         const [storeId, setStoreId] = useState(null);
         const [clicked, setClicked] = useState(null);
         const [orderRequests, setOrderRequests] = useState("");
-        const [orderId, setOrderId] = useState(null);
+        const [paymentMethod, setPaymentMethod] = useState(null);
 
         // 메뉴 총 금액 계산
         useEffect(() => {
@@ -183,9 +183,12 @@ const UserOrderCheckout = () => {
                             addressId: addressId,
                             orderRequests: orderRequests,
                             orderTotalPrice: total,
-                            orderStatus: 1
                         },
-                        cartList: cartItems
+                        cartList: cartItems,
+                        payments: {
+                            paymentMethod: "meetPayment",
+                            paymentStatus: "완료"
+                        }
                     };
                     console.log("서버로 보내는 데이터:", JSON.stringify(orderData));
 
@@ -198,8 +201,10 @@ const UserOrderCheckout = () => {
                         addressId,
                         orderRequests,
                         cartList: cartItems,
-                        paymentMethod: "meetPayment",
-                        paymentStatus: "완료"
+                        payments: {
+                            paymentMethod: "meetPayment",
+                            paymentStatus: "완료"
+                        }
                     });
                     console.log("만나서 결제 승인:", response.data);
                     alert("주문이 성공적으로 완료되었습니다!");

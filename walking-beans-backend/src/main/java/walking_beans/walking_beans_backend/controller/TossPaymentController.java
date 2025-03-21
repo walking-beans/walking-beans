@@ -4,11 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
+import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentServiceImpl;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
 
 import java.io.IOException;
@@ -22,10 +25,10 @@ import java.util.Map;
 @Slf4j
 public class TossPaymentController {
 
-    private final TossPaymentService tossPaymentService;
+    @Autowired
+    private final TossPaymentServiceImpl tossPaymentService;
     private final OrderServiceImpl orderService;
     private final UserCartServiceImpl cartService;
-
 
     @PostMapping("/request")
     public ResponseEntity<Map<String, Object>> requestPayment(@RequestBody Map<String, Object> requestData) {
@@ -92,6 +95,7 @@ public class TossPaymentController {
             // 요청된 결제 수단 확인
             Map<String, Object> paymentData = (Map<String, Object>) requestData.get("payments");
             String paymentMethod = paymentData != null ? (String) paymentData.get("paymentMethod") : "";
+            log.info("결제 데이터: {}", paymentData);
 
             Map<String, Object> response = new HashMap<>();
 
@@ -170,4 +174,10 @@ public class TossPaymentController {
             return ResponseEntity.badRequest().body(Map.of("error", "브랜드페이 인증 실패"));
         }
     }
+
+    @GetMapping("/method/{orderId}")
+    public Payments getPaymentByOrderId(@PathVariable Long orderId) {
+        return tossPaymentService.getPaymentByOrderId(orderId);
+    }
+
 }
