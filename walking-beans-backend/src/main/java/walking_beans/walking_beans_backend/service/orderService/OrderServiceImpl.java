@@ -1,6 +1,4 @@
 package walking_beans.walking_beans_backend.service.orderService;
-
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +7,6 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
-import walking_beans.walking_beans_backend.model.vo.OrderItems;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.HashMap;
