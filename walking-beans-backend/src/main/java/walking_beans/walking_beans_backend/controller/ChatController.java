@@ -51,7 +51,8 @@ public class ChatController {
 
         // MessageChattingDto MCD = messageChattingDtoService.getMCDbyRoomIdAndUserId(message.getRoomId(), message.getUserId());
         // alarmNotificationService.sendOrderNotification(Alarms.create(MCD.getSenderId, 2, message.getLastMessage())); //알람 저장 및 송신
-        alarmNotificationService.sendOrderNotification(Alarms.create(3, 2, message.getMessageContent())); //알람 저장 및 송신
+        alarmNotificationService.sendOrderNotification(Alarms.create(3, 2, message.getMessageContent(),3,"testUrl")); //알람 저장 및 송신
+
         return ResponseEntity.ok().build();
     }
 
