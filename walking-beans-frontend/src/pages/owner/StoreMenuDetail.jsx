@@ -2,10 +2,11 @@ import {useEffect, useRef, useState} from "react";
 import apiMenu from "../../service/apiMenu";
 import MenuInputTag from "../../components/owner/MenuInputTag";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 const StoreMenuDetail = () => {
+    const navigate = useNavigate();
     // 메뉴 정보
     const {storeId} = useParams();
     const {menuId} = useParams();
@@ -83,16 +84,25 @@ const StoreMenuDetail = () => {
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        withCredentials: true,
                     },
 
                 })
             .then((res) => {
                 console.log(res.data)
-                alert("수정완료!")
+                alert("메뉴가 성공적으로 수정되었습니다.!")
             })
             .catch((err) => {
+                if (err.response?.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    navigate("/owner");
+                } else if (err.response?.status === 403){
+                    alert("메뉴 수정 권한이 없습니다.");
+                    navigate("/owner");
+                } else {
                 console.log(err)
-                alert("데이터를 전송하지 못했습니다. 잠시후 다시 시도해주세요.")
+                alert("서버 오류로 인해 데이터를 전송하지 못했습니다. 잠시후 다시 시도해주세요.")
+                }
             })
 
     }

@@ -28,12 +28,12 @@ public class OwnershipAspect {
         Long userId = (Long) session.getAttribute("userId");
         System.out.println("세션에 저장되어있는 유저 아이디 : "+storeId);
         if (userId == null) {
-            return ResponseEntity.status(401).header("Location", "/owner").build();
+            return ResponseEntity.status(401).build(); // 로그인 필요
         }
         Long ownedStoreId = storeService.getStoreIdByUserId(userId);
         System.out.println("불러오는 매장 아이디 : "+ ownedStoreId);
         if (ownedStoreId == null || !ownedStoreId.equals(storeId)) {
-            return ResponseEntity.status(403).header("Location", "/owner").build();
+            return ResponseEntity.status(403).build(); // 권한없음
         }
         return joinPoint.proceed();
     }

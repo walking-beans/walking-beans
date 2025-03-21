@@ -95,7 +95,7 @@ public class MenuAPIController {
                                            @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
                                   ) {
 
-        return ResponseEntity.ok("메뉴 수정 완료");
+        return ResponseEntity.ok().build(); // 성공시
     }
 
     /**삭제하기
