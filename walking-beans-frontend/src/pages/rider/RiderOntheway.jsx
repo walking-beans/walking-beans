@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from "react"
 import {useParams} from "react-router-dom";
 import apiRiderService from "../../service/apiRiderService";
-import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
-import storeDefault from "../../images/rider/storeDefaultIcon.svg";
+import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
+import storeDefault from "../../assert/images/rider/storeDefaultIcon.svg";
+
+const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
 
 
 // Polyline 컴포넌트
 const RiderOntheway = () => {
+
     const {orderId} = useParams();
     const [onDelivery, setOnDelivery] = useState(false);
-
     const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
-    const [path, setPath] = useState([]);
 
     // 현재위치 가져오기
     useEffect(() => {
@@ -24,7 +25,7 @@ const RiderOntheway = () => {
                     };
 
                     setLocation(newLocation);
-                    setPath((prevPath) => [...prevPath, newLocation]);
+                    // setPath((prevPath) => [...prevPath, newLocation]);
                 },
                 (error) => {
                     console.error("위치 정보를 가져올 수 없습니다.", error);
@@ -44,7 +45,7 @@ const RiderOntheway = () => {
 
     // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
-        if (!riderLocation || !stores) return;
+        if (!location) return;
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -56,7 +57,7 @@ const RiderOntheway = () => {
             window.kakao.maps.load(() => {
                 const mapContainer = document.getElementById("map");
                 const mapOption = {
-                    center: new window.kakao.maps.LatLng(riderLocation.lat, riderLocation.lng),
+                    center: new window.kakao.maps.LatLng(location.lat, location.lng),
                     level: 5,
                 };
 
@@ -70,11 +71,11 @@ const RiderOntheway = () => {
                 );
                 // 현재 위치 마커 생성 (추후 프로젝트에 맞게 수정바람)
                 new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(riderLocation.lat, riderLocation.lng),
+                    position: new window.kakao.maps.LatLng(location.lat, location.lng),
                     map: map,
                     image: userMarkerImage,
                 });
-
+                /*
                 // 가게 마커 추가 (추후 프로젝트에 맞게 수정바람)
                 const storeMarkerImage = new window.kakao.maps.MarkerImage(
                     `${storeDefault}`, // 사용자 현재 위치 아이콘으로 구분지음
@@ -92,18 +93,16 @@ const RiderOntheway = () => {
                     // map level 2로 바꾸기
                     map.setLevel(2);
                     // map 중심 가게 중심으로 바꾸기
-                    map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+                     map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
 
-                    setCheckingSelectedStore(true);
-                    setSelectedStoreId(store.storeId);
-                });
+                });*/
             });
         };
 
         return () => {
             document.head.removeChild(script);
         };
-    }, [stores]);
+    }, []);
 
 
     function handlePickingOrder () {
@@ -120,6 +119,9 @@ const RiderOntheway = () => {
 
     return (
         <div>
+            {/* 맵 출력 */}
+            <div id="map" style={{ width: "100%", height: "650px" }}></div>
+
             <div>{orderId}</div>
             <button
                 onClick={() => {handlePickingOrder()}}

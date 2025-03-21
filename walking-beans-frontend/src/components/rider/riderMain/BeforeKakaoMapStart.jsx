@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
+import userCurrentLocation from "../../../assert/images/rider/userCurrentLocation.svg";
 //
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 

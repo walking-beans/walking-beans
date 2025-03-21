@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import userCurrentLocation from "../../../images/rider/userCurrentLocation.svg";
-import storeDefault from "../../../images/rider/storeDefaultIcon.svg";
+import userCurrentLocation from "../../../assert/images/rider/userCurrentLocation.svg";
+import storeDefault from "../../../assert/images/rider/storeDefaultIcon.svg";
 import apiRiderService from "../../../service/apiRiderService";
 import UntakenOrderDetail from "./UntakenOrderDetail";
 import RiderMainSelectedStore from "./RiderMainSelectedStore";
