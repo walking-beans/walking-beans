@@ -143,8 +143,8 @@ public class OrderAPIController {
         return orderService.getOrderStatus(orderId);
     }
 
-    @GetMapping("/{orderNumber}")
-    public ResponseEntity<UserOrderDTO> getOrder(@PathVariable String orderNumber) {
+    @GetMapping("/orderNumber/{orderNumber}")
+    public ResponseEntity<UserOrderDTO> getOrder(@PathVariable("orderNumber") String orderNumber) {
         UserOrderDTO order = orderService.getOrderByOrderNumber(orderNumber);
         if (order == null) {
             return ResponseEntity.notFound().build();

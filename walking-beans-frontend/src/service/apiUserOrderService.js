@@ -147,17 +147,6 @@ const apiUserOrderService = {
         }
     },
 
-    getOrderAddressByUserId: async (userId, setAddress) => {
-        try {
-            const response = await axios.get(`${API_ADDRESS_URL}/${userId}`);
-            console.log("주소 불러오기 성공:", response.data);
-            const filteredAddress = response.data.find((addr) => addr.addressRole === 1);
-            setAddress(filteredAddress || "기본 주소가 없습니다. 설정해 주세요");
-        } catch (error) {
-            console.error("주소 불러오기 실패:", error);
-        }
-    },
-
     insertOrder: async () => {
         try {
             const response = await axios .post(`${API_ORDER_URL}/create`,{

@@ -8,7 +8,6 @@ const UserSuccessPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
-
     const paymentKey = queryParams.get("paymentKey");
     const orderId = queryParams.get("orderId");
     const orderTotalPrice = queryParams.get("totalAmount");
@@ -18,9 +17,8 @@ const UserSuccessPage = () => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user?.user_id || null;
+    const [isConfirmed, setIsConfirmed] = useState(false);
     const orderRequests = queryParams.get("orderRequests");
-    const [isConfirmed, setIsConfirmed] = useState(false)
-    const orderData = location.state;
 
     useEffect(() => {
         const confirmPayment = async () => {
@@ -35,6 +33,7 @@ const UserSuccessPage = () => {
                         userId,
                         storeId,
                         addressId,
+                        orderRequests,
                     });
                     alert("결제 정보가 올바르지 않습니다.");
                     navigate("/sandbox/fail", {replace: true});
@@ -75,35 +74,21 @@ const UserSuccessPage = () => {
 
                 console.log("가공된 장바구니 데이터:", cartItems);
 
-                if (paymentMethod === "meetPayment") {
-                    const response = await axios.post("http://localhost:7070/api/payment/confirm", {
-                        paymentKey,
-                        orderNumber: orderId,
-                        orderTotalPrice,
-                        userId,
-                        storeId,
-                        addressId,
-                        orderRequests,
-                        cartList: cartItems
-                    });
-                    console.log("만나서 결제 승인:", response.data);
-                    alert("주문이 성공적으로 완료되었습니다!");
-                    localStorage.removeItem("orderRequests");
-                } else {
-                    const response = await axios.post("http://localhost:7070/api/payment/confirm", {
-                        paymentKey,
-                        orderNumber: orderId,
-                        orderTotalPrice,
-                        userId,
-                        storeId,
-                        addressId,
-                        orderRequests,
-                        cartList: cartItems
-                    });
-                    console.log("결제 승인 성공:", response.data);
-                    alert("결제가 성공적으로 완료되었습니다!");
-                    localStorage.removeItem("orderRequests");
-                }
+
+                const response = await axios.post("http://localhost:7070/api/payment/confirm", {
+                    paymentKey,
+                    orderNumber: orderId,
+                    orderTotalPrice,
+                    userId,
+                    storeId,
+                    addressId,
+                    orderRequests,
+                    cartList: cartItems
+                });
+                console.log("결제 승인 성공:", response.data);
+                alert("결제가 성공적으로 완료되었습니다!");
+                localStorage.removeItem("orderRequests");
+
 
                 setIsConfirmed(true);
                 navigate(`/user/delivery/status/${orderId}`, {replace: true});

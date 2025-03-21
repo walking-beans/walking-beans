@@ -14,6 +14,7 @@ import walking_beans.walking_beans_backend.service.userCartService.UserCartServi
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,19 +91,36 @@ public class TossPaymentController {
             // 데이터 검증
             validatePaymentData(requestData);
 
-            boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
-            Map<String, Object> response = tossPaymentService.confirmPayment(requestData, isApiPayment);
+            // 요청된 결제 수단 확인
+            Map<String, Object> paymentData = (Map<String, Object>) requestData.get("payments");
+            String paymentMethod = paymentData != null ? (String) paymentData.get("paymentMethod") : "";
 
-            if (response.get("error") == null) {
+            Map<String, Object> response = new HashMap<>();
+
+            if ("meetPayment".equals(paymentMethod)) {
+                log.info("만나서 결제 선택됨. 결제 승인 과정 생략");
+
+                // 주문 생성
                 Long orderId = orderService.createOrder(requestData);
                 response.put("orderId", orderId);
                 log.info("주문 생성 완료! 주문 ID: {}", orderId);
 
-                Long userId = Long.valueOf(requestData.get("userId").toString());
-                if (userId != null) {
-                    cartService.deleteAllCartsByUserId(userId);
-                    log.info("userId={}의 장바구니 삭제 완료", userId);
+            } else {
+                boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
+                response = tossPaymentService.confirmPayment(requestData, isApiPayment);
+
+                if (response.get("error") == null) {
+                    Long orderId = orderService.createOrder(requestData);
+                    response.put("orderId", orderId);
+                    log.info("주문 생성 완료! 주문 ID: {}", orderId);
                 }
+            }
+
+            // 장바구니 삭제 (만나서 결제든 일반 결제든 동일하게 처리)
+            Long userId = Long.valueOf(requestData.get("userId").toString());
+            if (userId != null) {
+                cartService.deleteAllCartsByUserId(userId);
+                log.info("userId={}의 장바구니 삭제 완료", userId);
             }
 
             return ResponseEntity.ok(response);
