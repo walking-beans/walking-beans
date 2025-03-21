@@ -68,6 +68,20 @@ public class OrderAPIController {
     @PatchMapping("/orderStatus")
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
+        log.info("=== /orderStatus/orderId: {} ===", orderId);
+
+        if (orderStatus == 4) {
+            // 유저 알림 보내기
+
+            // 라이더 알림 보내기
+
+        } else if (orderStatus == 5) {
+            // 유저한테 알림 보내기
+        } else if (orderStatus == 6) {
+            // 유저한테 알림 보내기
+
+            // 매장한테 알림 보내기
+        }
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }

@@ -7,18 +7,25 @@ import bellIcon from "../../assert/svg/bell.svg";
 import alarmIcon from "../../assert/svg/alarm.svg";
 import "../../pages/layout/UserHeader.css";
 
+//라이더용 벨 아이콘
+import riderBellIcon from "../../assert/svg/riderBell.svg";
+import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
 
-const HeaderAlarm = ({userId}) => {
+
+const HeaderAlarm = ({userId, bell}) => {
     const [alarmMessages, setAlarmMessages] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
     const navigate = useNavigate();
 
+    const alarmIconToShow = bell ? riderAlarmIcon : alarmIcon;
+    const bellIconToShow = bell ? riderBellIcon : bellIcon;
+
     useEffect(() => {
         console.log("🔌 WebSocket 연결 시도...");
 
-        const socket = new SockJS("https://localhost:7070/ws-alarm");
+        const socket = new SockJS("http://localhost:7070/ws-alarm");
         const stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
@@ -29,7 +36,7 @@ const HeaderAlarm = ({userId}) => {
                     //setUnreadCount((prev) => prev + 1);
                     //setAlarmMessages((prev) => [...prev, message.body]);
                     const receivedData = JSON.parse(message.body)
-
+                    console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
                     if (receivedData.userId === userId) {
                         setNotifications((prevNotifications) => [
                             ...prevNotifications,
@@ -76,7 +83,7 @@ const HeaderAlarm = ({userId}) => {
     return (
         <div className="notification-container">
             <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
-                <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications"/>
+                <img src={showDropdown ? alarmIconToShow : bellIconToShow} className="header-icon" alt="notifications"/>
                 {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
             </div>
             {showDropdown && (
