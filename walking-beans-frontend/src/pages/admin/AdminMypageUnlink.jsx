@@ -37,6 +37,7 @@ function AdminMypageUnlink() {
                 console.log("회원탈퇴 실패",err)
                 alert("회원탈퇴에 실패하였습니다.");
                 setDelete(false);
+                navigate("/unlink.success")
                 }
             )
         }
