@@ -166,18 +166,17 @@ const AdminChattingroom = ({user}) => {
 
 
     const [currentUser, setCurrentUser] = useState(null);
-    const userId = 1;
 
     // userId 에 따른 채팅목록 설정
     function setReceiver() {
-        if (userId === 1) {
+        if (user.user_role === "user") {
             // 라이더 목록 초기화
             setReceiverRelationRight(2);
             setLeftButtonValue("라이더");
             // 매장 목록 초기화
             setReceiverRelationRight(3);
             setRightButtonValue("매장");
-        } else if (userId === 2) {
+        } else if (user.user_role === "rider") {
             // 고객 목록 초기화
             setReceiverRelationLeft(1);
             setLeftButtonValue("빈즈");
@@ -203,7 +202,7 @@ const AdminChattingroom = ({user}) => {
         stompClient.current.connect({}, () => {
             stompClient.current.subscribe(`/topic/chattingroom`, (message) => {
                 console.log("connected && message : ", message);
-                (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
+                (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft, setChattingRoom);
             });
         });
     };
@@ -221,12 +220,12 @@ const AdminChattingroom = ({user}) => {
         console.log(whichOne);
         if (whichOne) {
             setReceiverRelationLeftOrRight(true);
-            apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom);
+            apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationRight, setChattingRoom);
             setClassRightBtn("btn btn-dark btn-lg");
             setClassLeftBtn("btn btn-light btn-lg");
         } else {
             setReceiverRelationLeftOrRight(false);
-            apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
+            apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft, setChattingRoom);
             setClassLeftBtn("btn btn-dark btn-lg");
             setClassRightBtn("btn btn-light btn-lg");
         }
@@ -238,7 +237,8 @@ const AdminChattingroom = ({user}) => {
         setReceiver();
         connect();
         // apiRiderService.getChattingListTest(1, setMessages);
-        apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft,
+
+        apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft,
             (newCR) => {
                 setChattingRoom(newCR);
                 console.log(newCR);
@@ -246,7 +246,7 @@ const AdminChattingroom = ({user}) => {
 
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
-    }, []);
+    }, [user]);
 
     return (
         <div className="admin-chattingroom-base ">
