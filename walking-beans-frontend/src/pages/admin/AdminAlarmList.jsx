@@ -55,12 +55,8 @@ const AdminAlarmList = () => {
         }
     }
 
-    const linkUrl = () => {
-
-    }
-
     return (
-        <div className="AlarmListcontainer"> {/*div에 마우스 링크 모양 추가*/}
+        <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (
                 <div className="AlarmDeleteContainer">
                     <button type={"submit"} onClick={deleteAllAlrams} className="AlarmDeleteBtn">
@@ -81,11 +77,6 @@ const AdminAlarmList = () => {
                         }}>
                             <h3>{value.alarmRole === 1
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
-                            {/*<p>{value.alarmRole === 1
-                                ? <Link to="/link1">{value.alarmContent}</Link>
-                                : value.alarmRole === 2
-                                    ? <Link to={`/chat/message/${value.alarmSenderId}`}>{value.alarmContent}</Link>
-                                    : value.alarmContent}</p>*/}
                             <p>{value.alarmContent}</p>
                             <p>
                                 {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
@@ -101,6 +92,4 @@ const AdminAlarmList = () => {
         </div>
     )
 }
-// 메세지 발신인 띄우기
-// DB문제 해결 -> null 문제
 export default AdminAlarmList;
