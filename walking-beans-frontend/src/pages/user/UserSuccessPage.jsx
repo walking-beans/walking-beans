@@ -83,9 +83,7 @@ const UserSuccessPage = () => {
                     storeId,
                     addressId,
                     orderRequests,
-                    cartList: cartItems,
-                    paymentMethod: "tossPay",
-                    paymentStatus: "완료"
+                    cartList: cartItems
                 });
                 console.log("결제 승인 성공:", response.data);
                 alert("결제가 성공적으로 완료되었습니다!");

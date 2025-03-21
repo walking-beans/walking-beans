@@ -185,11 +185,7 @@ const UserOrderCheckout = () => {
                             orderTotalPrice: total,
                             orderStatus: 1
                         },
-                        cartList: cartItems,
-                        payments: {
-                            paymentMethod: "meetPayment",
-                            paymentStatus: "완료"
-                        }
+                        cartList: cartItems
                     };
                     console.log("서버로 보내는 데이터:", JSON.stringify(orderData));
 

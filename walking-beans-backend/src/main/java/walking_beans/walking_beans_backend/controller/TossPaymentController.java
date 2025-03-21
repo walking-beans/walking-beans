@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import walking_beans.walking_beans_backend.mapper.PaymentMapper;
-import walking_beans.walking_beans_backend.model.dto.Payments;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
@@ -27,7 +25,6 @@ public class TossPaymentController {
     private final TossPaymentService tossPaymentService;
     private final OrderServiceImpl orderService;
     private final UserCartServiceImpl cartService;
-    private final PaymentMapper paymentMapper;
 
 
     @PostMapping("/request")

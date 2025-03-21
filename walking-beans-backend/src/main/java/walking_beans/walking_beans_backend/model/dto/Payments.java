@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 public class Payments {
     private long paymentId;
-    private String orderNumber;
+    private long orderId;
     private String paymentMethod;
     private String paymentStatus;
 

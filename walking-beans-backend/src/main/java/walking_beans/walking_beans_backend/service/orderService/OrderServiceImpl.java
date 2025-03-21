@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 결제 정보 설정
-        payment.setOrderNumber(order.getOrderNumber());
+        payment.setOrderId(order.getOrderId());
 
         // 결제 정보 삽입
         paymentMapper.insertPayments(payment);

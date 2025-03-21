@@ -5,7 +5,6 @@ import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import apiRiderService from "../../service/apiRiderService";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
