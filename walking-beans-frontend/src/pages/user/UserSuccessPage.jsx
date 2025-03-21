@@ -4,7 +4,7 @@ import axios from "axios";
 import apiUserOrderService from "../../service/apiUserOrderService"
 import loadingIcon from "../../images/user/loadingIcon.png"
 
-const UserSuccess = () => {
+const UserSuccessPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
@@ -18,8 +18,9 @@ const UserSuccess = () => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user?.user_id || null;
-
-    const [isConfirmed, setIsConfirmed] = useState(false);
+    const orderRequests = queryParams.get("orderRequests");
+    const [isConfirmed, setIsConfirmed] = useState(false)
+    const orderData = location.state;
 
     useEffect(() => {
         const confirmPayment = async () => {
@@ -33,13 +34,14 @@ const UserSuccess = () => {
                         orderTotalPrice,
                         userId,
                         storeId,
-                        addressId
+                        addressId,
                     });
                     alert("결제 정보가 올바르지 않습니다.");
                     navigate("/sandbox/fail", {replace: true});
                     return;
                 }
 
+                // 장바구니 데이터 가져오기
                 const cartItemsRaw = await apiUserOrderService.getUserCartByUserId(userId);
                 console.log("원본 장바구니 데이터:", cartItemsRaw);
 
@@ -67,7 +69,7 @@ const UserSuccess = () => {
                         optionNameList: cart.optionNames ? cart.optionNames.split(",") : [],
                         optionContentList: cart.optionContents ? cart.optionContents.split(",") : [],
                         optionPriceList: cart.optionPrices ? cart.optionPrices.split(",").map(Number) : [],
-                        totalQuantityList: cart.totalQuantities ? cart.totalQuantities.split(",").map(Number) : []
+                        totalQuantityList: cart.totalQuantities ? cart.totalQuantities.split(",").map(Number) : [],
                     };
                 });
 
@@ -81,11 +83,12 @@ const UserSuccess = () => {
                         userId,
                         storeId,
                         addressId,
-                        cartItems
+                        orderRequests,
+                        cartList: cartItems
                     });
                     console.log("만나서 결제 승인:", response.data);
                     alert("주문이 성공적으로 완료되었습니다!");
-
+                    localStorage.removeItem("orderRequests");
                 } else {
                     const response = await axios.post("http://localhost:7070/api/payment/confirm", {
                         paymentKey,
@@ -94,10 +97,12 @@ const UserSuccess = () => {
                         userId,
                         storeId,
                         addressId,
-                        cartItems
+                        orderRequests,
+                        cartList: cartItems
                     });
                     console.log("결제 승인 성공:", response.data);
                     alert("결제가 성공적으로 완료되었습니다!");
+                    localStorage.removeItem("orderRequests");
                 }
 
                 setIsConfirmed(true);
@@ -118,10 +123,11 @@ const UserSuccess = () => {
         <div className="user-order-background">
             <div className="user-order-loading">
                 <img src={loadingIcon}/>
-                <p className="user-title-center">주문 완료 중...</p>
+                <p className="user-title-center">주문이 완료 되었습니다.</p>
+                <p>주문 번호: {orderId}</p>
             </div>
         </div>
     )
 };
 
-export default UserSuccess;
+export default UserSuccessPage;

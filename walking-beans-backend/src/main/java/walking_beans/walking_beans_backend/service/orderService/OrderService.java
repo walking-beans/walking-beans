@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.orderService;
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.List;

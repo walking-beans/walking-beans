@@ -45,9 +45,9 @@ import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
 import UserReviewWrite from "../pages/user/UserReviewWrite";
 import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
-import UserSuccess from "../pages/user/UserSuccess";
-import {FailPage} from "../pages/user/Failpage";
-import CheckoutPage from "../pages/user/CheckoutPage";
+import UserSuccessPage from "../pages/user/UserSuccessPage";
+import {UserFailPage} from "../pages/user/UserFailPage";
+import UserCheckoutPage from "../pages/user/UserCheckoutPage";
 import AdminSignUp from "../pages/admin/AdminSignUp";
 import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
@@ -116,7 +116,7 @@ function PathRoute() {
                                 <Route path="/unlink" element={<AdminMypageUnlink/>}/>
                                 <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
-                                {/* 유저 관련 라우트 구현 완료*/}
+                                {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
 
                                 {/* 주문하기 페이지 구현 완료*/}
@@ -124,15 +124,15 @@ function PathRoute() {
 
                                 {/* 결제하기 페이지 구현 중*/}
                                 {/* 1. checkout toss API KEY 인증*/}
-                                <Route path="/checkout" element={<CheckoutPage />} />
+                                <Route path="/checkout" element={<UserCheckoutPage />} />
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
-                                <Route path="/sandbox/success" element={<UserSuccess />} />
+                                <Route path="/sandbox/success" element={<UserSuccessPage />} />
 
                                 {/*3. 인증 실패 결제 실패*/}
-                                <Route path="/sandbox/fail" element={<FailPage />} />
+                                <Route path="/sandbox/fail" element={<UserFailPage />} />
 
-                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
+                                <Route path="/user/delivery/status/:orderNumber" element={<UserDeliveryStatus/>}/>
 
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />

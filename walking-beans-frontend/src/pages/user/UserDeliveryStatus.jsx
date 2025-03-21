@@ -4,7 +4,7 @@ import riderMapMarker from "../../images/user/riderMapMarker.svg"
 import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
@@ -13,7 +13,6 @@ const UserDeliveryStatus = () => {
     const [map, setMap] = useState(null);
     const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
-    const {orderId} = useParams();
     const [userCoords, setUserCoords] = useState({lat: null, lng: null}); // 유저 주소
     const [storeCoords, setStoreCoords] = useState({lat: null, lng: null}); // 매장 주소
     const [store, setStore] = useState([]);
@@ -21,6 +20,20 @@ const UserDeliveryStatus = () => {
     const [order, setOrder] = useState([]);
     const [cart, setCart] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState(null);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const { orderNumber } = useParams();
+    const [orderId, setOrderId] = useState(null);
+    // const orderNumber = queryParams.get('orderNumber');
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const orderRequests = queryParams.get("orderRequests");
+
+    console.log("받아온 요청사항:", orderRequests ? decodeURIComponent(orderRequests) : "없음");
 
     // 로그인 확인
     useEffect(() => {
@@ -36,6 +49,56 @@ const UserDeliveryStatus = () => {
             navigate("/login");
         }
     }, []);
+
+    // orderId 가져오기 orderNumber 로 바꿀지 고민
+    useEffect(() => {
+        const fetchOrderDetails = async () => {
+            if (!orderNumber) {
+                setError("주문 번호가 없습니다.");
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                // orderNumber를 사용하여 주문 정보를 가져옵니다.
+                const orderResponse = await axios.get(`http://localhost:7070/api/orders/${orderNumber}`);
+                if (orderResponse.data) {
+                    setOrderDetails(orderResponse.data);
+                    setOrderId(orderResponse.data.orderId); // 데이터베이스의 orderId를 설정합니다.
+
+                    // orderId를 사용하여 추가 정보를 가져옵니다.
+                    const [addressResponse, storeResponse] = await Promise.all([
+                        axios.get(`http://localhost:7070/api/addresses/user/order/${orderResponse.data.orderId}`),
+                        axios.get(`http://localhost:7070/api/orders/storeInfo/${orderResponse.data.orderId}`)
+                    ]);
+
+                    setUserCoords({
+                        lat: addressResponse.data.addressLatitude,
+                        lng: addressResponse.data.addressLongitude
+                    });
+                    setAddress(addressResponse.data);
+
+                    setStoreCoords({
+                        lat: storeResponse.data.storeLatitude,
+                        lng: storeResponse.data.storeLongitude
+                    });
+                    setStore(storeResponse.data);
+
+                } else {
+                    setError("주문 정보를 찾을 수 없습니다.");
+                }
+            } catch (err) {
+                setError("데이터를 불러오는 중 오류가 발생했습니다.");
+                console.error("Error fetching data:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOrderDetails();
+    }, [orderNumber]);
+
+
 
     // 주문한 유저 주소 가져오기
     useEffect(() => {
@@ -161,17 +224,6 @@ const UserDeliveryStatus = () => {
 
     }, [isLoaded, userCoords, storeCoords]);
 
-    // 로컬스토리지에서 결제 방식을 가져옵니다.
-    useEffect(() => {
-        const storedPaymentMethod = localStorage.getItem("paymentMethod");
-        if (storedPaymentMethod) {
-            setPaymentMethod(storedPaymentMethod);
-        } else {
-            alert("결제 방식이 선택되지 않았습니다.");
-            navigate(`/user/order/payment/${orderId}`); // 결제 페이지로 이동
-        }
-    }, []);
-
     return (
         <div className="user-delivery-status-container">
             {/* Kakao Map */}
@@ -202,7 +254,7 @@ const UserDeliveryStatus = () => {
 
             <div>
                 <div>요청사항</div>
-                <div>{order.orderRequests}</div>
+                <div>{orderRequests ? decodeURIComponent(orderRequests) : "없음"}</div>
             </div>
 
             {/* 결제 방식에 따른 버튼 */}
