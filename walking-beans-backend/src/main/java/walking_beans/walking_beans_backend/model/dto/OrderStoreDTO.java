@@ -13,6 +13,7 @@ public class OrderStoreDTO {
     private int orderTotalPrice;
     private Timestamp orderCreateDate;
     private Timestamp orderModifiedDate;
+    private long riderIdOnDuty;
 
     // 고객 정보
     private Long customerId; //userId
