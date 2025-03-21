@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.ChattingInfoDTO;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface AlarmMapper {
 
     // 특정 알림을 읽음 처리
     void markNotificationAsRead(@Param("alarmId") Long alarmId);
+
+    // 채팅 유저들 정보 가져오기
+    ChattingInfoDTO getChattingUserInfo (long roomId, long senderId);
 }
