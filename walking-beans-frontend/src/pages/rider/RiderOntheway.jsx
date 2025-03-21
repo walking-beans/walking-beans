@@ -1,51 +1,61 @@
 import React, {useEffect, useState} from "react"
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import apiRiderService from "../../service/apiRiderService";
 import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
-import storeDefault from "../../assert/images/rider/storeDefaultIcon.svg";
+import pickingupIcon from "../../assert/images/rider/pickingupIcon.svg";
+import deliveryIcon from "../../assert/images/rider/deliveryIcon.svg";
+import apiOrdersStoresService from "../../service/apiOrdersStoresService";
 
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
-
 
 // Polyline 컴포넌트
 const RiderOntheway = () => {
 
     const {orderId} = useParams();
-    const [onDelivery, setOnDelivery] = useState(false);
+    const [order, setOrder] = useState(null);
     const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
+
+    const navigate = useNavigate();
+
+    const [onDelivery, setOnDelivery] = useState(false);
+
+    const [storeMarker, setStoreMarker] = useState(null);
 
     // 현재위치 가져오기
     useEffect(() => {
+        // 현재 위치 가져오기
         if (navigator.geolocation) {
-            const watchId = navigator.geolocation.watchPosition(
+            navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const newLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    setLocation({ lat, lng });
 
-                    setLocation(newLocation);
-                    // setPath((prevPath) => [...prevPath, newLocation]);
+                    console.log("사용자 위치 : "+ lat + ", " + lng);
                 },
                 (error) => {
-                    console.error("위치 정보를 가져올 수 없습니다.", error);
-                },
-                {
-                    enableHighAccuracy: true,
-                    maximumAge: 10000,
-                    timeout: 5000,
+                    console.error("위치 정보를 가져올 수 없습니다:", error);
                 }
             );
-
-            return () => navigator.geolocation.clearWatch(watchId);
         } else {
-            console.error("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
+            console.error("Geolocation을 지원하지 않는 브라우저입니다.");
         }
     }, []);
 
-    // 유저 marker 설정, 매장 marker 설정
+    // orderId 통해서 order 추가
     useEffect(() => {
         if (!location) return;
+
+        const  intervalId = setInterval(() => {
+            apiOrdersStoresService.getOrderByOrderId(orderId, setOrder);
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    }, [location]);
+
+    // 유저 marker 설정, 매장 marker 설정
+    useEffect(() => {
+        if (!order) return;
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -75,38 +85,43 @@ const RiderOntheway = () => {
                     map: map,
                     image: userMarkerImage,
                 });
-                /*
-                // 가게 마커 추가 (추후 프로젝트에 맞게 수정바람)
+
                 const storeMarkerImage = new window.kakao.maps.MarkerImage(
-                    `${storeDefault}`, // 사용자 현재 위치 아이콘으로 구분지음
+                    `${pickingupIcon}`, // 사용자 현재 위치 아이콘으로 구분지음
                     new window.kakao.maps.Size(40, 42),
                     { offset: new window.kakao.maps.Point(20, 42) }
                 );
 
-                const marker = new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude),
+                if (!onDelivery) {
+                    setStoreMarker(new window.kakao.maps.Marker({
+                        position: new window.kakao.maps.LatLng(order.storeLatitude, order.storeLongitude),
+                        map: map,
+                        image : storeMarkerImage,
+                    }));
+                }
+
+                const destinationMarkerImage = new window.kakao.maps.MarkerImage(
+                    `${deliveryIcon}`, // 사용자 현재 위치 아이콘으로 구분지음
+                    new window.kakao.maps.Size(40, 42),
+                    { offset: new window.kakao.maps.Point(20, 42) }
+                );
+
+                const destinationMarker = new window.kakao.maps.Marker({
+                    position: new window.kakao.maps.LatLng(order.orderLatitude, order.orderLongitude),
                     map: map,
-                    image : storeMarkerImage,
-                });
-
-                window.kakao.maps.event.addListener(marker, "click", () => {
-                    // map level 2로 바꾸기
-                    map.setLevel(2);
-                    // map 중심 가게 중심으로 바꾸기
-                     map.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
-
-                });*/
+                    image : destinationMarkerImage,
+                })
             });
         };
 
         return () => {
             document.head.removeChild(script);
         };
-    }, []);
-
+    }, [order]);
 
     function handlePickingOrder () {
         setOnDelivery(true);
+        storeMarker.setMap(null);
         apiRiderService.updateOrderStatus(orderId, 4);
         console.log(onDelivery);
     }
@@ -116,22 +131,36 @@ const RiderOntheway = () => {
         window.location.href = url;
     };
 
-
     return (
+
         <div>
-            {/* 맵 출력 */}
-            <div id="map" style={{ width: "100%", height: "650px" }}></div>
+            {
+                order ? (
+                    <div>
+                        {/* 맵 출력 */}
+                        <div id="map" style={{ width: "100%", height: "650px" }}></div>
+                        {
+                            onDelivery ? (
+                                <button
+                                    onClick={() => {navigate(`/rider/result/${orderId}`)}}
+                                >배달 완료
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => {handlePickingOrder()}}
+                                >픽업 완료
+                                </button>
+                            )
+                        }
 
-            <div>{orderId}</div>
-            <button
-                onClick={() => {handlePickingOrder()}}
-            >픽업 완료
-            </button>
-            <button onClick={openKakaoNavi} className="btn btn-primary">
-                카카오 내비 실행
-            </button>
-
-
+                        <button onClick={openKakaoNavi} className="btn btn-primary">
+                            카카오 내비 실행
+                        </button>
+                    </div>
+                ) : (
+                    <div>로딩 중...</div>
+                )
+            }
         </div>
     )
 }

@@ -38,6 +38,11 @@ public class OrderStoreServiceImpl implements OrderStoreService {
         return groupedOrders;
     }
 
+    @Override
+    public OrderStoreDTO getOrderByOrderId(long orderId) {
+        return orderMapper.getOrderByOrderId(orderId);
+    }
+
     public double getRadius(OrderStoreDTO order, double lat, double lng) {
         log.info("==== getRadius {}, {}, {}, {} ====", order.getStoreLatitude(), order.getStoreLongitude(), lat, lng );
         /*
@@ -66,4 +71,6 @@ public class OrderStoreServiceImpl implements OrderStoreService {
         log.info("R * c = {}", R * c);
         return R * c;
     }
+
+
 }

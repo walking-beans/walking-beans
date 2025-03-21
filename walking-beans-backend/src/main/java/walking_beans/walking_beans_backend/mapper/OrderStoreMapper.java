@@ -12,4 +12,6 @@ public interface OrderStoreMapper {
     List<OrderStoreDTO> getOrdersForRider();
 
     List <OrderStoreDTO> getOrdersByRiderIdOnDuty();
+
+    OrderStoreDTO getOrderByOrderId(@Param("orderId") long orderId);
 }

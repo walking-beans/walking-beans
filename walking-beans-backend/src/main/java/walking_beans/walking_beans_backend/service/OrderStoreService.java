@@ -9,4 +9,6 @@ public interface  OrderStoreService {
     List<OrderStoreDTO> getOrdersForRider();
 
     Map<Long, List<OrderStoreDTO>> getOrdersByRiderIdOnDuty(double lat, double lng);
+
+    OrderStoreDTO getOrderByOrderId(long orderId);
 }
