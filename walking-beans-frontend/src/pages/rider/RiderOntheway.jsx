@@ -157,7 +157,7 @@ const RiderOntheway = () => {
 
         <div>
             {
-                (order && (userRoomId !== "0") && (storeRoomId !== ("0"))) ? (
+                order ? (
                     <div>
                         {/* 맵 출력 */}
                         <div id="map" style={{ width: "100%", height: "650px" }}></div>
@@ -217,18 +217,25 @@ const RiderOntheway = () => {
                                 }
                             </div>
                             <div className="btn-container">
-                                <button
-                                    className="btn btn-outline-info btn-lg"
-                                    onClick={() => {navigate(`/chat/message/${storeRoomId}`)}}
-                                >
-                                    매장 채팅하기
-                                </button>
-                                <button
-                                    className="btn btn-outline-danger btn-lg"
-                                    onClick={() => {navigate(`/chat/message/${userRoomId}`)}}
-                                >
-                                    고객 채팅하기
-                                </button>
+                                {
+                                    storeRoomId !== "0" &&
+                                    <button
+                                        className="btn btn-outline-info btn-lg"
+                                        onClick={() => {navigate(`/chat/message/${storeRoomId}`)}}
+                                    >
+                                        매장 채팅하기
+                                    </button>
+                                }
+                                {
+                                    userRoomId !== "0" &&
+                                    <button
+                                        className="btn btn-outline-danger btn-lg"
+                                        onClick={() => {navigate(`/chat/message/${userRoomId}`)}}
+                                    >
+                                        고객 채팅하기
+                                    </button>
+                                }
+
                             </div>
                             <div className="btn-container">
                                 {/* 카카오 내비 url 이동 */}
