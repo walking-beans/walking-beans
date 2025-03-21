@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Footer from "../pages/custom-login/Footer";
 import HeaderRoute from "./HeaderRoute";
@@ -27,7 +27,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminMypage from "../pages/admin/AdminMypage";
 
 import UserInsertAddress from "../pages/user/UserInsertAddress";
-import UserOrdering from "../pages/user/UserOrdering";
+import UserOrderCheckout from "../pages/user/UserOrderCheckout";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
 import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
@@ -37,15 +37,18 @@ import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
+import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
+import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
 
 
 
 import UserReviewWrite from "../pages/user/UserReviewWrite";
 import AdminChangeRole from "../pages/admin/AdminChangeRole";
 import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
-import UserSuccess from "../pages/user/UserSuccess";
-import {FailPage} from "../pages/user/Failpage";
-import CheckoutPage from "../pages/user/CheckoutPage";
+import UserSuccessPage from "../pages/user/UserSuccessPage";
+import {UserFailPage} from "../pages/user/UserFailPage";
+import UserCheckoutPage from "../pages/user/UserCheckoutPage";
+import AdminSignUp from "../pages/admin/AdminSignUp";
 import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
@@ -56,6 +59,10 @@ function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedStoreId,setSelectedStoreId] = useState();
     const [currentOrderId,setCurrentOrderId] = useState();
+
+    /*** rider ***/
+    // 운행 중 or 퇴근
+    const [riderOnDuty, setRiderOnDuty] = useState(false);
 
 
     const [user, setUser] = useState(() => {
@@ -88,7 +95,10 @@ function PathRoute() {
     return (
         <div className="layout-container">
             <BrowserRouter>
-                <HeaderRoute user={user}/>
+                <HeaderRoute user={user}
+                             riderOnDuty={riderOnDuty}
+                             setRiderOnDuty={setRiderOnDuty}
+                />
                 <div className="content-wrapper">
                     <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
@@ -97,33 +107,37 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/alarm" element={<AdminNewAlarm/>}/> {/*알람 테스트 페이지1*/}
-                                <Route path="/alarmtest" element={<AdminResultFindPw />}/>{/*알람 테스트 페이지2*/}
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
+                                <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
+                                { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
+                                <Route path="/unlink" element={<AdminMypageUnlink/>}/>
+                                <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>
 
-                                {/* 유저 관련 라우트 */}
+                                {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
-                                {/*<Route path="/user/order/:storeId" element={<UserOrder />} />*/}
-                                {/* 주문하기 페이지 */}
-                                <Route path="/user/ordering/:orderId" element={<UserOrdering />}/>
-                                {/* 결제하기 페이지 */}
+
+                                {/* 주문하기 페이지 구현 완료*/}
+                                <Route path="/order/checkout/:userId" element={<UserOrderCheckout />}/>
+
+                                {/* 결제하기 페이지 구현 중*/}
                                 {/* 1. checkout toss API KEY 인증*/}
-                                <Route path="/checkout" element={<UserPayment />} />
+                                <Route path="/checkout" element={<UserCheckoutPage />} />
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
-                                <Route path="/sandbox/success" element={<UserSuccess />} />
+                                <Route path="/sandbox/success" element={<UserSuccessPage />} />
 
                                 {/*3. 인증 실패 결제 실패*/}
-                                <Route path="/sandbox/fail" element={<FailPage />} />
+                                <Route path="/sandbox/fail" element={<UserFailPage />} />
 
+                                <Route path="/user/delivery/status/:orderNumber" element={<UserDeliveryStatus/>}/>
 
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
                                 {/*주문 상세정보*/}
-                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+                                <Route path="/order/:orderId" element={<UserOrderDetail />} />
 
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
@@ -132,7 +146,7 @@ function PathRoute() {
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
                                 <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
-                                <Route path="/user/delivery/status/:orderId" element={<UserDeliveryStatus/>}/>
+
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
 
@@ -140,7 +154,11 @@ function PathRoute() {
                                 <Route path="/r/map" element={<RiderMap />} />
 
                                 <Route path="/rider" element={
-                                    <RiderMain/>
+                                    <RiderMain
+                                        user={user}
+                                        riderOnDuty={riderOnDuty}
+                                        setRiderOnDuty={setRiderOnDuty}
+                                    />
                                 }/>
                                 <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>

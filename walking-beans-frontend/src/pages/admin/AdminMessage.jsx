@@ -111,7 +111,7 @@ export default AdminMessage;
 */
 import React, { useEffect, useState, useRef } from "react";
 import { Stomp } from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import {useParams} from "react-router-dom";
 import "../../css/admin/AdminMessage.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
@@ -120,7 +120,7 @@ import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-p
 import SendAlarm from "../../components/admin/SendAlarm";
 
 
-function AdminMessage({user}) {
+const AdminMessage = ({user}) => {
 
     const {roomId} = useParams();
     const stompClient = useRef(null);
@@ -162,7 +162,7 @@ function AdminMessage({user}) {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/${roomId}`, (message) => {
+            stompClient.current.subscribe(`/topic/chatroom/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -203,12 +203,11 @@ function AdminMessage({user}) {
                 messageRole : 1,
                 messageContent : inputValue
             };
-            stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
-            stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
-            setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
+            stompClient.current.send(`/app/message`, {}, JSON.stringify(body));
+            stompClient.current.send(`/app/chatting`, {}, JSON.stringify(body));
+            // setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
-            setShowSendAlarm(true); //알람 전송 트리거
-            return;
+            // setShowSendAlarm(true); //알람 전송 트리거
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
             reader.readAsDataURL(previewImage);
@@ -228,9 +227,8 @@ function AdminMessage({user}) {
             setIsDisabled(false);
         } else {
             alert("메세지를 작성해주세요");
-            setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
-            setShowSendAlarm(true); //알림 전송 트리거
-            return;
+            // setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
+            // setShowSendAlarm(true); //알림 전송 트리거
         }
         // 알람 컴포넌트
 

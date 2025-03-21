@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.orderService;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,12 +9,15 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
 import walking_beans.walking_beans_backend.model.vo.OrderItems;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -80,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
     public UserOrderDTO getOrderByOrderNumber(String orderNumber) {
         return orderMapper.getOrderByOrderNumber(orderNumber);
     }
+
     @Override
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
@@ -133,12 +138,32 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderStatus(orderId);
     }
 
+    // orderNumber 영어 대문자, 숫자 랜덤 8자리
+    public class OrderNumberGenerator {
+        public static String generateOrderNumber() {
+            return UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        }
+    }
 
     @Override
     public Long createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
+            // 주문번호(랜덤) 생성)
+            String orderNumber = requestData.get("orderNumber").toString();
+            if (orderNumber == null || orderNumber.isEmpty()) {
+                orderNumber = OrderNumberGenerator.generateOrderNumber();
+            }
+            requestData.put("orderNumber", orderNumber);
+
+            // 요청사항
+            if (requestData.containsKey("orderRequests")) {
+                log.info("요청사항: {}", requestData.get("orderRequests"));
+            } else {
+                log.warn("요청사항이 없습니다.");
+            }
+
             // 기본 데이터 타입 변환 (String → Long & int)
             Long userId = Long.parseLong(requestData.get("userId").toString());
             Long storeId = Long.parseLong(requestData.get("storeId").toString());
@@ -152,43 +177,56 @@ public class OrderServiceImpl implements OrderService {
 
             // `orders` 테이블에 주문 생성
             orderMapper.createOrder(requestData);
-            String orderNumber = (String) requestData.get("orderNumber");
             log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
+            log.info("▶ orders 테이블 삽입 데이터: {}", requestData);
 
-            // `cartItems` 데이터를 `order_items` 테이블에 저장
-            List<Map<String, Object>> cartItems = (List<Map<String, Object>>) requestData.get("cartItems");
-            log.info(" cartItems: {}", cartItems);
+            // `cartList` 데이터를 `order_items` 테이블에 저장
+            Object cartListObj = requestData.get("cartList");
 
-            if (cartItems != null && !cartItems.isEmpty()) {
+            if (cartListObj instanceof List) {
+                List<Map<String, Object>> cartItems = (List<Map<String, Object>>) cartListObj;
+                log.info("cartItems 개수: {}", cartItems.size());
+
                 for (Map<String, Object> item : cartItems) {
-                    // `menuId` 변환
-                    Long menuId = Long.parseLong(item.get("menuId").toString());
+                    // `menuId` 처리
+                    Object menuIdObj = item.get("menuId");
+                    if (menuIdObj == null) {
+                        log.warn("메뉴 ID가 없는 아이템 스킵");
+                        continue;
+                    }
+                    Long menuId = Long.parseLong(menuIdObj.toString());
 
-                    // `optionId` 처리 (여러 개일 경우 첫 번째 옵션만 저장)
-                    String optionIds = item.get("optionIds").toString();
+                    // `optionId` 처리
+                    String optionIds = item.containsKey("optionIds")
+                            ? item.get("optionIds").toString()
+                            : null;
                     Long optionId = null;
                     if (optionIds != null && !optionIds.isEmpty()) {
                         String[] optionIdArray = optionIds.split(",");
-                        optionId = Long.parseLong(optionIdArray[0]); // 첫 번째 옵션만 저장
+                        optionId = Long.parseLong(optionIdArray[0]);
                     }
 
-                    //  `quantity` 변환
-                    int quantity = Integer.parseInt(item.get("totalQuantities").toString());
-
-                    // `OrderItems` 객체 생성
-                    OrderItems orderItem = new OrderItems(null, orderNumber, menuId, optionId != null ? optionId.toString() : null, quantity);
+                    // `quantity` 처리
+                    Object quantityObj = item.get("totalQuantities");
+                    if (quantityObj == null) {
+                        log.warn("수량 정보가 없는 아이템 스킵");
+                        continue;
+                    }
+                    int quantity = Integer.parseInt(quantityObj.toString());
 
                     // MyBatis에 전달할 데이터 생성
                     Map<String, Object> orderItemParams = new HashMap<>();
                     orderItemParams.put("orderNumber", orderNumber);
-                    orderItemParams.put("menuId", orderItem.getMenuId());
-                    orderItemParams.put("optionId", orderItem.getOptionId());
-                    orderItemParams.put("quantity", orderItem.getQuantity());
+                    orderItemParams.put("menuId", menuId);
+                    orderItemParams.put("optionId", optionId);
+                    orderItemParams.put("quantity", quantity);
 
                     // `order_items` 테이블에 삽입
                     orderMapper.insertOrderItem(orderItemParams);
-                    log.info("주문 아이템 저장 완료! 주문 번호: {}, 메뉴 ID: {}, 옵션 ID: {}, 수량: {}", orderNumber, menuId, optionId, quantity);
+                    log.info("주문 아이템 저장 완료: {}", orderItemParams);
                 }
+            } else {
+                log.warn("cartList가 List 타입이 아닙니다.");
             }
 
             return userId;
@@ -197,5 +235,4 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("주문 저장 실패");
         }
     }
-
 }

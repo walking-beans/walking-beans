@@ -39,6 +39,7 @@ public class AddressAPIController {
     // 주소 추가
     @PostMapping("/UserInsertAddress")
     public String UserInsertAddress(@RequestBody Address address) {
+        log.info("======= ====== {} ", address.toString());
         addressService.insertAddress(address);
         return "주소가 성공적으로 추가되었습니다.";
     }

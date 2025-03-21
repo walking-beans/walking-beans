@@ -78,7 +78,6 @@
         VALUES (#{userId}, #{storeId}, #{addressId}, 0, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
     </insert>
 
-
     <!-- 장바구니 내 주문하기 클릭 시 주문 중으로 상태 업데이트-->
     <update id="updateOrderStatusToCart">
         UPDATE orders
@@ -146,7 +145,7 @@
                order_number,
                delivery_address,
                total_payment,
-               special_requests,
+               order_requests,
                order_list
         FROM user_orders_view
         WHERE user_id = #{userId}
@@ -154,14 +153,15 @@
 
     <!-- 주문 내역 조회 -->
     <select id="getOrderByOrderNumber">
-        SELECT user_id,
+        SELECT order_id,
+               user_id,
                customer_name,
                store_name,
                order_date,
                order_number,
                delivery_address,
                total_payment,
-               special_requests,
+               order_requests,
                order_list
         FROM user_orders_view
         WHERE order_number = #{orderNumber}

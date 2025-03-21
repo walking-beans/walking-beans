@@ -3,8 +3,6 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
 
-import bellIcon from "../../assert/svg/bell.svg";
-import alarmIcon from "../../assert/svg/alarm.svg";
 import chatBubble from "../../assert/svg/userNav/chat_bubble.svg";
 import logoImg from "../../assert/svg/userNav/walkingBeans.svg";
 import packages from "../../assert/svg/userNav/package.svg";
@@ -15,6 +13,7 @@ import shoppingBasket from "../../assert/svg/userNav/shopping_basket.svg";
 import toggleIcon from "../../assert/svg/togle.svg";
 import userIcon from "../../assert/svg/user.svg";
 import apiUserService from "../../service/apiUserService";
+import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
 const UserHeader = ({user}) => {
     const location = useLocation();
@@ -27,59 +26,11 @@ const UserHeader = ({user}) => {
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
-    const [alretSoket, setAlertSocket] = useState(null); // 웹소켓 상태
 
     const [userAddress, setUserAddress] = useState(null);  // 주소 상태 관리
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
-
-    // 웹소켓 열기
-    useEffect(() => {
-        const wsAlert = new WebSocket("ws://localhost:7070/ws/alert");
-        const storedUserId = localStorage.getItem("user");
-        // JSON 문자열을 객체로 변환
-        const userObject = storedUserId ? JSON.parse(storedUserId) : {user_id : "noId"} // user가 null이면 noId넣기
-
-        // 객체에서 user_id를 가져옵니다.
-        const userId = userObject.user_id;
-
-        wsAlert.onopen = () => {
-            console.log("✅ 알림 WebSocket 연결 성공");
-        };
-
-        wsAlert.onmessage = (event) => {
-
-            console.log("📩 새 알림 도착:", event.data); // event.data 로그로 실제 내용을 확인
-            try {
-                const receivedData = JSON.parse(event.data);  // event.data를 JSON.parse로 변환
-                if (receivedData.userId === userId) {
-                    setNotifications((prevNotifications) => [
-                        ...prevNotifications,
-                        {message: receivedData.alarmContent, type: receivedData.alarmRole, senderId: receivedData.alarmSenderId},// 알람리스트
-                    ]);
-
-                    setUnreadCount((prevCount) => prevCount + 1);
-                }
-            } catch (error) {
-                console.error("JSON 파싱 오류:", error);  // JSON.parse 오류 발생 시
-            }
-        };
-
-        //웹 소켓 연결 오류
-        wsAlert.onerror = (error) => {
-            console.error("🚨 WebSocket 오류:", error);
-        };
-
-        // 웹소켓 연결 종료
-        wsAlert.onclose = () => {
-            console.warn("❌ 알림 WebSocket 연결 종료");
-        };
-
-        setAlertSocket(wsAlert);
-
-        return () => wsAlert.close();
-    }, []);
 
     // 유저 정보 로드
     useEffect(() => {
@@ -177,38 +128,7 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-                                <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
-                                    <img src={showDropdown ? alarmIcon : bellIcon} className="header-icon" alt="notifications" />
-                                    {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
-                                </div>
-                                {showDropdown && (
-                                    <div className={"AlarmDropdown"}>
-                                        {notifications.length > 0 ? (
-                                            notifications.map((noti, index) => (
-                                                <div key={index} className={"AlarmNotificationItem"} onClick={() => {
-                                                    if (noti.type === 1) {
-                                                        navigate("/alarmlist");
-                                                        //setNotifications([]);//알림 목록 비우기
-                                                        setShowDropdown(false); // 알림목록 닫기
-                                                    } else if (noti.type === 2) {
-                                                        navigate(`/chat/message/${noti.senderId}`);
-                                                        setShowDropdown(false); // 알림목록 닫기
-                                                    }
-                                                }
-                                                }>
-                                                    <strong>{noti.type === 1 ? "🔔 알림" : noti.type === 2 ? "💬 채팅" : ""}:</strong><br /> {noti.message}
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <div className={"NoAlarmNotificationItem"}>
-                                                <p>알림이 없습니다.</p>
-                                                <Link to="/alarmlist" className={"AlarmLink"} onClick={() => setShowDropdown(false)}>
-                                                    목록 보기
-                                                </Link>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                <HeaderAlarm userId={currentUser.user_id} bell={false} />
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>

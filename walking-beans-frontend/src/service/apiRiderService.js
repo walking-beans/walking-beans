@@ -56,6 +56,38 @@ const apiRiderService = {
             )
     },
 
+    updateOrdersByRiderIdAndOrderId : function (riderId, orderId) {
+        axios
+            .patch(`${API_URL}/orders/onme?riderId=${riderId}&orderId=${orderId}`)
+            .then(
+                (res) => {
+                    console.log(res.data + "개 변경");
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("주문 정보에 해당 라이더를 업데이트 중 문제가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            )
+    },
+
+    updateOrderStatus : function (orderId, orderStatus) {
+        axios
+            .patch(`${API_URL}/orders/orderStatus?orderId=${orderId}&orderStatus=${orderStatus}`)
+            .then(
+                (res) => {
+                    console.log(res.data + "개 변경");
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("주문 정보에 주문 상태를 업데이트 중 문제가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            )
+    },
+
     /***************** Stores *****************/
     getStoreInfoInRiderMain : function (setStores) {
         axios
@@ -72,6 +104,22 @@ const apiRiderService = {
             .catch(
                 (err) => {
                     alert("주문 내역을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            )
+    },
+
+    getStoreAddressByOrderId : function (orderId, setStore) {
+        axios
+            .get(`${API_URL}/store/address/orderId/${orderId}`)
+            .then(
+                (res) => {
+                    setStore(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("가게 정보를 불러오는 중 오류가 발생했습니다.");
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             )

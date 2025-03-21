@@ -145,7 +145,7 @@ export default AdminChattingroom;*/
 import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 
@@ -201,7 +201,7 @@ const AdminChattingroom = ({user}) => {
 
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chattingroom`, (message) => {
+            stompClient.current.subscribe(`/topic/chattingroom`, (message) => {
                 console.log("connected && message : ", message);
                 (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });

@@ -1,6 +1,4 @@
 import React from "react";
-import orderCartDeleteBtnIcon from "../../images/user/orderCartDeleteBtn.svg";
-import orderCartDeleteBtnIconHover from "../../images/user/orderCartDeleteBtnHover.svg";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import orderCartDeleteBtnIconMini from "../../images/user/orderCartDeleteBtnIconMini.svg";
 
@@ -24,7 +22,6 @@ const UserCart = ({
     const optionPriceList = optionPrices ? optionPrices.split(",").map(Number) : [];
     const quantityList = totalQuantities ? totalQuantities.split(",").map(Number) : [];
     const optionIdsList = optionIds ? optionIds.split(",") : [];
-    console.log("Processed data:", { menuList, priceList, optionList, optionContentList, optionPriceList, quantityList });
 
     const handleQuantityChange = async (newQuantity, itemIndex) => {
         const currentQuantity = quantityList[itemIndex];
@@ -68,8 +65,6 @@ const UserCart = ({
 
                 // 총 가격 계산
                 const totalPrice = (menuPrice + totalOptionPrice) * quantity;
-
-                console.log(`Menu ${index} details:`, { menuPrice, options, optionContents, optionPrices, totalOptionPrice, totalPrice });
 
                 return (
                     <div key={index} className="user-cart-container">

@@ -30,4 +30,9 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
         return chattingRoomMapper.getUserChattingRoomByUserId(userId, receiverRelation);
     }
 
+    @Override
+    public long getRoomIdByOrderId(long orderId) {
+        return chattingRoomMapper.getRoomIdByOrderId(orderId);
+    }
+
 }
