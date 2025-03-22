@@ -23,4 +23,5 @@ public class ChattingInfoDTO {
     private String receiverName;
     private int receiverRelation;
     private String receiverPictureUrl;
+
 }
