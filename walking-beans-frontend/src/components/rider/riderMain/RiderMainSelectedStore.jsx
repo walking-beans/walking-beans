@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
+import "../../../css/rider/RiderMainSelectedStore.css";
 
-const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingSelectedOrder}) => {
+const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingSelectedOrder, checkingSelectedOrder}) => {
 
     const [selectedStore, setSelectedStore] = useState([]);
 
@@ -17,7 +18,27 @@ const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingS
 
     return (
         <div>
-            {
+            <div className="rider-main-selected-store-container">
+                <div className="rider-main-selected-store-container-store-name">
+                    {selectedStore[0]?.storeName}
+                </div>
+                <div className="rider-main-selected-store-container-store-address">
+                    {selectedStore[0]?.storeAddress}
+                </div>
+                {
+                    selectedStore?.map(order => (
+                        <li key={order.orderId}>
+                            <div onClick={() => {handleSelectedOrder(order.orderId)}}
+                            >
+                                <p><strong>{order.orderNumber}</strong></p>
+                                <p className="rider-main-selected-store-li-delivery-title">배달 주소</p>
+                                <p className="rider-main-selected-store-li-delivery-address">{order.orderAddress} {order.orderDetailedAddress}</p>
+                            </div>
+                        </li>
+                    ))
+                }
+            </div>
+            {/*{
                 selectedStore?.map(order => (
                     <li key={order.orderId}>
                         <button onClick={() => {handleSelectedOrder(order.orderId)}}
@@ -29,7 +50,7 @@ const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingS
                         </button>
                     </li>
                 ))
-            }
+            }*/}
         </div>
 
     )
