@@ -77,7 +77,7 @@ public class ChatController {
 public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
     log.info("================ receiveChattingMessage : {} ===================", message.toString());
     // 메시지를 해당 채팅방 구독자들에게 전송
-    messagingTemplate.convertAndSend("/topic/chattingroom" + message.getRoomId(), message);
+    messagingTemplate.convertAndSend("/topic/chattingroom", message);
     return ResponseEntity.ok().build();
 }
 
