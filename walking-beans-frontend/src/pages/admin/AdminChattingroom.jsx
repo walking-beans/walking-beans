@@ -11,7 +11,7 @@ const AdminChattingroom = ({user}) => {
 
     const [receiverRelationLeft, setReceiverRelationLeft] = useState(2);
     const [receiverRelationRight, setReceiverRelationRight] = useState(3);
-    const [leftOrRight, setLeftOrRight] = useState(false);
+    const [IsLeftClicked, setIsLeftClicked] = useState(false);
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
 
@@ -55,7 +55,7 @@ const AdminChattingroom = ({user}) => {
         stompClient.current.connect({}, () => {
             stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
                 console.log("connected && message : ", message);
-                (leftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
+                (IsLeftClicked) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });
         });
     };
@@ -86,12 +86,12 @@ const AdminChattingroom = ({user}) => {
     const handleButton = (whichOne) => {
         console.log(whichOne);
         if (whichOne) {
-            setLeftOrRight(true);
+            setIsLeftClicked(true);
             apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom);
             setClassRightBtn("btn btn-dark btn-lg");
             setClassLeftBtn("btn btn-light btn-lg");
         } else {
-            setLeftOrRight(false);
+            setIsLeftClicked(false);
             apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             setClassLeftBtn("btn btn-dark btn-lg");
             setClassRightBtn("btn btn-light btn-lg");
@@ -148,18 +148,28 @@ import {Stomp} from "@stomp/stompjs";
 import apiRiderService from "../../service/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
+import apiChattingInfo from "../../service/apiChattingInfo";
+import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
+import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
 
 const AdminChattingroom = ({user}) => {
 
     const stompClient = useRef(null);
     const [chattingRoom, setChattingRoom] = useState([]);
+    const [chattingInfo, setChattingInfo] = useState({});
 
-    const [leftOrRight, setLeftOrRight] = useState(false);
+    const [IsLeftClicked, setIsLeftClicked] = useState(true);
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
 
     const [classLeftBtn, setClassLeftBtn] = useState("btn btn-dark btn-lg");
     const [classRightBtn, setClassRightBtn] = useState("btn btn-light btn-lg");
+
+    const status = {
+        "고객" : 1,
+        "라이더" : 2,
+        "매장" : 3,
+    }
 
     // user_role 에 따른 채팅목록 설정
     function setReceiver() {
@@ -179,28 +189,31 @@ const AdminChattingroom = ({user}) => {
     }
 
     // chattingroom update
-    function updateChattingRoom(leftOrRight) {
-        console.log("updateChattingRoom LeftOrRight : " + leftOrRight);
+    /*function updateChattingRoom(IsLeftClicked) {
+        console.log("updateChattingRoom IsLeftClicked : " + IsLeftClicked);
         if (user.user_role === "user") {
             console.log("user");
-            if (leftOrRight) {
+            if (IsLeftClicked) {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
             } else {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
             }
         } else if (user.user_role === "rider") {
-            if (leftOrRight) {
+            if (IsLeftClicked) {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
             } else {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
             }
         } else {
-            if (leftOrRight) {
+            if (IsLeftClicked) {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
             } else {
                 apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
             }
         }
+    }*/
+    function updateChattingInfo() {
+        apiChattingInfo.getChattingInfoBySenderId(user.user_id, setChattingInfo);
     }
 
     // 웹소켓 연결 설정
@@ -212,8 +225,8 @@ const AdminChattingroom = ({user}) => {
         stompClient.current.connect({}, () => {
 
             stompClient.current.subscribe(`/topic/chattingroom`, (message) => {
-                console.log("connected && message : ", leftOrRight);
-                updateChattingRoom(leftOrRight);
+                console.log("connected && message : ", IsLeftClicked);
+                updateChattingInfo();
             });
         });
     };
@@ -229,18 +242,17 @@ const AdminChattingroom = ({user}) => {
 
     const handleButton = (whichOne) => {
         if (whichOne) {
-            setLeftOrRight(true);
-            console.log(`userId : ${user.user_id}, receiverRelationRight : ${leftOrRight}`);
+            setIsLeftClicked(false);
+            console.log(`userId : ${user.user_id}, receiverRelationRight : ${IsLeftClicked}`);
             setClassRightBtn("btn btn-dark btn-lg");
             setClassLeftBtn("btn btn-light btn-lg");
         } else {
             console.log("handleButton : left");
-            setLeftOrRight(false);
-            console.log(`userId : ${user.user_id}, receiverRelationLeft : ${leftOrRight}`);
+            setIsLeftClicked(true);
+            console.log(`userId : ${user.user_id}, receiverRelationLeft : ${IsLeftClicked}`);
             setClassLeftBtn("btn btn-dark btn-lg");
             setClassRightBtn("btn btn-light btn-lg");
         }
-        updateChattingRoom(whichOne);
     }
 
     useEffect(() => {
@@ -252,7 +264,7 @@ const AdminChattingroom = ({user}) => {
     }, [user]);
 
     useEffect(() => {
-        updateChattingRoom();
+        updateChattingInfo();
     }, []);
 
     return (
@@ -274,7 +286,7 @@ const AdminChattingroom = ({user}) => {
 
                 </div>
                 <div className="admin-chattingroom-list">
-                    {(chattingRoom!== []) ? (
+                    {/*{(chattingRoom!== []) ? (
                         chattingRoom.map((room, index) => (
                             <Link to={`/chat/message/${room.roomId}`}>
                                 <div
@@ -290,7 +302,39 @@ const AdminChattingroom = ({user}) => {
                         ))
                     ) : (
                         <p>채팅 기록이 없습니다.</p>
-                    )}
+                    )}*/}
+                    {
+                        IsLeftClicked ? (
+                            chattingInfo[status[leftButtonValue]]?.map((room, index) => (
+                                <Link to={`/chat/message/${room.roomId}`}>
+                                    <div
+                                        key={index}
+                                        className="admin-chattingroom-list-chat"
+                                    >
+                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p>{room.receiverName}</p>
+                                        <p>{room.lastMessage}</p>
+                                        <p>{room.modifiedDate}</p>
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            chattingInfo[status[rightButtonValue]]?.map((room, index) => (
+                                <Link to={`/chat/message/${room.roomId}`}>
+                                    <div
+                                        key={index}
+                                        className="admin-chattingroom-list-chat"
+                                    >
+                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p>{room.receiverName}</p>
+                                        <p>{room.lastMessage}</p>
+                                        <p>{room.modifiedDate}</p>
+                                    </div>
+                                </Link>
+                            ))
+
+                        )
+                    }
                 </div>
             </ul>
         </div>
