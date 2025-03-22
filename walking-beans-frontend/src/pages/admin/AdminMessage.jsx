@@ -183,7 +183,7 @@ const AdminMessage = ({user}) => {
                 console.log(newMessage);
             });
         apiRiderService.getAllChattingMembers(roomId,
-            1,
+            user.user_id,
             (chattingMemberList) => {
                 setSenderId(chattingMemberList[0].roomReceiverId);
             });

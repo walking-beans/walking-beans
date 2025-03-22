@@ -11,7 +11,7 @@ const AdminChattingroom = ({user}) => {
 
     const [receiverRelationLeft, setReceiverRelationLeft] = useState(2);
     const [receiverRelationRight, setReceiverRelationRight] = useState(3);
-    const [receiverRelationLeftOrRight, setReceiverRelationLeftOrRight] = useState(false);
+    const [leftOrRight, setLeftOrRight] = useState(false);
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
 
@@ -55,7 +55,7 @@ const AdminChattingroom = ({user}) => {
         stompClient.current.connect({}, () => {
             stompClient.current.subscribe(`/sub/chatroom/1`, (message) => {
                 console.log("connected && message : ", message);
-                (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
+                (leftOrRight) ? apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             });
         });
     };
@@ -86,12 +86,12 @@ const AdminChattingroom = ({user}) => {
     const handleButton = (whichOne) => {
         console.log(whichOne);
         if (whichOne) {
-            setReceiverRelationLeftOrRight(true);
+            setLeftOrRight(true);
             apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationRight, setChattingRoom);
             setClassRightBtn("btn btn-dark btn-lg");
             setClassLeftBtn("btn btn-light btn-lg");
         } else {
-            setReceiverRelationLeftOrRight(false);
+            setLeftOrRight(false);
             apiRiderService.getUserChattingRoomByUserId(userId, receiverRelationLeft, setChattingRoom);
             setClassLeftBtn("btn btn-dark btn-lg");
             setClassRightBtn("btn btn-light btn-lg");
@@ -151,45 +151,55 @@ import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefa
 
 const AdminChattingroom = ({user}) => {
 
-    const navigate = useNavigate();
     const stompClient = useRef(null);
     const [chattingRoom, setChattingRoom] = useState([]);
 
-    const [receiverRelationLeft, setReceiverRelationLeft] = useState(2);
-    const [receiverRelationRight, setReceiverRelationRight] = useState(3);
-    const [receiverRelationLeftOrRight, setReceiverRelationLeftOrRight] = useState(false);
+    const [leftOrRight, setLeftOrRight] = useState(false);
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
 
     const [classLeftBtn, setClassLeftBtn] = useState("btn btn-dark btn-lg");
     const [classRightBtn, setClassRightBtn] = useState("btn btn-light btn-lg");
 
-
-    const [currentUser, setCurrentUser] = useState(null);
-
-    // userId 에 따른 채팅목록 설정
+    // user_role 에 따른 채팅목록 설정
     function setReceiver() {
         if (user.user_role === "user") {
-            // 라이더 목록 초기화
-            setReceiverRelationRight(2);
+            console.log("user");
             setLeftButtonValue("라이더");
-            // 매장 목록 초기화
-            setReceiverRelationRight(3);
             setRightButtonValue("매장");
         } else if (user.user_role === "rider") {
-            // 고객 목록 초기화
-            setReceiverRelationLeft(1);
-            setLeftButtonValue("빈즈");
-            // 매장 목록초기화
-            setReceiverRelationRight(3);
+            console.log("rider");
+            setLeftButtonValue("고객");
             setRightButtonValue("매장");
         } else {
-            // 고객 목록 초기화
-            setReceiverRelationLeft(1);
-            setLeftButtonValue("빈즈")
-            // 라이더 목록 초기화
-            setReceiverRelationRight(2);
+            console.log("owner");
+            setLeftButtonValue("고객")
             setRightButtonValue("라이더");
+        }
+    }
+
+    // chattingroom update
+    function updateChattingRoom(leftOrRight) {
+        console.log("updateChattingRoom LeftOrRight : " + leftOrRight);
+        if (user.user_role === "user") {
+            console.log("user");
+            if (leftOrRight) {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
+            } else {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
+            }
+        } else if (user.user_role === "rider") {
+            if (leftOrRight) {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
+            } else {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
+            }
+        } else {
+            if (leftOrRight) {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
+            } else {
+                apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
+            }
         }
     }
 
@@ -200,9 +210,10 @@ const AdminChattingroom = ({user}) => {
 
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
+
             stompClient.current.subscribe(`/topic/chattingroom`, (message) => {
-                console.log("connected && message : ", message);
-                (receiverRelationLeftOrRight) ? apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationRight, setChattingRoom) : apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft, setChattingRoom);
+                console.log("connected && message : ", leftOrRight);
+                updateChattingRoom(leftOrRight);
             });
         });
     };
@@ -217,36 +228,32 @@ const AdminChattingroom = ({user}) => {
     };
 
     const handleButton = (whichOne) => {
-        console.log(whichOne);
         if (whichOne) {
-            setReceiverRelationLeftOrRight(true);
-            apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationRight, setChattingRoom);
+            setLeftOrRight(true);
+            console.log(`userId : ${user.user_id}, receiverRelationRight : ${leftOrRight}`);
             setClassRightBtn("btn btn-dark btn-lg");
             setClassLeftBtn("btn btn-light btn-lg");
         } else {
-            setReceiverRelationLeftOrRight(false);
-            apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft, setChattingRoom);
+            console.log("handleButton : left");
+            setLeftOrRight(false);
+            console.log(`userId : ${user.user_id}, receiverRelationLeft : ${leftOrRight}`);
             setClassLeftBtn("btn btn-dark btn-lg");
             setClassRightBtn("btn btn-light btn-lg");
         }
+        updateChattingRoom(whichOne);
     }
-
-    // 유저
 
     useEffect(() => {
         setReceiver();
         connect();
         // apiRiderService.getChattingListTest(1, setMessages);
-
-        apiRiderService.getUserChattingRoomByUserId(user.user_id, receiverRelationLeft,
-            (newCR) => {
-                setChattingRoom(newCR);
-                console.log(newCR);
-            });
-
         // 컴포넌트 언마운트 시 웹소켓 연결 해제
         return () => disconnect();
     }, [user]);
+
+    useEffect(() => {
+        updateChattingRoom();
+    }, []);
 
     return (
         <div className="admin-chattingroom-base ">
@@ -267,7 +274,7 @@ const AdminChattingroom = ({user}) => {
 
                 </div>
                 <div className="admin-chattingroom-list">
-                    {Array.isArray(chattingRoom) ? (
+                    {(chattingRoom!== []) ? (
                         chattingRoom.map((room, index) => (
                             <Link to={`/chat/message/${room.roomId}`}>
                                 <div
