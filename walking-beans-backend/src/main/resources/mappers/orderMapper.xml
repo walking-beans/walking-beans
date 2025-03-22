@@ -60,9 +60,9 @@
 
 
     <insert id="createOrder">
-        INSERT INTO orders (user_id, store_id, address_id, order_number, order_requests, order_total_price,
+        INSERT INTO orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price,
                             order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, #{orderRequests}, #{orderTotalPrice}, NOW(),
+        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(),
                 NOW());
     </insert>
 
@@ -70,32 +70,6 @@
         INSERT INTO order_items (order_number, menu_id, option_id, quantity)
         VALUES (#{orderNumber}, #{menuId}, #{optionId}, #{quantity});
     </insert>
-
-    <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
-    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price,
-                            order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, 0, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
-    </insert>
-
-    <!-- 장바구니 내 주문하기 클릭 시 주문 중으로 상태 업데이트-->
-    <update id="updateOrderStatusToCart">
-        UPDATE orders
-        SET order_status = 1, <!-- 주문 중 -->
-        order_modified_date = NOW()
-        WHERE order_id = #{orderId}
-    </update>
-
-    <!-- 주문 완료 데이터 저장 (주문 상태는 2로 설정, 결제정보 함께 저장) -->
-    <update id="updateOrderInfo">
-        UPDATE orders
-        SET address_id          = #{addressId},
-            order_status        = 2,
-            order_requests      = #{orderRequests},
-            order_total_price   = #{order_total_price},
-            order_modified_date = NOW()
-        WHERE order_id = #{orderId}
-    </update>
 
     <!-- 주문정보 가져오기 -->
     <select id="findOrderById">
@@ -146,7 +120,8 @@
                delivery_address,
                total_payment,
                order_requests,
-               order_list
+               order_list,
+               quantity
         FROM user_orders_view
         WHERE user_id = #{userId}
     </select>
@@ -162,7 +137,8 @@
                delivery_address,
                total_payment,
                order_requests,
-               order_list
+               order_list,
+               quantity
         FROM user_orders_view
         WHERE order_number = #{orderNumber}
     </select>

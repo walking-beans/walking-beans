@@ -9,6 +9,7 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
 const UserDeliveryStatus = () => {
+    const {orderNumber} = useParams();
     const [isLoaded, setIsLoaded] = useState(false);
     const [map, setMap] = useState(null);
     const [userId, setUserId] = useState(null);
@@ -22,10 +23,9 @@ const UserDeliveryStatus = () => {
     const [paymentMethod, setPaymentMethod] = useState(null);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const { orderNumber } = useParams();
     const [orderId, setOrderId] = useState(null);
-    // const orderNumber = queryParams.get('orderNumber');
-    const [orderDetails, setOrderDetails] = useState(null);
+    const [payments, setPayments] = useState([]);
+
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -33,7 +33,10 @@ const UserDeliveryStatus = () => {
     const user = storedUser ? JSON.parse(storedUser) : null;
     const orderRequests = queryParams.get("orderRequests");
 
-    console.log("받아온 요청사항:", orderRequests ? decodeURIComponent(orderRequests) : "없음");
+    const [chattingMemberList, setChattingMemberList] = useState({});
+    const [storeRoomId, setStoreRoomId] = useState(0);
+    const [userRoomId, setUserRoomId] = useState(0);
+    const [riderRoomId, setRiderRoomId] = useState(0);
 
     // 로그인 확인
     useEffect(() => {
@@ -50,47 +53,56 @@ const UserDeliveryStatus = () => {
         }
     }, []);
 
-    // orderId 가져오기 orderNumber 로 바꿀지 고민
+    // 주문 정보 가져오기
     useEffect(() => {
+        if (!orderNumber) {
+            setError("주문 번호가 없습니다.");
+            setIsLoading(false);
+            return;
+        }
+
         const fetchOrderDetails = async () => {
-            if (!orderNumber) {
-                setError("주문 번호가 없습니다.");
-                setIsLoading(false);
-                return;
-            }
-
+            setIsLoading(true);
             try {
-                // orderNumber를 사용하여 주문 정보를 가져옵니다.
-                const orderResponse = await axios.get(`http://localhost:7070/api/orders/${orderNumber}`);
-                if (orderResponse.data) {
-                    setOrderDetails(orderResponse.data);
-                    setOrderId(orderResponse.data.orderId); // 데이터베이스의 orderId를 설정합니다.
+                const orderResponse = await axios.get(`http://localhost:7070/api/orders/orderNumber/${orderNumber}`);
+                console.log("주문 정보 : ", orderResponse.data);
+                if (!orderResponse.data) {
+                    setError("주문 정보를 찾을 수 없습니다.");
+                    setIsLoading(false);
+                    return;
+                }
 
-                    // orderId를 사용하여 추가 정보를 가져옵니다.
-                    const [addressResponse, storeResponse] = await Promise.all([
-                        axios.get(`http://localhost:7070/api/addresses/user/order/${orderResponse.data.orderId}`),
-                        axios.get(`http://localhost:7070/api/orders/storeInfo/${orderResponse.data.orderId}`)
-                    ]);
+                const orderData = orderResponse.data;
+                setOrder(orderData);
+                setOrderId(orderData.orderId);
 
+                // 주소와 매장 정보 병렬로 조회
+                const [addressResponse, storeResponse] = await Promise.all([
+                    axios.get(`http://localhost:7070/api/addresses/user/order/${orderData.orderId}`),
+                    axios.get(`http://localhost:7070/api/orders/storeInfo/${orderData.orderId}`)
+                ]);
+
+                // 주소 정보 설정
+                if (addressResponse.data) {
+                    setAddress(addressResponse.data);
                     setUserCoords({
                         lat: addressResponse.data.addressLatitude,
                         lng: addressResponse.data.addressLongitude
                     });
-                    setAddress(addressResponse.data);
+                }
 
+                // 매장 정보 설정
+                if (storeResponse.data) {
+                    setStore(storeResponse.data);
                     setStoreCoords({
                         lat: storeResponse.data.storeLatitude,
                         lng: storeResponse.data.storeLongitude
                     });
-                    setStore(storeResponse.data);
-
-                } else {
-                    setError("주문 정보를 찾을 수 없습니다.");
                 }
+                setIsLoading(false);
             } catch (err) {
+                console.error("데이터 조회 오류:", err);
                 setError("데이터를 불러오는 중 오류가 발생했습니다.");
-                console.error("Error fetching data:", err);
-            } finally {
                 setIsLoading(false);
             }
         };
@@ -98,65 +110,17 @@ const UserDeliveryStatus = () => {
         fetchOrderDetails();
     }, [orderNumber]);
 
-
-
-    // 주문한 유저 주소 가져오기
+    // 결제 정보 조회
     useEffect(() => {
-        if (!orderId) {
-            console.log("유저 주소를 불러올 orderId가 없습니다. : ", orderId)
-            return;
-        }
-
-        axios
-            .get(`http://localhost:7070/api/addresses/user/order/${orderId}`)
-            .then((res) => {
-
-                if (!orderId) {
-                    console.log("주소를 가져올 orderId가 없습니다 : ", orderId);
-                    return;
-                }
-
-                // 가져온 데이터 위도 경도 추출
-                setUserCoords({
-                    lat: res.data.addressLatitude,
-                    lng: res.data.addressLongitude
-                });
-                console.log("유저 주소 위도 :", res.data.addressLatitude, "유저 주소 경도 :", res.data.addressLongitude);
-                console.log("유저 주소 데이터 : ", res.data)
-
-                // 현황 데이터 가져오기
-                setAddress(res.data);
-
+        axios.get(`http://localhost:7070/api/payment/method/${orderId}`)
+            .then(res => {
+                console.log("결제 정보 조회 성공", res.data);
+                setPaymentMethod(res.data);
             })
-            .catch((err) => {
-                console.log("유저 주소 데이터 불러오기 오류 발생 : ", err);
-            });
-    }, [orderId]);
-
-    // 주문 받은 매장 주소 가져오기
-    useEffect(() => {
-        if (!orderId) {
-            console.log("매장 주소를 불러올 orderId가 없습니다. : ", orderId)
-            return;
-        }
-
-        axios
-            .get(`http://localhost:7070/api/orders/storeInfo/${orderId}`)
-            .then((res) => {
-                setStoreCoords({
-                    lat: res.data.storeLatitude,
-                    lng: res.data.storeLongitude
-                });
-                console.log("매장 위도 :", res.data.storeLatitude, "매장 경도 :", res.data.storeLongitude);
-
-                // 현황 데이터 가져오기
-                setStore(res.data);
-
+            .catch(err => {
+                console.log("결제 정보 조회 실패", err);
             })
-            .catch((err) => {
-                console.log("매장 주소 데이터 불러오기 오류 발생 : ", err);
-            })
-    }, [orderId]);
+    }, [orderId])
 
     // 카카오 맵 기본 생성
     useEffect(() => {
@@ -239,8 +203,8 @@ const UserDeliveryStatus = () => {
 
             <div>
                 <div>{store?.storeName}</div>
-                <div>주문번호</div>
-                <div>{order?.orderTotalPrice}(메뉴 {cart.cartQuantity}개)</div>
+                <div>{order.orderNumber}</div>
+                <div>{order?.totalPayment}(메뉴 {order?.quantity}개)</div>
             </div>
 
             <div className="user-order-hr" alt="구분선"></div>
@@ -254,21 +218,50 @@ const UserDeliveryStatus = () => {
 
             <div>
                 <div>요청사항</div>
-                <div>{orderRequests ? decodeURIComponent(orderRequests) : "없음"}</div>
+                <div>{order?.orderRequests}</div>
             </div>
 
             {/* 결제 방식에 따른 버튼 */}
             <div className="user-order-click-btn">
-                {paymentMethod === "tossPay" && (
+
+                {payments?.paymentMethod === "tossPay" && (
                     <>
-                        <button>매장 채팅하기</button>
-                        <button>라이더 채팅하기</button>
+                        <button
+                            className="btn btn-outline-info btn-lg"
+                            onClick={() => {
+                                navigate(`/chat/message/${storeRoomId}`)
+                            }}
+                        >
+                            매장 채팅하기
+                        </button>
+                        <button
+                            className="btn btn-outline-danger btn-lg"
+                            onClick={() => {
+                                navigate(`/chat/message/${riderRoomId}`)
+                            }}
+                        >
+                            라이더 채팅하기
+                        </button>
                     </>
                 )}
-                {paymentMethod === "meetPayment" && (
+                {payments?.paymentMethod === "meetPayment" && (
                     <>
-                        <button>매장 채팅하기</button>
-                        <button>라이더 채팅하기</button>
+                        <button
+                            className="btn btn-outline-info btn-lg"
+                            onClick={() => {
+                                navigate(`/chat/message/${storeRoomId}`)
+                            }}
+                        >
+                            매장 채팅하기
+                        </button>
+                        <button
+                            className="btn btn-outline-danger btn-lg"
+                            onClick={() => {
+                                navigate(`/chat/message/${riderRoomId}`)
+                            }}
+                        >
+                            라이더 채팅하기
+                        </button>
                         <button>만나서 결제 완료</button>
                     </>
                 )}

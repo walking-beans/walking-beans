@@ -8,11 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 
 import java.util.List;
@@ -23,6 +27,12 @@ import java.util.List;
 public class OrderAPIController {
     @Autowired
     private OrderServiceImpl orderService;
+
+    @Autowired
+    private AlarmServiceImpl alarmService;
+
+    @Autowired
+    private AlarmNotificationService alarmNotificationService;
 
     /**************************************** LEO ****************************************/
     /**
@@ -69,18 +79,22 @@ public class OrderAPIController {
     public ResponseEntity<Integer> updateOrderStatus(@RequestParam("orderId") long orderId,
                                                      @RequestParam("orderStatus") int orderStatus) {
         log.info("=== /orderStatus/orderId: {} ===", orderId);
-
+        OrderStoreDTO orderInfo = alarmService.getOrderInfoForAlarm(orderId);
         if (orderStatus == 4) {
             // 유저 알림 보내기
-
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"주문하신 음식의 조리가 완료되었습니다.", 0, "Url입력"));
             // 라이더 알림 보내기
-
+            if (orderInfo.getRiderId() != null) { //라이더 등록이 되어 있다면 알림을 보내기
+                alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getRiderId(),1,"음식이 준비되었습니다.",0,"Url입력하기"));
+            }
         } else if (orderStatus == 5) {
             // 유저한테 알림 보내기
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식이 배달중입니다.",0,"url입력하기"));
         } else if (orderStatus == 6) {
             // 유저한테 알림 보내기
-
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식 배달이 완료되었습니다.",0,"url입력하기"));
             // 매장한테 알림 보내기
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getStoreId(),1,"음식 배달이 완료되었습니다.",0,"url입력하기"));
         }
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
@@ -143,8 +157,8 @@ public class OrderAPIController {
         return orderService.getOrderStatus(orderId);
     }
 
-    @GetMapping("/{orderNumber}")
-    public ResponseEntity<UserOrderDTO> getOrder(@PathVariable String orderNumber) {
+    @GetMapping("/orderNumber/{orderNumber}")
+    public ResponseEntity<UserOrderDTO> getOrder(@PathVariable("orderNumber") String orderNumber) {
         UserOrderDTO order = orderService.getOrderByOrderNumber(orderNumber);
         if (order == null) {
             return ResponseEntity.notFound().build();
