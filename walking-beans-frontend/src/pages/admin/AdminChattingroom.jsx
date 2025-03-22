@@ -311,9 +311,10 @@ const AdminChattingroom = ({user}) => {
                                         key={index}
                                         className="admin-chattingroom-list-chat"
                                     >
-                                        <p><img src={(room.userPictureUrl)? (`${room.userPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
                                         <p>{room.receiverName}</p>
                                         <p>{room.lastMessage}</p>
+                                        <p>{room.modifiedDate}</p>
                                     </div>
                                 </Link>
                             ))
@@ -324,9 +325,10 @@ const AdminChattingroom = ({user}) => {
                                         key={index}
                                         className="admin-chattingroom-list-chat"
                                     >
-                                        <p><img src={(room.userPictureUrl)? (`${room.userPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
                                         <p>{room.receiverName}</p>
                                         <p>{room.lastMessage}</p>
+                                        <p>{room.modifiedDate}</p>
                                     </div>
                                 </Link>
                             ))
