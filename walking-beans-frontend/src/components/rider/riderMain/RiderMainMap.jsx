@@ -193,7 +193,8 @@ const RiderMainMap = () => {
                 checkingSelectedStore && <RiderMainSelectedStore orders={orders}
                                                                  storeId={selectedStoreId}
                                                                  setSelectedOrder={setSelectedOrder}
-                                                                 setCheckingSelectedOrder={setCheckingSelectedOrder}/>
+                                                                 setCheckingSelectedOrder={setCheckingSelectedOrder}
+                                                                 checkingSelectedOrder={checkingSelectedStore}/>
             }
 
             {/* untaken 주문들 중 하나 클릭했을 때 보여줄 UI && 주문 받기 */}
