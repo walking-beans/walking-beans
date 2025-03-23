@@ -1,8 +1,8 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import RiderOrderStatus from "./RiderOrderStatus";
-import "../../../css/rider/RiderOrderStatus.css";
-import apiRiderService from "../../../service/apiRiderService";
+import "../../css/rider/RiderOrderStatus.css";
+import apiRiderService from "../../service/apiRiderService";
 
 const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
 

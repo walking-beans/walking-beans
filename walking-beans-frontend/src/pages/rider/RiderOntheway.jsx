@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {useNavigate, useParams} from "react-router-dom";
 
-import RiderOrderStatus from "../../components/rider/riderMain/RiderOrderStatus";
+import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
 
 import apiRiderService from "../../service/apiRiderService";
 import apiOrdersStoresService from "../../service/apiOrdersStoresService";

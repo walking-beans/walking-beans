@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import "../../../css/rider/RiderMainSelectedStore.css";
+import "../../css/rider/RiderMainSelectedStore.css";
 
 const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingSelectedOrder, checkingSelectedOrder}) => {
 

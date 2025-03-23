@@ -149,8 +149,8 @@ import apiRiderService from "../../service/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 import apiChattingInfo from "../../service/apiChattingInfo";
-import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
-import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
+import RiderMainMap from "../../components/rider/RiderMainMap";
+import BeforeKakaoMapStart from "../../components/rider/BeforeKakaoMapStart";
 
 const AdminChattingroom = ({user}) => {
 

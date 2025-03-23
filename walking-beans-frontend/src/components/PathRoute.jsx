@@ -49,7 +49,6 @@ import UserSuccessPage from "../pages/user/UserSuccessPage";
 import {UserFailPage} from "../pages/user/UserFailPage";
 import UserCheckoutPage from "../pages/user/UserCheckoutPage";
 import AdminSignUp from "../pages/admin/AdminSignUp";
-import RiderMap from "../pages/rider/t/RiderMap";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
@@ -149,9 +148,6 @@ function PathRoute() {
 
 
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
-
-                                {/* 라이더 관련 라우트 */}
-                                <Route path="/r/map" element={<RiderMap />} />
 
                                 <Route path="/rider" element={
                                     <RiderMain
