@@ -27,7 +27,7 @@ const getDistance = (lat1, lng1, lat2, lng2) => {
     return R * c; // 거리 (km)
 };
 
-const RiderMainMap = () => {
+const RiderMainMap = ({user}) => {
     // 현재 유저 위치
     const [riderLocation, setRiderLocation] = useState({lat: 37.498095, lng: 127.028391});
     // untaken orders
@@ -199,7 +199,8 @@ const RiderMainMap = () => {
 
             {/* untaken 주문들 중 하나 클릭했을 때 보여줄 UI && 주문 받기 */}
             {
-                checkingSelectedOrder && <UntakenOrderDetail selectedOrder={selectedOrder}
+                checkingSelectedOrder && <UntakenOrderDetail riderId={user.user_id}
+                                                             selectedOrder={selectedOrder}
                                                              riderLocation={riderLocation}/>
             }
         </div>
