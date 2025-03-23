@@ -12,6 +12,7 @@ import deliveryIcon from "../../assert/images/rider/deliveryIcon.svg";
 
 import "../../css/rider/RiderOntheway.css";
 import "../../css/rider/RiderOrderStatus.css";
+import axios from "axios";
 
 
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
@@ -141,17 +142,45 @@ const RiderOntheway = () => {
         };
     }, [order]);
 
-    function handlePickingOrder () {
-        setOnDelivery(true);
-        storeMarker.setMap(null);
-        apiRiderService.updateOrderStatus(orderId, 4);
-        console.log(onDelivery);
-    }
-
     const openKakaoNavi = () => {
         const url = `https://map.kakao.com/?nil_profile=title&nil_src=local`;
         window.location.href = url;
     };
+
+    function handlePickingOrder () {
+        setOnDelivery(true);
+        storeMarker.setMap(null);
+        apiRiderService.updateOrderStatus(orderId, 5);
+        console.log(onDelivery);
+    }
+
+    function handleFinishedOrder () {
+        const formData = new FormData();
+        formData.append("riderId", order.riderId);
+        formData.append("orderId", order.orderId);
+        formData.append("incomeAmount", order.storeDeliveryTip);
+
+        axios
+            .put("http://localhost:7070/api/deliveryIncome/finished",
+                formData, {
+                    headers: {"Content-Type": "application/json"}
+                }
+            )
+            .then(
+                (response) => {
+
+                    console.log(response.date + "개 insert");
+                }
+            )
+            .catch(
+                (error) => {
+                    console.log("DeliveryIncome insert error", error);
+                }
+            );
+        navigate(`/rider/result/${orderId}`);
+        apiRiderService.updateOrderStatus(orderId, 6);
+    }
+
 
     return (
 
@@ -204,7 +233,7 @@ const RiderOntheway = () => {
                                     onDelivery ? (
                                         <button
                                             className="btn btn-success btn-lg pickingup-delivery-btn"
-                                            onClick={() => {navigate(`/rider/result/${orderId}`)}}
+                                            onClick={() => {handleFinishedOrder()}}
                                         >배달 완료
                                         </button>
                                     ) : (

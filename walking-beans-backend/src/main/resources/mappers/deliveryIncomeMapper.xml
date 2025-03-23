@@ -17,4 +17,9 @@
         WHERE rider_id = #{riderId}
           AND order_id = #{orderId}
     </select>
+
+    <insert id="insertDeliveryIncome">
+        INSERT INTO deliveryIncome (rider_id, order_id, income_date, income_amount)
+        VALUES (#{riderId}, #{orderId}, NOW(), #{incomeAmount})
+    </insert>
 </mapper>

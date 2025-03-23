@@ -17,7 +17,8 @@ const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
     return (
         <div>
             {/* Rider Header */}
-            <KakaomapStatus setRiderOnDuty={setRiderOnDuty} />
+            <KakaomapStatus user={user}
+                            setRiderOnDuty={setRiderOnDuty} />
         </div>
     )
 }
