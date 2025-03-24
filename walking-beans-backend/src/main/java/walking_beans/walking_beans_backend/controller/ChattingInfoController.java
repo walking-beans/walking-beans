@@ -25,9 +25,4 @@ public class ChattingInfoController {
         return ResponseEntity.ok(chattingInfoService.getChattingInfoBySenderId(senderId));
     }
 
-    @PutMapping
-    public ResponseEntity<Integer> insertChattingInfo() {
-        return null;
-    }
-
 }
