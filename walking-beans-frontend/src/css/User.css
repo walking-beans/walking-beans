@@ -1,3 +1,5 @@
+
+
 /**************** 유저 헤더 *****************/
 .user-header {
     display: flex;
@@ -38,7 +40,7 @@
 .user-home-container .store-item {
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: #D7BEA2;
     border-radius: 12px;
     padding: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -79,6 +81,18 @@
     color: #7f8c8d;
     margin-top: 4px;
     margin-left: auto;
+}
+
+.user-home-container .user-hr {
+    border: none;
+    border-top: 2px #5A3D21 solid;
+    margin: 30px 0;
+}
+
+.user-home-container .user-hr-mini {
+    border: none;
+    border-top: 2px #D7BEA2 solid;
+    margin: 20px 0;
 }
 
 /***************** UserSearchMap *******************/

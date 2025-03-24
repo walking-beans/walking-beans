@@ -72,26 +72,26 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
-@MessageMapping("/chatting")
-@SendTo("/topic/chattingroom")
-public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
-    log.info("================ receiveChattingMessage : {} ===================", message.toString());
-    // 메시지를 해당 채팅방 구독자들에게 전송
-    messagingTemplate.convertAndSend("/topic/chattingroom", message);
-    return ResponseEntity.ok().build();
-}
+    @MessageMapping("/chatting")
+    @SendTo("/topic/chattingroom")
+    public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
+        log.info("================ receiveChattingMessage : {} ===================", message.toString());
+        // 메시지를 해당 채팅방 구독자들에게 전송
+        messagingTemplate.convertAndSend("/topic/chattingroom", message);
+        return ResponseEntity.ok().build();
+    }
 
-@GetMapping("/api/chattingmessage")
-public ResponseEntity<List<UserMessage>> getAllUserMessage(@RequestParam("roomId") long roomId) {
-    log.info("getAllUserMessage roomId={}", roomId);
-    List<UserMessage> messages = messageService.getAllUserMessage(roomId);
-    return ResponseEntity.ok(messages);
-}
+    @GetMapping("/api/chattingmessage")
+    public ResponseEntity<List<UserMessage>> getAllUserMessage(@RequestParam("roomId") long roomId) {
+        log.info("getAllUserMessage roomId={}", roomId);
+        List<UserMessage> messages = messageService.getAllUserMessage(roomId);
+        return ResponseEntity.ok(messages);
+    }
 
-@GetMapping("/api/userchattingroom")
-public ResponseEntity<List<UserChattingRoom>> getUserChattingRoomByUserId(@RequestParam("userId") long userId,
-                                                                          @RequestParam("receiverRelation") int receiverRelation) {
-    log.info("getUserChattingRoomByUserId userId={}, userRole={}", userId, receiverRelation);
-    return ResponseEntity.ok(chattingRoomService.getUserChattingRoomByUserId(userId, receiverRelation));
-}
+    @GetMapping("/api/userchattingroom")
+    public ResponseEntity<List<UserChattingRoom>> getUserChattingRoomByUserId(@RequestParam("userId") long userId,
+                                                                              @RequestParam("receiverRelation") int receiverRelation) {
+        log.info("getUserChattingRoomByUserId userId={}, userRole={}", userId, receiverRelation);
+        return ResponseEntity.ok(chattingRoomService.getUserChattingRoomByUserId(userId, receiverRelation));
+    }
 }

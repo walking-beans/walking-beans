@@ -113,4 +113,10 @@ public class ReviewAPIController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 실패");
         }
     }
+
+    // 유저가 주문한 스토어에 대한 리뷰 존재 여부 확인
+    @GetMapping("/exists/{orderId}")
+    public ResponseEntity<Boolean> existsReviewByOrderId(@PathVariable long orderId) {
+        return ResponseEntity.ok(reviewService.existsReviewByOrderId(orderId));
+    }
 }
