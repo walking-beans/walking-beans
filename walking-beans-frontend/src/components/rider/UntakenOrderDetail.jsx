@@ -17,6 +17,7 @@ const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
     }
 
+
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조
     const getDistance = (lat1, lng1, lat2, lng2) => {
         const R = 6371; // 지구 반지름(km)

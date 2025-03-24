@@ -68,9 +68,11 @@ const RiderOntheway = () => {
     useEffect(() => {
         if (!order) return;
 
-        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
-        setStoreRoomId(chattingMemberList?.["3"] ?? "0");
-        setUserRoomId(chattingMemberList?.["1"] ?? "0");
+        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, (newCM) => {
+            setChattingMemberList(newCM);
+            setStoreRoomId(chattingMemberList?.["3"] ?? "0");
+            setUserRoomId(chattingMemberList?.["1"] ?? "0");
+        });
 
     }, [order])
 
@@ -151,6 +153,7 @@ const RiderOntheway = () => {
         setOnDelivery(true);
         storeMarker.setMap(null);
         apiRiderService.updateOrderStatus(orderId, 5);
+        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
         console.log(onDelivery);
     }
 
@@ -177,8 +180,8 @@ const RiderOntheway = () => {
                     console.log("DeliveryIncome insert error", error);
                 }
             );
-        navigate(`/rider/result/${orderId}`);
         apiRiderService.updateOrderStatus(orderId, 6);
+        navigate(`/rider/result/${orderId}`);
     }
 
 
