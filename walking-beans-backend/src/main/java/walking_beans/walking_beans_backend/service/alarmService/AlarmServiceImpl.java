@@ -92,6 +92,18 @@ public class AlarmServiceImpl implements AlarmService {
         return alarmMapper.getOrderInfoForAlarm(orderId);
     }
 
+    // 리뷰용 스토어 아이디로 유저 아이디 가져오기
+    @Override
+    public OrderStoreDTO getUserIdForReview(long orderId) {
+        return alarmMapper.getUserIdForReview(orderId);
+    }
+
+    // 스토어 알림용 스토어 주인 유저 아이디 가져오기
+    @Override
+    public OrderStoreDTO getUserIdForOrderAlarm(String orderNumber) {
+        return alarmMapper.getUserIdForOrderAlarm(orderNumber);
+    }
+
     //알람 리스트 가져오기
     @Override
     public List<Alarms> getUserAlarmList(int userId) {
