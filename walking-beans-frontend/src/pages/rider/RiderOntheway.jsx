@@ -68,19 +68,13 @@ const RiderOntheway = () => {
     useEffect(() => {
         if (!order) return;
 
-        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, (newCM) => {
-            setChattingMemberList(newCM);
-            setStoreRoomId(chattingMemberList?.["3"] ?? "0");
-            setUserRoomId(chattingMemberList?.["1"] ?? "0");
-        });
+        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
 
     }, [order])
 
     // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
         if (!order) return;
-
-
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -143,6 +137,13 @@ const RiderOntheway = () => {
             document.head.removeChild(script);
         };
     }, [order]);
+
+    useEffect(() => {
+        if (Object.keys(chattingMemberList).length > 0) {  // 데이터가 들어온 후 실행
+            setStoreRoomId(chattingMemberList["3"] ?? "0");
+            setUserRoomId(chattingMemberList["1"] ?? "0");
+        }
+    }, [chattingMemberList]);
 
     const openKakaoNavi = () => {
         const url = `https://map.kakao.com/?nil_profile=title&nil_src=local`;
@@ -250,7 +251,7 @@ const RiderOntheway = () => {
                             </div>
                             <div className="btn-container">
                                 {
-                                    storeRoomId !== "0" &&
+                                    storeRoomId !== 0 &&
                                     <button
                                         className="btn btn-outline-info btn-lg"
                                         onClick={() => {navigate(`/chat/message/${storeRoomId}`)}}
@@ -259,7 +260,7 @@ const RiderOntheway = () => {
                                     </button>
                                 }
                                 {
-                                    userRoomId !== "0" &&
+                                    userRoomId !== 0 &&
                                     <button
                                         className="btn btn-outline-danger btn-lg"
                                         onClick={() => {navigate(`/chat/message/${userRoomId}`)}}

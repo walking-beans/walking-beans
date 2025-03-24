@@ -14,6 +14,7 @@ const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
 
     const goToDetail = () => {
         apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
+        apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
     }
 
