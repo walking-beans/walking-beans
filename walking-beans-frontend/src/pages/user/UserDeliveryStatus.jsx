@@ -6,6 +6,7 @@ import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
+import apiRiderService from "../../service/apiRiderService";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
@@ -189,6 +190,12 @@ const UserDeliveryStatus = () => {
 
     }, [isLoaded, userCoords, storeCoords]);
 
+    const handleMeet = () => {
+        navigate(`/order`);
+        apiRiderService.updateOrderStatus(orderId, 6);
+    }
+
+
     return (
         <div className="user-delivery-status-container">
             {/* Kakao Map */}
@@ -197,21 +204,19 @@ const UserDeliveryStatus = () => {
             <div className="user-status-modal-container">
                 {/* 배달 현황 */}
                 <div>
-                    <div className="user-order-bordtext">도착 예정시간</div>
+                    <div className="user-order-bordtext">도착예정시간</div>
                     <RiderOrderStatus
                         orderId={order?.orderId}
-                        message="배달 시간이 초과되었습니다."
+                        message="빠르게 배달 중입니다."
                         css={
                             {
-                                order_status : "user-order-menu-container",
-                                order_status_content : "order_status_content",
-                                order_status_time_div : "order_status_time_div",
-                                order_status_time_remaining : "order_status_time_remaining",
-                                order_status_delivery_deadline : "order_status_delivery_deadline",
-                                order_status_message : "order_status_message",
-                                order_status_steps : "order_status_steps",
-                                order_status_step : "order_status_step",
-                                order_status_loading: "order_status_loading",
+                                order_status_time_div: "user-menu-option-group-container",
+                                order_status_time_remaining: "user-order-bic-text",
+                                order_status_delivery_deadline: "user-order-optiontitle",
+                                order_status_steps: "user-order-click-btn",
+                                order_status_message: "user-order-guide",
+                                order_status_step: "user-order-optiontitle",
+                                order_status_loading: "user-order-guide",
                             }
                         }
                     />
@@ -284,8 +289,15 @@ const UserDeliveryStatus = () => {
                                 </button>
                             </div>
                             <div className="user-order-click-btn-one">
-                                <button className="user-order-btn-b">만나서 결제 완료</button>
+                                <button
+                                    className="user-order-btn-b"
+                                    onClick={handleMeet}
+                                >만나서 결제 완료</button>
                             </div>
+                            <div
+                                className="user-order-guide"
+                                onClick={handleMeet}
+                            >배달을 받으셨다면 만나서 결제 완료 버튼을 눌러주세요!</div>
                         </div>
                     )}
                 </div>

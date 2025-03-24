@@ -122,7 +122,9 @@
                total_payment,
                order_requests,
                order_list,
-               quantity
+               quantity,
+               order_status,
+               store_logo
         FROM user_orders_view
         WHERE user_id = #{userId}
     </select>

@@ -50,7 +50,7 @@ const apiRiderService = {
             )
             .catch(
                 (err) => {
-                    alert("주문 정보를 불러오는 중 오류가 발생했습니다.");
+                    console.log("주문 정보를 불러오는 중 오류가 발생했습니다.");
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             )

@@ -53,6 +53,7 @@ import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
+import RiderOrderStatus from "./rider/RiderOrderStatus";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -139,6 +140,7 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderId" element={<UserOrderDetail />} />
+                                <Route path="/order/test" element={<RiderOrderStatus />} />
 
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>

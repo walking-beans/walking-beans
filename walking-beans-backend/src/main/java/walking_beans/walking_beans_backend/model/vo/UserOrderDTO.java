@@ -19,4 +19,6 @@ public class UserOrderDTO {
     private String orderRequests;
     private String orderList;
     private int quantity;
+    private int orderStatus;
+    private String storeLogo;
 }
