@@ -43,4 +43,18 @@
         FROM view_orders_stores
         WHERE order_id = #{orderId}
     </select>
+
+    <!-- 리뷰용 스토어 아이디로 유저아이디 가져오기-->
+    <select id="getUserIdForReview">
+        SELECT *
+        FROM view_orders_stores
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 주문알림용 스토어아이디로 스토어 주인 유저 아이디 가져오기-->
+    <select id="getUserIdForOrderAlarm">
+        SELECT *
+        FROM view_orders_stores
+        WHERE order_number = #{orderNumber}
+    </select>
 </mapper>

@@ -6,7 +6,7 @@ const statusLinks = [
     { text: "임시영업중지", path: "/owner/mystore" },
     { text: "매출조회", path: "/owner/revenue" },
     { text: "일정관리", path: "/owner/mystore" },
-    { text: "알림", path: "/owner/alarm" }
+    { text: "알림", path: "/alarmlist" }
 ];
 
 const StoreStatus = ({ weather, orders, storeStatus }) => {
