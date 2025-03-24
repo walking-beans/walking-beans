@@ -168,7 +168,7 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/orderlist" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderOrderList/>
+                                        <RiderOrderList  user={user}/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/rider/order" element={
@@ -178,7 +178,7 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/income" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderIncome/>
+                                        <RiderIncome  user={user}/>
                                     </ProtectedRoute>
                                 }/>
 

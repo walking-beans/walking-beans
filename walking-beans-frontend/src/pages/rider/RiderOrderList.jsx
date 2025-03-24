@@ -3,7 +3,7 @@ import apiRiderService from "../../service/apiRiderService";
 import {Link} from "react-router-dom";
 import "../../css/rider/RiderOrderList.css";
 
-const RiderOrderList = ({riderId}) => {
+const RiderOrderList = ({user}) => {
     const [orders, setOrders] = useState([]);
 
     const status = {
@@ -17,8 +17,8 @@ const RiderOrderList = ({riderId}) => {
     };
 
     useEffect(() => {
-        apiRiderService.getOrdersByRiderIdOnDuty(2, setOrders);
-    }, [/*riderId*/]);
+        apiRiderService.getOrdersByRiderIdOnDuty(user.user_id, setOrders);
+    }, [user]);
 
 
     return (
