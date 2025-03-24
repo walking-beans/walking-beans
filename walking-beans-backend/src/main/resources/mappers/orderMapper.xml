@@ -130,7 +130,10 @@
                total_payment,
                order_requests,
                order_list,
-               quantity
+               quantity,
+               order_status,
+               store_logo,
+               store_id
         FROM user_orders_view
         WHERE user_id = #{userId}
     </select>
@@ -144,6 +147,7 @@
                order_date,
                order_number,
                delivery_address,
+               detailed_address,
                total_payment,
                order_requests,
                order_list,

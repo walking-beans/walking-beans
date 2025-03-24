@@ -87,4 +87,9 @@ public class ReviewServiceImpl implements ReviewService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public boolean existsReviewByOrderId(long orderId) {
+        return reviewMapper.existsReviewByOrderId(orderId);
+    }
 }
