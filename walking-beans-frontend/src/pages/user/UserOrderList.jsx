@@ -31,8 +31,8 @@ const UserOrderList = () => {
     }, [userId, navigate]);
 
     return (
-        <div>
-            <h2>📋 내 주문 목록</h2>
+        <div className="user-order-container">
+            <h2 className="user-title-center">주문내역</h2>
             {orders.length === 0 ? (
                 <p>주문 내역이 없습니다.</p>
             ) : (

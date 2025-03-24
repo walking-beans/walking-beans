@@ -14,6 +14,9 @@ import java.util.*;
 
 public interface TossPaymentService {
 
+    // 결제 정보 저장하기
+    void insertPayments(Payments payments);
+
     // 결제 정보 조회
     Payments getPaymentByOrderId(long orderId);
 

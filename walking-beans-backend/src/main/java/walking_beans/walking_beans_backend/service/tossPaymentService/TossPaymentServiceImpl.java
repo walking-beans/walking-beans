@@ -96,6 +96,11 @@ public class TossPaymentServiceImpl implements TossPaymentService {
     private PaymentMapper paymentMapper;
 
     @Override
+    public void insertPayments(Payments payments) {
+        paymentMapper.insertPayments(payments);
+    }
+
+    @Override
     public Payments getPaymentByOrderId(long orderId) {
         return paymentMapper.getPaymentByOrderId(orderId);
 

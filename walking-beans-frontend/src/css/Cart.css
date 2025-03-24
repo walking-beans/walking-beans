@@ -39,6 +39,13 @@
     font-size: 33px;
     font-weight: bold;
     color: #5A3D21;
+    text-align: center;
+}
+
+.user-title-l{
+    font-size: 33px;
+    font-weight: bold;
+    color: #5A3D21;
 }
 
 .user-title-center {

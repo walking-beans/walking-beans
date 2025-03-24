@@ -107,6 +107,12 @@ public class TossPaymentController {
                 response.put("orderId", orderId);
                 log.info("주문 생성 완료! 주문 ID: {}", orderId);
 
+                Payments payment = new Payments();
+                payment.setOrderId(orderId);
+                payment.setPaymentMethod(paymentMethod);
+                payment.setPaymentStatus("완료");
+                tossPaymentService.insertPayments(payment);
+
             } else {
                 boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
                 response = tossPaymentService.confirmPayment(requestData, isApiPayment);

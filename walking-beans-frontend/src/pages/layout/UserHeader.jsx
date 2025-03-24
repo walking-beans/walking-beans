@@ -101,20 +101,6 @@ const UserHeader = ({user}) => {
         navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
-    //알람 토글
-    const toggleAlarm = () => {
-        if (showDropdown) { //true
-            setNotifications([]);// 알림 리스트를 초기화
-        } else {
-            // 알림을 열 때는 기존 알림 리스트를 비우지 않음
-            setUnreadCount(0);  // 알림 아이콘 배지 초기화
-        }
-
-        setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
-        //setShowDropdown(!showDropdown);
-        //setUnreadCount(0);
-    };
-
     return (
         <div className="user-header-wrapper">
             <header className="custom-header">
