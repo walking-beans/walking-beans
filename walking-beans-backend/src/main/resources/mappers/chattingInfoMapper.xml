@@ -6,6 +6,7 @@
         SELECT *
         FROM view_chatting_info
         WHERE sender_id = #{senderId}
+        ORDER BY modified_date DESC
     </select>
 
 </mapper>

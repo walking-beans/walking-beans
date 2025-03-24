@@ -28,7 +28,7 @@ public class ChattingMemberController {
     }
 
     @GetMapping("/roomId")
-    public ResponseEntity< Map<Integer, Long>> getUserAndStoreRoomId(@RequestParam("orderId") long orderId,
+    public ResponseEntity<Map<Integer, Long>> getUserAndStoreRoomId(@RequestParam("orderId") long orderId,
                                                                        @RequestParam("userId") long userId) {
 
 

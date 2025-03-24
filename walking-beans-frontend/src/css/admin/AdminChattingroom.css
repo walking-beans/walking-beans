@@ -18,13 +18,13 @@
 }
 
 .admin-chattingroom-list {
-    display: flex;
+    display: block;
 
 }
 
 .admin-chattingroom-list-chat {
     display: block;
-    margin: 0 50px;
+    margin: 0 50px 20px 50px;
     width : 500px;
     height: 75px;
     border-radius: 37px;
