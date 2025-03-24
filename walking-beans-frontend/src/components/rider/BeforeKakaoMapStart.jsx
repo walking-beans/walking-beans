@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
-import userCurrentLocation from "../../../assert/images/rider/userCurrentLocation.svg";
-//
+import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
+import "../../css/rider/BeforeKakaoMapStart.css";
+
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 
-const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
+const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
+
+    const [riderOD, setRiderOD] = useState(riderOnDuty);
 
     useEffect(() => {
         // 현재 위치 가져오기
@@ -27,6 +30,7 @@ const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
     }, []);
 
     useEffect(() => {
+        console.log("start : " + riderOnDuty);
         if (!userLocation) return;
 
         // 카카오맵 스크립트 로드
@@ -65,10 +69,27 @@ const BeforeKakaoMapStart = ({setRiderOnDuty}) => {
         };
     }, [userLocation]);
 
+    function handleRiderOnDuty() {
+        setRiderOnDuty(prevState => {
+            console.log("BeforeKakaoMapStart : " + !prevState);
+            setRiderOD(true);
+            console.log("handleRiderStatus : " + !prevState);
+            setRiderOD(!prevState);
+            return !prevState
+        });
+    }
+
     return (
-        <div>
+        <div className="before-kakao-map-start">
             <div id="map" style={{ width: "100%", height: "650px" }}></div>
-            <button onClick={()=> {setRiderOnDuty(true)}} className="btn btn-info">운행 시작</button>
+            {
+                !riderOnDuty && (
+                    <button onClick={()=> {handleRiderOnDuty()}}
+                            className="btn btn-info before-kakao-map-start-startbtn">
+                        운행 시작
+                    </button>
+                )
+            }
         </div>
     );
 };

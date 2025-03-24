@@ -1,0 +1,28 @@
+.rider-order-list-container {
+    padding : 10px 0;
+}
+
+.rider-order-list-order {
+    margin : 20px 0;
+
+}
+
+.rider-order-list-order-ordernumber {
+    font-weight: bold;
+}
+
+.rider-order-list-order-orderstatus {
+
+}
+
+.rider-order-list-order-orderprice {
+
+}
+
+.rider-order-list-order-orderdate {
+
+}
+
+.rider-order-list-noorders {
+
+}

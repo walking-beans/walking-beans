@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import apiRiderService from "../../../service/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 
 const RiderOrderStatus = ({orderId, message, css}) => {
     const [newOrderId, setOrderId] = useState(orderId);
