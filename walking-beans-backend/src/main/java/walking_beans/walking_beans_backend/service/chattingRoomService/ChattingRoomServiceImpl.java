@@ -1,7 +1,5 @@
 package walking_beans.walking_beans_backend.service.chattingRoomService;
 
-
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,5 +78,4 @@ public class ChattingRoomServiceImpl implements ChattingRoomService {
         chattingMemberService.insertChattingMember(ownerRoomId, riderId, ownerId, 3);
         chattingMemberService.insertChattingMember(ownerRoomId, ownerId, riderId, 2);
     }
-
 }

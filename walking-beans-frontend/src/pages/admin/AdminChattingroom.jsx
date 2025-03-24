@@ -300,7 +300,7 @@ const AdminChattingroom = ({user}) => {
                             ))
                         ) : (
                             chattingInfo[status[rightButtonValue]]?.map((room, index) => (
-                                <Link to={`/chat/message/${room.roomId}`}  style={{ textDecoration: "none", color: "black" }}>
+                                <Link to={`/chat/message/${room.roomId}`} style={{ textDecoration: "none", color: "black" }}>
                                     <div
                                         key={index}
                                         className="admin-chattingroom-list-chat"
