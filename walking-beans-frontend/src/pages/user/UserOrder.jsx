@@ -184,7 +184,7 @@ const UserOrder = () => {
         <div className="user-order-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
-                    <div className="user-title">{store?.storeName}</div>
+                    <div className="user-title-l">{store?.storeName}</div>
                     <div>
                         <img src={oneStar} alt="별점 아이콘"/>
                         <span className="store-menu-title">
