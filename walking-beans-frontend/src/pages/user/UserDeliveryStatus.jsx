@@ -5,6 +5,7 @@ import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
@@ -193,11 +194,27 @@ const UserDeliveryStatus = () => {
             {/* Kakao Map */}
             <div className="user-delivery-map" id="user-delivery-status-map"></div>
 
-            <div className="user-menu-option-modal-container">
+            <div className="user-status-modal-container">
                 {/* 배달 현황 */}
                 <div>
                     <div className="user-order-bordtext">도착 예정시간</div>
-                    <div>진행현황 바</div>
+                    <RiderOrderStatus
+                        orderId={order?.orderId}
+                        message="배달 시간이 초과되었습니다."
+                        css={
+                            {
+                                order_status : "user-order-menu-container",
+                                order_status_content : "order_status_content",
+                                order_status_time_div : "order_status_time_div",
+                                order_status_time_remaining : "order_status_time_remaining",
+                                order_status_delivery_deadline : "order_status_delivery_deadline",
+                                order_status_message : "order_status_message",
+                                order_status_steps : "order_status_steps",
+                                order_status_step : "order_status_step",
+                                order_status_loading: "order_status_loading",
+                            }
+                        }
+                    />
                 </div>
 
                 <div className="user-order-hr" alt="구분선"></div>
