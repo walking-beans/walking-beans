@@ -12,4 +12,5 @@ public interface ChattingMemberService {
 
     Map<Integer, Long> getUserAndStoreRoomId(long orderId, long userId);
 
+    void insertChattingMember(long roomId, long userId, long receiverId, long receiverRelation);
 }

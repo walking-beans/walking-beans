@@ -12,13 +12,6 @@
         AND CM.receiver_relation  = #{receiverRelation}
     </select>
 
-    <!-- 채팅창 메세지 입력 될 때 마지막 메세지 update -->
-    <update id="updateLastMessageOfChattingRoom">
-        UPDATE chattingroom
-        SET last_message = #{lastMessage}
-        WHERE room_id = #{roomId}
-    </update>
-
     <select id="getUserChattingRoomByUserId">
         WITH RankedMessages AS (
             SELECT
@@ -48,5 +41,19 @@
         SELECT room_id
         FROM chattingroom
         WHERE order_id = #{orderId}
+        ORDER BY room_id DESC LIMIT 1
     </select>
+
+    <!-- 채팅창 메세지 입력 될 때 마지막 메세지 update -->
+    <update id="updateLastMessageOfChattingRoom">
+        UPDATE chattingroom
+        SET last_message = #{lastMessage}
+        WHERE room_id = #{roomId}
+    </update>
+
+    <!-- orderId 에 대한 새로운 chattingroom 만들기 -->
+    <insert id="insertChattingroomByOrderId">
+        INSERT INTO chattingroom (order_id, last_message)
+        VALUES (#{orderId}, null)
+    </insert>
 </mapper>

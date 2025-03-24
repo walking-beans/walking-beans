@@ -3,10 +3,7 @@ package walking_beans.walking_beans_backend.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.ChattingInfoDTO;
 import walking_beans.walking_beans_backend.service.chattingInfoService.ChattingInfoServiceImpl;
 
@@ -26,6 +23,11 @@ public class ChattingInfoController {
         log.info("======== /api/chattinginfo/map?senderId={}", senderId);
 
         return ResponseEntity.ok(chattingInfoService.getChattingInfoBySenderId(senderId));
+    }
+
+    @PutMapping
+    public ResponseEntity<Integer> insertChattingInfo() {
+        return null;
     }
 
 }

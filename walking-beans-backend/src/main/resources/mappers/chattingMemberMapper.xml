@@ -17,4 +17,10 @@
         WHERE CM.user_id = #{userId}
           AND CR.order_id = #{orderId};
     </select>
+
+    <insert id="insertChattingMember">
+        INSERT INTO chattingMember (room_id, user_id, room_receiver_id, receiver_relation)
+        VALUES
+            (#{roomId}, #{userId}, #{receiverId}, #{receiverRelation});
+    </insert>
 </mapper>
