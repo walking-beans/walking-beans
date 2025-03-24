@@ -43,7 +43,7 @@ const UserInsertAddress = ({ user }) => {
         document.body.appendChild(script1);
 
         const script2 = document.createElement("script");
-        script2.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=KAKAO_MAP_API_KEY&libraries=services,clusterer,drawing`;
+        script2.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services,clusterer,drawing`;
         script2.async = true;
         script2.onload = () => {
             setIsKakaoLoaded(true);
