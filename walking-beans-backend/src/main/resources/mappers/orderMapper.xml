@@ -57,6 +57,14 @@
         WHERE O.order_id = #{orderId}
     </select>
 
+    <select id="getOwnerIdByOrderId">
+        SELECT S.user_id
+        FROM orders O
+                 JOIN stores S
+                      ON O.store_id = S.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
 
