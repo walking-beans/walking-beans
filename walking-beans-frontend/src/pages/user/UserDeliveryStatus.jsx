@@ -193,78 +193,85 @@ const UserDeliveryStatus = () => {
             {/* Kakao Map */}
             <div className="user-delivery-map" id="user-delivery-status-map"></div>
 
-            {/* 배달 현황 */}
-            <div>
-                <div>도착 예정시간</div>
-                <div>진행현황 바</div>
-            </div>
+            <div className="user-menu-option-modal-container">
+                {/* 배달 현황 */}
+                <div>
+                    <div className="user-order-bordtext">도착 예정시간</div>
+                    <div>진행현황 바</div>
+                </div>
 
-            <div className="user-order-hr" alt="구분선"></div>
+                <div className="user-order-hr" alt="구분선"></div>
 
-            <div>
-                <div>{store?.storeName}</div>
-                <div>{order.orderNumber}</div>
-                <div>{Number(order?.totalPayment).toLocaleString()}(메뉴 {order?.quantity}개)</div>
-            </div>
+                <div>
+                    <div className="user-order-bordtext">{store?.storeName}</div>
+                    <div className="user-order-basic-text-m-0">{order.orderNumber}</div>
+                    <div
+                        className="user-order-basic-text-m-0">{Number(order?.totalPayment).toLocaleString()}(메뉴 {order?.quantity}개)
+                    </div>
+                </div>
 
-            <div className="user-order-hr" alt="구분선"></div>
+                <div className="user-order-hr" alt="구분선"></div>
 
-            <div>
-                <div>배달주소</div>
-                <div>{address?.address} {address?.detailedAddress}</div>
-            </div>
+                <div>
+                    <div className="user-order-bordtext">배달주소</div>
+                    <div className="user-order-basic-text-m-0">{address?.address} {address?.detailedAddress}</div>
+                </div>
 
-            <div className="user-order-hr" alt="구분선"></div>
+                <div className="user-order-hr" alt="구분선"></div>
 
-            <div>
-                <div>요청사항</div>
-                <div>{order?.orderRequests}</div>
-            </div>
+                <div className="user-order-optiontitle">
+                    <div className="user-order-bordtext">요청사항</div>
+                    <div className="user-order-basic-text-m-0">{order?.orderRequests}</div>
+                </div>
 
-            {/* 결제 방식에 따른 버튼 */}
-            <div className="user-order-click-btn">
-
-                {payments?.paymentMethod === "tossPay" && (
-                    <>
-                        <button
-                            className="btn btn-outline-info btn-lg"
-                            onClick={() => {
-                                navigate(`/chat/message/${storeRoomId}`)
-                            }}
-                        >
-                            매장 채팅하기
-                        </button>
-                        <button
-                            className="btn btn-outline-danger btn-lg"
-                            onClick={() => {
-                                navigate(`/chat/message/${riderRoomId}`)
-                            }}
-                        >
-                            라이더 채팅하기
-                        </button>
-                    </>
-                )}
-                {payments?.paymentMethod === "meetPayment" && (
-                    <>
-                        <button
-                            className="btn btn-outline-info btn-lg"
-                            onClick={() => {
-                                navigate(`/chat/message/${storeRoomId}`)
-                            }}
-                        >
-                            매장 채팅하기
-                        </button>
-                        <button
-                            className="btn btn-outline-danger btn-lg"
-                            onClick={() => {
-                                navigate(`/chat/message/${riderRoomId}`)
-                            }}
-                        >
-                            라이더 채팅하기
-                        </button>
-                        <button>만나서 결제 완료</button>
-                    </>
-                )}
+                {/* 결제 방식에 따른 버튼 */}
+                <div>
+                    {payments?.paymentMethod === "tossPay" && (
+                        <div className="user-order-click-btn">
+                            <button
+                                className="user-mini-btn-b"
+                                onClick={() => {
+                                    navigate(`/chat/message/${storeRoomId}`)
+                                }}
+                            >
+                                매장 채팅하기
+                            </button>
+                            <button
+                                className="user-mini-btn-sb"
+                                onClick={() => {
+                                    navigate(`/chat/message/${riderRoomId}`)
+                                }}
+                            >
+                                라이더 채팅하기
+                            </button>
+                        </div>
+                    )}
+                    {payments?.paymentMethod === "meetPayment" && (
+                        <div>
+                            <div className="user-order-click-btn">
+                                <button
+                                    className="user-mini-btn-b"
+                                    onClick={() => {
+                                        navigate(`/chat/message/${storeRoomId}`)
+                                    }}
+                                >
+                                    매장 채팅하기
+                                </button>
+                                <button
+                                    className="user-mini-btn-sb"
+                                    onClick={() => {
+                                        navigate(`/chat/message/${riderRoomId}`)
+                                    }}
+                                >
+                                    라이더 채팅하기
+                                </button>
+                            </div>
+                            <div className="user-order-click-btn-one">
+                                <button className="user-order-btn-b">만나서 결제 완료</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
