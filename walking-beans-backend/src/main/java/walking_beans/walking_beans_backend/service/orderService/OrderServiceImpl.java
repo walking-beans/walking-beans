@@ -8,6 +8,8 @@ import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private AlarmServiceImpl alarmService;
 
     /**************************************** Leo ****************************************/
     @Override
@@ -74,6 +79,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PaymentMapper paymentMapper;
+
+    @Autowired
+    AlarmNotificationService alarmNotificationService;
 
     // 오더 리스트
     @Override
@@ -263,7 +271,9 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 log.warn("cartList가 List 타입이 아닙니다.");
             }
-
+            // 매장에 주문수락 요청 알림 보내기
+            OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
+            alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(),1,"새로운 주문이 들어왔습니다.",0,"/user/delivery/status/"+orderNumber));
             return userId;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
