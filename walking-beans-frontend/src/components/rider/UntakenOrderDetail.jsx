@@ -1,9 +1,10 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import RiderOrderStatus from "./RiderOrderStatus";
-import "../../../css/rider/RiderOrderStatus.css";
+import "../../css/rider/RiderOrderStatus.css";
+import apiRiderService from "../../service/apiRiderService";
 
-const UntakenOrderDetail = ({selectedOrder, riderLocation}) => {
+const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
 
     const navigate = useNavigate();
 
@@ -12,6 +13,7 @@ const UntakenOrderDetail = ({selectedOrder, riderLocation}) => {
     }, []);
 
     const goToDetail = () => {
+        apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
     }
 

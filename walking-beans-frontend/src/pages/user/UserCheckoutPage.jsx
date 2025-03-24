@@ -17,7 +17,7 @@ export function UserCheckoutPage() {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;
-    const [orderRequests, setOrderRequests] = useState("");
+    const queryParams = new URLSearchParams(location.search);
 
     const [widgets, setWidgets] = useState(null);
     const [amount, setAmount] = useState({
@@ -91,6 +91,10 @@ export function UserCheckoutPage() {
             .catch(err => console.error("addressId 가져오기 실패:", err));
     }, [userId]);
 
+    const orderRequests = queryParams.get("orderRequests")
+        ? decodeURIComponent(queryParams.get("orderRequests"))
+        : "";
+
     return (
         <div className="user-order-background">
             <div className="user-order-menu-container">
@@ -142,7 +146,7 @@ export function UserCheckoutPage() {
                                         orderName,
                                         customerName: user?.user_name || "홍길동",
                                         customerEmail,
-                                        successUrl: `${window.location.origin}/sandbox/success?totalAmount=${totalAmountValue}&storeId=${storeId}&addressId=${addressId}`,
+                                        successUrl: `${window.location.origin}/sandbox/success?totalAmount=${totalAmountValue}&storeId=${storeId}&addressId=${addressId}&orderRequests=${encodeURIComponent(orderRequests)}`,
                                         failUrl: `${window.location.origin}/sandbox/fail`
                                     });
                                 } catch (error) {

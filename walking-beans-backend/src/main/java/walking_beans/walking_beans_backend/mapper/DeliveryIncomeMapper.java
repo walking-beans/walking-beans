@@ -13,4 +13,5 @@ public interface DeliveryIncomeMapper {
 
     DeliveryIncome getDeliveryIncomeByOrderId(@Param("riderId") long riderId, @Param("orderId") long orderId);
 
+    Integer insertDeliveryIncome(DeliveryIncome deliveryIncome);
 }

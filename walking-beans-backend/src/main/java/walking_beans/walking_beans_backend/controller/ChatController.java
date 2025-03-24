@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.ChattingInfoDTO;
 import walking_beans.walking_beans_backend.model.dto.Message;
 import walking_beans.walking_beans_backend.model.dto.admin.UserChattingRoom;
 import walking_beans.walking_beans_backend.model.dto.admin.UserMessage;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.messageService.MessageServiceImpl;
 
@@ -34,6 +36,9 @@ public class ChatController {
     @Autowired
     AlarmNotificationService alarmNotificationService;
 
+    @Autowired
+    AlarmServiceImpl alarmService;
+
     @GetMapping("/api/chatting")
     public ResponseEntity<List<Message>> getAllMessages(@RequestParam("roomId") long roomId) {
         List<Message> messages = messageService.getAllMessages(roomId);
@@ -48,35 +53,45 @@ public class ChatController {
         // 메시지를 해당 채팅방 구독자들에게 전송
         messagingTemplate.convertAndSend("/topic/chatroom/" + message.getRoomId(), message);
         messageService.insertMessageByRoomId(message);
-
-        // MessageChattingDto MCD = messageChattingDtoService.getMCDbyRoomIdAndUserId(message.getRoomId(), message.getUserId());
-        // alarmNotificationService.sendOrderNotification(Alarms.create(MCD.getSenderId, 2, message.getLastMessage())); //알람 저장 및 송신
-        alarmNotificationService.sendOrderNotification(Alarms.create(3, 2, message.getMessageContent(),3,"testUrl")); //알람 저장 및 송신
-
-        return ResponseEntity.ok().build();
-    }
-
-    @MessageMapping("/chatting")
-    @SendTo("/topic/chattingroom")
-    public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
-        log.info("================ receiveChattingMessage : {} ===================", message.toString());
-        // 메시지를 해당 채팅방 구독자들에게 전송
-        messagingTemplate.convertAndSend("/topic/chattingroom" + message.getRoomId(), message);
         chattingRoomService.updateLastMessageOfChattingRoom(message.getRoomId(), message.getMessageContent());
+
+        ChattingInfoDTO infoUser = alarmService.getChattingUserInfo(message.getRoomId(), message.getUserId());
+        System.out.println("메세지 유저 아이디:" + message.getUserId());
+        System.out.println(infoUser);
+        System.out.println("메세지 받을 아이디:" + infoUser.getReceiverId());
+        if (message.getRoomId() == infoUser.getSenderId()) {
+            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(), 2, infoUser.getSenderName() +" : "+ message.getMessageContent(), infoUser.getSenderId(), "/chat/message/"+message.getRoomId())); //알람 저장 및 송신
+            System.out.println("1번 실행");
+        } else {
+            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(),2,infoUser.getSenderName() +" : "+ message.getMessageContent(),infoUser.getSenderId(),"/chat/message/"+message.getRoomId()));
+            System.out.println("2번 실행");
+        }
+
+
+     
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/chattingmessage")
-    public ResponseEntity<List<UserMessage>> getAllUserMessage(@RequestParam("roomId") long roomId) {
-        log.info("getAllUserMessage roomId={}", roomId);
-        List<UserMessage> messages = messageService.getAllUserMessage(roomId);
-        return ResponseEntity.ok(messages);
-    }
+@MessageMapping("/chatting")
+@SendTo("/topic/chattingroom")
+public ResponseEntity<Void> receiveChattingMessage(@RequestBody Message message) {
+    log.info("================ receiveChattingMessage : {} ===================", message.toString());
+    // 메시지를 해당 채팅방 구독자들에게 전송
+    messagingTemplate.convertAndSend("/topic/chattingroom", message);
+    return ResponseEntity.ok().build();
+}
 
-    @GetMapping("/api/userchattingroom")
-    public ResponseEntity<List<UserChattingRoom>> getUserChattingRoomByUserId(@RequestParam("userId") long userId,
-                                                                              @RequestParam("receiverRelation") int receiverRelation) {
-        log.info("getUserChattingRoomByUserId userId={}, userRole={}", userId, receiverRelation);
-        return ResponseEntity.ok(chattingRoomService.getUserChattingRoomByUserId(userId, receiverRelation));
-    }
+@GetMapping("/api/chattingmessage")
+public ResponseEntity<List<UserMessage>> getAllUserMessage(@RequestParam("roomId") long roomId) {
+    log.info("getAllUserMessage roomId={}", roomId);
+    List<UserMessage> messages = messageService.getAllUserMessage(roomId);
+    return ResponseEntity.ok(messages);
+}
+
+@GetMapping("/api/userchattingroom")
+public ResponseEntity<List<UserChattingRoom>> getUserChattingRoomByUserId(@RequestParam("userId") long userId,
+                                                                          @RequestParam("receiverRelation") int receiverRelation) {
+    log.info("getUserChattingRoomByUserId userId={}, userRole={}", userId, receiverRelation);
+    return ResponseEntity.ok(chattingRoomService.getUserChattingRoomByUserId(userId, receiverRelation));
+}
 }

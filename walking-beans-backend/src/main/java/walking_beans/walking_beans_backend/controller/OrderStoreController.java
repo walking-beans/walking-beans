@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
-import walking_beans.walking_beans_backend.service.OrderStoreServiceImpl;
+import walking_beans.walking_beans_backend.service.orderStoreService.OrderStoreServiceImpl;
 
 import java.util.List;
 import java.util.Map;

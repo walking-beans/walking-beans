@@ -1,6 +1,6 @@
-import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
+import RiderMainMap from "../../components/rider/RiderMainMap";
 import {useState} from "react";
-import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
+import BeforeKakaoMapStart from "../../components/rider/BeforeKakaoMapStart";
 
 const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
 
@@ -17,7 +17,8 @@ const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
     return (
         <div>
             {/* Rider Header */}
-            <KakaomapStatus setRiderOnDuty={setRiderOnDuty} />
+            <KakaomapStatus user={user}
+                            setRiderOnDuty={setRiderOnDuty} />
         </div>
     )
 }

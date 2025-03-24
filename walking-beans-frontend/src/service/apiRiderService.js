@@ -223,6 +223,24 @@ const apiRiderService = {
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             );
+    },
+
+    getUserAndStoreRoomId : function (orderId, userId, setChattingMemberList) {
+        axios
+            .get(`${API_URL}/chattingmember/roomId?orderId=${orderId}&userId=${userId}`)
+            .then(
+                (res) => {
+                    console.log("📌 API 응답 데이터:", res.data);  // ✅ 데이터 확인용
+                    console.log("📌 데이터 타입:", typeof res.data);
+                    setChattingMemberList(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
     }
 }
 

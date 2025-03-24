@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.service;
+package walking_beans.walking_beans_backend.service.orderStoreService;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 
 import java.util.List;
