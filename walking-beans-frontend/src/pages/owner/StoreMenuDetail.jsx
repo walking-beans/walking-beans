@@ -78,14 +78,15 @@ const StoreMenuDetail = () => {
             submitData.append("menuPictureUrl", imgRef.current.files[0]);
         }
         console.log(submitData);
+        // 권한 확인 및 반응에 따라서 페이지 이동 기능 포함.
         axios
             .put(`http://localhost:7070/api/menu/owner/${storeId}/menu/${menuId}`,
                 submitData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
-                        withCredentials: true,
-                    },
+                        "Content-Type": "multipart/form-data"
+
+                    },withCredentials: true,
 
                 })
             .then((res) => {
@@ -122,6 +123,42 @@ const StoreMenuDetail = () => {
     /*if (isLoading){
         return <div> 로딩중 ...</div>;
     }*/
+
+    // 세션 확인
+/*
+    useEffect(() => {
+        // 쿠키에서 JSESSIONID 확인
+        const getJSessionId = () => {
+            const cookies = document.cookie.split("; ");
+            for (let cookie of cookies) {
+                const [name, value] = cookie.split("=");
+                if (name === "JSESSIONID") {
+                    console.log("JSESSIONID:", value);
+                    return value;
+                }
+            }
+            console.log("JSESSIONID를 찾을 수 없습니다.");
+            return null;
+        };
+
+        getJSessionId();
+
+        // 서버에서 JSESSIONID 확인
+        axios
+            .get("http://localhost:8080/api/users/getSessionData", {
+                withCredentials: true, // 세션 쿠키(JSESSIONID)를 포함
+            })
+            .then((response) => {
+                console.log("서버에서 받은 JSESSIONID:", response.data.JSESSIONID);
+                console.log("전체 응답:", response.data);
+            })
+            .catch((error) => {
+                console.error("세션 확인 오류:", error);
+            });
+    }, []);
+
+*/
+
     return (
         <>
             <div className={"StoreMenuDetail-container"}>

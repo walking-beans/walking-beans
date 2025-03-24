@@ -2,12 +2,15 @@ import {useEffect, useState} from "react";
 import StoreStatus from "../owner/teacherUi/StoreStatus";
 import StoreManagement from "../owner/teacherUi/StoreManagement";
 import '../owner/teacherUi/StoreMain.css';
+import axios from "axios";
 
 const StoreMain = () => {
     const [weather, setWeather] = useState({ condition: "흐림", temperature: -2 });
     const [orders, setOrders] = useState({ pending: 5, completed: 10 });
     const [storeStatus, setStoreStatus] = useState("준비중");
     const [ownerName, setOwnerName] = useState("");
+    const [userId, setUserId] = useState("");
+    const [storeId, setStoreId] = useState("");
 
 
 
@@ -16,10 +19,20 @@ const StoreMain = () => {
         if (storedUser) {
             const userData = JSON.parse(storedUser);
         console.log(storedUser)
-            setOwnerName(userData.ownerName || "사장님");
+            setOwnerName(userData.user_name || "사장님");
+            setUserId(userData.user_id) // 가게 정보 확인을 위한 id가져오기 , 이동할 페이지마다 storeId 파라미터가 있기 때문에 필요
         } else {
             setOwnerName("사장님");
         }
+        if (userId){
+            axios
+                .get(``)
+                .then( ()=>{})
+                .catch( ()=>{})
+
+        }
+
+
     }, []);
 
     return (
