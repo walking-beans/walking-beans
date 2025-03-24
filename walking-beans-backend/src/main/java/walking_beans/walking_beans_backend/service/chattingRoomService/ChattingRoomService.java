@@ -15,4 +15,10 @@ public interface ChattingRoomService {
     List<UserChattingRoom> getUserChattingRoomByUserId(long userId, int receiverRelation);
 
     long getRoomIdByOrderId(long orderId);
+
+    int insertChattingroomByOrderId(long orderId);
+
+    void createChattingRoomForUserAndOwner(long userId, long orderId);
+
+    void createChattingRoomForRider(long riderId, long userId, long ownerId, long orderId);
 }

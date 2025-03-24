@@ -65,6 +65,7 @@ public class OrderAPIController {
     @PatchMapping("/onme")
     public ResponseEntity<Integer> updateOrdersByRiderIdAndOrderId(@RequestParam("riderId") long riderId,
                                                                    @RequestParam("orderId") long orderId) {
+        log.info("=== /onme?riderId: {} ===", riderId);
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
     // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
@@ -82,18 +83,19 @@ public class OrderAPIController {
         OrderStoreDTO orderInfo = alarmService.getOrderInfoForAlarm(orderId);
         if (orderStatus == 4) {
             // 유저 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"주문하신 음식의 조리가 완료되었습니다.", 0,"/user/delivery/status/"+orderId));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"주문하신 음식의 조리가 완료되었습니다.", 0,"/user/delivery/status/"+orderInfo.getOrderNumber()));
             // 라이더 알림 보내기
             if (orderInfo.getRiderId() != null) { //라이더 등록이 되어 있다면 알림을 보내기
                 alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getRiderId(),1,"음식이 준비되었습니다.",0,"/rider/result/"+orderId));
             }
         } else if (orderStatus == 5) {
             // 유저한테 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식이 배달중입니다.",0,"/user/delivery/status/"+orderId));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식이 배달중입니다.",0,"/user/delivery/status/"+orderInfo.getOrderNumber()));
         } else if (orderStatus == 6) {
             // 유저한테 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식 배달이 완료되었습니다.",0,"/user/orderlist/"+ orderId));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식 배달이 완료되었습니다.",0,"/order"));
             // 유저한테 리뷰 요청 알람 보내기
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"맛있게 드셨다면 리뷰 작성 부탁드립니다!",0,"/order"));
         }
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }

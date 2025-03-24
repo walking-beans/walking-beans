@@ -69,16 +69,12 @@ const RiderOntheway = () => {
         if (!order) return;
 
         apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
-        setStoreRoomId(chattingMemberList?.["3"] ?? "0");
-        setUserRoomId(chattingMemberList?.["1"] ?? "0");
 
     }, [order])
 
     // 유저 marker 설정, 매장 marker 설정
     useEffect(() => {
         if (!order) return;
-
-
 
         // 카카오맵 스크립트 로드
         const script = document.createElement("script");
@@ -142,6 +138,13 @@ const RiderOntheway = () => {
         };
     }, [order]);
 
+    useEffect(() => {
+        if (Object.keys(chattingMemberList).length > 0) {  // 데이터가 들어온 후 실행
+            setStoreRoomId(chattingMemberList["3"] ?? "0");
+            setUserRoomId(chattingMemberList["1"] ?? "0");
+        }
+    }, [chattingMemberList]);
+
     const openKakaoNavi = () => {
         const url = `https://map.kakao.com/?nil_profile=title&nil_src=local`;
         window.location.href = url;
@@ -151,6 +154,7 @@ const RiderOntheway = () => {
         setOnDelivery(true);
         storeMarker.setMap(null);
         apiRiderService.updateOrderStatus(orderId, 5);
+        apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
         console.log(onDelivery);
     }
 
@@ -177,8 +181,8 @@ const RiderOntheway = () => {
                     console.log("DeliveryIncome insert error", error);
                 }
             );
-        navigate(`/rider/result/${orderId}`);
         apiRiderService.updateOrderStatus(orderId, 6);
+        navigate(`/rider/result/${orderId}`);
     }
 
 
@@ -247,7 +251,7 @@ const RiderOntheway = () => {
                             </div>
                             <div className="btn-container">
                                 {
-                                    storeRoomId !== "0" &&
+                                    storeRoomId !== 0 &&
                                     <button
                                         className="btn btn-outline-info btn-lg"
                                         onClick={() => {navigate(`/chat/message/${storeRoomId}`)}}
@@ -256,7 +260,7 @@ const RiderOntheway = () => {
                                     </button>
                                 }
                                 {
-                                    userRoomId !== "0" &&
+                                    userRoomId !== 0 &&
                                     <button
                                         className="btn btn-outline-danger btn-lg"
                                         onClick={() => {navigate(`/chat/message/${userRoomId}`)}}

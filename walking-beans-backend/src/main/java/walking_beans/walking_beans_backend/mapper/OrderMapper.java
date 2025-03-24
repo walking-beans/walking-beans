@@ -25,6 +25,8 @@ public interface OrderMapper {
 
     RiderOrderStatusDTO getOrderStatusWithRemainingTime(@Param("orderId") long orderId);
 
+    Long getOwnerIdByOrderId(long orderId);
+
     /****************************************  ****************************************/
 
     // 주문 등록하기

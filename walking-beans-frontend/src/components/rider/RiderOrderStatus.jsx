@@ -31,7 +31,7 @@ const RiderOrderStatus = ({orderId, message, css}) => {
             setOrderProgressPercent(no.orderStatus);
             console.log("RiderOrderStatus order : " + no);
         });
-    }, [orderId]);
+    }, [orderId, orderProgress]);
 
     return (
         <div className={css.order_status}>

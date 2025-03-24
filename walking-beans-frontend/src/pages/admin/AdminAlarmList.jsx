@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminAlarmList.css";
 
 
@@ -73,6 +73,7 @@ const AdminAlarmList = () => {
                     <div key={index}>
                         <div className="AlarmList" onClick={() => {
                             const targetUrl = value.alarmUrl;
+                            console.log(targetUrl);
                             navigate(targetUrl);
                         }}>
                             <h3>{value.alarmRole === 1
