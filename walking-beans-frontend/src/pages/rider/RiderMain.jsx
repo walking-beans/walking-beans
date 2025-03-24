@@ -18,6 +18,7 @@ const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
         <div>
             {/* Rider Header */}
             <KakaomapStatus user={user}
+                            riderOnDuty = {riderOnDuty}
                             setRiderOnDuty={setRiderOnDuty} />
         </div>
     )
