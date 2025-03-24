@@ -181,6 +181,40 @@ public class OrderServiceImpl implements OrderService {
             log.info("주문 저장 완료! 주문 번호: {}", orderNumber);
             log.info("▶ orders 테이블 삽입 데이터: {}", requestData);
 
+
+            // MyBatis에서 자동 생성된 주문 ID 가져오기
+            Long orderId = null;
+            Object orderIdObj = requestData.get("orderId");
+            if (orderIdObj != null) {
+                if (orderIdObj instanceof Long) {
+                    orderId = (Long) orderIdObj;
+                } else if (orderIdObj instanceof Integer) {
+                    orderId = ((Integer) orderIdObj).longValue();
+                } else {
+                    orderId = Long.parseLong(orderIdObj.toString());
+                }
+            }
+
+            if (orderId == null) {
+                log.error("주문 ID를 찾을 수 없습니다.");
+                throw new RuntimeException("주문 ID를 찾을 수 없습니다.");
+            }
+
+            log.info("주문 저장 완료! 주문 번호: {}, 주문 ID: {}", orderNumber, orderId);
+
+            // 결제 정보 저장
+            Object paymentsObj = requestData.get("payments");
+            if (paymentsObj instanceof Map) {
+                Map<String, Object> paymentData = (Map<String, Object>) paymentsObj;
+                Payments payment = new Payments();
+                payment.setOrderId(orderId);  // 생성된 주문 ID 설정
+                payment.setPaymentMethod(paymentData.get("paymentMethod").toString());
+                payment.setPaymentStatus(paymentData.get("paymentStatus").toString());
+
+                paymentMapper.insertPayments(payment);
+                log.info("결제 정보 저장 완료: {}", payment);
+            }
+
             // `cartList` 데이터를 `order_items` 테이블에 저장
             Object cartListObj = requestData.get("cartList");
 

@@ -59,7 +59,7 @@
     <!-- ****************************************  **************************************** -->
 
 
-    <insert id="createOrder">
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price,
                             order_create_date, order_modified_date)
         VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(),

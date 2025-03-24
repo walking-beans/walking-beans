@@ -115,7 +115,7 @@ const UserDeliveryStatus = () => {
         axios.get(`http://localhost:7070/api/payment/method/${orderId}`)
             .then(res => {
                 console.log("결제 정보 조회 성공", res.data);
-                setPaymentMethod(res.data);
+                setPayments(res.data);
             })
             .catch(err => {
                 console.log("결제 정보 조회 실패", err);
@@ -204,7 +204,7 @@ const UserDeliveryStatus = () => {
             <div>
                 <div>{store?.storeName}</div>
                 <div>{order.orderNumber}</div>
-                <div>{order?.totalPayment}(메뉴 {order?.quantity}개)</div>
+                <div>{Number(order?.totalPayment).toLocaleString()}(메뉴 {order?.quantity}개)</div>
             </div>
 
             <div className="user-order-hr" alt="구분선"></div>
