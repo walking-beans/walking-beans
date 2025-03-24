@@ -33,7 +33,9 @@ const RiderOrderList = ({user}) => {
                                         <div className="rider-order-list-order" key={order.id}>
                                             <Link to={`/rider/order/${order.orderId}` } style={{ textDecoration: "none", color: "black" }}>
                                                 <div className="rider-order-list-order-ordernumber">주문번호 : {order.orderNumber}</div>
-                                                <div className="rider-order-list-order-orderstatus">{status[order.orderStatus]}</div>
+                                                <div className={order.orderStatus === 6 ? "rider-order-list-order-finishedorderstatus" : "rider-order-list-order-orderstatus"}>
+                                                    {status[order.orderStatus]}
+                                                </div>
                                                 <div className="rider-order-list-order-orderprice">금액 : {(parseInt(order.orderTotalPrice)).toLocaleString()}</div>
                                                 <div className="rider-order-list-order-orderdate">주문 날짜 : {order.orderModifiedDate}</div>
                                             </Link>

@@ -28,7 +28,8 @@
                order_requests,
                order_total_price,
                DATE_FORMAT(order_create_date, '%Y-%m-%d %W %p %h:%i')   AS order_create_date,
-               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date
+               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date,
+               rider_id_on_duty
         FROM orders
         WHERE rider_id_on_duty = #{riderIdOnDuty}
         ORDER BY order_status, order_modified_date DESC

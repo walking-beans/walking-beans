@@ -33,18 +33,16 @@ const HeaderAlarm = ({userId, bell}) => {
                 console.log("✅ WebSocket 연결 성공");
                 stompClient.subscribe(`/topic/alarms/${userId}`, (message) => {
                     console.log("알림 수신:", message.body);
-                    //setUnreadCount((prev) => prev + 1);
-                    //setAlarmMessages((prev) => [...prev, message.body]);
-                    const receivedData = JSON.parse(message.body)
+                    const receivedData = JSON.parse(message.body);
                     console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
                     if (receivedData.userId === userId) {
                         setNotifications((prevNotifications) => [
-                            ...prevNotifications,
                             {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
                                 url: receivedData.alarmUrl
                             },
+                            ...prevNotifications,
                         ])
 
                         setUnreadCount((prevCount) => prevCount +1);
