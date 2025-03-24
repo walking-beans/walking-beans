@@ -22,13 +22,16 @@ public class StoreAPIController {
     private StoreServiceImpl storeService;
     @Autowired
     private OrderService orderService;
-/*
+
     /**소유권 확인용도
      *
-     * @param session
+     * @param userId
      * @return
 
-    @GetMapping("/owner")
+    @GetMapping("/owner/storeid")
+    */
+
+ /*
     public ResponseEntity<?> getStoreOwner(HttpSession session) {
         long userId = (long) session.getAttribute("userId");
         if (userId == 0) {return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인필요");}

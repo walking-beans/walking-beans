@@ -27,7 +27,9 @@ const StoreMain = () => {
         if (userId){
             axios
                 .get(``)
-                .then( ()=>{})
+                .then( (res)=>{
+                    setStoreId(res.data)
+                })
                 .catch( ()=>{})
 
         }

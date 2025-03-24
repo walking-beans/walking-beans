@@ -53,7 +53,7 @@ public class StoreServiceImpl implements StoreService {
     public void updateStores(Stores stores) {
         storeMapper.updateStores(stores);
     }
-
+    // 권한 검증용 id 확인
     @Override
     public long getStoreIdByUserId(long userId) {
         return 0;
