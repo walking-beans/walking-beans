@@ -65,6 +65,7 @@ public class OrderAPIController {
     @PatchMapping("/onme")
     public ResponseEntity<Integer> updateOrdersByRiderIdAndOrderId(@RequestParam("riderId") long riderId,
                                                                    @RequestParam("orderId") long orderId) {
+        log.info("=== /onme?riderId: {} ===", riderId);
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
     // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)

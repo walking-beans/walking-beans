@@ -41,7 +41,7 @@ public class ChattingRoomAPIController {
         return ResponseEntity.ok(chattingRoomService.getRoomIdByOrderId(orderId));
     }
 
-    @GetMapping("/test")
+    @GetMapping("/insert")
     public ResponseEntity<Void> createChattingRoomForRider(@RequestParam("riderId") long riderId, @RequestParam("userId") long userId, @RequestParam("ownerId") long ownerId, @RequestParam("orderId") long orderId) {
 
         chattingRoomService.createChattingRoomForRider(riderId, userId, ownerId, orderId);
