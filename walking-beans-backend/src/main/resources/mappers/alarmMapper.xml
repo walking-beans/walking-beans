@@ -14,7 +14,7 @@
         SELECT *
         FROM Alarms
         WHERE user_id = #{userId}
-        ORDER BY alarm_create_date DESC
+        ORDER BY alarm_id DESC
     </select>
 
     <!-- 알람 모두 지우기 -->
