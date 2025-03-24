@@ -9,10 +9,16 @@
 
 .rider-order-list-order-ordernumber {
     font-weight: bold;
+    font-size : 17px;
 }
 
 .rider-order-list-order-orderstatus {
+    font-weight: bold;
+    color : red;
+}
 
+.rider-order-list-order-finishedorderstatus {
+    font-weight: bold;
 }
 
 .rider-order-list-order-orderprice {

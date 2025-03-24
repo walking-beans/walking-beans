@@ -238,7 +238,7 @@ const AdminMessage = ({user}) => {
     };
 
     return (
-        <div className="admin-chattingroom-base">
+        <div className="admin-message-base">
             <ul>
                 {/* 메시지 리스트 출력 */}
                 {messages.map((msg, index) => (
@@ -250,14 +250,15 @@ const AdminMessage = ({user}) => {
                                 <div
                                     className="admin-message-notUserInput "
                                 >
-                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
-                                    <p>{msg.messageContent}</p>
+                                    <p><img className="admin-message-notUserInput-img" src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /></p>
+                                    <p className="admin-message-notUserInput-name">{msg.userName}</p>
+                                    <p className="admin-message-notUserInput-content">{msg.messageContent}</p>
                                 </div>
                             ) : (
                                 <div
                                     className="admin-message-userInput"
                                 >
-                                    <p>{msg.messageContent}</p>
+                                    <p className="admin-message-userInput-p">{msg.messageContent}</p>
                                 </div>
                             )
                         }
@@ -280,7 +281,7 @@ const AdminMessage = ({user}) => {
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
-                            <img src={PictureButton}/>
+                            <img className="admin-message-pictureBtn-pic" src={PictureButton}/>
                         </label>
                         <input
                             id="fileInput"
