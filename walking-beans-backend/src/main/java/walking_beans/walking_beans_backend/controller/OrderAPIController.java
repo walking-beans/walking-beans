@@ -82,21 +82,19 @@ public class OrderAPIController {
         OrderStoreDTO orderInfo = alarmService.getOrderInfoForAlarm(orderId);
         if (orderStatus == 4) {
             // 유저 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"주문하신 음식의 조리가 완료되었습니다.", 0, "Url입력"));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"주문하신 음식의 조리가 완료되었습니다.", 0,"/user/delivery/status/"+orderId));
             // 라이더 알림 보내기
             if (orderInfo.getRiderId() != null) { //라이더 등록이 되어 있다면 알림을 보내기
-                alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getRiderId(),1,"음식이 준비되었습니다.",0,"Url입력하기"));
+                alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getRiderId(),1,"음식이 준비되었습니다.",0,"/rider/result/"+orderId));
             }
         } else if (orderStatus == 5) {
             // 유저한테 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식이 배달중입니다.",0,"url입력하기"));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식이 배달중입니다.",0,"/user/delivery/status/"+orderId));
         } else if (orderStatus == 6) {
             // 유저한테 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식 배달이 완료되었습니다.",0,"url입력하기"));
-            // 매장한테 알림 보내기
-            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getStoreId(),1,"음식 배달이 완료되었습니다.",0,"url입력하기"));
+            alarmNotificationService.sendOrderNotification(Alarms.create(orderInfo.getCustomerId(),1,"음식 배달이 완료되었습니다.",0,"/user/orderlist/"+ orderId));
+            // 유저한테 리뷰 요청 알람 보내기
         }
-
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
     }
 
