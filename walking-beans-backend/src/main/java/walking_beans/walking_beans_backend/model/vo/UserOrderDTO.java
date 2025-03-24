@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class UserOrderDTO {
     private long orderId;
-    private Long userId;
+    private long userId;
     private String customerName;
     private String storeName;
     private String orderDate;
@@ -21,4 +21,5 @@ public class UserOrderDTO {
     private int quantity;
     private int orderStatus;
     private String storeLogo;
+    private long storeId;
 }

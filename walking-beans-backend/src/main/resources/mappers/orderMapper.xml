@@ -124,7 +124,8 @@
                order_list,
                quantity,
                order_status,
-               store_logo
+               store_logo,
+               store_id
         FROM user_orders_view
         WHERE user_id = #{userId}
     </select>
