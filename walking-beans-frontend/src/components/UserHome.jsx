@@ -101,7 +101,7 @@ const UserHome = ({ user: initialUser }) => {
         const centerLat = userId ? userLat : userLocation?.lat;
         const centerLng = userId ? userLng : userLocation?.lng;
 
-        if (!centerLat || !centerLng) return; // 📌 좌표가 없으면 실행 X
+        if (!centerLat || !centerLng) return; // 좌표가 없으면 실행 X
 
         const script = document.createElement("script");
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
@@ -255,27 +255,32 @@ const UserHome = ({ user: initialUser }) => {
 
             searchedStores.forEach((store) => {
                 fetchReviews(store.storeId, (rating, reviewCount) => {
-                    const distance = parseFloat(getDistance(userLat, userLng, store.storeLatitude, store.storeLongitude)); // 대표 주소 기준 거리 계산
+                    const distance = getDistance(userLat, userLng, store.storeLatitude, store.storeLongitude); // 대표 주소 기준 거리 계산
 
                     updatedStores.push({
                         ...store,
                         storeRating: rating, // 리뷰 기반 별점 적용
                         storeReviewCount: reviewCount,
-                        storeDistance: distance //  대표 주소 기준 거리 저장
+                        storeDistance: distance, // 대표 주소 기준 거리 저장
                     });
 
                     remainingStores--;
                     if (remainingStores === 0) {
-                        let sortedData = [...updatedStores];
+                        //  10km 이내 매장만 필터링
+                        let filteredStores = updatedStores.filter(store => store.storeDistance <= 10);
 
-                        if (sortType === "rating") {
-                            sortedData.sort((a, b) => b.storeRating - a.storeRating);
-                        } else if (sortType === "distance") {
-                            sortedData.sort((a, b) => a.storeDistance - b.storeDistance); // 대표 주소 기준 거리순 정렬
+                        if (filteredStores.length === 0) {
+                            alert("주변에 검색할 매장이 없습니다.");
                         }
 
+                        //  정렬 로직 유지
+                        if (sortType === "rating") {
+                            filteredStores.sort((a, b) => b.storeRating - a.storeRating);
+                        } else if (sortType === "distance") {
+                            filteredStores.sort((a, b) => a.storeDistance - b.storeDistance);
+                        }
 
-                        setDisplayStores([...sortedData]); // 최종 업데이트
+                        setDisplayStores(filteredStores); //  최종 업데이트
                     }
                 });
             });

@@ -27,4 +27,7 @@ public interface ReviewService {
 
     // 이미지 업로드
     String uploadToImgur(MultipartFile file) throws IOException;
+
+    // 유저가 주문한 스토어에 대한 리뷰 존재 여부 확인
+    boolean existsReviewByOrderId(long orderId);
 }

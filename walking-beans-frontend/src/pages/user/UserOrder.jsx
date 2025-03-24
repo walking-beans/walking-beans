@@ -190,7 +190,7 @@ const UserOrder = () => {
                         <span className="store-menu-title">
                             {store?.storeRating}({store?.storeReviewCount})
                         </span>
-                        <Link to={`/store/${storeId}`}>
+                        <Link to={`/user/review/${storeId}`}>
                             <img src={detailBtn} alt="가게 평점 자세히보기"/>
                         </Link>
                     </div>
