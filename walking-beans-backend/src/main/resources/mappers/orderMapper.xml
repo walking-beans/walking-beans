@@ -31,7 +31,7 @@
                DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date
         FROM orders
         WHERE rider_id_on_duty = #{riderIdOnDuty}
-        ORDER BY order_id DESC
+        ORDER BY order_status, order_modified_date DESC
     </select>
 
     <!-- 주문 상태 변경 -->
