@@ -22,4 +22,5 @@ public class UserOrderDTO {
     private int orderStatus;
     private String storeLogo;
     private long storeId;
+    private String detailedAddress;
 }

@@ -5,7 +5,7 @@ import apiUserOrderService from "../../service/apiUserOrderService";
 import {useNavigate} from "react-router-dom";
 
 const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
-    const [selectedOption, setSelectedOption] = useState({});
+    const [selectedOption, setSelectedOption] = useState([]);
     const [options, setOptions] = useState([]);
     const [grouped, setGrouped] = useState({});
     const modalBodyRef = useRef(null);

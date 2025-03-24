@@ -139,6 +139,7 @@
                order_date,
                order_number,
                delivery_address,
+               detailed_address,
                total_payment,
                order_requests,
                order_list,

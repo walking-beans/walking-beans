@@ -142,22 +142,6 @@ const UserOrderList = () => {
                             </div>
                             ))
                         }
-                        {/*
-                    <ul>
-                        {orders.map((order) => (
-                            <li key={order.orderNumber}>
-                                <Link to={`/order/${order.orderNumber}`}>
-                                    <p>🆔 주문번호: {order.orderNumber}</p>
-
-                                </Link>
-                                <p>{order.storeName}</p>
-                                <p>📅 주문일자: {order.orderDate}</p>
-                                <p>💰 총액: {order.totalPayment}원</p>
-                                <p>📝 주문내역: {order.orderList}</p>
-                <div className="user-order-hr"></div>
-                            </li>
-                        ))}
-                    </ul>*/}
                     </div>
                 )}
             </div>

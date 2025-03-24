@@ -195,6 +195,11 @@ const UserDeliveryStatus = () => {
         apiRiderService.updateOrderStatus(orderId, 6);
     }
 
+    useEffect(() => {
+        console.log("orderNumber:", orderNumber);
+        console.log("Order state:", order);
+        console.log("OrderId state:", orderId);
+    }, [orderNumber, order, orderId]);
 
     return (
         <div className="user-delivery-status-container">
@@ -205,23 +210,24 @@ const UserDeliveryStatus = () => {
                 {/* 배달 현황 */}
                 <div>
                     <div className="user-order-bordtext">도착예정시간</div>
-                    <RiderOrderStatus
-                        orderId={order?.orderId}
-                        message="빠르게 배달 중입니다."
-                        css={
-                            {
-                                order_status_time_div: "user-menu-option-group-container",
-                                order_status_time_remaining: "user-order-bic-text",
-                                order_status_delivery_deadline: "user-order-optiontitle",
-                                order_status_steps: "user-order-click-btn",
-                                order_status_message: "user-order-guide",
-                                order_status_step: "user-order-optiontitle",
-                                order_status_loading: "user-order-guide",
+                    {orderId && (
+                        <RiderOrderStatus
+                            orderId={orderId}
+                            message="빠르게 배달 중입니다."
+                            css={
+                                {
+                                    order_status_time_div: "user-menu-option-group-container",
+                                    order_status_time_remaining: "user-order-big-text",
+                                    order_status_delivery_deadline: "user-order-optiontitle",
+                                    order_status_steps: "user-order-click-btn",
+                                    order_status_message: "user-order-guide",
+                                    order_status_step: "user-order-optiontitle",
+                                    order_status_loading: "user-order-guide",
+                                }
                             }
-                        }
-                    />
+                        />
+                    )}
                 </div>
-
                 <div className="user-order-hr" alt="구분선"></div>
 
                 <div>
@@ -292,12 +298,14 @@ const UserDeliveryStatus = () => {
                                 <button
                                     className="user-order-btn-b"
                                     onClick={handleMeet}
-                                >만나서 결제 완료</button>
+                                >만나서 결제 완료
+                                </button>
                             </div>
                             <div
                                 className="user-order-guide"
                                 onClick={handleMeet}
-                            >배달을 받으셨다면 만나서 결제 완료 버튼을 눌러주세요!</div>
+                            >배달을 받으셨다면 만나서 결제 완료 버튼을 눌러주세요!
+                            </div>
                         </div>
                     )}
                 </div>

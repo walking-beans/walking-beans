@@ -139,7 +139,7 @@ function PathRoute() {
                                 <Route path="/order" element={<UserOrderList />} />
 
                                 {/*주문 상세정보*/}
-                                <Route path="/order/:orderId" element={<UserOrderDetail />} />
+                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
                                 <Route path="/order/test" element={<RiderOrderStatus />} />
 
 
