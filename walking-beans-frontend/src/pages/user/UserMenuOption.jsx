@@ -7,7 +7,7 @@ const UserMenuOption = ({optionContent, optionPrice, onChange, checked}) => {
             <div className="user-order-option-info">
                 <label className="user-order-optiontext">
                     <input
-                        type="radio"
+                        type="checkbox"
                         className="user-order-option-select"
                         onChange={onChange}
                         checked={checked || false}

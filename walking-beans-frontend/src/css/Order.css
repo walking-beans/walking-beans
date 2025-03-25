@@ -451,7 +451,7 @@
     text-align: center;
 }
 
-.user-order-loading img{
+.user-order-loading img {
     display: inline-block;
     margin: 30px auto;
 }
@@ -501,7 +501,7 @@
 }
 
 .user-status-modal-container {
-    max-height: 600px;
+    max-height: 530px;
     max-width: 600px;
     display: flex;
     flex-direction: column;
@@ -510,9 +510,13 @@
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 30px 30px 0 0;
     overflow-y: auto;
-    scrollbar-width: none;
     width: 100%;
     margin: 0;
+    position: absolute;
+    top: 390px;
+    z-index: 2;
+    scrollbar-width: thin;
+    scrollbar-color: #AB7A44 #F4EDDF;
 }
 
 .user-order-guide {
@@ -588,6 +592,9 @@
     gap: 4px;
 }
 
-.user-select-mid-text {
+.user-select-qyt-text {
     justify-self: end;
+    font-size: 17px;
+    color: #5A3D21;
+    font-weight: bold;
 }
