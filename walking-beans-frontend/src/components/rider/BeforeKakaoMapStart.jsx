@@ -81,7 +81,7 @@ const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
 
     return (
         <div className="before-kakao-map-start">
-            <div id="map" style={{ width: "100%", height: "650px" }}></div>
+            <div id="map" style={{ width: "100%", height: "800px" }}></div>
             {
                 !riderOnDuty && (
                     <button onClick={()=> {handleRiderOnDuty()}}
