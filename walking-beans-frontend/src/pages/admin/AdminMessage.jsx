@@ -111,7 +111,7 @@ export default AdminMessage;
 */
 import React, { useEffect, useState, useRef } from "react";
 import { Stomp } from "@stomp/stompjs";
-import apiRiderService from "../../components/rider/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 import {useParams} from "react-router-dom";
 import "../../css/admin/AdminMessage.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
@@ -120,7 +120,7 @@ import PictureButton from "../../assert/images/admin/AdminMessage/adminMessage-p
 import SendAlarm from "../../components/admin/SendAlarm";
 
 
-function AdminMessage({user}) {
+const AdminMessage = ({user}) => {
 
     const {roomId} = useParams();
     const stompClient = useRef(null);
@@ -162,7 +162,7 @@ function AdminMessage({user}) {
         console.log("✅ WebSocket Connected.");
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, () => {
-            stompClient.current.subscribe(`/sub/chatroom/${roomId}`, (message) => {
+            stompClient.current.subscribe(`/topic/chatroom/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
@@ -176,7 +176,6 @@ function AdminMessage({user}) {
     };
 
     useEffect(() => {
-        console.log("user : ", user);
         connect();
         apiRiderService.getChattingMessageList(roomId,
             (newMessage) => {
@@ -184,7 +183,7 @@ function AdminMessage({user}) {
                 console.log(newMessage);
             });
         apiRiderService.getAllChattingMembers(roomId,
-            1,
+            user.user_id,
             (chattingMemberList) => {
                 setSenderId(chattingMemberList[0].roomReceiverId);
             });
@@ -195,20 +194,23 @@ function AdminMessage({user}) {
     //메세지 전송
     const sendMessage = () => {
         console.log("sendMessage senderId : " + senderId);
+        if (!user) {
+            alert("에러 발생 잠시 후 다시 실행해주세요");
+            return;
+        }
         if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
                 roomId : roomId,
-                userId : 1,
+                userId : user.user_id,
                 messageRole : 1,
                 messageContent : inputValue
             };
-            stompClient.current.send(`/pub/message`, {}, JSON.stringify(body));
-            stompClient.current.send(`/pub/chatting`, {}, JSON.stringify(body));
-            setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
+            stompClient.current.send(`/app/message`, {}, JSON.stringify(body));
+            stompClient.current.send(`/app/chatting`, {}, JSON.stringify(body));
+            // setSendAlarmMessage(inputValue); //알람용 텍스트 내용 저장
             setInputValue('');
-            setShowSendAlarm(true); //알람 전송 트리거
-            return;
+            // setShowSendAlarm(true); //알람 전송 트리거
         } else if (stompClient.current && previewImage) {
             /*const reader = new FileReader();
             reader.readAsDataURL(previewImage);
@@ -228,16 +230,15 @@ function AdminMessage({user}) {
             setIsDisabled(false);
         } else {
             alert("메세지를 작성해주세요");
-            setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
-            setShowSendAlarm(true); //알림 전송 트리거
-            return;
+            // setSendAlarmMessage("이미지가 전송되었습니다."); //알림 내용 저장
+            // setShowSendAlarm(true); //알림 전송 트리거
         }
         // 알람 컴포넌트
 
     };
 
     return (
-        <div className="admin-chattingroom-base">
+        <div className="admin-message-base">
             <ul>
                 {/* 메시지 리스트 출력 */}
                 {messages.map((msg, index) => (
@@ -245,18 +246,19 @@ function AdminMessage({user}) {
                         key={index}
                     >
                         {
-                            msg.userId !== 1 ? (
+                            msg.userId !== user.user_id ? (
                                 <div
                                     className="admin-message-notUserInput "
                                 >
-                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
-                                    <p>{msg.messageContent}</p>
+                                    <p><img className="admin-message-notUserInput-img" src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /></p>
+                                    <p className="admin-message-notUserInput-name">{msg.userName}</p>
+                                    <p className="admin-message-notUserInput-content">{msg.messageContent}</p>
                                 </div>
                             ) : (
                                 <div
                                     className="admin-message-userInput"
                                 >
-                                    <p>{msg.messageContent}</p>
+                                    <p className="admin-message-userInput-p">{msg.messageContent}</p>
                                 </div>
                             )
                         }
@@ -279,7 +281,7 @@ function AdminMessage({user}) {
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
-                            <img src={PictureButton}/>
+                            <img className="admin-message-pictureBtn-pic" src={PictureButton}/>
                         </label>
                         <input
                             id="fileInput"

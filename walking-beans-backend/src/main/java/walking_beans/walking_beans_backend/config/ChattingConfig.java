@@ -1,3 +1,4 @@
+/*
 package walking_beans.walking_beans_backend.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -26,3 +27,4 @@ public class ChattingConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
     }
 }
+*/

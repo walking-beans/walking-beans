@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from "react";
 
 const SendAlarm = ({ userId, alarmRole, senderId, messageContent }) => {
@@ -53,4 +54,4 @@ const SendAlarm = ({ userId, alarmRole, senderId, messageContent }) => {
     return null; // UI는 보이지 않게 처리
 };
 
-export default SendAlarm;
+export default SendAlarm;*/

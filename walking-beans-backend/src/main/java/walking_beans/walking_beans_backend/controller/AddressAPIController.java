@@ -39,6 +39,7 @@ public class AddressAPIController {
     // 주소 추가
     @PostMapping("/UserInsertAddress")
     public String UserInsertAddress(@RequestBody Address address) {
+        log.info("======= ====== {} ", address.toString());
         addressService.insertAddress(address);
         return "주소가 성공적으로 추가되었습니다.";
     }
@@ -69,6 +70,15 @@ public class AddressAPIController {
         addressService.updatePrimaryAddress(userId,addressId);
         return "기본 주소가 변경되었습니다.";
     }
+
+    // 주소 삭제
+    @DeleteMapping("/delete/{addressId}")
+    public ResponseEntity<String> deleteAddress(@PathVariable("addressId") Long addressId) {
+        addressService.deleteAddress(addressId);
+        return ResponseEntity.ok("주소가 삭제되었습니다.");
+    }
+
+
     /**************************************** LEO ****************************************/
 
     /**
