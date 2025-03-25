@@ -28,7 +28,8 @@ public class OrderDetailDTO {
     private String menuName;
     private int menuPrice;
     private int quantity;
-
+// optionIds
+    private String optionIds;
     private String optionNames;
     private String optionContents;
     private String optionPrices;
