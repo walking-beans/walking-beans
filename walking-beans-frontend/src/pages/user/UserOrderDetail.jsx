@@ -17,32 +17,41 @@ const UserOrderDetail = () => {
         axios.get(`http://localhost:7070/api/orders/detail/orderNumber/${orderNumber}`)
             .then((response) => {
                 if (response.data && response.data.length > 0) {
-                    // 기본 주문 정보는 첫 번째 항목에서 가져옴
-                    setOrder(response.data[0]);
-                    // 상세 내역은 전체 배열 사용
+                    // 주문 기본 정보는 첫 번째 항목에서 가져옴
+                    const baseOrderInfo = response.data[0];
+                    setOrder(baseOrderInfo);
                     setOrderItems(response.data);
-                    console.log("주문 데이터 : ", response.data);
 
-                    // 메뉴 가격 계산
-                    const menuTotal = orderItems.reduce((sum, item) => {
+                    // 메뉴 총액 계산
+                    const menuTotal = response.data.reduce((sum, item) => {
                         const basePrice = parseInt(item.menuPrice) || 0;
-                        const optionPrice = parseInt(item.totalOptionPrice) || 0;
+                        const optionPrices = item.optionPrices
+                            ? item.optionPrices.split(',').reduce((total, price) => total + parseInt(price), 0)
+                            : 0;
                         const qty = parseInt(item.quantity) || 1;
 
-                        const itemTotal = (basePrice + optionPrice) * qty;
-                        console.log(`항목: ${item.menuName}, 가격: ${basePrice}, 옵션: ${optionPrice}, 수량: ${qty}, 소계: ${itemTotal}`);
+                        const itemTotal = (basePrice + optionPrices) * qty;
+
+                        console.log(`
+                                메뉴: ${item.menuName}, 
+                                기본가격: ${basePrice}, 
+                                옵션가격: ${optionPrices}, 
+                                수량: ${qty}, 
+                                항목 총액: ${itemTotal}
+                            `);
 
                         return sum + itemTotal;
                     }, 0);
                     setTotalMenuPrice(menuTotal);
 
-                    // 배달팁 계산 (총합)
-                    const totalPrice = orderItems.reduce((sum, item) => {
-                        const tip = parseInt(item.storeDeliveryTip) || 0;
-                        const total = tip + totalMenuPrice;
-                        return sum + item.total;
-                    }, 0);
+                    console.log('총 메뉴 금액:', menuTotal);
+
+                    const deliveryTip = parseInt(order.storeDeliveryTip) || 0;
+                    const totalPrice = menuTotal + deliveryTip;
                     setTotalPrice(totalPrice);
+
+                    console.log('배달팁:', deliveryTip);
+                    console.log('총 결제 금액:', totalPrice);
                 }
                 setLoading(false);
             })
