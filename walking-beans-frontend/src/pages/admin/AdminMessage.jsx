@@ -176,7 +176,6 @@ const AdminMessage = ({user}) => {
     };
 
     useEffect(() => {
-        console.log("user : ", user);
         connect();
         apiRiderService.getChattingMessageList(roomId,
             (newMessage) => {
@@ -184,7 +183,7 @@ const AdminMessage = ({user}) => {
                 console.log(newMessage);
             });
         apiRiderService.getAllChattingMembers(roomId,
-            1,
+            user.user_id,
             (chattingMemberList) => {
                 setSenderId(chattingMemberList[0].roomReceiverId);
             });
@@ -195,11 +194,15 @@ const AdminMessage = ({user}) => {
     //메세지 전송
     const sendMessage = () => {
         console.log("sendMessage senderId : " + senderId);
+        if (!user) {
+            alert("에러 발생 잠시 후 다시 실행해주세요");
+            return;
+        }
         if (!stompClient.current) return alert("❌ WebSocket이 연결되지 않았습니다!");
         if (stompClient.current && inputValue) {
             const body = {
                 roomId : roomId,
-                userId : 1,
+                userId : user.user_id,
                 messageRole : 1,
                 messageContent : inputValue
             };
@@ -235,7 +238,7 @@ const AdminMessage = ({user}) => {
     };
 
     return (
-        <div className="admin-chattingroom-base">
+        <div className="admin-message-base">
             <ul>
                 {/* 메시지 리스트 출력 */}
                 {messages.map((msg, index) => (
@@ -243,18 +246,19 @@ const AdminMessage = ({user}) => {
                         key={index}
                     >
                         {
-                            msg.userId !== 1 ? (
+                            msg.userId !== user.user_id ? (
                                 <div
                                     className="admin-message-notUserInput "
                                 >
-                                    <p><img src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /> {msg.userName}</p>
-                                    <p>{msg.messageContent}</p>
+                                    <p><img className="admin-message-notUserInput-img" src={(msg.userPictureUrl) ? `${msg.userPictureUrl}`: `${UserDefaultIcon}`} /></p>
+                                    <p className="admin-message-notUserInput-name">{msg.userName}</p>
+                                    <p className="admin-message-notUserInput-content">{msg.messageContent}</p>
                                 </div>
                             ) : (
                                 <div
                                     className="admin-message-userInput"
                                 >
-                                    <p>{msg.messageContent}</p>
+                                    <p className="admin-message-userInput-p">{msg.messageContent}</p>
                                 </div>
                             )
                         }
@@ -277,7 +281,7 @@ const AdminMessage = ({user}) => {
                         <label htmlFor="fileInput"
                             className="admin-message-pictureBtn"
                         >
-                            <img src={PictureButton}/>
+                            <img className="admin-message-pictureBtn-pic" src={PictureButton}/>
                         </label>
                         <input
                             id="fileInput"

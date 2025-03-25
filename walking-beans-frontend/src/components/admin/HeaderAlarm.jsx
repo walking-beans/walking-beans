@@ -12,7 +12,7 @@ import riderBellIcon from "../../assert/svg/riderBell.svg";
 import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
 
 
-const HeaderAlarm = ({userId, bell = false}) => {
+const HeaderAlarm = ({userId, bell}) => {
     const [alarmMessages, setAlarmMessages] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
@@ -33,18 +33,16 @@ const HeaderAlarm = ({userId, bell = false}) => {
                 console.log("✅ WebSocket 연결 성공");
                 stompClient.subscribe(`/topic/alarms/${userId}`, (message) => {
                     console.log("알림 수신:", message.body);
-                    //setUnreadCount((prev) => prev + 1);
-                    //setAlarmMessages((prev) => [...prev, message.body]);
-                    const receivedData = JSON.parse(message.body)
+                    const receivedData = JSON.parse(message.body);
                     console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
                     if (receivedData.userId === userId) {
                         setNotifications((prevNotifications) => [
-                            ...prevNotifications,
                             {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
-                                senderId: receivedData.alarmSenderId,
+                                url: receivedData.alarmUrl
                             },
+                            ...prevNotifications,
                         ])
 
                         setUnreadCount((prevCount) => prevCount +1);
@@ -93,10 +91,9 @@ const HeaderAlarm = ({userId, bell = false}) => {
                             <div key={index} className={"AlarmNotificationItem"} onClick={() => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
-                                    //setNotifications([]);//알림 목록 비우기
                                     setShowDropdown(false); // 알림목록 닫기
                                 } else if (noti.type === 2) {
-                                    navigate(`/chat/message/${noti.senderId}`);
+                                    navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
                                 }
                             }

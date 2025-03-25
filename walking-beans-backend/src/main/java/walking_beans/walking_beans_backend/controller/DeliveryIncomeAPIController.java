@@ -43,4 +43,15 @@ public class DeliveryIncomeAPIController {
         return ResponseEntity.ok(deliveryIncomeService.getDeliveryIncomeByOrderId(riderId, orderId));
     }
 
+    /**
+     * insert DelivertIncome
+     * @param deliveryIncome
+     * @return ResponseEntity.ok(Integer)
+     */
+    @PutMapping("/finished")
+    public ResponseEntity<Integer> insertDeliveryIncome(@RequestBody DeliveryIncome deliveryIncome) {
+        log.info("=== /api/deliveryIncome/finished {} {} {} ===", deliveryIncome.getOrderId(), deliveryIncome.getRiderId(), deliveryIncome.getIncomeAmount());
+        return ResponseEntity.ok(deliveryIncomeService.insertDeliveryIncome(deliveryIncome));
+    }
+
 }

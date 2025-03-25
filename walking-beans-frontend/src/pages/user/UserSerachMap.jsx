@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/User.css";
-import userCurrentLocation from "../../images/rider/userCurrentLocation.svg";
+import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
 import axios from "axios";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
@@ -17,30 +17,64 @@ const UserSearchMap = () => {
     const infoWindowsRef = useRef([]);
 
 
-    const preventClose = (e) => {
-        // 2. 해당 함수 안에 새로운 함수를 생성하는데, 이때 이 함수는 자바스크립트의 이벤트를 감지하게된다.
-        e.preventDefault();
-        // 2-1. 특정 이벤트에 대한 사용자 에이전트 (브라우저)의 기본 동작이 실행되지 않도록 막는다.
-        e.returnValue = '';
-        // 2-2. e.preventDefault를 통해서 방지된 이벤트가 제대로 막혔는지 확인할 때 사용한다고 한다.
-        // 2-3. 더 이상 쓰이지 않지만, chrome 설정상 필요하다고 하여 추가함.
-        // 2-4. returnValue가 true일 경우 이벤트는 그대로 실행되고, false일 경우 실행되지 않는다고 한다.
-        navigate("/");
+    // ✅ lat, lng이 변경될 때마다 sessionStorage에 저장
+    useEffect(() => {
+        if (lat && lng) {
+            sessionStorage.setItem("userLat", lat);
+            sessionStorage.setItem("userLng", lng);
+        }
+    }, [lat, lng]);
+
+
+
+    //  매장의 리뷰를 가져와 업데이트하는 함수
+    const fetchReviews = (storeId, callback) => {
+        axios.get(`http://localhost:7070/api/reviews/${storeId}`)
+            .then((res) => {
+                const reviewsData = res.data;
+                const totalScore = reviewsData.reduce((sum, review) => sum + review.reviewStarRating, 0);
+                const average = reviewsData.length > 0 ? (totalScore / reviewsData.length).toFixed(1) : "0.0";
+                const reviewCount = reviewsData.length;
+                callback(average, reviewCount);
+            })
+            .catch((err) => {
+                console.error(`❌ 리뷰 정보를 불러오지 못했습니다. storeId: ${storeId}`, err);
+                callback("0.0", 0);
+            });
     };
 
-// 브라우저에 렌더링 시 한 번만 실행하는 코드
-    useEffect(() => {
-        (() => {
-            window.addEventListener('beforeunload', preventClose);
-            // 4. beforeunload 이벤트는 리소스가 사라지기 전 window 자체에서 발행한다.
-            // 4-2. window의 이벤트를 감지하여 beforunload 이벤트 발생 시 preventClose 함수가 실행된다.
-        })();
+    //  주변 매장 데이터 가져오기 + 리뷰 업데이트
+    const fetchNearbyStores = (lat, lng) => {
+        axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
+            .then((res) => {
+                console.log("📌 주변 매장 데이터:", res.data);
 
-        return () => {
-            window.removeEventListener('beforeunload', preventClose);
-            // 5. 해당 이벤트 실행 후, beforeunload를 감지하는 것을 제거한다.
-        };
-    });
+                let updatedStores = [];
+                let remainingStores = res.data.length;
+
+                if (remainingStores === 0) {
+                    console.log("❌ 주변에 매장이 없습니다.");
+                    setStores([]);
+                    return;
+                }
+
+                res.data.forEach((store) => {
+                    fetchReviews(store.storeId, (rating, reviewCount) => {
+                        updatedStores.push({
+                            ...store,
+                            storeRating: rating,
+                            storeReviewCount: reviewCount,
+                        });
+
+                        remainingStores--;
+                        if (remainingStores === 0) {
+                            setStores(updatedStores); // ⭐️ 모든 리뷰 가져온 후 한 번만 업데이트
+                        }
+                    });
+                });
+            })
+            .catch((error) => console.error("❌ 매장 정보 불러오기 오류:", error));
+    };
 
 // 카카오 지도 초기화
     useEffect(() => {
@@ -87,15 +121,7 @@ const UserSearchMap = () => {
         };
     }, [lat, lng]); // `mapRef.current` 제거
 
-    //  주변 매장 데이터 가져오기 (지도 로드 후 실행)
-    const fetchNearbyStores = (lat, lng) => {
-        axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
-            .then((res) => {
-                console.log(" 주변 매장 데이터:", res.data);
-                setStores(res.data); //  매장 데이터 상태 업데이트
-            })
-            .catch((error) => console.error("매장 정보 불러오기 오류:", error));
-    };
+
 
     // 기존 마커를 지도에서 삭제하는 함수
     const clearMarkers = () => {
@@ -103,11 +129,25 @@ const UserSearchMap = () => {
         markersRef.current = [];
     };
 
-    //  지도에 매장 마커 표시
+    const handleMarkerClick = (store) => {
+        fetchReviews(store.storeId, (rating, reviewCount) => {
+
+            //  별점이 제대로 업데이트된 후 setSelectedStore 실행
+            setSelectedStore(prevStore => ({
+                ...prevStore,
+                ...store,
+                storeRating: rating, // 최신 리뷰 반영
+                storeReviewCount: reviewCount,
+            }));
+        });
+
+        mapRef.current.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+    };
+
     useEffect(() => {
         if (!mapRef.current) return;
 
-        clearMarkers(); //  기존 마커 삭제
+        clearMarkers(); // 기존 마커 삭제
 
         const displayStores = searchResults.length > 0 ? searchResults : stores;
         console.log("🗺️ 지도에 표시할 매장 목록:", displayStores);
@@ -122,7 +162,7 @@ const UserSearchMap = () => {
                 content: `<div style="padding:5px; font-size:12px; background:#fff; border-radius:5px;">${store.storeName}</div>`,
             });
 
-            // ✅ 마커에 마우스를 올리면 매장 이름 표시
+            //  마커에 마우스를 올리면 매장 이름 표시
             window.kakao.maps.event.addListener(marker, "mouseover", () => {
                 infoWindow.open(mapRef.current, marker);
             });
@@ -131,18 +171,16 @@ const UserSearchMap = () => {
                 infoWindow.close();
             });
 
-            //  마커 클릭 이벤트 (기존 infoWindow 닫고 새 infoWindow 열기)
+            //  마커 클릭 이벤트: 실시간 리뷰 반영
             window.kakao.maps.event.addListener(marker, "click", () => {
-                infoWindow.close(); // 클릭 시 매장이름 사라지게 설정
-                setSelectedStore(store);
-                mapRef.current.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
+                infoWindow.close();
+                handleMarkerClick(store); // 실시간 별점 & 리뷰 반영
             });
 
             markersRef.current.push(marker);
             infoWindowsRef.current.push(infoWindow);
         });
-
-    }, [searchResults, stores]); // stores가 변경될 때 실행
+    }, [searchResults, stores]); // `stores` 변경 시 다시 실행
 
     //  매장 상세 정보 보기
     const handleStore = () => {

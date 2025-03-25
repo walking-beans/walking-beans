@@ -11,6 +11,7 @@ import walking_beans.walking_beans_backend.model.dto.ChattingMember;
 import walking_beans.walking_beans_backend.service.chattingMember.ChattingMemberServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -24,5 +25,13 @@ public class ChattingMemberController {
     public ResponseEntity<List<ChattingMember>> getAllChattingMembers(@RequestParam("roomId") long roomId,
                                                                       @RequestParam("userId") long userId) {
         return ResponseEntity.ok(chattingMemberService.getAllChattingMembers(roomId, userId));
+    }
+
+    @GetMapping("/roomId")
+    public ResponseEntity<Map<Integer, Long>> getUserAndStoreRoomId(@RequestParam("orderId") long orderId,
+                                                                       @RequestParam("userId") long userId) {
+
+
+        return ResponseEntity.ok(chattingMemberService.getUserAndStoreRoomId(orderId, userId));
     }
 }

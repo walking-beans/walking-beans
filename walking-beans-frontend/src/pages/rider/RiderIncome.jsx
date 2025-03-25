@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import apiRiderService from "../../service/apiRiderService";
 import "../../css/rider/RiderIncome.css";
 
-const RiderIncome = () => {
+const RiderIncome = ({user}) => {
 //테스트
     const [incomeList, setIncomeList] = useState([]);
 
@@ -16,7 +16,7 @@ const RiderIncome = () => {
 
 
     useEffect(() => {
-        apiRiderService.getAllRiderIncomeList(2,
+        apiRiderService.getAllRiderIncomeList(user.user_id,
             setIncomeList,
             todaysMonth,
             todaysYear,

@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.orderService;
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public interface OrderService {
 
     // 주문 데이터 저장
     void insertOrder(Orders order, List<Carts> cartList, Payments payments);
+
 
     // 주문정보 가져오기
     Orders findOrderById(long orderId);

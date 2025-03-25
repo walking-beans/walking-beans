@@ -8,13 +8,19 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class UserOrderDTO {
-    private Long userId;
+    private long orderId;
+    private long userId;
     private String customerName;
     private String storeName;
     private String orderDate;
     private String orderNumber;
     private String deliveryAddress;
     private int totalPayment;
-    private String specialRequests;
+    private String orderRequests;
     private String orderList;
+    private int quantity;
+    private int orderStatus;
+    private String storeLogo;
+    private long storeId;
+    private String detailedAddress;
 }

@@ -43,6 +43,8 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const [star, setStar] = useState(0);
     const [starPath, setStarPath] = useState("");
 
+    const [riderOD, setRiderOD] = useState(riderOnDuty);
+
     // 웹소켓 열기
    /* useEffect(() => {
 
@@ -109,7 +111,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
             setUserId(parsedUser.user_id);
         }
     }, [user]);
-    console.log(userId);
+
     /**
      * 네비게이션바 토글아이콘  함수
      * toggleIcon from "../../assert/svg/togle.svg
@@ -178,6 +180,22 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
         //setUnreadCount(0);
     };
 
+    function handleRiderStatus () {
+        setRiderOnDuty(prevState => {
+            console.log("handleRiderStatus : " + !prevState);
+            setRiderOD(!prevState);
+            return !prevState;
+        });
+    }
+
+    useEffect(() => {
+        console.log("RiderHeader useEffect");
+        const button = document.getElementById("riderOnDutyBtn");
+        if (button) {
+            button.value = riderOD ? "운행 중" : "운행 종료";
+        }
+    }, [riderOD, riderOnDuty, setRiderOnDuty]);
+
     return (
         <div className="rider-header-wrapper">
             <header className="rider-header">
@@ -231,7 +249,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                         )}
                                     </div>
                                 )}*/}
-                                <HeaderAlarm userId={userId} />
+                                <HeaderAlarm userId={userId} bell={true}/>
                             </>
                         )}
                         <img src={toggleIcon}
@@ -257,23 +275,14 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                     <img style={{ width: "100px" }} src={starPath}/>
                                 </div>
                             </div>
-                            {
-                                riderOnDuty ? (
-                                    <button
-                                        className="rider-status-btn"
-                                        onClick={() => setRiderOnDuty(true)}
-                                    >
-                                        운행 중
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="rider-unstatus-btn"
-                                        onClick={() => setRiderOnDuty(false)}
-                                    >
-                                        운행 종료
-                                    </button>
-                                )
-                            }
+                            <button
+                                id="riderOnDutyBtn"
+                                value={riderOD ? "운행 중" : "운행 종료"}
+                                className={riderOD ? "rider-status-btn" : "rider-unstatus-btn"}
+                                onClick={handleRiderStatus}
+                            >
+                                {riderOD ? "운행 중" : "운행 종료"}
+                            </button>
 
                         </div>
 

@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.model.dto;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 public class OrderStoreDTO {
@@ -11,8 +12,9 @@ public class OrderStoreDTO {
     private int orderStatus;
     private String orderRequests;
     private int orderTotalPrice;
-    private Timestamp orderCreateDate;
-    private Timestamp orderModifiedDate;
+    private LocalDateTime orderCreateDate;
+    private LocalDateTime orderModifiedDate;
+    private long riderIdOnDuty;
 
     // 고객 정보
     private Long customerId; //userId
@@ -55,4 +57,23 @@ public class OrderStoreDTO {
     private double orderLatitude;
     private double orderLongitude;
     private int orderAddressRole;
+
+    // 주문 수령 시간 && 주문 배달 시간
+    private String orderCreatedDay;
+    private String orderCreatedTime;
+
+    private String orderDeliveredDay;
+    private String orderDeliveredTime;
+
+    public void setOrderCreateAndDeliveredDate() {
+        this.orderCreatedDay = orderCreateDate.getMonthValue() + "/" + orderCreateDate.getDayOfMonth();
+        this.orderCreatedTime = (orderCreateDate.getHour() < 10 ? "0" + orderCreateDate.getHour() : orderCreateDate.getHour()) + ":" + (orderCreateDate.getMinute() < 10 ? "0" + orderCreateDate.getMinute() : orderCreateDate.getMinute());
+        this.orderDeliveredDay = orderModifiedDate.getMonthValue() + "/" + orderModifiedDate.getDayOfMonth();
+        this.orderDeliveredTime = (orderModifiedDate.getHour() < 10 ? "0" + orderModifiedDate.getHour() : orderModifiedDate.getHour())  + ":" + (orderModifiedDate.getMinute() < 10 ? "0" + orderModifiedDate.getMinute() : orderModifiedDate.getMinute());
+        if (orderCreatedDay.equals(orderDeliveredDay)) {
+            this.orderDeliveredDay = null;
+        }
+
+    }
+
 }

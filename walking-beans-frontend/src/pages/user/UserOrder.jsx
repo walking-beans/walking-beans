@@ -184,13 +184,13 @@ const UserOrder = () => {
         <div className="user-order-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
-                    <div className="user-title">{store?.storeName}</div>
+                    <div className="user-title-l">{store?.storeName}</div>
                     <div>
                         <img src={oneStar} alt="별점 아이콘"/>
                         <span className="store-menu-title">
                             {store?.storeRating}({store?.storeReviewCount})
                         </span>
-                        <Link to={`/store/${storeId}`}>
+                        <Link to={`/user/review/${storeId}`}>
                             <img src={detailBtn} alt="가게 평점 자세히보기"/>
                         </Link>
                     </div>

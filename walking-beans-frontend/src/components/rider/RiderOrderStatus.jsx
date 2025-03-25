@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import apiRiderService from "../../../service/apiRiderService";
+import apiRiderService from "../../service/apiRiderService";
 
-const RiderOrderStatus = ({orderId, message, css}) => {
+const RiderOrderStatus = ({orderId, message, css, orderStatus, setOrderStatus}) => {
     const [newOrderId, setOrderId] = useState(orderId);
     const [orderInfo, setOrderInfo] = useState(null);
 
@@ -22,17 +22,17 @@ const RiderOrderStatus = ({orderId, message, css}) => {
     }
 
     useEffect(() => {
-        console.log("orderId : " + orderId);
+        console.log("ros orderId : " + orderId);
         console.log("css : " + css)
 
         setOrderId(orderId);
         apiRiderService.getOrderStatusWithRemainingTime(newOrderId, (no) => {
             setOrderInfo(no);
+            setOrderStatus(no.orderStatus);
             setOrderProgressPercent(no.orderStatus);
             console.log("RiderOrderStatus order : " + no);
         });
-    }, []);
-
+    }, [orderId, orderStatus]);
 
     return (
         <div className={css.order_status}>
@@ -42,8 +42,8 @@ const RiderOrderStatus = ({orderId, message, css}) => {
                         {
                             (orderInfo.timeRemaining !== 0) ?
                                 <div className={css.order_status_time_div}>
-                                    <span className={css.order_status_time_remaining}>총 {orderInfo.timeRemaining}분 남음</span>
-                                    <span className={css.order_status_delivery_deadline}>{orderInfo.deliveryDeadline}까지</span>
+                                    <span className={css.order_status_time_remaining}>{orderInfo.timeRemaining}분</span>
+                                    <span className={css.order_status_delivery_deadline}> ({orderInfo.deliveryDeadline})</span>
                                 </div>
                                 :
                                 <div className={css.order_status_message}>

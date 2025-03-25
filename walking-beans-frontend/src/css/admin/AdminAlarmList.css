@@ -8,6 +8,12 @@
 
 }
 
+.AlarmList:hover {
+    cursor: pointer;
+    background-color: #D2B595;
+    border: 1px solid #D2B595;
+}
+
 .NoAlarmList {
     text-align: center;
     min-height: 70vh;

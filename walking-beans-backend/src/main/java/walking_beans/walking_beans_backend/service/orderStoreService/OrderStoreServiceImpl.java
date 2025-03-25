@@ -1,9 +1,8 @@
-package walking_beans.walking_beans_backend.service;
+package walking_beans.walking_beans_backend.service.orderStoreService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import walking_beans.walking_beans_backend.mapper.OrderStoreMapper;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 
@@ -38,6 +37,13 @@ public class OrderStoreServiceImpl implements OrderStoreService {
         return groupedOrders;
     }
 
+    @Override
+    public OrderStoreDTO getOrderByOrderId(long orderId) {
+        OrderStoreDTO orderStoreDTO = orderMapper.getOrderByOrderId(orderId);
+        orderStoreDTO.setOrderCreateAndDeliveredDate();
+        return orderStoreDTO;
+    }
+
     public double getRadius(OrderStoreDTO order, double lat, double lng) {
         log.info("==== getRadius {}, {}, {}, {} ====", order.getStoreLatitude(), order.getStoreLongitude(), lat, lng );
         /*
@@ -66,4 +72,6 @@ public class OrderStoreServiceImpl implements OrderStoreService {
         log.info("R * c = {}", R * c);
         return R * c;
     }
+
+
 }

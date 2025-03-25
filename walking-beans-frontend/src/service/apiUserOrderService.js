@@ -60,22 +60,6 @@ const apiUserOrderService = {
         }
     },
 
-    /*
-    addToCart: async (cartItem) => {
-        try {
-            console.log("장바구니에 추가된 데이터 : ", cartItem);
-            const response = await axios.post(`${API_CART_URL}/add`, cartItem, {
-                headers: {"Content-Type": "application/json"}
-            });
-            return response.data;
-        } catch (error) {
-            console.error("장바구니 추가 실패:", error.response?.data || error.message);
-            throw error;
-        }
-    },
-
-     */
-
     clearCart: async (userId, storeId) => {
         if (!userId) {
             console.error("User ID is undefined", userId);
@@ -163,17 +147,6 @@ const apiUserOrderService = {
         }
     },
 
-    getOrderAddressByUserId: async (userId, setAddress) => {
-        try {
-            const response = await axios.get(`${API_ADDRESS_URL}/${userId}`);
-            console.log("주소 불러오기 성공:", response.data);
-            const filteredAddress = response.data.find((addr) => addr.addressRole === 1);
-            setAddress(filteredAddress || "기본 주소가 없습니다. 설정해 주세요");
-        } catch (error) {
-            console.error("주소 불러오기 실패:", error);
-        }
-    },
-
     insertOrder: async () => {
         try {
             const response = await axios .post(`${API_ORDER_URL}/create`,{
@@ -182,6 +155,7 @@ const apiUserOrderService = {
 
             const data = await response.data;
             console.log("주문 저장 성공 : ", data.orderId)
+
         } catch (error) {
             console.log("주문 저장 실패 : ", error)
         }
