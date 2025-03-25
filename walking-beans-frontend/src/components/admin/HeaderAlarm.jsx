@@ -35,12 +35,12 @@ const HeaderAlarm = ({userId, bell}) => {
                     console.log("알림 수신:", message.body);
                     const receivedData = JSON.parse(message.body);
                     console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
-                    if (receivedData.userId === userId) {
+                    if (receivedData.userId === userId ) {
                         setNotifications((prevNotifications) => [
                             {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
-                                url: receivedData.alarmUrl
+                                url: receivedData.alarmUrl,
                             },
                             ...prevNotifications,
                         ])
@@ -74,8 +74,6 @@ const HeaderAlarm = ({userId, bell}) => {
         }
 
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
-        //setShowDropdown(!showDropdown);
-        //setUnreadCount(0);
     };
 
     return (
