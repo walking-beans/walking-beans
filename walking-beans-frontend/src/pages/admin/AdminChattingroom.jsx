@@ -162,6 +162,7 @@ const AdminChattingroom = ({user}) => {
     const [classLeftBtn, setClassLeftBtn] = useState("btn btn-dark btn-lg admin-chattingroom-btn-checked");
     const [classRightBtn, setClassRightBtn] = useState("btn btn-light btn-lg admin-chattingroom-btn-unchecked");
 
+
     const status = {
         "고객" : 1,
         "라이더" : 2,

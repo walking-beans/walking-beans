@@ -162,12 +162,14 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/ontheway/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderOntheway/>
+                                        <RiderOntheway
+                                            user={user}
+                                        />
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/rider/result/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderResult/>
+                                        <RiderResult user={user}/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/rider/orderlist" element={
@@ -227,11 +229,8 @@ function PathRoute() {
                                 }/>
 
                                 {/* 관리자 관련 라우트 */}
-                                <Route path="/chat/chattingroom" element={user ? <AdminChattingroom user={user} /> : <div>Loading...</div>}/>
+                                <Route path="/chat/chattingroom" element={<AdminChattingroom user={user} />}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
-
-                                <Route path="/TEST/message/:roomId" element={<AdminMessageTEST />}/>
-                                <Route path="/TEST/chattingroom" element={<AdminChattingroomTest />}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
                             </Routes>
