@@ -13,7 +13,6 @@ import RiderMain from "../pages/rider/RiderMain";
 import RiderOntheway from "../pages/rider/RiderOntheway";
 import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
-import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
 import UserOrder from "../pages/user/UserOrder";
@@ -176,11 +175,7 @@ function PathRoute() {
                                         <RiderOrderList  user={user}/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/rider/order" element={
-                                    <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderOrder/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/rider/income" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
                                         <RiderIncome  user={user}/>
