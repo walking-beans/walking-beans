@@ -10,42 +10,48 @@ const UserOrderDetail = () => {
     const [error, setError] = useState(null);
     const [orderId, setOrderId] = useState(null);
     const [totalMenuPrice, setTotalMenuPrice] = useState(0);
+    const [orderItems, setOrderItems] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
         axios.get(`http://localhost:7070/api/orders/detail/orderNumber/${orderNumber}`)
             .then((response) => {
-                setOrder(response.data[0] || {});
-                console.log("주문 데이터 : ", response.data[0]);
+                if (response.data && response.data.length > 0) {
+                    // 기본 주문 정보는 첫 번째 항목에서 가져옴
+                    setOrder(response.data[0]);
+                    // 상세 내역은 전체 배열 사용
+                    setOrderItems(response.data);
+                    console.log("주문 데이터 : ", response.data);
 
-                // 메뉴 가격 총합 계산
-                const menuTotal = response.data.reduce((sum, item) => {
-                    const itemPrice = (item.menuPrice + (item.totalOptionPrice || 0)) * item.quantity;
-                    return sum + itemPrice;
-                }, 0);
+                    // 메뉴 가격 계산
+                    const menuTotal = orderItems.reduce((sum, item) => {
+                        const basePrice = parseInt(item.menuPrice) || 0;
+                        const optionPrice = parseInt(item.totalOptionPrice) || 0;
+                        const qty = parseInt(item.quantity) || 1;
 
-                setTotalMenuPrice(menuTotal);
+                        const itemTotal = (basePrice + optionPrice) * qty;
+                        console.log(`항목: ${item.menuName}, 가격: ${basePrice}, 옵션: ${optionPrice}, 수량: ${qty}, 소계: ${itemTotal}`);
+
+                        return sum + itemTotal;
+                    }, 0);
+                    setTotalMenuPrice(menuTotal);
+
+                    // 배달팁 계산 (총합)
+                    const totalPrice = orderItems.reduce((sum, item) => {
+                        const tip = parseInt(item.storeDeliveryTip) || 0;
+                        const total = tip + totalMenuPrice;
+                        return sum + item.total;
+                    }, 0);
+                    setTotalPrice(totalPrice);
+                }
                 setLoading(false);
             })
             .catch((error) => {
-                console.error("주문 정보를 불러오는 중 오류 발생:", error);
-                setError("주문 정보를 가져올 수 없습니다.");
+                console.error("주문 정보 오류:", error);
+                setError("주문 정보를 불러올 수 없습니다.");
             })
-            .finally(() => {
-                setLoading(false);
-            });
+            .finally(() => setLoading(false));
     }, [orderNumber]);
-
-    const orderItems = order.orderList
-        ? order.orderList.split("|").map(item => {
-            const parts = item.trim().split("/");
-            return {
-                menuName: parts[0] || "메뉴 없음",
-                optionName: parts[1] || "옵션 없음",
-                optionContent: parts[2] || "옵션 내용 없음",
-                menuPrice: parts[3] ? Number(parts[3]).toLocaleString() + "원" : "가격 정보 없음"
-            };
-        })
-        : [];
 
     return (
         <div className="user-order-background">
@@ -58,22 +64,30 @@ const UserOrderDetail = () => {
                 <div className="user-order-mt">
                     <div
                         className="user-order-basic-text-m-0">{order?.menuName} {order.quantity > 1 ? ` 외 ${order.quantity - 1}개` : '1개'}</div>
-                    <div className="user-order-basic-text-m-0">주문일시 : {order?.orderCreateDate
-                        ? new Date(order.orderCreateDate).toLocaleString('ko-KR', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            weekday: 'short',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true
-                        })
-                            .replace(/\. /g, '-')
-                            .replace(/\./, '')
-                            .replace(/-(?=\([가-힣]{1}\))/, ' ')
-                        : '날짜 정보 없음'}</div>
 
-                    <div className="user-order-basic-text-m-0">주문번호 : {order.orderNumber}</div>
+                    <div className="user-order-mt">
+                        <div>
+                            <span className="user-order-basic-text-m-0">주문일시 : </span> <span
+                            className="user-select-mid-text">{order?.orderCreateDate
+                            ? new Date(order.orderCreateDate).toLocaleString('ko-KR', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                weekday: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            })
+                                .replace(/\. /g, '-')
+                                .replace(/\./, '')
+                                .replace(/-(?=\([가-힣]{1}\))/, ' ')
+                            : '날짜 정보 없음'}</span>
+                        </div>
+                        <div>
+                            <span className="user-order-basic-text-m-0">주문번호 : </span> <span
+                            className="user-select-mid-text">{order.orderNumber}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="user-order-hr"></div>
@@ -81,37 +95,46 @@ const UserOrderDetail = () => {
 
 
                 <div className="user-order-mt">
-                    {orderItems.map((item, index) => {
-                        const isLastItem = index === orderItems.length - 1;
-                        return (
-                            <div key={index}>
-                                <div className="user-order-address-detail-text">{item.menuName}</div>
-                                {(item.optionName !== "옵션 없음" || item.optionContent !== "옵션 내용 없음") && (
+                    {orderItems.length > 0 ? (
+                        orderItems.map((item, index) => {
+                            const isLastItem = index === orderItems.length - 1;
+                            return (
+                                <div key={index}>
+                                    <div className="user-order-address-detail-text">{item.menuName}</div>
+                                    {item.optionNames && (
+                                        <div className="user-cart-detailtext">
+                                            {item.optionNames} {item.optionContents}
+                                            {item.optionPrices && ` (+${Number(item.optionPrices).toLocaleString()}원)`}
+                                        </div>
+                                    )}
                                     <div className="user-cart-detailtext">
-                                        {item.optionName !== "옵션 없음" ? item.optionName : ''}
-                                        {item.optionContent !== "옵션 내용 없음" ? ` ${item.optionContent}` : ''}
+                                        {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                     </div>
-                                )}
-                                <div className="user-cart-detailtext">{item.menuPrice}</div>
-                                <div className="user-select-mid-text">{order.quantity}개</div>
-                                {!isLastItem && <div className="user-order-hr-mini"></div>}
-                            </div>
-                        );
-                    })}
+                                    <div className="user-select-mid-text">{item.quantity}개</div>
+                                    {!isLastItem && <div className="user-order-hr-mini"></div>}
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div>주문 상세 내역이 없습니다.</div>
+                    )}
                 </div>
                 <div className="user-order-hr"></div>
 
                 <div className="user-order-price-grid">
                     <div className="user-order-bordtext">결제금액</div>
-                    <div className="user-cart-big-pricetext">{Number(order?.orderTotalPrice).toLocaleString()}원</div>
+                    <div className="user-cart-big-pricetext">{totalPrice.toLocaleString()}원</div>
                 </div>
 
-                <div>주문금액</div>
-                <div>{order.menuTotal}</div>
+                <div className="user-order-address-grid">
+                    <div className="user-order-basic-text-m-0">주문금액</div>
+                    <div className="user-select-mid-text">{totalMenuPrice.toLocaleString()}원</div>
+                </div>
 
-                <div>배달팁</div>
-                <div>{order.storeDeliveryTip}</div>
-
+                <div className="user-order-address-grid">
+                    <div className="user-order-basic-text-m-0">배달팁</div>
+                    <div className="user-select-mid-text">{Number(order.storeDeliveryTip).toLocaleString()}원</div>
+                </div>
 
                 <div className="user-order-hr"></div>
 
