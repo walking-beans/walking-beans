@@ -39,6 +39,12 @@ const HeaderAlarm = ({userId, bell}) => {
                     console.log("알림 수신:", message.body);
                     const receivedData = JSON.parse(message.body);
                     console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
+
+                    if (receivedData.alarmUrl === window.location.pathname) { //채팅방에 들어가있으면 알람을 받지 않게 수정
+                        console.log("해당페이지입니다.");
+                        return;
+                    }
+
                     if (receivedData.userId === userId ) {
                         setNotifications((prevNotifications) => [
                             {
