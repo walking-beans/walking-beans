@@ -233,6 +233,7 @@ function PathRoute() {
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
+
                             </Routes>
                         </div>
                     </div>
