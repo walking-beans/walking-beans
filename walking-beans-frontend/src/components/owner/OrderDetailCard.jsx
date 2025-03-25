@@ -8,7 +8,7 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
 
     useEffect(() => {
         if (order){
-            // 상세정보 가져오기
+            // 상세정보 가져오기 크아아악
             axios
                 .get(`http://localhost:7070/api/orders/${order.orderId}`)
                 .then((res) => {
