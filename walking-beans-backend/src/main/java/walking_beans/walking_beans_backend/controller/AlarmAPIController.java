@@ -27,6 +27,7 @@ public class AlarmAPIController {
         return alarmService.getUserAlarmList(userId);
     }
 
+
     // 알림 리스트 전체 삭제
     @DeleteMapping("/api/alarm/delete/{userId}")
     public void deleteAllAlarms(@PathVariable("userId") byte userId) {
