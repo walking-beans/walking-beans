@@ -29,4 +29,9 @@ public class DeliveryIncomeServiceImpl implements DeliveryIncomeService {
         return income;
     }
 
+    @Override
+    public Integer insertDeliveryIncome(DeliveryIncome deliveryIncome) {
+        return deliveryIncomeMapper.insertDeliveryIncome(deliveryIncome);
+    }
+
 }

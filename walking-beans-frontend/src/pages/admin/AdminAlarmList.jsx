@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import "../../css/admin/AdminAlarmList.css";
 
 
 const AdminAlarmList = () => {
     const [userId, setUserId] = useState(0);
     const [AlarmList, setAlarmList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // localStorage에서 user 객체를 가져온 후 JSON.parse로 객체로 변환
@@ -24,6 +26,7 @@ const AdminAlarmList = () => {
                 .get(`http://localhost:7070/api/chat/${userId}`)
                 .then((res) => {
                     setAlarmList(res.data);
+                    console.log(res.data);
                 })
                 .catch((err) => {
                     alert("백엔드에서 리스트를 가져오는데 실패했습니다.");
@@ -53,10 +56,10 @@ const AdminAlarmList = () => {
     }
 
     return (
-        <div className="user-home-container">
+        <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (
-                <div style={style.AlarmDeleteContainer}>
-                    <button type={"submit"} onClick={deleteAllAlrams} style={style.AlarmDeleteBtn}>
+                <div className="AlarmDeleteContainer">
+                    <button type={"submit"} onClick={deleteAllAlrams} className="AlarmDeleteBtn">
                         알림 모두 지우기
                     </button>
                 </div>
@@ -64,18 +67,18 @@ const AdminAlarmList = () => {
 
             {/* 알림 리스트가 없을 때 */}
             {AlarmList.length === 0 ? (
-                <h3 style={style.NoAlarmList}>알람이 없습니다</h3>
+                <h3 className="NoAlarmList">알람이 없습니다</h3>
             ) : (
                 AlarmList.map((value, index) => (
                     <div key={index}>
-                        <div style={style.AlarmList}>
+                        <div className="AlarmList" onClick={() => {
+                            const targetUrl = value.alarmUrl;
+                            console.log(targetUrl);
+                            navigate(targetUrl);
+                        }}>
                             <h3>{value.alarmRole === 1
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
-                            <p>{value.alarmRole === 1
-                                ? <Link to="/link1">{value.alarmContent}</Link>
-                                : value.alarmRole === 2
-                                    ? <Link to="/link2">{value.alarmContent}</Link>
-                                    : value.alarmContent}</p>
+                            <p>{value.alarmContent}</p>
                             <p>
                                 {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
@@ -88,34 +91,6 @@ const AdminAlarmList = () => {
                 ))
             )}
         </div>
-    );
-};
-// 메세지 발신인 띄우기
-// DB문제 해결 -> null 문제
-
-const style = {
-    AlarmList: {
-        border: "1px solid #5A3D21",
-        borderRadius: "35px",
-        margin: "20px",
-        textAlign: "center",
-        backgroundColor: "#FAF1D0",
-        padding: "8px",
-    },
-    NoAlarmList: {
-        textAlign: "center",
-        minHeight: "70vh",
-    },
-
-    AlarmDeleteContainer: {
-        textAlign: "right",
-    },
-
-    AlarmDeleteBtn: {
-        borderRadius: "10px",
-        backgroundColor: "#F6B8A1 ",
-        border: "none",
-        padding: "5px",
-    }
+    )
 }
 export default AdminAlarmList;

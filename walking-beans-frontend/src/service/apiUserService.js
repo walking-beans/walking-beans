@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {call} from "axios";
 import {Link} from "react-router-dom";
 
 const USER_API_URL = "http://localhost:7070/api/users"
@@ -59,17 +59,17 @@ const apiUserService = {
 
     // 유저 롤 수정하는 api
     updateRole:
-        function (userEmail, userRole) {
+        function (userEmail, userRole, callback) {
             axios
                 .put(`${USER_API_URL}/${userEmail}/${userRole}`)
                 .then(
                     (res) => {
-                        console.log("유저 롤이 수정되었습니다.");
+                        callback("success");
                     }
                 )
                 .catch(
                     (err) => {
-                        alert("유저 롤을 수정하는데 백엔드에서 문제가 생겼습니다.");
+                        alert("등급을 수정하는데 백엔드에서 문제가 생겼습니다.");
                     }
                 )
         },
@@ -125,6 +125,7 @@ const apiUserService = {
         },
 
 
+    // 마이페이지
     mypage:
         function (userId, callback, errorCallback) {
             axios
@@ -138,12 +139,12 @@ const apiUserService = {
                 });
         },
 
+    // 프로필 사진
     uploadProfileImage:
         function (userId, file, callback, errorCallback) {
         const formData = new FormData();
         formData.append("file",file);
 
-            console.log("📢 업로드 요청 URL:", `${USER_API_URL}/mypage/${userId}/uploadProfile`);
             console.log("📢 업로드할 파일:", file);
 
             axios
@@ -162,6 +163,32 @@ const apiUserService = {
                 errorCallback("프로필 이미지를 업로드하는 데 실패했습니다.");
             });
         },
+
+    // 회원정보 수정
+    infoCorrection:
+    function (userId, userPhone, callback, errorCallback ) {
+        axios
+            .put(`${USER_API_URL}/infoCorrection`,null,{
+                params: { userId: userId, userPhone: userPhone }
+            })
+            .then((res) => {
+            callback(res.data)
+        })
+            .catch((err) => {
+                console.log("오류",err)
+                errorCallback("전화번호 수정에 실패하였습니다.")
+            })
+    },
+
+    // 회원 탈퇴
+    delete:
+    function (userId, callback, errorCallback) {
+        axios
+            .delete(`${USER_API_URL}/unlink/${userId}`)
+            .then((res)=>callback&&callback(res.data))
+            .catch((err)=>errorCallback&&errorCallback(err));
+
+    },
 
     primaryAddress:
     function (userId,setUserAddress,setUserLat,setUserLng){
