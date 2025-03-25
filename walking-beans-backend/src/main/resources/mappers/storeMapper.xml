@@ -137,7 +137,7 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
 
     <!-- 가게 정보(메뉴,메뉴옵션,가게) 조작 권한 검증-->
     <select id="getStoreIdByUserId">
-        SELECT store_id AS storeId
+        SELECT store_id AS storeId, user_id As userId
         FROM stores
         WHERE user_id = #{userId}
     </select>
