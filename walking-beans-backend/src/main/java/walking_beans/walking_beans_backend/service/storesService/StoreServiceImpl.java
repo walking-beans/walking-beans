@@ -56,13 +56,7 @@ public class StoreServiceImpl implements StoreService {
     // 권한 검증용 id 확인
     @Override
     public long getStoreIdByUserId(long userId) {
-        return 0;
-    }
-
-    // 수정시 권한검증
-    @Override
-    public boolean isStoreOwner(long storeId, long userId) {
-        return storeMapper.findByIdAndOwner(storeId, userId) != null;
+        return storeMapper.getStoreIdByUserId(userId);
     }
 
     // 매장정보 삭제하기

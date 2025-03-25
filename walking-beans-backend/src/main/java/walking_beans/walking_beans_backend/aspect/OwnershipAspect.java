@@ -7,9 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import walking_beans.walking_beans_backend.service.orderService.OrderService;
 import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
-import walking_beans.walking_beans_backend.service.storesService.StoreService;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 
 import java.util.Map;

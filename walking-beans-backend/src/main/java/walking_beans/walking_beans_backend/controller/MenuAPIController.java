@@ -82,6 +82,7 @@ public class MenuAPIController {
      *      * @param menuDescription
      *      * @param menuCategory
      *      * @param menuPictureUrl
+     *      권한 검증을 위한 세션 포함
      */
     @PutMapping("/owner/{storeId}/menu/{menuId}")
     @OwnershipCheck
