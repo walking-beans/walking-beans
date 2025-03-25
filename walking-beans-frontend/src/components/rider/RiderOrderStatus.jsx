@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import apiRiderService from "../../service/apiRiderService";
 
-const RiderOrderStatus = ({orderId, message, css}) => {
+const RiderOrderStatus = ({orderId, message, css, orderStatus, setOrderStatus}) => {
     const [newOrderId, setOrderId] = useState(orderId);
     const [orderInfo, setOrderInfo] = useState(null);
 
@@ -28,10 +28,11 @@ const RiderOrderStatus = ({orderId, message, css}) => {
         setOrderId(orderId);
         apiRiderService.getOrderStatusWithRemainingTime(newOrderId, (no) => {
             setOrderInfo(no);
+            setOrderStatus(no.orderStatus);
             setOrderProgressPercent(no.orderStatus);
             console.log("RiderOrderStatus order : " + no);
         });
-    }, [orderId, orderProgress]);
+    }, [orderId, orderStatus]);
 
     return (
         <div className={css.order_status}>

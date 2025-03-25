@@ -18,10 +18,11 @@ import axios from "axios";
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO; // 본인 카카오 API 키
 
 // Polyline 컴포넌트
-const RiderOntheway = () => {
+const RiderOntheway = ({user}) => {
 
     const {orderId} = useParams();
     const [order, setOrder] = useState(null);
+    const [orderStatus, setOrderStatus] = useState(-1);
     const [location, setLocation] = useState({ lat: 37.5665, lng: 126.9780 });
     const [storeRoomId, setStoreRoomId] = useState(0);
     const [userRoomId, setUserRoomId] = useState(0);
@@ -32,6 +33,40 @@ const RiderOntheway = () => {
     const [onDelivery, setOnDelivery] = useState(false);
 
     const [storeMarker, setStoreMarker] = useState(null);
+
+    const [orderInfo, setOrderInfo] = useState(null);
+
+    const [orderProgress, setOrderProgress] = useState(0);
+
+    const setOrderProgressPercent = (no_order_status) => {
+        if (no_order_status === 3) {
+            setOrderProgress(30);
+        } else if (no_order_status === 4) {
+            setOrderProgress(50);
+        } else if (no_order_status === 5) {
+            setOrderProgress(72);
+        } else if (no_order_status === 6) {
+            setOrderProgress(100);
+        } else {
+            setOrderProgress(0);
+        }
+    }
+
+    useEffect(() => {
+        console.log("ros orderId : " + orderId);
+;
+        apiRiderService.getOrderStatusWithRemainingTime(orderId, (no) => {
+            setOrderInfo(no);
+            if (no.orderStatus === 6) {
+                alert("이미 배달이 완료했습니다. 결과 페이지로 이동하겠습니다.");
+                navigate(`/rider/result/${orderId}`);
+            }
+            setOrderStatus(no.orderStatus);
+            setOrderProgressPercent(no.orderStatus);
+            console.log("RiderOrderStatus order : " + no);
+        });
+    }, [order, orderStatus]);
+
 
     // 현재위치 가져오기
     useEffect(() => {
@@ -154,6 +189,7 @@ const RiderOntheway = () => {
         setOnDelivery(true);
         storeMarker.setMap(null);
         apiRiderService.updateOrderStatus(orderId, 5);
+        setOrderStatus(5);
         apiRiderService.getUserAndStoreRoomId(orderId, order.riderIdOnDuty, setChattingMemberList);
         console.log(onDelivery);
     }
@@ -212,7 +248,7 @@ const RiderOntheway = () => {
                                     }
                                 </div>
                                 <hr />
-                                <RiderOrderStatus
+                                {/*<RiderOrderStatus
                                     orderId={order.orderId}
                                     message="배달 시간이 초과되었습니다."
                                     css={
@@ -228,13 +264,47 @@ const RiderOntheway = () => {
                                             order_status_loading: "order_status_loading",
                                         }
                                     }
-                                />
+                                    orderStatus={orderStatus}
+                                    setOrderStatus={setOrderStatus}
+                                />*/}
+                                <div className="order_status">
+                                    {
+                                        orderInfo ? (
+                                            <div className="order_status_content">
+                                                {
+                                                    (orderInfo.timeRemaining !== 0) ?
+                                                        <div className="order_status_time_div">
+                                                            <span className="order_status_time_remaining">{orderInfo.timeRemaining}분</span>
+                                                            <span className="order_status_delivery_deadline"> ({orderInfo.deliveryDeadline})</span>
+                                                        </div>
+                                                        :
+                                                        <div className="order_status_message">
+                                                            배달 시간이 초과되었습니다.
+                                                        </div>
+                                                }
+                                                <div className="progress">
+                                                    <div className="progress-bar bg-warning" role="progressbar" style={{ width: `${orderProgress}%` }}
+                                                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <div className="order_status_steps">
+                                                    <span className="order_status_step">주문 수락</span>
+                                                    <span className="order_status_step">조리 중</span>
+                                                    <span className="order_status_step">조리 완료</span>
+                                                    <span className="order_status_step">배달 중</span>
+                                                    <span className="order_status_step">배달 완료</span>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="order_status_loading">Loading...</div>
+                                        )
+                                    }
+                                </div>
                             </div>
                             <hr />
                             <div className="btn-container">
                                 {/* 픽업 완료 btn || 배달 완료 btn */}
                                 {
-                                    onDelivery ? (
+                                    (orderStatus === 5) ? (
                                         <button
                                             className="btn btn-success btn-lg pickingup-delivery-btn"
                                             onClick={() => {handleFinishedOrder()}}
