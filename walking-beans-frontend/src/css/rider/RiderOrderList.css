@@ -4,7 +4,14 @@
 
 .rider-order-list-order {
     margin : 20px 0;
+}
 
+.rider-order-list-order-container {
+
+}
+
+.rider-order-list-order-container:hover {
+    cursor: pointer;
 }
 
 .rider-order-list-order-ordernumber {

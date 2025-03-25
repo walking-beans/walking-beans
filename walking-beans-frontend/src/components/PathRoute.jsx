@@ -13,7 +13,6 @@ import RiderMain from "../pages/rider/RiderMain";
 import RiderOntheway from "../pages/rider/RiderOntheway";
 import RiderResult from "../pages/rider/RiderResult";
 import RiderOrderList from "../pages/rider/RiderOrderList";
-import RiderOrder from "../pages/rider/RiderOrder";
 import RiderIncome from "../pages/rider/RiderIncome";
 import ProtectedRoute from "./ProtectedRoute";
 import UserOrder from "../pages/user/UserOrder";
@@ -54,6 +53,7 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
+import UserCart from "../pages/user/UserCart";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -140,18 +140,16 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+
                                 <Route path="/order/test" element={<RiderOrderStatus />} />
 
-
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
+                                <Route path="/user/reviewWrite/:orderId" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
 
-                                <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
-                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
-
-
-
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
+
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
                                 <Route path="/rider" element={
                                     <RiderMain
@@ -177,11 +175,7 @@ function PathRoute() {
                                         <RiderOrderList  user={user}/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/rider/order" element={
-                                    <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderOrder/>
-                                    </ProtectedRoute>
-                                }/>
+
                                 <Route path="/rider/income" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
                                         <RiderIncome  user={user}/>
@@ -233,6 +227,7 @@ function PathRoute() {
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user} />}/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
+
                             </Routes>
                         </div>
                     </div>
