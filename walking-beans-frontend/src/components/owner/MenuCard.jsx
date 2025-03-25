@@ -3,8 +3,6 @@ import {useState} from "react";
 
 const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
 
-
-
     //id,name,price,
     //handleDelete 삭제버튼용 핸들러
     //barrel 1열/ 3열 변환 버튼
@@ -77,7 +75,6 @@ const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,ba
                     </div>
                 </div>
             }
-
         </>
     )
 }

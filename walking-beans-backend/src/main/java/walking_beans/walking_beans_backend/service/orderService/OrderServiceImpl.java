@@ -48,6 +48,45 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty) {
+        List<Orders> orders = orderMapper.getOrdersByRiderIdOnDuty(riderIdOnDuty);
+        for (Orders order : orders) {
+            order.changeCreateDateFormat();
+            if (order.getOrderModifiedDate() != null) {
+                order.changeModifiedDateFormat();
+            }
+        }
+
+        return orders;
+    }
+
+    @Override
+    public RiderOrderStatusDTO getOrderStatusWithRemainingTime(long orderId) {
+        RiderOrderStatusDTO orderStatusDTO = orderMapper.getOrderStatusWithRemainingTime(orderId);
+        // timeRemaining (배달 완료까지 남은 시간) 설정하는 method
+        if (orderStatusDTO.definingTimeRemaining()) {
+            // timeRemaining 이 0이 아니라면 deadline 시간 설정하기
+            orderStatusDTO.definingDeliveryDeadline();
+        }
+        return orderStatusDTO;
+    }
+
+
+    /**********************************************mochoping**********************************************/
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    @Override
+    public List<Orders> getLatestOrderForStore(long storeId) {
+        return orderMapper.getLatestOrderForStore(storeId);
+    }
+    // 주문번호로 뷰 테이블에서 전체 정보 가져오기
+    @Override
+    public UserOrderDTO getOrderForStore(String orderNumber) {
+        return orderMapper.getOrderForStore(orderNumber);
+    }
+
+    // 웹소켓 통신용 메서드
+    // 주문상태 2 이상 업데이트시 업주에게 자동 업데이트
+    @Override
     public Integer updateOrderStatus(long orderId, int orderStatus) {
         Integer updatedRows = orderMapper.updateOrderStatus(orderId, orderStatus);
         System.out.println("업데이트된 행 수: " + updatedRows + ", 상태: " + orderStatus); // 로그
@@ -72,30 +111,6 @@ public class OrderServiceImpl implements OrderService {
         return updatedRows;
     }
 
-    @Override
-    public List<Orders> getOrdersByRiderIdOnDuty(long riderIdOnDuty) {
-        List<Orders> orders = orderMapper.getOrdersByRiderIdOnDuty(riderIdOnDuty);
-        for (Orders order : orders) {
-            order.changeCreateDateFormat();
-            if (order.getOrderModifiedDate() != null) {
-                order.changeModifiedDateFormat();
-            }
-        }
-
-        return orders;
-    }
-
-    @Override
-    public RiderOrderStatusDTO getOrderStatusWithRemainingTime(long orderId) {
-        RiderOrderStatusDTO orderStatusDTO = orderMapper.getOrderStatusWithRemainingTime(orderId);
-        // timeRemaining (배달 완료까지 남은 시간) 설정하는 method
-        if (orderStatusDTO.definingTimeRemaining()) {
-            // timeRemaining 이 0이 아니라면 deadline 시간 설정하기
-            orderStatusDTO.definingDeliveryDeadline();
-        }
-        return orderStatusDTO;
-    }
-
     /****************************************  ****************************************/
 
 
@@ -118,6 +133,8 @@ public class OrderServiceImpl implements OrderService {
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
     }
+
+
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
@@ -305,4 +322,6 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("주문 저장 실패");
         }
     }
+
+
 }

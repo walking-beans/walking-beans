@@ -1,11 +1,16 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import OrderDetailCard from "../../components/owner/OrderDetailCard";
 
 
 const StoreOrder= () => {
     const {id} = useParams();
     const [orders, setOrders] = useState([]);
+    const [activeTab, setActiveTab] = useState("progress"); // 탭 상태: "progress" 또는 "completed"
+    const [selectedOrder, setSelectedOrder] = useState(null); // 모달에 보여줄 주문
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
+
     const connectWebSocket = () =>{
         // 웹소켓 상태값 2이상시 표시
         const socket = new WebSocket("ws://localhost:7070/ws/orders");
@@ -37,27 +42,23 @@ const StoreOrder= () => {
                 });
 
         };
-
         socket.onclose = () => {
             console.log("웹소켓 연결 종료 : 주문역활 업데이트 종료");
         };
-
         socket.onerror = (error) => {
             console.log("웹소켓 에러: 주문역활 업데이트 ", error);
             // 재연결 시도
             setTimeout(connectWebSocket, 1000); // 1초 후 재연결
         };
-
         return () => {
             socket.close();
         };
     }
 
 
-
     useEffect(() => {
 
-        // 주문정보리스트 현재 문제 > orders가 갱신이 안되는걸까? 불러진 주문들이 전부 중복 로딩됨.
+        // 최초 로딩시 모든 주문 로딩 , 주문상태 필터 없음
         axios
             .get(`http://localhost:7070/api/orders/store/${id}`)
             .then( (res)=>{
@@ -75,14 +76,73 @@ const StoreOrder= () => {
         console.log("렌더링 후 orders:", orders);
     }, [orders]);
 
+    // 진행상황 필터링
+    const progressOrders = orders.filter(
+        (order) => order.orderStatus >= 2 && order.orderStatus <= 5
+    )
+    const completedOrders = orders.filter(
+        (order) => order.orderStatus >= 6
+    )
+
+    // 모달 열기
+    const openModal = (order) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
+    };
+
+    // 모달 닫기
+    const closeModal = () => {
+        setSelectedOrder(null);
+        setIsModalOpen(false);
+    };
+
+
+
     return(
         <>
-            {orders.map((order)=>(
-            <div key={order.orderId}>
-                <p>{order.orderNumber}</p>
-                <p>{order.orderStatus}</p>
+            {/* 탭 UI */}
+            <div>
+                <button
+                    onClick={() => setActiveTab("progress")}
+                    style={{
+                        fontWeight: activeTab === "progress" ? "bold" : "normal",
+                    }}
+                >
+                    진행 중인 주문
+                </button>
+                <button
+                    onClick={() => setActiveTab("completed")}
+                    style={{
+                        fontWeight: activeTab === "completed" ? "bold" : "normal",
+                    }}
+                >
+                    완료된 주문
+                </button>
             </div>
-            ))}
+
+            {/* 필터링된 주문 렌더링 */}
+            {activeTab === "progress" ? (
+                progressOrders.map((order) => (
+                    <div key={order.orderId}>
+                        <p>{order.orderNumber}</p>
+                        <p>{order.orderStatus}</p>
+                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                    </div>
+                ))
+            ) : (
+                completedOrders.map((order) => (
+                    <div key={order.orderId}>
+                        <p>{order.orderNumber}</p>
+                        <p>{order.orderStatus}</p>
+                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                    </div>
+                ))
+            )}
+
+            {/* 모달 컴포넌트 */}
+            {isModalOpen && (
+                <OrderDetailCard order={selectedOrder} onClose={closeModal} />
+            )}
         </>
     )
 }
