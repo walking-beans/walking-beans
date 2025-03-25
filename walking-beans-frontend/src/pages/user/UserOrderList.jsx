@@ -64,8 +64,8 @@ const UserOrderList = () => {
             orders.forEach(order => {
                 axios.get(`http://localhost:7070/api/reviews/exists/${order.orderId}`)
                     .then(res => {
-                        setReviewStatus(prev => ({
-                            ...prev,
+                        setReviewStatus(orders => ({
+                            ...orders,
                             [order.orderId]: res.data
                         }));
                     })
@@ -81,8 +81,8 @@ const UserOrderList = () => {
                 if (order.orderStatus >= 2 && order.orderStatus <= 5) {
                     // 이제 바로 orderId를 사용
                     apiRiderService.getOrderStatusWithRemainingTime(order.orderId, (timeData) => {
-                        setOrderTimeInfo(prev => ({
-                            ...prev,
+                        setOrderTimeInfo(orders => ({
+                            ...orders,
                             [order.orderNumber]: timeData
                         }));
                     });
@@ -163,13 +163,15 @@ const UserOrderList = () => {
                                     ) : order.orderStatus === 6 ? (
                                         <>
                                             {reviewStatus[order.orderId] ? (
-                                                <button className="user-mini-btn-b"
+                                                <button className="user-mini-btn-bb"
                                                         onClick={() => navigate(`/user/review/${order.storeId}`)}>
                                                     작성한 리뷰 보기
                                                 </button>
                                             ) : (
-                                                <button className="user-mini-btn-b"
-                                                        onClick={() => navigate(`/user/reviewWrite`)}>
+                                                <button
+                                                    className="user-mini-btn-b"
+                                                    onClick={() => navigate(`/user/reviewWrite/${order.orderId}`)}
+                                                >
                                                     리뷰 작성하기
                                                 </button>
                                             )}

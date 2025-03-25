@@ -45,8 +45,8 @@ const UserOrderDetail = () => {
                 <div className="user-order-bordtext">{order?.storeName}</div>
 
                 <div className="user-order-mt">
-                    <div>{order?.orderList?.split('/')[0]} {order.quantity > 1 ? ` 외 ${order.quantity - 1}개` : '1개'}</div>
-                    <div>주문일시 : {order?.orderDate
+                    <div className="user-order-basic-text-m-0">{order?.orderList?.split('/')[0]} {order.quantity > 1 ? ` 외 ${order.quantity - 1}개` : '1개'}</div>
+                    <div className="user-order-basic-text-m-0">주문일시 : {order?.orderDate
                         ? new Date(order.orderDate).toLocaleString('ko-KR', {
                             year: 'numeric',
                             month: '2-digit',
@@ -61,7 +61,7 @@ const UserOrderDetail = () => {
                             .replace(/-(?=\([가-힣]{1}\))/, ' ')
                         : '날짜 정보 없음'}</div>
 
-                    <div>주문번호 : {order.orderNumber}</div>
+                    <div className="user-order-basic-text-m-0">주문번호 : {order.orderNumber}</div>
                 </div>
 
                 <div className="user-order-hr"></div>
