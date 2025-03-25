@@ -1,28 +1,26 @@
 import {useEffect, useState} from "react";
-import apiRiderService from "../../service/apiRiderService";
+import apiRiderService from "../../components/rider/apiRiderService";
 import {Link} from "react-router-dom";
-import "../../css/rider/RiderOrderList.css";
 
-const RiderOrderList = ({user}) => {
+const RiderOrderList = ({riderId}) => {
     const [orders, setOrders] = useState([]);
 
     const status = {
         '0' : '구매 희망',
-        '1' : '주문 중',
-        '2' : '조리 접수 대기 중',
-        '3' : '조리 중',
-        '4' : '조리 완료',
-        '5' : '배달 중',
-        '6' : '배달 완료'
+        '1' : '주문 접수 대기 중',
+        '2' : '조리 중',
+        '3' : '조리 완료',
+        '4' : '배달 중',
+        '5' : '배달 완료'
     };
 
     useEffect(() => {
-        apiRiderService.getOrdersByRiderIdOnDuty(user.user_id, setOrders);
-    }, [user]);
+        apiRiderService.getOrdersByRiderIdOnDuty(2, setOrders);
+    }, [/*riderId*/]);
 
 
     return (
-        <div className="rider-order-list-container">
+        <div>
             {
                 (orders.length > 0) ? (
                     <ul>
@@ -30,14 +28,12 @@ const RiderOrderList = ({user}) => {
                             orders.map(
                                 (order) => {
                                     return (
-                                        <div className="rider-order-list-order" key={order.id}>
-                                            <Link to={`/rider/order/${order.orderId}` } style={{ textDecoration: "none", color: "black" }}>
-                                                <div className="rider-order-list-order-ordernumber">주문번호 : {order.orderNumber}</div>
-                                                <div className={order.orderStatus === 6 ? "rider-order-list-order-finishedorderstatus" : "rider-order-list-order-orderstatus"}>
-                                                    {status[order.orderStatus]}
-                                                </div>
-                                                <div className="rider-order-list-order-orderprice">금액 : {(parseInt(order.orderTotalPrice)).toLocaleString()}</div>
-                                                <div className="rider-order-list-order-orderdate">주문 날짜 : {order.orderModifiedDate}</div>
+                                        <div>
+                                            <Link to={`/rider/order/${order.orderId}`}>
+                                                <div>주문번호 : {order.orderNumber}</div>
+                                                <div>주문 상태 : {status[order.orderStatus]}</div>
+                                                <div>금액 : {(parseInt(order.orderTotalPrice)).toLocaleString()}</div>
+                                                <div>주문 날짜 : {order.orderModifiedDate}</div>
                                             </Link>
                                         </div>
                                     )
@@ -46,7 +42,7 @@ const RiderOrderList = ({user}) => {
                         }
                     </ul>
                 ) : (
-                    <div className="rider-order-list-noorders">배달 내역이 없습니다.</div>
+                    <div></div>
                 )
             }
 

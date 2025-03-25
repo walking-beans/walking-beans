@@ -25,9 +25,6 @@ public interface AddressService {
     // 모든 주소 0으로 만들기
     void resetAddressRoles(long userId);
 
-    // 주소 삭제
-    void deleteAddress(long addressId);
-
 
     /********** LEO **********/
     // 유저 대표 주소 가져오기 by order_id

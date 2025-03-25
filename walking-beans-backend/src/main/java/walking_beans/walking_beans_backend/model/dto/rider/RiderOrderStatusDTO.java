@@ -50,17 +50,9 @@ public class RiderOrderStatusDTO {
         LocalDateTime deadLine = orderModifiedDate.plusMinutes(storeMaxDeliveryTime);
 
         if (deadLine.getHour() > 12) {
-            this.deliveryDeadline = "오후 " + (deadLine.getHour() - 12) + ":";
+            this.deliveryDeadline = "오후 " + (deadLine.getHour() - 12) + ":" + (deadLine.getMinute());
         } else {
-           this.deliveryDeadline = "오전 " + deadLine.getHour() + ":";
-        }
-
-        if (deadLine.getMinute() == 0) {
-            this.deliveryDeadline += "00";
-        } else if (deadLine.getMinute() < 10) {
-            this.deliveryDeadline += "0" + deadLine.getMinute();
-        } else {
-            this.deliveryDeadline += deadLine.getMinute();
+           this.deliveryDeadline = "오전 " + deadLine.getHour() + ":" + deadLine.getMinute();
         }
     }
 

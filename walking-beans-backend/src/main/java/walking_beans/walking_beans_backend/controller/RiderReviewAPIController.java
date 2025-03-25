@@ -27,7 +27,7 @@ public class RiderReviewAPIController {
     }
 
     @PostMapping
-    public  ResponseEntity<Integer> insertRiderReview(@RequestBody RiderReview riderReview) {
+    public  ResponseEntity<Integer> insertRiderReview(RiderReview riderReview) {
         log.info("=== /api/riderReview {} ===", riderReview);
         return ResponseEntity.ok(riderReviewService.insertRiderReview(riderReview));
     }

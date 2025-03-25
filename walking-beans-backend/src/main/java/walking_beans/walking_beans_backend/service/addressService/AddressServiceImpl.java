@@ -50,12 +50,6 @@ public class AddressServiceImpl implements AddressService {
         addressMapper.resetAddressRoles(userId);
     }
 
-    //주소 삭제
-    @Override
-    public void deleteAddress(long addressId) {
-        addressMapper.deleteAddress(addressId);
-    }
-
 
     // 대표주소 변경
     @Override

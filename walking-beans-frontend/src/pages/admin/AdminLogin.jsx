@@ -7,7 +7,7 @@ const AdminLogin = () => {
     return (
         <div>
             <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginSocial/>/*}{/*소셜 로그인*/}
         </div>
     )
 
@@ -67,9 +67,6 @@ const AdminLoginNomal = () => {
                     break;
                 case "owner":
                     navigate("/owner");
-                    break;
-                case "noRole":
-                    navigate("/updaterole");
                     break;
                 default:
                     navigate("/");
@@ -188,9 +185,6 @@ const AdminLoginSocial = () => {
                     break;
                 case "owner":
                     navigate("/owner");
-                    break;
-                case "noRole":
-                    navigate("/updaterole");
                     break;
                 default:
                     navigate("/");

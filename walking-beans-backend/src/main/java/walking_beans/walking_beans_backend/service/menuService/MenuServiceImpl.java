@@ -107,7 +107,7 @@ public class MenuServiceImpl implements MenuService {
 
     // 대표메뉴 정보 가져오기
     @Override
-    public Menu findMainMenuByStoreId(long storeId) {
+    public List<Menu> findMainMenuByStoreId(long storeId) {
         return menuMapper.findMainMenuByStoreId(storeId);
     }
 }

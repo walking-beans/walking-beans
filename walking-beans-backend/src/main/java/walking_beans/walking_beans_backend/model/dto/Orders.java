@@ -1,9 +1,14 @@
 package walking_beans.walking_beans_backend.model.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 @Slf4j
@@ -12,21 +17,24 @@ import java.util.StringTokenizer;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orders {
+public class Orders implements Serializable { // Redis 캐싱을 위한 직렬화
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderId;
+    private long orderId; //PK
 
-    private long userId;
-    private long storeId;
-    private long addressId;
+    private long userId; //FK
+
+    private long menuId;
+
+    private long storeId; //FK
+    private long addressId; //FK
 
     @Column(unique = true)
     private String orderNumber;
-
     private int orderStatus;
     private String orderRequests;
-    private int orderTotalPrice;
+    private String orderTotalPrice;
 
     private String orderCreateDate;
 

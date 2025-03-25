@@ -35,6 +35,14 @@ const apiStoreService ={
                         storePhone: store.storePhone ?? "연락처 없음"
                     }));
 
+                    if (sortType === "rating") {
+                        sortedData.sort((a, b) => b.storeRating - a.storeRating);
+                    } else if (sortType === "distance") {
+                        sortedData.sort((a, b) =>
+                            getDistance(userLocation.lat, userLocation.lng, a.storeLatitude, a.storeLongitude) -
+                            getDistance(userLocation.lat, userLocation.lng, b.storeLatitude, b.storeLongitude)
+                        );
+                    }
 
                     setDisplayStores(sortedData);
                     return res;  // axios의 응답을 반환 (Promise 반환)

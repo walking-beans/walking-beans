@@ -30,19 +30,4 @@ public class Alarms {
     private boolean alarmStatus;
 
     private Timestamp alarmCreateDate;
-
-    private String alarmUrl;
-
-    // 호출시 편의성을 위해 알람 팩토리 메서드 추가 (테스트용)
-    public static Alarms create(long userId, int alarmRole, String alarmContent, long senderId, String alarmUrl) {
-        Alarms alarms = new Alarms();
-        alarms.setUserId(userId);
-        alarms.setAlarmRole(alarmRole);
-        alarms.setAlarmContent(alarmContent);
-        alarms.setAlarmSenderId(senderId);
-        alarms.setAlarmStatus(false); // 기본값: 읽지 않음
-        alarms.setAlarmCreateDate(new Timestamp(System.currentTimeMillis())); // 생성 시간
-        alarms.setAlarmUrl(alarmUrl);
-        return alarms;
-    }
 }

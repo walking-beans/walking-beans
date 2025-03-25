@@ -8,19 +8,4 @@
         WHERE room_id = #{roomId}
         AND user_id = #{userId}
     </select>
-
-    <select id="getUserAndStoreRoomId">
-        SELECT CM.room_id, CM.receiver_relation
-        FROM chattingroom CR
-                 JOIN chattingmember CM
-                      ON CR.room_id = CM.room_id
-        WHERE CM.user_id = #{userId}
-          AND CR.order_id = #{orderId};
-    </select>
-
-    <insert id="insertChattingMember">
-        INSERT INTO chattingMember (room_id, user_id, room_receiver_id, receiver_relation)
-        VALUES
-            (#{roomId}, #{userId}, #{receiverId}, #{receiverRelation});
-    </insert>
 </mapper>

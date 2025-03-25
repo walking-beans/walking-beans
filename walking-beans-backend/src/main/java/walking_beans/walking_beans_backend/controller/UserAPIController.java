@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Users;
-import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
@@ -22,9 +20,6 @@ public class UserAPIController {
 
     @Autowired
     private UserServiceImpl userService;
-
-    @Autowired
-    private AlarmNotificationService alarmNotificationService;
 
     /**************************** 로그인 ****************************/
     // 로그인
@@ -70,7 +65,6 @@ public class UserAPIController {
     //유저 롤 업데이트
     @PutMapping("/{userEmail}/{userRole}")
     public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
-        alarmNotificationService.sendOrderNotification(Alarms.create(15,1,"롤이 변경되었습니다.",15,"testUrl"));
         userService.updateUserRole(userEmail, userRole);
     }
 
@@ -100,11 +94,9 @@ public class UserAPIController {
     }
 
 
-    // 업로드할 이미지
     @Value("${upload-img}")
     private String uploadPath;
 
-    // 프로필 업로드
     @PostMapping("/mypage/{userId}/uploadProfile")
     public ResponseEntity<?> uploadProfileImage(@PathVariable Long userId,
                                                 @RequestParam("file") MultipartFile file) {
@@ -139,7 +131,8 @@ public class UserAPIController {
     }
 
 
-    // 마이페이지
+
+
     @GetMapping("/mypage/{userId}")
     public ResponseEntity<?> getMyPage(@PathVariable("userId") Long userId) {
         Users user = userService.selectUserInfo(userId);
@@ -150,14 +143,7 @@ public class UserAPIController {
 
         return ResponseEntity.ok(user);
     }
-
-    // 회원 탈퇴
-    @DeleteMapping("/unlink/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        userService.deleteUserAccount(userId);
-        return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
-    }
-
-
 }
+
+
 

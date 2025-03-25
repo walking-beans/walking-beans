@@ -15,4 +15,5 @@ public class Payments {
     private long orderId;
     private String paymentMethod;
     private String paymentStatus;
+
 }

@@ -1,4 +1,3 @@
-/*
 import React, { useState } from "react";
 import SendAlarm from "../../components/admin/SendAlarm";
 
@@ -13,12 +12,12 @@ const AdminResultFindPw = () => {
         <div className="user-home-container">
             <p>알람 보내기</p>
 
-
+            {/* 알람 보내기 버튼 */}
             <button type="button" onClick={handleSendAlarm}>
                 보내기 알람
             </button>
 
-
+            {/* 알람 전송 상태가 true일 때만 SendAlarm 컴포넌트 렌더링 */}
             {isAlarmSent && (
                 <SendAlarm
                     userId="1"
@@ -31,4 +30,4 @@ const AdminResultFindPw = () => {
     );
 };
 
-export default AdminResultFindPw;*/
+export default AdminResultFindPw;

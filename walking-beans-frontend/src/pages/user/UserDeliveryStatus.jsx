@@ -4,18 +4,16 @@ import riderMapMarker from "../../images/user/riderMapMarker.svg"
 import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
 import axios from "axios";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
-import apiRiderService from "../../service/apiRiderService";
+import {useNavigate, useParams} from "react-router-dom";
 
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
 const UserDeliveryStatus = () => {
-    const {orderNumber} = useParams();
     const [isLoaded, setIsLoaded] = useState(false);
     const [map, setMap] = useState(null);
     const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
+    const {orderId} = useParams();
     const [userCoords, setUserCoords] = useState({lat: null, lng: null}); // 유저 주소
     const [storeCoords, setStoreCoords] = useState({lat: null, lng: null}); // 매장 주소
     const [store, setStore] = useState([]);
@@ -23,22 +21,6 @@ const UserDeliveryStatus = () => {
     const [order, setOrder] = useState([]);
     const [cart, setCart] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState(null);
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const [orderId, setOrderId] = useState(null);
-    const [payments, setPayments] = useState([]);
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const storedUser = localStorage.getItem("user");
-    const user = storedUser ? JSON.parse(storedUser) : null;
-    const orderRequests = queryParams.get("orderRequests");
-
-    const [chattingMemberList, setChattingMemberList] = useState({});
-    const [storeRoomId, setStoreRoomId] = useState(0);
-    const [userRoomId, setUserRoomId] = useState(0);
-    const [riderRoomId, setRiderRoomId] = useState(0);
 
     // 로그인 확인
     useEffect(() => {
@@ -55,74 +37,63 @@ const UserDeliveryStatus = () => {
         }
     }, []);
 
-    // 주문 정보 가져오기
+    // 주문한 유저 주소 가져오기
     useEffect(() => {
-        if (!orderNumber) {
-            setError("주문 번호가 없습니다.");
-            setIsLoading(false);
+        if (!orderId) {
+            console.log("유저 주소를 불러올 orderId가 없습니다. : ", orderId)
             return;
         }
 
-        const fetchOrderDetails = async () => {
-            setIsLoading(true);
-            try {
-                const orderResponse = await axios.get(`http://localhost:7070/api/orders/orderNumber/${orderNumber}`);
-                console.log("주문 정보 : ", orderResponse.data);
-                if (!orderResponse.data) {
-                    setError("주문 정보를 찾을 수 없습니다.");
-                    setIsLoading(false);
+        axios
+            .get(`http://localhost:7070/api/addresses/user/order/${orderId}`)
+            .then((res) => {
+
+                if (!orderId) {
+                    console.log("주소를 가져올 orderId가 없습니다 : ", orderId);
                     return;
                 }
 
-                const orderData = orderResponse.data;
-                setOrder(orderData);
-                setOrderId(orderData.orderId);
+                // 가져온 데이터 위도 경도 추출
+                setUserCoords({
+                    lat: res.data.addressLatitude,
+                    lng: res.data.addressLongitude
+                });
+                console.log("유저 주소 위도 :", res.data.addressLatitude, "유저 주소 경도 :", res.data.addressLongitude);
+                console.log("유저 주소 데이터 : ", res.data)
 
-                // 주소와 매장 정보 병렬로 조회
-                const [addressResponse, storeResponse] = await Promise.all([
-                    axios.get(`http://localhost:7070/api/addresses/user/order/${orderData.orderId}`),
-                    axios.get(`http://localhost:7070/api/orders/storeInfo/${orderData.orderId}`)
-                ]);
+                // 현황 데이터 가져오기
+                setAddress(res.data);
 
-                // 주소 정보 설정
-                if (addressResponse.data) {
-                    setAddress(addressResponse.data);
-                    setUserCoords({
-                        lat: addressResponse.data.addressLatitude,
-                        lng: addressResponse.data.addressLongitude
-                    });
-                }
+            })
+            .catch((err) => {
+                console.log("유저 주소 데이터 불러오기 오류 발생 : ", err);
+            });
+    }, [orderId]);
 
-                // 매장 정보 설정
-                if (storeResponse.data) {
-                    setStore(storeResponse.data);
-                    setStoreCoords({
-                        lat: storeResponse.data.storeLatitude,
-                        lng: storeResponse.data.storeLongitude
-                    });
-                }
-                setIsLoading(false);
-            } catch (err) {
-                console.error("데이터 조회 오류:", err);
-                setError("데이터를 불러오는 중 오류가 발생했습니다.");
-                setIsLoading(false);
-            }
-        };
-
-        fetchOrderDetails();
-    }, [orderNumber]);
-
-    // 결제 정보 조회
+    // 주문 받은 매장 주소 가져오기
     useEffect(() => {
-        axios.get(`http://localhost:7070/api/payment/method/${orderId}`)
-            .then(res => {
-                console.log("결제 정보 조회 성공", res.data);
-                setPayments(res.data);
+        if (!orderId) {
+            console.log("매장 주소를 불러올 orderId가 없습니다. : ", orderId)
+            return;
+        }
+
+        axios
+            .get(`http://localhost:7070/api/orders/storeInfo/${orderId}`)
+            .then((res) => {
+                setStoreCoords({
+                    lat: res.data.storeLatitude,
+                    lng: res.data.storeLongitude
+                });
+                console.log("매장 위도 :", res.data.storeLatitude, "매장 경도 :", res.data.storeLongitude);
+
+                // 현황 데이터 가져오기
+                setStore(res.data);
+
             })
-            .catch(err => {
-                console.log("결제 정보 조회 실패", err);
+            .catch((err) => {
+                console.log("매장 주소 데이터 불러오기 오류 발생 : ", err);
             })
-    }, [orderId])
+    }, [orderId]);
 
     // 카카오 맵 기본 생성
     useEffect(() => {
@@ -190,125 +161,65 @@ const UserDeliveryStatus = () => {
 
     }, [isLoaded, userCoords, storeCoords]);
 
-    const handleMeet = () => {
-        navigate(`/order`);
-        apiRiderService.updateOrderStatus(orderId, 6);
-    }
-
+    // 로컬스토리지에서 결제 방식을 가져옵니다.
     useEffect(() => {
-        console.log("orderNumber:", orderNumber);
-        console.log("Order state:", order);
-        console.log("OrderId state:", orderId);
-    }, [orderNumber, order, orderId]);
+        const storedPaymentMethod = localStorage.getItem("paymentMethod");
+        if (storedPaymentMethod) {
+            setPaymentMethod(storedPaymentMethod);
+        } else {
+            alert("결제 방식이 선택되지 않았습니다.");
+            navigate(`/user/order/payment/${orderId}`); // 결제 페이지로 이동
+        }
+    }, []);
 
     return (
         <div className="user-delivery-status-container">
             {/* Kakao Map */}
             <div className="user-delivery-map" id="user-delivery-status-map"></div>
 
-            <div className="user-status-modal-container">
-                {/* 배달 현황 */}
-                <div>
-                    <div className="user-order-bordtext">도착예정시간</div>
-                    {orderId && (
-                        <RiderOrderStatus
-                            orderId={orderId}
-                            message="빠르게 배달 중입니다."
-                            css={
-                                {
-                                    order_status_time_div: "user-menu-option-group-container",
-                                    order_status_time_remaining: "user-order-big-text",
-                                    order_status_delivery_deadline: "user-order-optiontitle",
-                                    order_status_steps: "user-order-click-btn",
-                                    order_status_message: "user-order-guide",
-                                    order_status_step: "user-order-optiontitle",
-                                    order_status_loading: "user-order-guide",
-                                }
-                            }
-                        />
-                    )}
-                </div>
-                <div className="user-order-hr" alt="구분선"></div>
+            {/* 배달 현황 */}
+            <div>
+                <div>도착 예정시간</div>
+                <div>진행현황 바</div>
+            </div>
 
-                <div>
-                    <div className="user-order-bordtext">{store?.storeName}</div>
-                    <div className="user-order-basic-text-m-0">{order.orderNumber}</div>
-                    <div
-                        className="user-order-basic-text-m-0">{Number(order?.totalPayment).toLocaleString()}(메뉴 {order?.quantity}개)
-                    </div>
-                </div>
+            <div className="user-order-hr" alt="구분선"></div>
 
-                <div className="user-order-hr" alt="구분선"></div>
+            <div>
+                <div>{store?.storeName}</div>
+                <div>주문번호</div>
+                <div>{order?.orderTotalPrice}(메뉴 {cart.cartQuantity}개)</div>
+            </div>
 
-                <div>
-                    <div className="user-order-bordtext">배달주소</div>
-                    <div className="user-order-basic-text-m-0">{address?.address} {address?.detailedAddress}</div>
-                </div>
+            <div className="user-order-hr" alt="구분선"></div>
 
-                <div className="user-order-hr" alt="구분선"></div>
+            <div>
+                <div>배달주소</div>
+                <div>{address?.address} {address?.detailedAddress}</div>
+            </div>
 
-                <div className="user-order-optiontitle">
-                    <div className="user-order-bordtext">요청사항</div>
-                    <div className="user-order-basic-text-m-0">{order?.orderRequests}</div>
-                </div>
+            <div className="user-order-hr" alt="구분선"></div>
 
-                {/* 결제 방식에 따른 버튼 */}
-                <div>
-                    {payments?.paymentMethod === "tossPay" && (
-                        <div className="user-order-click-btn">
-                            <button
-                                className="user-mini-btn-b"
-                                onClick={() => {
-                                    navigate(`/chat/message/${storeRoomId}`)
-                                }}
-                            >
-                                매장 채팅하기
-                            </button>
-                            <button
-                                className="user-mini-btn-sb"
-                                onClick={() => {
-                                    navigate(`/chat/message/${riderRoomId}`)
-                                }}
-                            >
-                                라이더 채팅하기
-                            </button>
-                        </div>
-                    )}
-                    {payments?.paymentMethod === "meetPayment" && (
-                        <div>
-                            <div className="user-order-click-btn">
-                                <button
-                                    className="user-mini-btn-b"
-                                    onClick={() => {
-                                        navigate(`/chat/message/${storeRoomId}`)
-                                    }}
-                                >
-                                    매장 채팅하기
-                                </button>
-                                <button
-                                    className="user-mini-btn-sb"
-                                    onClick={() => {
-                                        navigate(`/chat/message/${riderRoomId}`)
-                                    }}
-                                >
-                                    라이더 채팅하기
-                                </button>
-                            </div>
-                            <div className="user-order-click-btn-one">
-                                <button
-                                    className="user-order-btn-b"
-                                    onClick={handleMeet}
-                                >만나서 결제 완료
-                                </button>
-                            </div>
-                            <div
-                                className="user-order-guide"
-                                onClick={handleMeet}
-                            >배달을 받으셨다면 만나서 결제 완료 버튼을 눌러주세요!
-                            </div>
-                        </div>
-                    )}
-                </div>
+            <div>
+                <div>요청사항</div>
+                <div>{order.orderRequests}</div>
+            </div>
+
+            {/* 결제 방식에 따른 버튼 */}
+            <div className="user-order-click-btn">
+                {paymentMethod === "tossPay" && (
+                    <>
+                        <button>매장 채팅하기</button>
+                        <button>라이더 채팅하기</button>
+                    </>
+                )}
+                {paymentMethod === "meetPayment" && (
+                    <>
+                        <button>매장 채팅하기</button>
+                        <button>라이더 채팅하기</button>
+                        <button>만나서 결제 완료</button>
+                    </>
+                )}
             </div>
         </div>
     );

@@ -1,22 +1,27 @@
 package walking_beans.walking_beans_backend.model.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.sql.Timestamp;
 
+@ToString
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 public class Carts {
-    private Long cartId;
-    private String menuId; // Long -> String 으로 설정
-    private String optionId; // Long -> String 으로 설정
-    private Long orderId;
-    private Long storeId;
-    private Long userId;
-    private String cartQuantity; // Long -> String 으로 설정
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long cartId;
+
+    private long optionId;
+    private long orderId;
+    private long storeId;
+    private long userId;
+    private int cartQuantity;
     private Timestamp cartCreateDate;
     private Timestamp cartModifiedDate;
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { Stomp } from "@stomp/stompjs";
-import apiRiderService from "../../service/apiRiderService";
+import apiRiderService from "../../components/rider/apiRiderService";
 import {useParams} from "react-router-dom";
 
 function AdminMessageTEST() {

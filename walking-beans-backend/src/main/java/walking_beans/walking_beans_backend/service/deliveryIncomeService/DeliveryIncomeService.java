@@ -9,6 +9,4 @@ public interface DeliveryIncomeService {
     List<DeliveryIncome> getDeliveryIncomeByRiderId(long riderId, int todaysMonth, int todaysYear);
 
     DeliveryIncome getDeliveryIncomeByOrderId(long riderId, long orderId);
-
-    Integer insertDeliveryIncome(DeliveryIncome deliveryIncome);
 }
