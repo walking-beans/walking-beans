@@ -27,6 +27,12 @@ public class AlarmAPIController {
         return alarmService.getUserAlarmList(userId);
     }
 
+    // 읽지 않은 알람 리스트 가져오기
+    @GetMapping("/api/noreadalarms/{userId}")
+    public List<Alarms> getNotReadAlarms(@PathVariable("userId") long userId) {
+        return alarmService.getNotReadAlarms(userId);
+    }
+
 
     // 알림 리스트 전체 삭제
     @DeleteMapping("/api/alarm/delete/{userId}")

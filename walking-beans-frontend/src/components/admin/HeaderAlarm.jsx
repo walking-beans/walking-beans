@@ -10,6 +10,7 @@ import "../../pages/layout/UserHeader.css";
 //라이더용 벨 아이콘
 import riderBellIcon from "../../assert/svg/riderBell.svg";
 import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
+import axios from "axios";
 
 
 const HeaderAlarm = ({userId, bell}) => {
@@ -17,6 +18,9 @@ const HeaderAlarm = ({userId, bell}) => {
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
+
+    const [alarms, setAlarms] = useState([]); // 알림 리스트 (서버에서 불러온)
+    const [count, setCount] = useState(0); // 읽지 않은 알람 수
     const navigate = useNavigate();
 
     const alarmIconToShow = bell ? riderAlarmIcon : alarmIcon;
@@ -63,6 +67,25 @@ const HeaderAlarm = ({userId, bell}) => {
             stompClient.deactivate();
         };
     }, [userId]);
+/*
+    useEffect(() => {
+        if (userId) {
+            axios
+                .get(`http://localhost:7070/api/noreadalarms/${userId}`)
+                .then((res) => {
+                    setAlarms(res.data);
+                    // 읽지 않은 알람의 개수 카운트
+                    const countFalseStatus = res.data.filter(
+                        (alarm) => alarm.alarmStatus === false
+                    ).length;
+                    setCount(countFalseStatus);
+                })
+                .catch((err) => {
+                    console.log("읽지 않은 알람리스트 불러오기 실패" + err);
+                });
+        }
+    }, [userId]);*/
+
 
     //알람 토글
     const toggleAlarm = () => {
@@ -84,7 +107,8 @@ const HeaderAlarm = ({userId, bell}) => {
             </div>
             {showDropdown && (
                 <div className={"AlarmDropdown"}>
-                    {notifications.length > 0 ? (
+                    {
+                        notifications.length > 0 ? (
                         notifications.map((noti, index) => (
                             <div key={index} className={"AlarmNotificationItem"} onClick={() => {
                                 if (noti.type === 1) {
