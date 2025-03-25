@@ -53,6 +53,7 @@ import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
+import RiderOrderStatus from "./rider/RiderOrderStatus";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -118,10 +119,10 @@ function PathRoute() {
                                 {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder />} />
 
-                                {/* 주문하기 페이지 구현 완료*/}
+                                {/* 주문하기 페이지*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout />}/>
 
-                                {/* 결제하기 페이지 구현 중*/}
+                                {/* 결제하기 페이지*/}
                                 {/* 1. checkout toss API KEY 인증*/}
                                 <Route path="/checkout" element={<UserCheckoutPage />} />
 
@@ -131,12 +132,15 @@ function PathRoute() {
                                 {/*3. 인증 실패 결제 실패*/}
                                 <Route path="/sandbox/fail" element={<UserFailPage />} />
 
+                                {/* 유저 배달현황 */}
                                 <Route path="/user/delivery/status/:orderNumber" element={<UserDeliveryStatus/>}/>
 
                                 {/*주문 목록 리스트*/}
                                 <Route path="/order" element={<UserOrderList />} />
+
                                 {/*주문 상세정보*/}
-                                <Route path="/order/:orderId" element={<UserOrderDetail />} />
+                                <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+                                <Route path="/order/test" element={<RiderOrderStatus />} />
 
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
@@ -168,7 +172,7 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/orderlist" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderOrderList/>
+                                        <RiderOrderList  user={user}/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/rider/order" element={
@@ -178,7 +182,7 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/income" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderIncome/>
+                                        <RiderIncome  user={user}/>
                                     </ProtectedRoute>
                                 }/>
 

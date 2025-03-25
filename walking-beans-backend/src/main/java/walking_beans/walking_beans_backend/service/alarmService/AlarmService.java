@@ -26,4 +26,10 @@ public interface AlarmService {
 
     //알림용 주문 상태 데이터 가져오기
     OrderStoreDTO getOrderInfoForAlarm (long orderId);
+
+    // 리뷰용 유저 아이디 가져오기
+    OrderStoreDTO getUserIdForReview (long orderId);
+
+    // 스토어 아이디로 스토어 주인 유저 아이디 가져오기
+    OrderStoreDTO getUserIdForOrderAlarm(String orderNumber);
 }

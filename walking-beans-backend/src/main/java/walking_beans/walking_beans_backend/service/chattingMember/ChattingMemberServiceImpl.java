@@ -32,4 +32,9 @@ public class ChattingMemberServiceImpl implements ChattingMemberService{
 
         return result;
     }
+
+    @Override
+    public void insertChattingMember(long roomId, long userId, long receiverId, long receiverRelation) {
+        chattingMemberMapper.insertChattingMember(roomId, userId, receiverId, receiverRelation);
+    }
 }

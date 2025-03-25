@@ -28,10 +28,11 @@
                order_requests,
                order_total_price,
                DATE_FORMAT(order_create_date, '%Y-%m-%d %W %p %h:%i')   AS order_create_date,
-               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date
+               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date,
+               rider_id_on_duty
         FROM orders
         WHERE rider_id_on_duty = #{riderIdOnDuty}
-        ORDER BY order_id DESC
+        ORDER BY order_status, order_modified_date DESC
     </select>
 
     <!-- 주문 상태 변경 -->
@@ -56,10 +57,18 @@
         WHERE O.order_id = #{orderId}
     </select>
 
+    <select id="getOwnerIdByOrderId">
+        SELECT S.user_id
+        FROM orders O
+                 JOIN stores S
+                      ON O.store_id = S.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
 
-    <insert id="createOrder">
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price,
                             order_create_date, order_modified_date)
         VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(),
@@ -121,7 +130,10 @@
                total_payment,
                order_requests,
                order_list,
-               quantity
+               quantity,
+               order_status,
+               store_logo,
+               store_id
         FROM user_orders_view
         WHERE user_id = #{userId}
     </select>
@@ -135,6 +147,7 @@
                order_date,
                order_number,
                delivery_address,
+               detailed_address,
                total_payment,
                order_requests,
                order_list,

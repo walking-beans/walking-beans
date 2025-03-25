@@ -145,12 +145,9 @@ export default AdminChattingroom;*/
 import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useRef, useState} from "react";
 import {Stomp} from "@stomp/stompjs";
-import apiRiderService from "../../service/apiRiderService";
 import "../../css/admin/AdminChattingroom.css";
 import UserDefaultIcon from "../../assert/images/admin/AdminMessage/UserIconDefault.svg";
 import apiChattingInfo from "../../service/apiChattingInfo";
-import RiderMainMap from "../../components/rider/RiderMainMap";
-import BeforeKakaoMapStart from "../../components/rider/BeforeKakaoMapStart";
 
 const AdminChattingroom = ({user}) => {
 
@@ -162,8 +159,8 @@ const AdminChattingroom = ({user}) => {
     const [leftButtonValue, setLeftButtonValue] = useState("");
     const [rightButtonValue, setRightButtonValue] = useState("");
 
-    const [classLeftBtn, setClassLeftBtn] = useState("btn btn-dark btn-lg");
-    const [classRightBtn, setClassRightBtn] = useState("btn btn-light btn-lg");
+    const [classLeftBtn, setClassLeftBtn] = useState("btn btn-dark btn-lg admin-chattingroom-btn-checked");
+    const [classRightBtn, setClassRightBtn] = useState("btn btn-light btn-lg admin-chattingroom-btn-unchecked");
 
     const status = {
         "고객" : 1,
@@ -244,14 +241,14 @@ const AdminChattingroom = ({user}) => {
         if (whichOne) {
             setIsLeftClicked(false);
             console.log(`userId : ${user.user_id}, receiverRelationRight : ${IsLeftClicked}`);
-            setClassRightBtn("btn btn-dark btn-lg");
-            setClassLeftBtn("btn btn-light btn-lg");
+            setClassRightBtn("btn btn-dark btn-lg admin-chattingroom-btn-checked");
+            setClassLeftBtn("btn btn-light btn-lg admin-chattingroom-btn-unchecked");
         } else {
             console.log("handleButton : left");
             setIsLeftClicked(true);
             console.log(`userId : ${user.user_id}, receiverRelationLeft : ${IsLeftClicked}`);
-            setClassLeftBtn("btn btn-dark btn-lg");
-            setClassRightBtn("btn btn-light btn-lg");
+            setClassLeftBtn("btn btn-dark btn-lg admin-chattingroom-btn-checked");
+            setClassRightBtn("btn btn-light btn-lg admin-chattingroom-btn-unchecked");
         }
     }
 
@@ -268,7 +265,7 @@ const AdminChattingroom = ({user}) => {
     }, []);
 
     return (
-        <div className="admin-chattingroom-base ">
+        <div className="admin-chattingroom-base">
             <ul className="nav nav-underline">
                 <div className="admin-button-base col-12">
                     <button type="button"
@@ -286,49 +283,32 @@ const AdminChattingroom = ({user}) => {
 
                 </div>
                 <div className="admin-chattingroom-list">
-                    {/*{(chattingRoom!== []) ? (
-                        chattingRoom.map((room, index) => (
-                            <Link to={`/chat/message/${room.roomId}`}>
-                                <div
-                                    key={index}
-                                    className="admin-chattingroom-list-chat"
-                                >
-                                    <p><img src={(room.userPictureUrl)? (`${room.userPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
-                                    <p>{room.userName}</p>
-                                    <p>{room.messageContent}</p>
-                                    <p>{room.messageTime}</p>
-                                </div>
-                            </Link>
-                        ))
-                    ) : (
-                        <p>채팅 기록이 없습니다.</p>
-                    )}*/}
                     {
                         IsLeftClicked ? (
                             chattingInfo[status[leftButtonValue]]?.map((room, index) => (
-                                <Link to={`/chat/message/${room.roomId}`}>
+                                <Link to={`/chat/message/${room.roomId}`} style={{ textDecoration: "none", color: "black" }}>
                                     <div
                                         key={index}
                                         className="admin-chattingroom-list-chat"
                                     >
-                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
-                                        <p>{room.receiverName}</p>
-                                        <p>{room.lastMessage}</p>
-                                        <p>{room.modifiedDate}</p>
+                                        <p><img className="admin-chattingroom-list-chat-img" src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p className="admin-chattingroom-list-chat-name">{room.receiverName}</p>
+                                        <p className="admin-chattingroom-list-chat-lastmessage">{room.lastMessage}</p>
+                                        <p className="admin-chattingroom-list-chat-date">{room.modifiedDate}</p>
                                     </div>
                                 </Link>
                             ))
                         ) : (
                             chattingInfo[status[rightButtonValue]]?.map((room, index) => (
-                                <Link to={`/chat/message/${room.roomId}`}>
+                                <Link to={`/chat/message/${room.roomId}`} style={{ textDecoration: "none", color: "black" }}>
                                     <div
                                         key={index}
                                         className="admin-chattingroom-list-chat"
                                     >
-                                        <p><img src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
-                                        <p>{room.receiverName}</p>
-                                        <p>{room.lastMessage}</p>
-                                        <p>{room.modifiedDate}</p>
+                                        <p><img className="admin-chattingroom-list-chat-img" src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
+                                        <p className="admin-chattingroom-list-chat-name">{room.receiverName}</p>
+                                        <p className="admin-chattingroom-list-chat-lastmessage">{room.lastMessage}</p>
+                                        <p className="admin-chattingroom-list-chat-date">{room.modifiedDate}</p>
                                     </div>
                                 </Link>
                             ))

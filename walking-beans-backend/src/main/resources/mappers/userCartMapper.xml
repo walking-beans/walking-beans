@@ -30,6 +30,7 @@
     <select id="findCartById">
         SELECT * FROM carts WHERE cart_id = #{cartId}
     </select>
+
     <!--
     먼저 기존 장바구니 데이터 조회
     - > 유저아이디와 가게 아이디와 메뉴아이디 옵션이 모두 일치하는 경우에만
@@ -84,20 +85,7 @@
         FROM carts
         WHERE user_id = #{userId}
     </delete>
-    <!--
-    유저아이디와 스토어이디를 조회하여 현재 담고있는
-    메뉴 가게 아이디와 일치하지 않으면
-    기존 카트에 저장된 메뉴 모두 지우기
 
-
-     <select id="findUserCartByUserAndStore">
-        SELECT
-        FROM carts
-        WHERE user_id = #{userId} AND store_id = #{storeId}
-    </select>
-
-    위 참조하여 사용
-    -->
     <delete id="changeStoreIdAndMenu">
         DELETE
         FROM carts

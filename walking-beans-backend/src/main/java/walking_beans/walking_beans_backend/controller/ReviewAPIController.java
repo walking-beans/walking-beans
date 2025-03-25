@@ -5,7 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 import walking_beans.walking_beans_backend.model.dto.Reviews;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.reviewService.ReviewService;
 
 import java.io.IOException;
@@ -19,6 +23,12 @@ import java.util.Map;
 public class ReviewAPIController {
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private AlarmServiceImpl alarmService;
+
+    @Autowired
+    private AlarmNotificationService alarmNotificationService;
 
     // 특정 매장의 모든 리뷰 조회
     @GetMapping("/{storeId}")
@@ -65,6 +75,11 @@ public class ReviewAPIController {
             // DB에 저장
             Reviews savedReview = reviewService.insertReview(review);
 
+            // 매장에 리뷰 등록되었다고 알림 보내기
+            System.out.println(orderId);
+            OrderStoreDTO reviewOwnerUserid = alarmService.getUserIdForReview(orderId);
+            System.out.println(reviewOwnerUserid);
+            alarmNotificationService.sendOrderNotification(Alarms.create(reviewOwnerUserid.getStoreOwnerId(),1,"새로운 리뷰가 등록되었습니다!",0,"/user/review/"+storeId));
             return ResponseEntity.ok(savedReview);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -97,5 +112,11 @@ public class ReviewAPIController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 삭제 실패");
         }
+    }
+
+    // 유저가 주문한 스토어에 대한 리뷰 존재 여부 확인
+    @GetMapping("/exists/{orderId}")
+    public ResponseEntity<Boolean> existsReviewByOrderId(@PathVariable long orderId) {
+        return ResponseEntity.ok(reviewService.existsReviewByOrderId(orderId));
     }
 }

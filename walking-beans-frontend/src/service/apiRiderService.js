@@ -50,7 +50,7 @@ const apiRiderService = {
             )
             .catch(
                 (err) => {
-                    alert("주문 정보를 불러오는 중 오류가 발생했습니다.");
+                    console.log("주문 정보를 불러오는 중 오류가 발생했습니다.");
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             )
@@ -231,6 +231,8 @@ const apiRiderService = {
             .then(
                 (res) => {
                     console.log("📌 API 응답 데이터:", res.data);  // ✅ 데이터 확인용
+                    console.log("📌 API 응답 데이터 orderId :", orderId);  // ✅ 데이터 확인용
+                    console.log("📌 API 응답 데이터 userId :", userId);  // ✅ 데이터 확인용
                     console.log("📌 데이터 타입:", typeof res.data);
                     setChattingMemberList(res.data);
                 }
@@ -238,6 +240,22 @@ const apiRiderService = {
             .catch(
                 (err) => {
                     alert("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            );
+    },
+
+    createChattingRoomForRider : function (riderId, userId, ownerId, orderId) {
+        axios
+            .get(`${API_URL}/chattingroom/insert?riderId=${riderId}&userId=${userId}&ownerId=${ownerId}&orderId=${orderId}`)
+            .then(
+                (res) => {
+                    console.log("변경 "+ res.data + "개");  // ✅ 데이터 확인용
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("채팅방 insert 중 오류가 발생했습니다.");
                     console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             );
