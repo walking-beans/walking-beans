@@ -2,11 +2,17 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/User.css";
 import groupIcon from "../../assert/svg/Group.svg"
+import {useNavigate, useParams} from "react-router-dom";
 
 const UserReviewWrite = () => {
     const [reviews, setReviews] = useState([]);
     const [riderReview, setRiderReview] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
+    const { orderId } = useParams();
+    const [userId, setUserId] = useState(null);
+    const [storeId, setStoreId] = useState(null);
+    const navigate = useNavigate();
+
     /*  const [newReview, setNewReview] = useState({
           orderId: orderId,
           userId: null,
@@ -15,12 +21,17 @@ const UserReviewWrite = () => {
           reviewContent: "",
       }); 연결되면 storeId,orderId 작성*/
     const [newReview, setNewReview] = useState({
+      /*  
+      orderId: orderId, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
+        userId: userId, // 🛠 테스트용 유저 ID
+        storeId: storeId, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
+        */
         orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
         userId: 1, // 🛠 테스트용 유저 ID
         storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
+
         reviewStarRating: 5, // 기본값 5점
         reviewContent: "",
-        file: null,
     });
     /*const [newRiderReview,setNewRiderReview] = useState({
         orderId: orderId,
@@ -110,6 +121,7 @@ const UserReviewWrite = () => {
             })
             .then((res) => {
                 alert("리뷰가 성공적으로 등록되었습니다!");
+                navigate("/order")
                 setNewReview((prevReview) => ({
                     ...prevReview,
                     reviewStarRating: 5,
@@ -129,6 +141,21 @@ const UserReviewWrite = () => {
                 alert("백엔드에서 라이더 별점을 저장하지 못했습니다.");
             });
     };
+
+    //해당되는 주문 정보 가져오기
+    useEffect(() => {
+        if (orderId) {
+            axios.get(`http://localhost:7070/api/orders/${orderId}`)
+                .then(res => {
+                    setNewReview(orders => ({
+                        ...orders,
+                        orderId: orderId,
+                        storeId: res.data.storeId
+                    }));
+                })
+                .catch(err => console.error("주문 정보 조회 실패:", err));
+        }
+    }, [orderId]);
 
     return (
         <div className="user-review-container">

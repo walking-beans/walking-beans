@@ -54,6 +54,7 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
+import UserCart from "../pages/user/UserCart";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -140,18 +141,16 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail />} />
+
                                 <Route path="/order/test" element={<RiderOrderStatus />} />
 
-
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
+                                <Route path="/user/reviewWrite/:orderId" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
 
-                                <Route path="/user/reviewWrite" element={<UserReviewWrite storeId={selectedStoreId} orderId={currentOrderId}/>}/>
                                 <Route path="/user/search/map" element={<UserSearchMap searchResults={searchResults} />} />
-                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
-
-
-
                                 <Route path="/user/search/map" element={<UserSearchMap/>}/>
+
+                                <Route path="/user/insertAddress" element={<UserInsertAddress/>}/>
 
                                 <Route path="/rider" element={
                                     <RiderMain
