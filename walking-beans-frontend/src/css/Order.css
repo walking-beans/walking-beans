@@ -588,6 +588,9 @@
     gap: 4px;
 }
 
-.user-select-mid-text {
+.user-select-qyt-text {
     justify-self: end;
+    font-size: 17px;
+    color: #5A3D21;
+    font-weight: bold;
 }
