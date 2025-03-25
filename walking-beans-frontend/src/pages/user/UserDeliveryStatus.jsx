@@ -78,16 +78,21 @@ const UserDeliveryStatus = () => {
         fetchOrderDetails();
     }, [orderNumber]);
 
-    // 채팅방 ID 가져오기
+    // 채팅방 생성 및 가져오기 로직 개선
     useEffect(() => {
         if (orderId && userId) {
-            apiRiderService.getUserAndStoreRoomId(orderId, userId, (rooms) => {
-                if (rooms) {
-                    setChattingMemberList(rooms);
-                    setStoreRoomId(rooms["3"] || 0);
-                    setRiderRoomId(rooms["2"] || 0);
-                }
-            });
+            // 채팅방이 없을 경우 생성
+            axios.get(`http://localhost:7070/api/chattingroom/usertest?userId=${userId}&orderId=${orderId}`)
+                .then(() => {
+                    // 생성 후 채팅방 ID 가져오기
+                    apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
+                        setChattingMemberList(data);
+                        console.log("채팅방 데이터:", data);
+                        if (data["3"]) setStoreRoomId(data["3"]);
+                        if (data["2"]) setRiderRoomId(data["2"]);
+                    });
+                })
+                .catch(err => console.error("채팅방 생성 오류:", err));
         }
     }, [orderId, userId]);
 
@@ -154,24 +159,57 @@ const UserDeliveryStatus = () => {
     }, [isLoaded, userCoords, storeCoords]);
 
     const handleMeet = () => {
-        navigate(`/order`);
         apiRiderService.updateOrderStatus(orderId, 6);
+        // 짧은 지연 후 페이지 이동
+        setTimeout(() => navigate(`/order`), 100);
     };
 
-    // 직접 채팅방 페이지로 이동
+    // 라이더 채팅 핸들러
     const handleRiderChat = () => {
         if (riderRoomId) {
             navigate(`/chat/message/${riderRoomId}`);
         } else {
-            alert("라이더와의 채팅방을 찾을 수 없습니다.");
+            // 라이더 정보 가져오기 후 채팅방 생성
+            axios.get(`http://localhost:7070/api/orders?orderId=${orderId}`)
+                .then(res => {
+                    const riderId = res.data.riderIdOnDuty;
+                    if (riderId) {
+                        axios.get(`http://localhost:7070/api/chattingroom/insert?riderId=${riderId}&userId=${userId}&ownerId=${store.userId}&orderId=${orderId}`)
+                            .then(() => {
+                                alert("라이더 채팅방이 생성되었습니다. 다시 시도해주세요.");
+                                // 채팅방 ID 다시 가져오기
+                                apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
+                                    if (data["2"]) {
+                                        setRiderRoomId(data["2"]);
+                                        navigate(`/chat/message/${data["2"]}`);
+                                    }
+                                });
+                            });
+                    } else {
+                        alert("아직 배정된 라이더가 없습니다.");
+                    }
+                });
         }
     };
 
+    // 매장 채팅 핸들러
     const handleStoreChat = () => {
         if (storeRoomId) {
             navigate(`/chat/message/${storeRoomId}`);
         } else {
-            alert("매장과의 채팅방을 찾을 수 없습니다.");
+            // 채팅방 생성 API 직접 호출
+            axios.get(`http://localhost:7070/api/chattingroom/usertest?userId=${userId}&orderId=${orderId}`)
+                .then(() => {
+                    // 채팅방 ID 다시 가져오기
+                    apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
+                        if (data["3"]) {
+                            setStoreRoomId(data["3"]);
+                            navigate(`/chat/message/${data["3"]}`);
+                        } else {
+                            alert("매장 채팅방을 찾을 수 없습니다. 잠시 후 다시 시도해주세요.");
+                        }
+                    });
+                });
         }
     };
 
@@ -233,9 +271,7 @@ const UserDeliveryStatus = () => {
                             </button>
                             <button
                                 className="user-mini-btn-sb"
-                                onClick={() => {
-                                    navigate(`/chat/message/${riderRoomId}`)
-                                }}
+                                onClick={handleRiderChat}
                             >
                                 라이더 채팅하기
                             </button>
@@ -252,9 +288,7 @@ const UserDeliveryStatus = () => {
                                 </button>
                                 <button
                                     className="user-mini-btn-sb"
-                                    onClick={() => {
-                                        navigate(`/chat/message/${riderRoomId}`)
-                                    }}
+                                    onClick={handleRiderChat}
                                 >
                                     라이더 채팅하기
                                 </button>
