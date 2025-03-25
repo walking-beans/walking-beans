@@ -3,12 +3,11 @@ package walking_beans.walking_beans_backend.mapper;
 import jakarta.mail.Store;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestBody;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -24,8 +23,6 @@ public interface OrderMapper {
     List<Orders> getOrdersByRiderIdOnDuty(@Param("riderIdOnDuty") long riderIdOnDuty);
 
     RiderOrderStatusDTO getOrderStatusWithRemainingTime(@Param("orderId") long orderId);
-
-    Long getOwnerIdByOrderId(long orderId);
 
     /****************************************  ****************************************/
 
@@ -44,11 +41,12 @@ public interface OrderMapper {
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
 
-    Long createOrder(Map<String, Object> requestData);
+    /**************************************************************/
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    List<Orders> findgetLatestOrderForStore(long storeId);
 
-    void insertOrderItem(Map<String, Object> orderItemParams);
+    // 주문번호로 전체 정보 가져오기
+    Orders getOrderListForStore(String orderNumber);
 
-    UserOrderDTO getOrderByOrderNumber(String orderNumber);
 
-    List<UserOrderDTO> getOrdersByUserId(Long userId);
 }

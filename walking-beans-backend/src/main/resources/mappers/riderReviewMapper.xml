@@ -10,7 +10,7 @@
 
     <insert id="insertRiderReview">
         INSERT INTO riderreview (rider_id, order_id, rider_review_rating)
-        VALUES (#{riderId}, #{orderId},#{riderReviewRating});
+        VALUES (3, 3, 4);
     </insert>
 
 

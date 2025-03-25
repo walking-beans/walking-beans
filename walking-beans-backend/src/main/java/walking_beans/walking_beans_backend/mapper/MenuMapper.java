@@ -30,6 +30,6 @@ public interface MenuMapper {
     void deleteMenu(long menuId);
 
     // 대표메뉴 정보 가져오기
-    Menu findMainMenuByStoreId(long storeId);
+    List<Menu> findMainMenuByStoreId(long storeId);
 
 }

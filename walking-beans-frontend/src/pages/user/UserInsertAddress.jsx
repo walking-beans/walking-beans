@@ -3,7 +3,6 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../../css/User.css";
 
-
 const UserInsertAddress = ({ user }) => {
     const navigate = useNavigate();
     const [address, setAddress] = useState(""); // 주소
@@ -14,8 +13,6 @@ const UserInsertAddress = ({ user }) => {
     const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
     const [addressLatitude, setLatitude] = useState("");
     const [addressLongitude, setLongitude] = useState("");
-
-    const KAKAO_MAP_API_KEY = "5c03e27b386769b61889fd1f0650ec23";
 
     useEffect(() => {
         console.log("user props:", user);
@@ -43,7 +40,7 @@ const UserInsertAddress = ({ user }) => {
         document.body.appendChild(script1);
 
         const script2 = document.createElement("script");
-        script2.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services,clusterer,drawing`;
+        script2.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_JAVASCRIPT_KEY&libraries=services`;
         script2.async = true;
         script2.onload = () => {
             setIsKakaoLoaded(true);
@@ -81,7 +78,6 @@ const UserInsertAddress = ({ user }) => {
 
                 if (!isKakaoLoaded || !window.kakao || !window.kakao.maps) {
                     console.error("카카오 지도 API가 아직 로드되지 않았습니다.");
-                    alert("카카오 지도 api 가 아직 로드 되지않았습니다.")
                     return;
                 }
 
@@ -156,15 +152,10 @@ const UserInsertAddress = ({ user }) => {
     };
     // 주소 삭제
     const handleDeleteAddress = (addressId) => {
-        if (!addressId) {
-            alert("삭제할 주소 ID가 없습니다.");
-            return;
-        }
-
         axios.delete(`http://localhost:7070/api/addresses/delete/${addressId}`)
             .then(() => {
                 alert("주소가 삭제되었습니다.");
-                fetchUserAddresses(currentUser?.user_id); // 주소 목록 새로고침
+                fetchUserAddresses(currentUser?.user_id);
             })
             .catch((error) => {
                 console.error("주소 삭제 오류:", error);
@@ -235,15 +226,7 @@ const UserInsertAddress = ({ user }) => {
                             <p className="text-muted small">{addr.address} {addr.detailedAddress}</p>
                             {addr.addressRole === 1 && <span>기본 주소</span>}
                         </div>
-                        <button
-                            className="btn btn-sm"
-                            onClick={(e) => {
-                                e.stopPropagation(); //  부모 이벤트 전파 방지
-                                handleDeleteAddress(addr.addressId);
-                            }}
-                        >
-                            삭제
-                        </button>
+                        <button className="btn  btn-sm" onClick={() => handleDeleteAddress(addr.addressId)}>삭제</button>
                     </div>
                 ))}
             </div>

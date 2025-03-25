@@ -22,7 +22,7 @@ public class Stores {
 
     private String storeDescription;
 
-    private long storeMainMenu;
+    private String storeMainMenu;
 
     private long storeBusinessNumber;
 

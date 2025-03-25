@@ -70,7 +70,7 @@
 
     <update id="updateUserInfo" >
         UPDATE users
-        SET user_phone = #{userPhone}
+        SET phone_number = #{userPhone}
         WHERE user_id = #{userId}
     </update>
 

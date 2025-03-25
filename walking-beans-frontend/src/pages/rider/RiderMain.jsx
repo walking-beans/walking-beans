@@ -1,8 +1,8 @@
-import RiderMainMap from "../../components/rider/RiderMainMap";
+import RiderMainMap from "../../components/rider/riderMain/RiderMainMap";
 import {useState} from "react";
-import BeforeKakaoMapStart from "../../components/rider/BeforeKakaoMapStart";
+import BeforeKakaoMapStart from "../../components/rider/riderMain/BeforeKakaoMapStart";
 
-const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
+const RiderMain = () => {
 
     const [getReady, setGetReady] = useState(false);
 
@@ -12,14 +12,12 @@ const RiderMain = ({user, riderOnDuty, setRiderOnDuty}) => {
         before : BeforeKakaoMapStart
     }
 
-    const KakaomapStatus = status[riderOnDuty ? "after" : "before"];
+    const KakaomapStatus = status[getReady ? "after" : "before"];
 
     return (
         <div>
             {/* Rider Header */}
-            <KakaomapStatus user={user}
-                            riderOnDuty = {riderOnDuty}
-                            setRiderOnDuty={setRiderOnDuty} />
+            <KakaomapStatus setGetReady={setGetReady}/>
         </div>
     )
 }

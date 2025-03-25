@@ -15,8 +15,4 @@ public interface ChattingRoomMapper {
     int updateLastMessageOfChattingRoom(long roomId, String lastMessage);
 
     List<UserChattingRoom> getUserChattingRoomByUserId(@Param("userId") long userId, @Param("receiverRelation") int receiverRelation);
-
-    long getRoomIdByOrderId(@Param("orderId") long orderId);
-
-    int insertChattingroomByOrderId(@Param("orderId") long orderId);
 }

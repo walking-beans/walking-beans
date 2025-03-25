@@ -43,8 +43,8 @@ public class WebSocketChatAlertHandler extends TextWebSocketHandler {
         // JSON 데이터를 Alarms 객체로 변환
         Alarms receivedAlarm = objectMapper.readValue(message.getPayload(), Alarms.class);
 
-        // 메시지 저장 (임시 주석)
-        //alarmService.sendMessage(receivedAlarm);
+        // 메시지 저장
+        alarmService.sendMessage(receivedAlarm);
 
         // 모든 세션에 메시지 전달
         for (WebSocketSession webSocketSession : sessions) {
