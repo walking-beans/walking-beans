@@ -169,7 +169,7 @@ function PathRoute() {
                                 }/>
                                 <Route path="/rider/result/:orderId" element={
                                     <ProtectedRoute allowedRoles={["rider"]}>
-                                        <RiderResult/>
+                                        <RiderResult user={user}/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/rider/orderlist" element={
