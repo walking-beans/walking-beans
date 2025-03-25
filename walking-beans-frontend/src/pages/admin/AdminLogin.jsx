@@ -2,6 +2,7 @@ import React, {use, useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
+import "../../css/admin/AdminLogin.css";
 
 const AdminLogin = () => {
     return (

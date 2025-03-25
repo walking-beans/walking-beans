@@ -14,7 +14,7 @@
         SELECT *
         FROM Alarms
         WHERE user_id = #{userId}
-        ORDER BY alarm_create_date DESC
+        ORDER BY alarm_id DESC
     </select>
 
     <!-- 알람 모두 지우기 -->
@@ -23,6 +23,15 @@
         FROM Alarms
         WHERE user_id = #{userId}
     </delete>
+
+    <!-- 읽지 않은 알림 가져오기 -->
+    <select id="getNotReadAlarms">
+        SELECT *
+        FROM Alarms
+        WHERE alarm_status = #{alarmStatus}
+        AND user_id = #{userId}
+        ORDER BY alarm_id DESC
+    </select>
 
     <!-- 특정 알림 읽음 상태 업데이트 -->
     <update id="markNotificationAsRead">
