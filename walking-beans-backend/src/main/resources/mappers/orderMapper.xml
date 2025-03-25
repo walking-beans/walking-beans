@@ -28,10 +28,11 @@
                order_requests,
                order_total_price,
                DATE_FORMAT(order_create_date, '%Y-%m-%d %W %p %h:%i')   AS order_create_date,
-               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date
+               DATE_FORMAT(order_modified_date, '%Y-%m-%d %W %p %h:%i') AS order_modified_date,
+               rider_id_on_duty
         FROM orders
         WHERE rider_id_on_duty = #{riderIdOnDuty}
-        ORDER BY order_id DESC
+        ORDER BY order_status, order_modified_date DESC
     </select>
 
     <!-- 주문 상태 변경 -->
@@ -56,34 +57,28 @@
         WHERE O.order_id = #{orderId}
     </select>
 
+    <select id="getOwnerIdByOrderId">
+        SELECT S.user_id
+        FROM orders O
+                 JOIN stores S
+                      ON O.store_id = S.store_id
+        WHERE O.order_id = #{orderId}
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
-    <!-- 주문 & 장바구니 데이터 저장 주문 상태 0으로 설정 수정 예정(메뉴 옵션 추가) -->
-    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO orders (user_id, store_id, address_id, order_status, order_requests, order_total_price,
+
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO orders (user_id, store_id, address_id, order_number, order_status, order_requests, order_total_price,
                             order_create_date, order_modified_date)
-        VALUES (#{userId}, #{storeId}, #{addressId}, 0, #{orderRequests}, #{orderTotalPrice}, NOW(), NOW());
+        VALUES (#{userId}, #{storeId}, #{addressId}, #{orderNumber}, 2, #{orderRequests}, #{orderTotalPrice}, NOW(),
+                NOW());
     </insert>
 
-
-    <!-- 장바구니 내 주문하기 클릭 시 주문 중으로 상태 업데이트-->
-    <update id="updateOrderStatusToCart">
-        UPDATE orders
-        SET order_status = 1, <!-- 주문 중 -->
-        order_modified_date = NOW()
-        WHERE order_id = #{orderId}
-    </update>
-
-    <!-- 주문 완료 데이터 저장 (주문 상태는 2로 설정, 결제정보 함께 저장) -->
-    <update id="updateOrderInfo">
-        UPDATE orders
-        SET address_id        = #{addressId},
-            order_status      = 2,
-            order_requests    = #{orderRequests},
-            order_total_price = #{order_total_price},
-            order_modified_date = NOW()
-        WHERE order_id = #{orderId}
-    </update>
+    <insert id="insertOrderItem">
+        INSERT INTO order_items (order_number, menu_id, option_id, quantity)
+        VALUES (#{orderNumber}, #{menuId}, #{optionId}, #{quantity});
+    </insert>
 
     <!-- 주문정보 가져오기 -->
     <select id="findOrderById">
@@ -101,7 +96,13 @@
 
     <!-- 주문내역, 주문상세 내역 : 주문한 가게 정보 가져오기 -->
     <select id="findStoreByOrderId">
-        SELECT s.store_id, s.store_name, s.store_picture_url, s.store_main_menu, s.store_address, s.store_latitude, s.store_longitude
+        SELECT s.store_id,
+               s.store_name,
+               s.store_picture_url,
+               s.store_main_menu,
+               s.store_address,
+               s.store_latitude,
+               s.store_longitude
         FROM stores s
         WHERE s.store_id = (SELECT o.store_id
                             FROM orders o
@@ -116,5 +117,42 @@
                order_Requests
         FROM orders
         WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 유저의 기존 주문 내역리스트들 -->
+    <select id="getOrdersByUserId">
+        SELECT user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               delivery_address,
+               total_payment,
+               order_requests,
+               order_list,
+               quantity,
+               order_status,
+               store_logo,
+               store_id
+        FROM user_orders_view
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 주문 내역 조회 -->
+    <select id="getOrderByOrderNumber">
+        SELECT order_id,
+               user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               delivery_address,
+               detailed_address,
+               total_payment,
+               order_requests,
+               order_list,
+               quantity
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber}
     </select>
 </mapper>

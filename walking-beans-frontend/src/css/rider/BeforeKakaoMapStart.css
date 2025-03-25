@@ -1,0 +1,28 @@
+.before-kakao-map-start {
+    display: block;
+    align-items: center;
+    margin: auto;
+
+}
+
+.before-kakao-map-start-startbtn {
+    display: block;
+    align-items: center;
+    margin: 0 10px 0 10px;
+    width: 580px;
+    font-size: 22px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+
+    z-index: 1;
+    position: relative;
+    top: -80px;
+}
+
+.before-kakao-map-start-startbtn:hover {
+    color: white;
+    font-weight: bold;
+
+}

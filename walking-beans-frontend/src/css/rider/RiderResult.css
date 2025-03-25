@@ -1,0 +1,97 @@
+.rider-result-container {
+    display: block;
+    background-color : black;
+
+    padding : 0 40px;
+    position : absolute;
+    top : 100px;
+    z-index : -1;
+    width : 600px;
+    min-height : 800px;
+
+    color : #c8c8c8;
+}
+
+.rider-result-main-container {
+    text-align: center;
+}
+
+.rider-result-main-container-title {
+    position : relative;
+    top : 30px;
+}
+
+.rider-result-main-container-img {
+    width : 300px;
+}
+
+.rider-result-main-container-ordertitle {
+    margin : 10px 0 0 0;
+    font-size : 20px;
+    font-weight : bold;
+}
+
+.rider-result-main-container-ordernumber {
+    color : #707070;
+    font-weight: bold;
+    font-size : 16px;
+}
+
+.rider-result-container-div-spantitle {
+    font-weight : bold;
+}
+
+.rider-result-container-div-span {
+    color : #707070;
+    margin-left : 20px;
+}
+
+.rider-result-container-div-p {
+    color : #707070;
+    margin-left : 70px;
+}
+
+.rider-result-date-container {
+
+}
+
+.rider-result-date-div {
+
+}
+
+.rider-result-date-div-img {
+    width : 20px;
+}
+
+.rider-result-date-div-span {
+    margin-left : 10px;
+    font-weight : bold;
+    font-size : 18px;
+}
+
+.rider-result-date-div-time {
+    margin : 10px 0 10px 30px;
+}
+
+.rider-result-date-div-span-time {
+    color : #707070;
+
+}
+
+.rider-result-date-div-time-orderstatus {
+    margin-left : 30px;
+    color : #808080;
+    font-weight: bold;
+}
+
+.rider-result-main-container-hr {
+    border-width : 5px;
+    border-radius : 5px;
+}
+
+.rider-result-main-container-hr-dashed {
+    border-width : 3px;
+    border-radius : 5px;
+    border-top : dashed;
+}
+

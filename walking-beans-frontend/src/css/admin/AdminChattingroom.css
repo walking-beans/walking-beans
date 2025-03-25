@@ -1,10 +1,14 @@
 .admin-chattingroom-base {
     flex-grow: 1;
-    display: flex;
+    display: block;
     flex-direction: column;
     width: 100%;
     max-width: 600px;
+    min-height: 800px;
     margin: 0 auto;
+
+    background-color : #fff9d8;
+
 }
 
 .admin-button-base {
@@ -14,19 +18,72 @@
 }
 
 .admin-chattingroom-list {
-    display: flex;
+    display: block;
 
 }
 
 .admin-chattingroom-list-chat {
-    margin: 0 50px;
-    justify-content: center;
+    display: block;
+    margin: 0 50px 20px 50px;
+    width : 500px;
+    height: 75px;
+    border-radius: 37px;
+}
+
+.admin-chattingroom-list-chat-img {
+    position: absolute;
+    width : 70px;
+    border-radius: 50%;
+
+}
+
+.admin-chattingroom-list-chat-name {
+    position : relative;
+    left : 85px;
+    margin: 0 0 3px 0;
+
+    font-weight : bold;
+    color : black;
+    font-size : 12px;
+}
+
+.admin-chattingroom-list-chat-lastmessage {
+    position : relative;
+    left : 85px;
+    margin: 0 0 3px 0;
+
+    color : black;
+}
+
+.admin-chattingroom-list-chat-date {
+    position : relative;
+    left : 85px;
+    margin: 0 0 3px 0;
+
+    color : black;
+    font-size : 10px;
+}
+
+.admin-chattingroom-btn-unchecked {
+    background-color : #fff9d8;
+}
+
+.admin-chattingroom-btn-unchecked:hover {
+    background-color : #fff9d8;
+}
+
+.admin-chattingroom-btn-checked {
+    font-weight : bold;
+}
+
+.admin-chattingroom-btn-checked:hover {
+    font-weight : bold;
 }
 
 @media (max-width: 480px) {
     .admin-chattingroom-base {
         max-width: 100%;
-        background-color: #f8f1e4;
+        background-color: #fff9d8;
     }
 
     .admin-button-base {

@@ -15,3 +15,4 @@
 .scroll__wrap::-webkit-scrollbar{   /* 크롬, 사파리, 오페라, 엣지 */
     display: none;
 }
+
