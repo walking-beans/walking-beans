@@ -574,3 +574,20 @@
 .user-order-mt {
     margin-top: 30px;
 }
+
+.user-order-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-order-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-select-mid-text {
+    justify-self: end;
+}

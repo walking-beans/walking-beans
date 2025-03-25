@@ -25,20 +25,31 @@ const UserOrderDetail = () => {
                     // 메뉴 총액 계산
                     const menuTotal = response.data.reduce((sum, item) => {
                         const basePrice = parseInt(item.menuPrice) || 0;
+
+                        // 옵션 가격 계산
                         const optionPrices = item.optionPrices
                             ? item.optionPrices.split(',').reduce((total, price) => total + parseInt(price), 0)
                             : 0;
+
                         const qty = parseInt(item.quantity) || 1;
+
+                        // 옵션 정보 표시 로직 추가
+                        const optionDisplay = item.optionNames && item.optionContents
+                            ? item.optionNames.split(',').map((name, index) =>
+                                `${name} ${item.optionContents.split(',')[index]} ${item.optionPrices.split(',')[index] !== '0' ? `(+${item.optionPrices.split(',')[index]}원)` : ''}`
+                            ).join(', ')
+                            : '';
 
                         const itemTotal = (basePrice + optionPrices) * qty;
 
                         console.log(`
-                                메뉴: ${item.menuName}, 
-                                기본가격: ${basePrice}, 
-                                옵션가격: ${optionPrices}, 
-                                수량: ${qty}, 
-                                항목 총액: ${itemTotal}
-                            `);
+        메뉴: ${item.menuName}, 
+        기본가격: ${basePrice}, 
+        옵션: ${optionDisplay}, 
+        옵션가격: ${optionPrices}, 
+        수량: ${qty}, 
+        항목 총액: ${itemTotal}
+    `);
 
                         return sum + itemTotal;
                     }, 0);
@@ -109,17 +120,23 @@ const UserOrderDetail = () => {
                             const isLastItem = index === orderItems.length - 1;
                             return (
                                 <div key={index}>
-                                    <div className="user-order-address-detail-text">{item.menuName}</div>
-                                    {item.optionNames && (
+                                    <div className="user-order-detail-grid">
+                                    <div className="user-order-left">
+                                        <div className="user-order-address-detail-text">{item.menuName}</div>
+                                        {item.optionNames && (
+                                            <div className="user-cart-detailtext">
+                                                {item.optionNames} {item.optionContents}
+                                                {item.optionPrices === "0" ? "" : item.optionPrices && ` (+${Number(item.optionPrices).toLocaleString()}원)`}
+                                            </div>
+                                        )}
                                         <div className="user-cart-detailtext">
-                                            {item.optionNames} {item.optionContents}
-                                            {item.optionPrices && ` (+${Number(item.optionPrices).toLocaleString()}원)`}
+                                            {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                         </div>
-                                    )}
-                                    <div className="user-cart-detailtext">
-                                        {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                     </div>
+
+                                    {/* 오른쪽: 개수 */}
                                     <div className="user-select-mid-text">{item.quantity}개</div>
+                                    </div>
                                     {!isLastItem && <div className="user-order-hr-mini"></div>}
                                 </div>
                             );
