@@ -157,6 +157,8 @@ public class OrderAPIController {
         return orderService.getOrderStatus(orderId);
     }
 
+
+     //주문 상세 내역 정보 가져오기
     @GetMapping("/orderNumber/{orderNumber}")
     public ResponseEntity<UserOrderDTO> getOrder(@PathVariable("orderNumber") String orderNumber) {
         UserOrderDTO order = orderService.getOrderByOrderNumber(orderNumber);
@@ -165,4 +167,5 @@ public class OrderAPIController {
         }
         return ResponseEntity.ok(order);
     }
+
 }
