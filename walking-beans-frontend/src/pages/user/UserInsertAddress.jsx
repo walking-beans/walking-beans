@@ -175,16 +175,13 @@ const UserInsertAddress = ({ user }) => {
     return (
         <div className="user-insert-address-container">
             <div className="d-flex justify-content-between align-items-center py-3 border-bottom">
-                <i className="bi bi-arrow-left fs-4" onClick={() => navigate(-1)} style={{cursor: "pointer"}}></i>
                 <h5 className="fw-bold mb-0">주소 설정</h5>
             </div>
 
             <div className="mt-3">
                 <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                        <i className="bi bi-search text-muted"></i>
-                    </span>
-                    <input type="text" className="form-control bg-light border-0"
+
+                    <input type="text" className="insert-address"
                            placeholder="주소를 입력해 주세요."
                            value={address}
                            readOnly
@@ -192,33 +189,31 @@ const UserInsertAddress = ({ user }) => {
                 </div>
                 {address && (
                     <>
-                        <div className="d-flex align-items-center mt-2">
-                            <input type="text" className="form-control me-2"
+                            <input type="text" className="address-alias"
                                    style={{flex: "0 0 60%"}}
                                    placeholder="주소 별칭 (예: 집, 회사)"
                                    value={addressName}
                                    onChange={(e) => setAddressName(e.target.value)}/>
 
-                            <button className="btn btn-dark me-2 "
-                                    style={{flex: "0 0 19%"}}
-                                    onClick={handleSaveAddress}>
-                                저장
-                            </button>
-
-                            <button className="btn btn-secondary"
-                                    style={{flex: "0 0 18%"}}
-                                    onClick={() => {
-                                        setAddress("");
-                                        setAddressName("");
-                                        setDetailedAddress("");
-                                    }}>
-                                취소
-                            </button>
-                        </div>
-                        <input type="text" className="form-control mt-2"
+                        <input type="text" className="detailed-address"
                                placeholder="상세 주소 입력"
                                value={detailedAddress}
                                onChange={(e) => setDetailedAddress(e.target.value)}/>
+                        <div className="button-container">
+                        <button className="save-btn"
+                                onClick={handleSaveAddress}>
+                            저장
+                        </button>
+
+                        <button className="cancel-btn"
+                                onClick={() => {
+                                    setAddress("");
+                                    setAddressName("");
+                                    setDetailedAddress("");
+                                }}>
+                            취소
+                        </button>
+                        </div>
                     </>
                 )
                 }
@@ -233,7 +228,7 @@ const UserInsertAddress = ({ user }) => {
                                 <i className="bi bi-geo-alt-fill me-2"></i> {addr.addressName}
                             </h6>
                             <p className="text-muted small">{addr.address} {addr.detailedAddress}</p>
-                            {addr.addressRole === 1 && <span>기본 주소</span>}
+                            {addr.addressRole === 1 && <span>📌기본 주소</span>}
                         </div>
                         <button
                             className="btn btn-sm"
