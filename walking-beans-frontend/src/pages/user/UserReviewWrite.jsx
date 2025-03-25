@@ -15,9 +15,9 @@ const UserReviewWrite = () => {
           reviewContent: "",
       }); 연결되면 storeId,orderId 작성*/
     const [newReview, setNewReview] = useState({
-        orderId: 123, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
+        orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
         userId: 1, // 🛠 테스트용 유저 ID
-        storeId: 10, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
+        storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
         reviewStarRating: 5, // 기본값 5점
         reviewContent: "",
         file: null,
@@ -45,7 +45,7 @@ const UserReviewWrite = () => {
         }
     }, []);
 
-    // ⭐ 매장 별점 선택
+    //  매장 별점 선택
     const handleStarClick = (rating) => {
         setNewReview((prevReview) => ({
             ...prevReview,
@@ -53,7 +53,7 @@ const UserReviewWrite = () => {
         }));
     };
 
-    // ⭐ 라이더 별점 선택
+    //  라이더 별점 선택
     const handleRiderStarClick = (rating) => {
         setNewRiderReview((prevReview) => ({
             ...prevReview,
@@ -61,12 +61,12 @@ const UserReviewWrite = () => {
         }));
     };
 
-    // 🖼 파일 선택 핸들러 (여러 개 추가)
+    //  파일 선택 핸들러 (여러 개 추가)
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         const previewFiles = files.map((file) => ({
             file,
-            preview: URL.createObjectURL(file), // ✅ 미리보기 URL 생성
+            preview: URL.createObjectURL(file), // 미리보기 URL 생성
         }));
 
         setSelectedImages((prevImages) => [...prevImages, ...previewFiles]); // 기존 이미지에 추가
@@ -79,7 +79,7 @@ const UserReviewWrite = () => {
     };
 
 
-    // 📌 리뷰 작성 요청
+    //  리뷰 작성 요청
     const handleReviewSubmit = (e) => {
         e.preventDefault();
 
@@ -133,7 +133,7 @@ const UserReviewWrite = () => {
     return (
         <div className="user-review-container">
             <form onSubmit={handleReviewSubmit}>
-                {/* ⭐ 매장 별점 */}
+                {/* 매장 별점 */}
                 <div className="star-rating">
                     <p>매장 별점</p>
                     <div className="star-container">
@@ -149,7 +149,7 @@ const UserReviewWrite = () => {
                     </div>
                 </div>
 
-                {/* ✍ 리뷰 입력 */}
+                {/* 리뷰 입력 */}
                 <textarea
                     placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요."
                     value={newReview.reviewContent}
@@ -161,7 +161,7 @@ const UserReviewWrite = () => {
                     }
                 />
 
-                {/* 🖼 파일 업로드 */}
+                {/*  파일 업로드 */}
                 <div className="file-upload">
                     <label htmlFor="file-input">
                         <img src={groupIcon} alt="업로드" className="upload-icon" />
@@ -181,7 +181,7 @@ const UserReviewWrite = () => {
                     </div>
                 </div>
 
-                {/* ⭐ 라이더 별점 */}
+                {/* 라이더 별점 */}
                 <div className="star-rating">
                     <p>라이더 별점</p>
                     <div className="star-container">
@@ -197,7 +197,7 @@ const UserReviewWrite = () => {
                     </div>
                 </div>
 
-                <button type="submit" className="submit-button">리뷰 작성</button>
+                <button type="submit" className="submit-button">작성하기</button>
             </form>
         </div>
     );
