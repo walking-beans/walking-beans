@@ -473,7 +473,7 @@
     background: #5A3D21;
     color: white;
     border: none;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     padding: 0;
     margin: 0;
@@ -523,11 +523,18 @@
     margin-top: 10px;
 }
 
+.user-order-big-guide {
+    font-size: 30px;
+    color: #EE5A4C;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 .user-order-big-text {
     font-size: 30px;
     color: #5A3D21;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .user-mini-btn-bb {
@@ -537,7 +544,7 @@
     background: #F4EDDF;
     color: #5A3D21;
     border: 1px solid #5A3D21;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     padding: 0;
     margin: 0;
@@ -566,4 +573,21 @@
 
 .user-order-mt {
     margin-top: 30px;
+}
+
+.user-order-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-order-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-select-mid-text {
+    justify-self: end;
 }

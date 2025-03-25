@@ -31,6 +31,7 @@ const UserHeader = ({user}) => {
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
+    const [orderNumber, setOrderNumber] = useState(null);
 
     // 유저 정보 로드
     useEffect(() => {
@@ -132,11 +133,10 @@ const UserHeader = ({user}) => {
                         */}
                         <ul className="nav-menu list-unstyled">
                             {[
-                                {icon: person, text: "마이페이지", path: "/"},
+                                {icon: person, text: "마이페이지", path: "/mypage"},
                                 {icon: shoppingBasket, text: "장바구니", path: "/"},
-                                {icon: packages, text: "주문현황", path: "/"},
-                                {icon: receipt, text: "주문내역", path: "/"},
-                                {icon: chatBubble, text: "채팅", path: "/"}
+                                {icon: receipt, text: "주문내역", path: "/order"},
+                                {icon: chatBubble, text: "채팅", path: "/chat/chattingroom"}
                             ].map(({icon, text, path}) => (
                                 <li key={text}>
                                     <a href={path}>
