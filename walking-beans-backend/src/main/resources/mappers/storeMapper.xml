@@ -169,7 +169,7 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     <!-- ************************************************************************************* -->
 
     <!--사용자 위치 기준 반경 10km 내의 매장 조회 -->
-    <select id="findNearbyStores" resultType="walking_beans.walking_beans_backend.model.dto.Stores">
+    <select id="findNearbyStores">
         SELECT * FROM (
         SELECT s.*,
         (6371 * acos(cos(radians(#{lat})) * cos(radians(s.store_latitude))

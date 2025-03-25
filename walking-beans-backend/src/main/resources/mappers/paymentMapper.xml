@@ -8,4 +8,11 @@
         INSERT INTO payments(order_id, payment_method, payment_status)
         VALUES (#{orderId},#{paymentMethod}, #{paymentStatus})
     </insert>
+
+    <!-- 결제 정보 조회 -->
+    <select id="getPaymentByOrderId">
+        SELECT *
+        FROM payments
+        WHERE order_id = #{orderId}
+    </select>
 </mapper>

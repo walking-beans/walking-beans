@@ -1,0 +1,41 @@
+.AlarmList {
+    border:  1px solid #5A3D21 ;
+    border-radius: 35px;
+    margin: 20px;
+    text-align: center;
+    background-color: #FAF1D0;
+    padding: 8px;
+
+}
+
+.AlarmList:hover {
+    cursor: pointer;
+    background-color: #D2B595;
+    border: 1px solid #D2B595;
+}
+
+.NoAlarmList {
+    text-align: center;
+    min-height: 70vh;
+}
+
+.AlarmDeleteContainer {
+    text-align: right;
+}
+
+.AlarmDeleteBtn {
+    border-radius: 10px;
+    background-color: #F6B8A1;
+    border: none;
+    padding: 5px;
+}
+
+.AlarmListcontainer {
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    background-color: #f8f1e4;
+    padding: 16px;
+    min-height: 70vh;
+    height: auto;
+}

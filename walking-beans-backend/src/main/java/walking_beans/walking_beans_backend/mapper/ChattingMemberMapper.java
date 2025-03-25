@@ -10,4 +10,8 @@ import java.util.List;
 public interface ChattingMemberMapper {
 
     List<ChattingMember> getAllChattingMembers(@Param("roomId") long roomId, @Param("userId") long userId);
+
+    List<ChattingMember> getUserAndStoreRoomId(@Param("orderId") long orderId, @Param("userId") long userId);
+
+    void insertChattingMember(long roomId, long userId, long receiverId, long receiverRelation);
 }

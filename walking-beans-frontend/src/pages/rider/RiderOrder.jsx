@@ -1,5 +1,16 @@
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import apiOrdersStoresService from "../../service/apiOrdersStoresService";
 
-const RiderOrder = () => {
+const RiderOrder = ({user}) => {
+
+    const {orderId} = useParams();
+    const [order, setOrder] = useState(null);
+
+
+    useEffect(() => {
+        apiOrdersStoresService.getOrderByOrderId(orderId, setOrder);
+    }, [user]);
 
     return (
         <div>

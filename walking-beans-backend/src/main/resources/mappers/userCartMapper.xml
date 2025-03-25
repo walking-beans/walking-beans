@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="walking_beans.walking_beans_backend.mapper.UserCartMapper">
+
+    <!-- 장바구니 조회 (View 테이블에서 조회) -->
+    <select id="findCartViewByUserId">
+        SELECT *
+        FROM user_cart_view
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 특정 userId의 장바구니 정보 조회 -->
+    <select id="findUserCart">
+        SELECT *
+        FROM carts
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- menu_id가 0 또는 빈 값일 경우 UPDATE    -->
+    <update id="updateCartIfMenuIdIsEmpty">
+        UPDATE carts
+        SET menu_id       = #{menuId},
+            cart_quantity = #{cartQuantity},
+            option_id     = #{optionId}
+        WHERE user_id = #{userId}
+          AND store_id = #{storeId}
+          AND (menu_id = '0' OR menu_id = '');
+    </update>
+    <select id="findCartById">
+        SELECT * FROM carts WHERE cart_id = #{cartId}
+    </select>
+
+    <!--
+    먼저 기존 장바구니 데이터 조회
+    - > 유저아이디와 가게 아이디와 메뉴아이디 옵션이 모두 일치하는 경우에만
+    updateCartQuantity 추후 수량 업데이트 할 수 있도록 설정
+    -->
+    <select id="findCartByUserAndMenu" >
+        SELECT *
+        FROM carts
+        WHERE user_id = #{userId}
+          AND store_id = #{storeId}
+          AND menu_id = #{menuId}
+          AND option_id = #{optionId}
+    </select>
+
+    <select id="findUserCartByUserAndStore">
+        SELECT *
+        FROM carts
+        WHERE user_id = #{userId} AND store_id = #{storeId}
+    </select>
+
+    <!-- 기존 menu_id 존재 시 cart_quantity 업데이트  -->
+    <update id="updateCartQuantity">
+        UPDATE carts
+        SET cart_quantity = #{cartQuantity}, cart_modified_date = NOW()
+        WHERE cart_id = #{cartId}
+    </update>
+    <!-- menu_id가 없을 경우 새로운 menu_id 추가 -->
+    <update id="appendMenuIdToCart">
+        UPDATE carts
+        SET menu_id = CONCAT(menu_id, ',', #{menuId}),
+            cart_quantity = CONCAT(cart_quantity, ',', #{cartQuantity}),
+            option_id = CONCAT(option_id, ',', #{optionId})
+        WHERE user_id = #{userId}
+          AND store_id = #{storeId}
+    </update>
+    <!-- 새로운 장바구니 아이템 추가 -->
+    <insert id="insertCartItem">
+        INSERT INTO carts (user_id, menu_id, store_id, option_id, cart_quantity, cart_create_date, cart_modified_date)
+        VALUES (#{userId}, #{menuId}, #{storeId}, #{optionId}, #{cartQuantity}, NOW(), NOW())
+    </insert>
+
+    <!-- 장바구니 삭제 -->
+    <delete id="deleteFromCart">
+        DELETE
+        FROM carts
+        WHERE cart_id = #{cartId}
+    </delete>
+
+    <!-- 주문 완료 시 해당하는 user_id 장바구니 삭제 -->
+    <delete id="deleteAllCartsByUserId">
+        DELETE
+        FROM carts
+        WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="changeStoreIdAndMenu">
+        DELETE
+        FROM carts
+        WHERE user_id = #{userId}
+          AND store_id != #{storeId}
+    </delete>
+
+
+</mapper>

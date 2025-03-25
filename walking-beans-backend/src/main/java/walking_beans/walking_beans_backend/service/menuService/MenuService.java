@@ -30,5 +30,5 @@ public interface MenuService {
     void deleteMenu(long menuId);
 
     // 대표메뉴 정보 가져오기
-    List<Menu> findMainMenuByStoreId(long storeId);
+    Menu findMainMenuByStoreId(long storeId);
 }
