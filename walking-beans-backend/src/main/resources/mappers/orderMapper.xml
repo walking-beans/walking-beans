@@ -155,14 +155,4 @@
         FROM user_orders_view
         WHERE order_number = #{orderNumber}
     </select>
-    <!--store 확인용-->
-    <!-- 가게 id로 주문번호, 주문상태만 가져오기 storeOrder -->
-    <select id="findgetLatestOrderForStore">
-        SELECT order_number, order_status, order_id, order_modified_date
-        FROM orders
-        WHERE store_id = #{storeId}
-    </select>
-
-
-
 </mapper>
