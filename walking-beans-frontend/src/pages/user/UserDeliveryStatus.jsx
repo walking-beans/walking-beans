@@ -81,18 +81,18 @@ const UserDeliveryStatus = () => {
     // 채팅방 생성 및 가져오기 로직 개선
     useEffect(() => {
         if (orderId && userId) {
-            // 채팅방이 없을 경우 생성
-            axios.get(`http://localhost:7070/api/chattingroom/usertest?userId=${userId}&orderId=${orderId}`)
-                .then(() => {
-                    // 생성 후 채팅방 ID 가져오기
-                    apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
-                        setChattingMemberList(data);
-                        console.log("채팅방 데이터:", data);
-                        if (data["3"]) setStoreRoomId(data["3"]);
-                        if (data["2"]) setRiderRoomId(data["2"]);
-                    });
-                })
-                .catch(err => console.error("채팅방 생성 오류:", err));
+            /****************** Create Chatiingroom for user && owner **********************/
+            // 이 코드 UseDeliveryStatus 에 접속할 때마다 채팅방 만들 예정이라 UserPayment 에서 실행되는거 추천드립니다.
+            apiRiderService.createChattingRoomForUserAndOwner(userId, orderNumber);
+            /************************************** *****************************************/
+
+            /****************** Set storeRoomId && riderRoomId for redirect **********************/
+            apiRiderService.getUserAndStoreRoomId(orderId, userId,  (object) => {
+                console.log("채팅방 데이터:", object);
+                if (object["3"]) setStoreRoomId(object["3"]);
+                if (object["2"]) setRiderRoomId(object["2"]);
+            })
+            /************************************** *****************************************/
         }
     }, [orderId, userId]);
 
@@ -164,6 +164,7 @@ const UserDeliveryStatus = () => {
         setTimeout(() => navigate(`/order`), 100);
     };
 
+    /****************** 라이더 채팅방은 RiderMain 에서 라이더가 주문 수령시 create 될 예정입니다. 이 부분은 수정해주시길 바랍니다. **********************/
     // 라이더 채팅 핸들러
     const handleRiderChat = () => {
         if (riderRoomId) {
@@ -191,8 +192,10 @@ const UserDeliveryStatus = () => {
                 });
         }
     };
+    /************************************************************************  ****************************************************************************/
 
-    // 매장 채팅 핸들러
+
+        // 매장 채팅 핸들러
     const handleStoreChat = () => {
         if (storeRoomId) {
             navigate(`/chat/message/${storeRoomId}`);

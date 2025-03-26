@@ -7,6 +7,7 @@ import "../../css/Order.css"
 import axios from "axios";
 import UserSelectMenu from "./UserSelectMenu";
 import {v4 as uuidv4} from 'uuid';
+import apiRiderService from "../../service/apiRiderService";
 
 const UserOrderCheckout = () => {
         const location = useLocation();
@@ -132,6 +133,7 @@ const UserOrderCheckout = () => {
                 alert("요청사항을 입력해주세요!");
                 return;
             }
+
 
             if (clicked === 'tossPay') {
                 console.log('결제 수단 : tossPay');
