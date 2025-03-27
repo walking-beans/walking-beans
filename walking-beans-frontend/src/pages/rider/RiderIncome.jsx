@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import apiRiderService from "../../service/apiRiderService";
 import "../../css/rider/RiderIncome.css";
 
-
 const RiderIncome = ({user}) => {
 //테스트
     const [incomeList, setIncomeList] = useState([]);
