@@ -88,7 +88,7 @@ const UserOrderDetail = () => {
                     <div className="user-order-mt">
                         <div>
                             <span className="user-order-basic-text-m-0">주문일시 : </span> <span
-                            className="user-select-mid-text">{order?.orderCreateDate
+                            className="user-select-qyt-text">{order?.orderCreateDate
                             ? new Date(order.orderCreateDate).toLocaleString('ko-KR', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -134,7 +134,6 @@ const UserOrderDetail = () => {
                                         </div>
                                     </div>
 
-                                    {/* 오른쪽: 개수 */}
                                     <div className="user-select-mid-text">{item.quantity}개</div>
                                     </div>
                                     {!isLastItem && <div className="user-order-hr-mini"></div>}

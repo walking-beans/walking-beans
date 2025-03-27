@@ -35,8 +35,6 @@ public class OrderAPIController {
 
     @Autowired
     private AlarmNotificationService alarmNotificationService;
-    @Autowired
-    private OrderMapper orderMapper;
 
     /**************************************** LEO ****************************************/
     /**
@@ -173,10 +171,18 @@ public class OrderAPIController {
     // 주문 상세 내역 정보 가져오기
     @GetMapping("/detail/orderNumber/{orderNumber}")
     public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
-        List<OrderDetailDTO> orderDetails = orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+        List<OrderDetailDTO> orderDetails = orderService.getOrderDetailsByOrderNumber(orderNumber);
+        log.info("orderDetails: {}", orderDetails);
+        System.out.println("orderDetails = " + orderDetails);
         if (orderDetails.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(orderDetails);
+    }
+
+    // 주문 삭제
+    @DeleteMapping("/delete/{orderNumber}")
+    public void deleteOrderByOrderNumber(String orderNumber){
+        orderService.deleteOrderByOrderNumber(orderNumber);
     }
 }
