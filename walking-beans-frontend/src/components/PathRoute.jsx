@@ -29,11 +29,9 @@ import UserInsertAddress from "../pages/user/UserInsertAddress";
 import UserOrderCheckout from "../pages/user/UserOrderCheckout";
 import AdminMessageTEST from "../pages/admin/AdminMessageTEST";
 import AdminChattingroomTest from "../pages/admin/AdminChattingroomTest";
-import AdminNewAlarm from "../pages/admin/AdminNewAlarm";
 import AdminAlarmList from "../pages/admin/AdminAlarmList";
 import UserDeliveryStatus from "../pages/user/UserDeliveryStatus";
 
-import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
 import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
@@ -47,7 +45,6 @@ import StoreMenuDetail from "../pages/owner/StoreMenuDetail";
 import UserSuccessPage from "../pages/user/UserSuccessPage";
 import {UserFailPage} from "../pages/user/UserFailPage";
 import UserCheckoutPage from "../pages/user/UserCheckoutPage";
-import AdminSignUp from "../pages/admin/AdminSignUp";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
@@ -108,7 +105,6 @@ function PathRoute() {
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
-                                <Route path="/changeRole" element={<AdminSignUp />}/>{/* 알림 확인용 수동 롤 변경 페이지*/}
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
                                 { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }

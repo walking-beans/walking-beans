@@ -19,7 +19,7 @@ public interface AlarmService {
     void sendNotification(Alarms alarm);
 
     // 읽지 않은 알람 가져오기
-    List<Alarms>getNotReadAlarms (boolean alarmStatus,long userId);
+    List<Alarms>getNotReadAlarms (long userId);
 
     // 알림 읽음 표시
     void markNotificationAsRead(Long notificationId);

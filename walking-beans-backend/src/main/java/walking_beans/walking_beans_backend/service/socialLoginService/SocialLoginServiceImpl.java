@@ -138,8 +138,10 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         System.out.println("🚨 userInfo: :"+ userInfo);
         Map<String, Object> responseData = (Map<String, Object>) userInfo.get("response");
 
+        System.out.println(responseData);
         String email = (String) responseData.get("email");
-        String nickname = (String) responseData.get("nickname");
+        //String nickname = (String) responseData.get("nickname");
+        String name = (String) responseData.get("name");
         String phone = (String) responseData.get("mobile");
         String phoneWithoutHyphen = phone.replaceAll("-", "");
 
@@ -149,7 +151,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("role",0); // 롤 유저로 고정
         resultMap.put("email", email);
-        resultMap.put("nickname", nickname);
+        resultMap.put("name", name);
         resultMap.put("phone", phoneWithoutHyphen);
         return resultMap;
     }
