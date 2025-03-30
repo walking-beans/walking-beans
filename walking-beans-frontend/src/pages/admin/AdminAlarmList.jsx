@@ -80,7 +80,7 @@ const AdminAlarmList = () => {
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
                             <p>{value.alarmContent}</p>
                             <p>
-                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
+                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')}<br/>
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
                                     hour: '2-digit',
                                     minute: '2-digit'

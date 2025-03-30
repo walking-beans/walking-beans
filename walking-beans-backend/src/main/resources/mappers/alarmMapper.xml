@@ -28,7 +28,7 @@
     <select id="getNotReadAlarms">
         SELECT *
         FROM Alarms
-        WHERE alarm_status = #{alarmStatus}
+        WHERE alarm_status = false
         AND user_id = #{userId}
         ORDER BY alarm_id DESC
     </select>

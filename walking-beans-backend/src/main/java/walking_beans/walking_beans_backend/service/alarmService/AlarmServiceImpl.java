@@ -75,8 +75,8 @@ public class AlarmServiceImpl implements AlarmService {
 
     // 읽지 않은 알람 가져오기
     @Override
-    public List<Alarms> getNotReadAlarms(boolean alarmStatus, long userId) {
-        return alarmMapper.getNotReadAlarms(alarmStatus, userId);
+    public List<Alarms> getNotReadAlarms(long userId) {
+        return alarmMapper.getNotReadAlarms(userId);
     }
 
     //  특정 알림 읽음 처리
