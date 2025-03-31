@@ -265,6 +265,7 @@ public class OrderServiceImpl implements OrderService {
                     orderItemParams.put("menuId", menuId);
                     orderItemParams.put("optionId", optionId);
                     orderItemParams.put("quantity", quantity);
+                    orderItemParams.put("totalPrice", orderTotalPrice);
 
                     // `order_items` 테이블에 삽입
                     orderMapper.insertOrderItem(orderItemParams);
@@ -278,7 +279,7 @@ public class OrderServiceImpl implements OrderService {
             alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
             return userId;
         } catch (Exception e) {
-            log.error("❌ 주문 저장 중 오류 발생: ", e);
+            log.error("주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");
         }
     }
