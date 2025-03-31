@@ -57,7 +57,7 @@ const UserOrderDetail = () => {
 
                     console.log('총 메뉴 금액:', menuTotal);
 
-                    const deliveryTip = parseInt(order.storeDeliveryTip) || 0;
+                    const deliveryTip = parseInt(baseOrderInfo.storeDeliveryTip) || 0;
                     const totalPrice = menuTotal + deliveryTip;
                     setTotalPrice(totalPrice);
 
