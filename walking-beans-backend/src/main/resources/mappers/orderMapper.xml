@@ -76,8 +76,8 @@
     </insert>
 
     <insert id="insertOrderItem">
-        INSERT INTO order_items (order_number, menu_id, option_id, quantity)
-        VALUES (#{orderNumber}, #{menuId}, #{optionId}, #{quantity});
+        INSERT INTO order_items (order_number, menu_id, option_ids, quantity)
+        VALUES (#{orderNumber}, #{menuId}, #{optionIds}, #{quantity});
     </insert>
 
     <!-- 주문정보 가져오기 -->

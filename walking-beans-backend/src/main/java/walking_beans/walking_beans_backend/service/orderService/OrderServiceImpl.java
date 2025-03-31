@@ -246,42 +246,11 @@ public class OrderServiceImpl implements OrderService {
                             ? item.get("optionIds").toString()
                             : null;
 
-                    if (optionIds != null && !optionIds.isEmpty()) {
-                        String[] optionIdArray = optionIds.split(",");
-
-                        // 각 옵션마다 별도의 주문 항목으로 저장
-                        for (String optId : optionIdArray) {
-                            if (optId != null && !optId.trim().isEmpty()) {
-                                try {
-                                    Long optionId = Long.parseLong(optId.trim());
-
-                                    // 각 옵션별 주문 항목 파라미터 생성
-                                    Map<String, Object> orderItemParams = new HashMap<>();
-                                    orderItemParams.put("orderNumber", orderNumber);
-                                    orderItemParams.put("menuId", menuId);
-                                    orderItemParams.put("optionId", optionId);
-
-                                    // 각 옵션별로 주문 항목 저장
-                                    orderMapper.insertOrderItem(orderItemParams);
-                                    log.info("주문 아이템 저장 완료 (옵션 ID: {}): {}", optionId, orderItemParams);
-                                } catch (NumberFormatException e) {
-                                    log.warn("옵션 ID 변환 오류: {}", optId, e);
-                                }
-                            }
-                        }
-                    } else {
-                        // 옵션 없는 경우
-                        Map<String, Object> orderItemParams = new HashMap<>();
-                        orderItemParams.put("orderNumber", orderNumber);
-                        orderItemParams.put("menuId", menuId);
-                        orderItemParams.put("optionId", null);
-
-                        orderMapper.insertOrderItem(orderItemParams);
-                        log.info("주문 아이템 저장 완료 (옵션 없음): {}", orderItemParams);
-                    }
-
                     // `quantity` 처리
-                    Object quantityObj = item.get("totalQuantities");
+                    Object quantityObj = item.get("cartQuantity") != null
+                            ? item.get("cartQuantity")
+                            : item.get("totalQuantities");
+
                     if (quantityObj == null) {
                         log.warn("수량 정보가 없는 아이템 스킵");
                         continue;

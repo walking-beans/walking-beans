@@ -164,10 +164,11 @@ const UserOrderDetail = () => {
                                             {item.optionNameArray && item.optionNameArray.length > 0 && (
                                                 <div className="user-cart-detailtext">
                                                     {item.optionNameArray.map((name, i) => (
-                                                        <div key={i}>
+                                                        <span key={i}>
+                                                             {i > 0 ? ', ' : ''}
                                                             {name} {item.optionContentArray[i]}
-                                                            {item.optionPriceArray[i] === 0 ? "" : ` (+${item.optionPriceArray[i].toLocaleString()}원)`}
-                                                        </div>
+                                                            ({item.optionPriceArray[i] > 0 ? `+${item.optionPriceArray[i].toLocaleString()}원` : '+0원'})
+                                                         </span>
                                                     ))}
                                                 </div>
                                             )}
