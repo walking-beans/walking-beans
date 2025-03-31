@@ -58,5 +58,5 @@ public interface OrderMapper {
     List<OrderDetailDTO> getOrderDetailsByOrderNumber(@Param("orderNumber") String orderNumber);
 
     // 주문 삭제
-    void deleteOrderByOrderNumber(String orderNumber);
+    void deleteOrderById(long orderId);
 }

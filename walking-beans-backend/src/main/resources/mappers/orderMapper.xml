@@ -152,7 +152,8 @@
                total_payment,
                order_requests,
                order_list,
-               quantity
+               quantity,
+               order_status
         FROM user_orders_view
         WHERE order_number = #{orderNumber}
     </select>
@@ -164,8 +165,9 @@
     </select>
 
     <!-- 주문 삭제 -->
-    <delete id="deleteOrderByOrderNumber">
+    <delete id="deleteOrderById">
         DELETE FROM orders
-        WHERE order_number = #{orderNumber}
+        WHERE order_id = #{orderId}
+          AND order_status = 6
     </delete>
 </mapper>

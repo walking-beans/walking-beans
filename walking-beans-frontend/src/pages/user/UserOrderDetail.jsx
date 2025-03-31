@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import UserSelectMenu from "./UserSelectMenu";
 
@@ -8,13 +8,10 @@ const UserOrderDetail = () => {
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [orderId, setOrderId] = useState(null);
     const [totalMenuPrice, setTotalMenuPrice] = useState(0);
     const [orderItems, setOrderItems] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [optionNames, setOptionNames] = useState([]);
-    const [optionContents, setOptionContents] = useState([]);
-    const [optionPrices, setOptionPrices] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:7070/api/orders/detail/orderNumber/${orderNumber}`)
@@ -110,6 +107,36 @@ const UserOrderDetail = () => {
             })
             .finally(() => setLoading(false));
     }, [orderNumber]);
+
+    const handleDeleteOrder = () => {
+        console.log("현재 주문 상태:", order.orderStatus);  // 상태 확인용 로그
+
+        // 삭제 조건 확인
+        if (order.orderStatus !== 6) {
+            alert(`배달 완료된 주문만 삭제할 수 있습니다. (현재 상태: ${order.orderStatus})`);
+            return;
+        }
+
+        // 사용자에게 삭제 확인 요청
+        const confirmDelete = window.confirm(`주문번호 ${order.orderNumber}를 삭제하시겠습니까?\n삭제 후 복구는 불가능 합니다.`);
+
+        if (confirmDelete) {
+            axios.delete(`http://localhost:7070/api/orders/delete/${order.orderId}`)
+                .then(() => {
+                    // 성공 메시지 표시
+                    alert("주문 내역이 성공적으로 삭제되었습니다.");
+                    // 주문 목록 페이지로 리다이렉트
+                    navigate("/order");
+                })
+                .catch((error) => {
+                    console.error("주문 삭제 오류:", error.response ? error.response.data : error);
+                    alert(
+                        error.response?.data ||
+                        "주문 내역 삭제 중 오류가 발생했습니다. 다시 시도해주세요."
+                    );
+                });
+        }
+    };
 
     return (
         <div className="user-order-background">
@@ -219,7 +246,18 @@ const UserOrderDetail = () => {
                 </div>
 
                 <div className="user-order-click-btn-one">
-                    <button className="user-order-btn-b">주문내역 삭제</button>
+                    {order.orderStatus === 6 ? (
+                        <button
+                            className="user-order-btn-b"
+                            onClick={handleDeleteOrder}
+                        >
+                            주문내역 삭제
+                        </button>
+                    ) : (
+                        <div className="user-order-guide">
+                            배달 완료 후 주문 내역을 삭제할 수 있습니다.
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
