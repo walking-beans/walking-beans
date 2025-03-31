@@ -54,6 +54,7 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
+import StoreRegister from "../pages/owner/StoreRegister";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -208,6 +209,12 @@ function PathRoute() {
                                 <Route path="/owner/:storeId/:menuId/menuoption" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
+                                    </ProtectedRoute>
+                                }/>
+                                {/* id = userId 유저 id, 유저만 신규 가게 등록이 가능하도록 제한*/}
+                                <Route path="/user/:id/storeregister/" element={
+                                    <ProtectedRoute allowedRoles={["user"]}>
+                                        <StoreRegister/>
                                     </ProtectedRoute>
                                 }/>
                                 {/* id = storeId 업주 본인 가게 id*/}

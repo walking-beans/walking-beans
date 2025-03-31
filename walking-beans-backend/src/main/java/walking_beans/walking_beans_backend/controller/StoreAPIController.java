@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.orderService.OrderService;
+import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
+import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -20,27 +25,10 @@ public class StoreAPIController {
 
     @Autowired
     private StoreServiceImpl storeService;
+
     @Autowired
-    private OrderService orderService;
-
-    /**소유권 확인용도
-     *
-     * @param userId
-     * @return
-
-    @GetMapping("/owner/storeid")
-    */
-
- /*
-    public ResponseEntity<?> getStoreOwner(HttpSession session) {
-        long userId = (long) session.getAttribute("userId");
-        if (userId == 0) {return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인필요");}
-        Long storeId = storeService.getStoreIdByUserId(userId);
-        return ResponseEntity.ok("가게 Id : " + storeId);
-    }
-
-*/
-
+    private
+    UserServiceImpl userService;
     /**매장 전체정보 불러오기
      * List<Stores>
      * @return
@@ -74,9 +62,28 @@ public class StoreAPIController {
      *  유저 정보 추가후 재검증 필요 외래키 부족
      * @param stores
      */
-    @PostMapping()
-    public void addStore(@RequestBody Stores stores) {
+    @PostMapping
+    public void addStore(
+            @ModelAttribute Stores stores,
+            @RequestParam(value = "store_picture_url", required = false) MultipartFile storePictureUrl
+                        )
+            throws IOException { // 이미지 처리
+        if (storePictureUrl != null && !storePictureUrl.isEmpty()) {
+            String fileUrl = saveFile(storePictureUrl);
+            stores.setStorePictureUrl(fileUrl);
+        }
+        // 가게 등록
         storeService.addStore(stores);
+
+        // 유저 역활 업데이트
+        userService.updateUserRoleStore(stores.getUserId(), (byte) 3); // 1 -> 3으로 변경
+    }
+
+    private String saveFile(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String filePath = "/uploads/" + fileName;
+        file.transferTo(new File(filePath));
+        return filePath;
     }
 
     /**매장정보 수정하기

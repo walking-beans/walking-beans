@@ -1,4 +1,4 @@
-const MenuInputTag = (id, label, placeholder, value, onChange) => {
+const MenuInputTag = ({id, label, placeholder, value, onChange}) => {
 
     return (
         <div className="MenuInputTag-container">

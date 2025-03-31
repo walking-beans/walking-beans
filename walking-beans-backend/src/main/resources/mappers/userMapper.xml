@@ -84,6 +84,12 @@
         WHERE user_id = #{userId};
     </delete>
 
+    <!--가게 가입시 유저역활 업데이트 -->
+    <update id="updateUserRoleStore">
+        UPDATE users
+        SET user_role = #{userRole}
+        WHERE user_id = #{userId}
+    </update>
 
 </mapper>
 
