@@ -26,15 +26,38 @@ const UserOrderDetail = () => {
                     setOrderItems(response.data);
 
                     for (const item of response.data) {
-                        // 옵션 정보 문자열을 배열로 변환
-                        const names = item.optionNames ? item.optionNames.split(',') : [];
-                        const contents = item.optionContents ? item.optionContents.split(',') : [];
-                        const prices = item.optionPrices ? item.optionPrices.split(',').map(Number) : [];
+                        // 옵션 정보 문자열을 배열로 변환 (빈 문자열 처리 개선)
+                        const names = item.optionNames && item.optionNames.trim() !== '' ?
+                            item.optionNames.split(',') : [];
 
-                        // 필요하다면 item 객체에 변환된 배열 추가
-                        item.optionNameArray = names;
-                        item.optionContentArray = contents;
-                        item.optionPriceArray = prices;
+                        const contents = item.optionContents && item.optionContents.trim() !== '' ?
+                            item.optionContents.split(',') : [];
+
+                        const prices = item.optionPrices && item.optionPrices.trim() !== '' ?
+                            item.optionPrices.split(',').map(price => {
+                                const num = Number(price);
+                                return isNaN(num) ? 0 : num;  // NaN 값도 처리
+                            }) : [];
+
+                        // 옵션 데이터가 모두 비어있으면 배열도 비워주기
+                        if (names.length === 1 && names[0] === '' &&
+                            contents.length === 1 && contents[0] === '' &&
+                            prices.length === 1 && prices[0] === 0) {
+                            item.optionNameArray = [];
+                            item.optionContentArray = [];
+                            item.optionPriceArray = [];
+                        } else {
+                            item.optionNameArray = names;
+                            item.optionContentArray = contents;
+                            item.optionPriceArray = prices;
+                        }
+
+                        // 디버깅 출력 추가
+                        console.log(`주문 항목 ${item.order_item_id}의 옵션:`, {
+                            names: item.optionNameArray,
+                            contents: item.optionContentArray,
+                            prices: item.optionPriceArray
+                        });
                     }
 
                     // 메뉴 총액 계산
