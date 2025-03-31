@@ -24,9 +24,6 @@ const UserHome = ({ user: initialUser }) => {
     const [ratingStats, setRatingStats] = useState({ average: 0, counts: [0, 0, 0, 0, 0] });
     const [reviews, setReviews] = useState([]);
 
-
-
-
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -350,12 +347,12 @@ const UserHome = ({ user: initialUser }) => {
             {/*매장 리스트*/}
             <ul className="store-list">
                 {displayStores.map((store) => (
-                    <li key={store.storeId} className="store-item">
+                    <li key={store.storeId} className="store-item" onClick={() => handleStore(store.storeId)}>
                         <img className="store-picture" src={store.storePictureUrl} alt="store" />
                         <div className="store-info">
                             {/* 왼쪽: 이름 & 별점 */}
                             <div className="store-details">
-        <span className="store-name" onClick={() => handleStore(store.storeId)}>
+        <span className="store-name">
             {store.storeName}
         </span>
                                 <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
