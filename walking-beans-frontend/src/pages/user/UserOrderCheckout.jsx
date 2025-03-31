@@ -30,10 +30,6 @@ const UserOrderCheckout = () => {
         const [storeId, setStoreId] = useState(null);
         const [clicked, setClicked] = useState(null);
         const [orderRequests, setOrderRequests] = useState("");
-        const [paymentMethod, setPaymentMethod] = useState(null);
-        const [orderOptionNames, setOrderOptionNames] = useState([]);
-        const [orderOptionContents, setOrderOptionContents] = useState([]);
-        const [orderOptionPrices, setOrderOptionPrices] = useState([]);
         const [optionIds, setOptionIds] = useState(null);
 
         // 메뉴 총 금액 계산
@@ -221,16 +217,20 @@ const UserOrderCheckout = () => {
                         payments: {
                             paymentMethod: "meetPayment",
                             paymentStatus: "완료"
-                        },
-                        orderOptionNames,
-                        orderOptionContents,
-                        orderOptionPrices
+                        }
                     });
                     console.log("만나서 결제 승인:", response.data);
+
+                    const chattingRoomId = response.data.chattingRoomId;
+
                     alert("주문이 성공적으로 완료되었습니다!");
                     localStorage.removeItem("orderRequests");
 
-                    navigate(`/user/delivery/status/${orderNumber}`, {replace: true});
+                    if (chattingRoomId) {
+                        navigate(`/chat/message/${chattingRoomId}`, { replace: true });  // ✅ 채팅방으로 바로 이동!
+                    } else {
+                        navigate(`/user/delivery/status/${orderNumber}`, { replace: true }); // 기존 로직 유지
+                    }
                 } catch (err) {
                     console.error("주문 저장 실패", err);
                     alert("오류가 발생하였습니다. 다시 시도해 주세요.");

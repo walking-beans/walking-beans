@@ -78,24 +78,6 @@ const UserDeliveryStatus = () => {
         fetchOrderDetails();
     }, [orderNumber]);
 
-    // 채팅방 생성 및 가져오기 로직 개선
-    useEffect(() => {
-        if (orderId && userId) {
-            /****************** Create Chatiingroom for user && owner **********************/
-            // 이 코드 UseDeliveryStatus 에 접속할 때마다 채팅방 만들 예정이라 UserPayment 에서 실행되는거 추천드립니다.
-            apiRiderService.createChattingRoomForUserAndOwner(userId, orderNumber);
-            /************************************** *****************************************/
-
-            /****************** Set storeRoomId && riderRoomId for redirect **********************/
-            apiRiderService.getUserAndStoreRoomId(orderId, userId,  (object) => {
-                console.log("채팅방 데이터:", object);
-                if (object["3"]) setStoreRoomId(object["3"]);
-                if (object["2"]) setRiderRoomId(object["2"]);
-            })
-            /************************************** *****************************************/
-        }
-    }, [orderId, userId]);
-
     // 결제 정보 조회
     useEffect(() => {
         if (!orderId) return;
@@ -192,8 +174,6 @@ const UserDeliveryStatus = () => {
                 });
         }
     };
-    /************************************************************************  ****************************************************************************/
-
 
         // 매장 채팅 핸들러
     const handleStoreChat = () => {
@@ -201,7 +181,7 @@ const UserDeliveryStatus = () => {
             navigate(`/chat/message/${storeRoomId}`);
         } else {
             // 채팅방 생성 API 직접 호출
-            axios.get(`http://localhost:7070/api/chattingroom/usertest?userId=${userId}&orderId=${orderId}`)
+            axios.get(`http://localhost:7070/api/chattingroom/userinsert?userId=${userId}&orderId=${orderId}&storeId=${store.storeId}`)
                 .then(() => {
                     // 채팅방 ID 다시 가져오기
                     apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
@@ -222,17 +202,16 @@ const UserDeliveryStatus = () => {
 
             <div className="user-status-modal-container">
                 <div>
-                    <div className="user-order-bordtext">도착예정시간</div>
                     {orderId && (
                         <RiderOrderStatus
                             orderId={orderId}
-                            message="빠르게 배달 중입니다."
+                            message="초과 현재 위치는 라이더 채팅을 이용해 주세요."
                             css={{
                                 order_status_time_div: "user-menu-option-group-container",
                                 order_status_time_remaining: "user-order-big-text",
                                 order_status_delivery_deadline: "user-order-optiontitle",
                                 order_status_steps: "user-order-click-btn",
-                                order_status_message: "user-order-guide",
+                                order_status_message: "user-order-bordtext",
                                 order_status_step: "user-order-optiontitle",
                                 order_status_loading: "user-order-guide",
                             }}
