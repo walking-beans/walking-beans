@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.vo.OrderItems;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 
 import java.util.List;

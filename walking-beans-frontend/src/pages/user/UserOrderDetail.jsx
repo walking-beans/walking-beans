@@ -12,6 +12,9 @@ const UserOrderDetail = () => {
     const [totalMenuPrice, setTotalMenuPrice] = useState(0);
     const [orderItems, setOrderItems] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [optionNames, setOptionNames] = useState([]);
+    const [optionContents, setOptionContents] = useState([]);
+    const [optionPrices, setOptionPrices] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:7070/api/orders/detail/orderNumber/${orderNumber}`)
@@ -21,6 +24,18 @@ const UserOrderDetail = () => {
                     const baseOrderInfo = response.data[0];
                     setOrder(baseOrderInfo);
                     setOrderItems(response.data);
+
+                    for (const item of response.data) {
+                        // 옵션 정보 문자열을 배열로 변환
+                        const names = item.optionNames ? item.optionNames.split(',') : [];
+                        const contents = item.optionContents ? item.optionContents.split(',') : [];
+                        const prices = item.optionPrices ? item.optionPrices.split(',').map(Number) : [];
+
+                        // 필요하다면 item 객체에 변환된 배열 추가
+                        item.optionNameArray = names;
+                        item.optionContentArray = contents;
+                        item.optionPriceArray = prices;
+                    }
 
                     // 메뉴 총액 계산
                     const menuTotal = response.data.reduce((sum, item) => {
@@ -57,7 +72,7 @@ const UserOrderDetail = () => {
 
                     console.log('총 메뉴 금액:', menuTotal);
 
-                    const deliveryTip = parseInt(order.storeDeliveryTip) || 0;
+                    const deliveryTip = parseInt(baseOrderInfo.storeDeliveryTip) || 0;
                     const totalPrice = menuTotal + deliveryTip;
                     setTotalPrice(totalPrice);
 
@@ -121,20 +136,23 @@ const UserOrderDetail = () => {
                             return (
                                 <div key={index}>
                                     <div className="user-order-detail-grid">
-                                    <div className="user-order-left">
-                                        <div className="user-order-address-detail-text">{item.menuName}</div>
-                                        {item.optionNames && (
+                                        <div className="user-order-left">
+                                            <div className="user-order-address-detail-text">{item.menuName}</div>
+                                            {item.optionNameArray && item.optionNameArray.length > 0 && (
+                                                <div className="user-cart-detailtext">
+                                                    {item.optionNameArray.map((name, i) => (
+                                                        <div key={i}>
+                                                            {name} {item.optionContentArray[i]}
+                                                            {item.optionPriceArray[i] === 0 ? "" : ` (+${item.optionPriceArray[i].toLocaleString()}원)`}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                             <div className="user-cart-detailtext">
-                                                {item.optionNames} {item.optionContents}
-                                                {item.optionPrices === "0" ? "" : item.optionPrices && ` (+${Number(item.optionPrices).toLocaleString()}원)`}
+                                                {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                             </div>
-                                        )}
-                                        <div className="user-cart-detailtext">
-                                            {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                         </div>
-                                    </div>
-
-                                    <div className="user-select-mid-text">{item.quantity}개</div>
+                                        <div className="user-select-mid-text">{item.quantity}개</div>
                                     </div>
                                     {!isLastItem && <div className="user-order-hr-mini"></div>}
                                 </div>

@@ -157,7 +157,7 @@
         WHERE order_number = #{orderNumber}
     </select>
 
-    <!-- 주문 번호로 상세 정보 조회 -->
+    <!-- 주문 번호로 상세 정보 조회-->
     <select id="getOrderDetailsByOrderNumber">
         SELECT * FROM order_detail_view
         WHERE order_number = #{orderNumber}

@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.orderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import walking_beans.walking_beans_backend.mapper.MenuOptionMapper;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
@@ -13,10 +14,7 @@ import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -27,6 +25,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private AlarmServiceImpl alarmService;
+
+    @Autowired
+    private MenuOptionMapper menuOptionMapper;
 
     /**************************************** Leo ****************************************/
     @Override
@@ -287,8 +288,39 @@ public class OrderServiceImpl implements OrderService {
     // 주문 상세 내역 정보 가져오기
     @Override
     public List<OrderDetailDTO> getOrderDetailsByOrderNumber(String orderNumber) {
+        List<OrderDetailDTO> orderDetails = orderMapper.getOrderDetailsByOrderNumber(orderNumber);
 
-        return orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+        // 각 주문 항목에 대해 추가 처리
+        for (OrderDetailDTO detail : orderDetails) {
+            if (detail.getOptionIds() != null && !detail.getOptionIds().isEmpty()) {
+                // 옵션 ID를 배열로 분할
+                String[] optionIds = detail.getOptionIds().split(",");
+
+                // 각 옵션 ID에 대한 정보 조회
+                List<String> names = new ArrayList<>();
+                List<String> contents = new ArrayList<>();
+                List<String> prices = new ArrayList<>();
+                int totalOptionPrice = 0;
+
+                for (String optionId : optionIds) {
+                    MenuOption option = menuOptionMapper.findMenuOptionById(Long.parseLong(optionId));
+                    if (option != null) {
+                        names.add(option.getOptionName());
+                        contents.add(option.getOptionContent());
+                        prices.add(String.valueOf(option.getOptionPrice()));
+                        totalOptionPrice += option.getOptionPrice();
+                    }
+                }
+
+                // 정보 설정
+                detail.setOptionNames(String.join(",", names));
+                detail.setOptionContents(String.join(",", contents));
+                detail.setOptionPrices(String.join(",", prices));
+                detail.setTotalOptionPrice(totalOptionPrice);
+            }
+        }
+
+        return orderDetails;
     }
 
     // 주문 삭제

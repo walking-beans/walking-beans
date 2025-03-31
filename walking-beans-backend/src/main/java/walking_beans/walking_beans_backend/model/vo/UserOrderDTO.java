@@ -10,7 +10,7 @@ import lombok.*;
 public class UserOrderDTO {
     private long orderId;
     private long userId;
-    private long optionId;
+    private Long orderItemId;
     private String customerName;
     private String storeName;
     private String orderDate;
