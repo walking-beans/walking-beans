@@ -321,12 +321,11 @@ const UserHome = ({ user: initialUser }) => {
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
             <div className="d-flex align-items-center px-3 mb-2">
-                <h5 className="fw-bold mb-0"
+                <div className="user-order-bordtext"
                     onClick={handleUserAddress}
                     style={{cursor: "pointer"}}>
-                    {userAddress ? userAddress.address : "주소를 입력해주세요"}
-                    <i className="bi bi-chevron-down ms-1"></i>
-                </h5>
+                    {userAddress ? `${userAddress.address} ${userAddress.detailedAddress}` : "주소를 입력해주세요"}
+                </div>
             </div>
             {/*검색 공간*/}
             <div className="input-group mb-3 px-2">
