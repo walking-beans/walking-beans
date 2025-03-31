@@ -36,7 +36,7 @@ const DeliveryInfoForm = ({formData, handleChange}) => {
             />
             <MenuInputTag
                 id="store_delivery_address"
-                label="배달 주소"
+                label="배달 가능 구역"
                 placeholder="배달 가능 지역을 입력하세요"
                 value={formData.store_delivery_address}
                 onChange={handleChange}

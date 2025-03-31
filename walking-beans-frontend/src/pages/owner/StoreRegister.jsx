@@ -18,7 +18,7 @@ const StoreRegister = () => {
         store_main_menu: "",
         store_business_number: "",
         store_phone: "",
-        store_operation_hours: "",
+        store_operation_hours: "09:00 - 18:00",
         store_closed_dates: "",
         store_status: "운영 중", // 기본값
         store_review_count: 0,   // 기본값
@@ -28,8 +28,8 @@ const StoreRegister = () => {
         store_delivery_tip: "",
         store_delivery_address: "",
         store_address: "",
-        store_latitude: "",
-        store_longitude: "",
+        store_latitude: "00.000001",
+        store_longitude: "00.000001",
         store_picture_url: null, // 파일 초기화
     });
 
@@ -73,7 +73,7 @@ const StoreRegister = () => {
         uploadData.append("store_longitude", formData.store_longitude);
 
         axios
-            .post("http://localhost:7070/api/stores",
+            .post("http://localhost:7070/api/store",
                 uploadData,
                 {headers: {"Content-Type": "multipart/form-data"},
                 })
@@ -82,6 +82,8 @@ const StoreRegister = () => {
             })
             .catch((err)=>{
                 console.log("가게등록실패", err);
+                console.log("가게등록실패", uploadData);
+
             })
     }
 

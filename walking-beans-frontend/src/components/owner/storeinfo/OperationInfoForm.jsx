@@ -8,7 +8,7 @@ const OperationInfoForm = ({ formData, handleChange }) => {
             <MenuInputTag
                 id="store_operation_hours"
                 label="운영 시간"
-                placeholder="예: 09:00-18:00"
+                placeholder="예: 09:00 - 18:00"
                 value={formData.store_operation_hours}
                 onChange={handleChange}
                 type="text"
