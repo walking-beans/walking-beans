@@ -73,6 +73,12 @@ public class AlarmServiceImpl implements AlarmService {
         log.info("알림 저장 완료" + alarm);
     }
 
+    // 읽지 않은 알람 가져오기
+    @Override
+    public List<Alarms> getNotReadAlarms(long userId) {
+        return alarmMapper.getNotReadAlarms(userId);
+    }
+
     //  특정 알림 읽음 처리
     @Override
     public void markNotificationAsRead(Long alarmId) {

@@ -1,4 +1,5 @@
 package walking_beans.walking_beans_backend.service.orderService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
@@ -273,11 +275,24 @@ public class OrderServiceImpl implements OrderService {
             }
             // 매장에 주문수락 요청 알림 보내기
             OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
-            alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(),1,"새로운 주문이 들어왔습니다.",0,"/user/delivery/status/"+orderNumber));
+            alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
             return userId;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");
         }
+    }
+
+    // 주문 상세 내역 정보 가져오기
+    @Override
+    public List<OrderDetailDTO> getOrderDetailsByOrderNumber(String orderNumber) {
+
+        return orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+    }
+
+    // 주문 삭제
+    @Override
+    public void deleteOrderByOrderNumber(String orderNumber) {
+        orderMapper.deleteOrderByOrderNumber(orderNumber);
     }
 }

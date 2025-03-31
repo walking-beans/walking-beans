@@ -49,7 +49,7 @@ public class ChattingRoomAPIController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/usertest")
+    @PutMapping("/userinsert")
     public ResponseEntity<Void> createChattingRoomForUserAndOwner(@RequestParam("userId") long userId, @RequestParam("orderId") long orderId) {
 
         chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);

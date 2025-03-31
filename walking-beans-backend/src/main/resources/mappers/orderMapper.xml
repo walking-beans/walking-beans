@@ -122,6 +122,7 @@
     <!-- 유저의 기존 주문 내역리스트들 -->
     <select id="getOrdersByUserId">
         SELECT user_id,
+               order_id,
                customer_name,
                store_name,
                order_date,
@@ -155,4 +156,16 @@
         FROM user_orders_view
         WHERE order_number = #{orderNumber}
     </select>
+
+    <!-- 주문 번호로 상세 정보 조회 -->
+    <select id="getOrderDetailsByOrderNumber">
+        SELECT * FROM order_detail_view
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <!-- 주문 삭제 -->
+    <delete id="deleteOrderByOrderNumber">
+        DELETE FROM orders
+        WHERE order_number = #{orderNumber}
+    </delete>
 </mapper>

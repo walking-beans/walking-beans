@@ -213,7 +213,9 @@ className="cursor-pointer text-primary fw-bold"
 /******************* user delivery status ********************/
 .user-delivery-map {
     width: 600px;
-    height: 400px;
+    height: 350px;
+    z-index: 0;
+    top: -20px;
 }
 
 

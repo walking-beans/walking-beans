@@ -39,7 +39,9 @@ public class OrderStoreServiceImpl implements OrderStoreService {
 
     @Override
     public OrderStoreDTO getOrderByOrderId(long orderId) {
-        return orderMapper.getOrderByOrderId(orderId);
+        OrderStoreDTO orderStoreDTO = orderMapper.getOrderByOrderId(orderId);
+        orderStoreDTO.setOrderCreateAndDeliveredDate();
+        return orderStoreDTO;
     }
 
     public double getRadius(OrderStoreDTO order, double lat, double lng) {

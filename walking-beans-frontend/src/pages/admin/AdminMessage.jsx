@@ -296,14 +296,6 @@ const AdminMessage = ({user}) => {
                         >
                             전송
                         </button>
-                        {showSendAlarm &&
-                            <SendAlarm
-                                userId={senderId} //받는사람
-                                alarmRole="2" // 알림 타입
-                                senderId={roomId} //보낸사람(roomId)
-                                messageContent={sendAlarmMessage} // 알림 내용
-                            />
-                        }
                     </div>
                 </div>
             </ul>

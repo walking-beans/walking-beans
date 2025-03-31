@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import detailbtn from "../../images/user/detailbtn.svg";
+import apiRiderService from "../../service/apiRiderService";
+import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
 
 const UserOrderList = () => {
     const [orders, setOrders] = useState([]);
@@ -11,12 +13,28 @@ const UserOrderList = () => {
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;
     const [reviewStatus, setReviewStatus] = useState(0);
+    const [orderTimeInfo, setOrderTimeInfo] = useState({});
 
     const status = {
         '2': '매장 확인 중',
-        '3': '조리 중',
-        '4': '조리 완료',
-        '5': '배달 중',
+        '3': (order) => ({
+            text: orderTimeInfo[order.orderNumber]
+                ? `${orderTimeInfo[order.orderNumber].timeRemaining}분 후 도착`
+                : '조리 중',
+            className: 'user-order-big-guide'
+        }),
+        '4': (order) => ({
+            text: orderTimeInfo[order.orderNumber]
+                ? `${orderTimeInfo[order.orderNumber].timeRemaining}분 후 도착`
+                : '조리 완료',
+            className: 'user-order-big-guide'
+        }),
+        '5': (order) => ({
+            text: orderTimeInfo[order.orderNumber]
+                ? `${orderTimeInfo[order.orderNumber].timeRemaining}분 후 도착`
+                : '배달 중',
+            className: 'user-order-big-guide'
+        }),
         '6': '배달 완료'
     };
 
@@ -46,12 +64,29 @@ const UserOrderList = () => {
             orders.forEach(order => {
                 axios.get(`http://localhost:7070/api/reviews/exists/${order.orderId}`)
                     .then(res => {
-                        setReviewStatus(prev => ({
-                            ...prev,
+                        setReviewStatus(orders => ({
+                            ...orders,
                             [order.orderId]: res.data
                         }));
                     })
                     .catch(err => console.error("리뷰 상태 확인 오류:", err));
+            });
+        }
+    }, [orders]);
+
+    // 배달 중 남은 시간 가져오기
+    useEffect(() => {
+        if (orders.length > 0) {
+            orders.forEach(order => {
+                if (order.orderStatus >= 2 && order.orderStatus <= 5) {
+                    // 이제 바로 orderId를 사용
+                    apiRiderService.getOrderStatusWithRemainingTime(order.orderId, (timeData) => {
+                        setOrderTimeInfo(orders => ({
+                            ...orders,
+                            [order.orderNumber]: timeData
+                        }));
+                    });
+                }
             });
         }
     }, [orders]);
@@ -82,10 +117,18 @@ const UserOrderList = () => {
                                     <img src={order?.storeLogo}
                                          className="order-store-logo"/>
                                     <div className="user-order-list-info">
-                                        <div
-                                            className="user-order-big-text">{status[order.orderStatus] || '상태 정보 없음'}</div>
-                                        <div>{order?.storeName}</div>
-                                        <div>
+                                        <div className={
+                                            typeof status[order.orderStatus] === 'function' &&
+                                            status[order.orderStatus](order).className
+                                                ? status[order.orderStatus](order).className
+                                                : 'user-order-big-text'
+                                        }>
+                                            {typeof status[order.orderStatus] === 'function'
+                                                ? status[order.orderStatus](order).text
+                                                : status[order.orderStatus]}
+                                        </div>
+                                        <div className="user-order-basic-text-m-0">{order?.storeName}</div>
+                                        <div className="user-order-basic-text-m-0">
                                             {order?.orderDate
                                                 ? new Date(order.orderDate).toLocaleString('ko-KR', {
                                                     year: 'numeric',
@@ -101,7 +144,8 @@ const UserOrderList = () => {
                                                     .replace(/-(?=\([가-힣]{1}\))/, ' ')  // DD- (날짜 뒤의 `-`만 제거)
                                                 : '날짜 정보 없음'}
                                         </div>
-                                        <span>{order?.orderList?.split('/')[0]} {order.quantity > 1 ? ` 외 ${order.quantity - 1}개` : ''} {order?.totalPayment.toLocaleString()}원</span>
+                                        <span
+                                            className="user-order-basic-text-m-0">{order?.orderList?.split('/')[0]} {order.quantity > 1 ? ` 외 ${order.quantity - 1}개` : ''} {order?.totalPayment.toLocaleString()}원</span>
                                         <Link to={`/order/${order.orderNumber}`}>
                                             <img src={detailbtn} alt="메뉴 상세보기"/>
                                         </Link>
@@ -111,19 +155,23 @@ const UserOrderList = () => {
                                     {order.orderStatus <= 3 ? (
                                         <>
                                             <button className="user-mini-btn-b"
-                                                    onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달 현황 보기</button>
+                                                    onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달
+                                                현황 보기
+                                            </button>
                                             <button className="user-mini-btn-bb">채팅 문의</button>
                                         </>
                                     ) : order.orderStatus === 6 ? (
                                         <>
                                             {reviewStatus[order.orderId] ? (
-                                                <button className="user-mini-btn-b"
+                                                <button className="user-mini-btn-bb"
                                                         onClick={() => navigate(`/user/review/${order.storeId}`)}>
                                                     작성한 리뷰 보기
                                                 </button>
                                             ) : (
-                                                <button className="user-mini-btn-b"
-                                                        onClick={() => navigate(`/user/reviewWrite`)}>
+                                                <button
+                                                    className="user-mini-btn-b"
+                                                    onClick={() => navigate(`/user/reviewWrite/${order.orderId}`)}
+                                                >
                                                     리뷰 작성하기
                                                 </button>
                                             )}
@@ -132,15 +180,18 @@ const UserOrderList = () => {
                                     ) : (
                                         <>
                                             <button className="user-mini-btn-b"
-                                                    onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달 현황 보기</button>
-                                            <button className="user-mini-btn-bb">채팅 문의</button>
+                                                    onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달
+                                                현황 보기
+                                            </button>
+                                            <button className="user-mini-btn-bb"
+                                                    onClick={() => navigate(`/chat/chattingroom`)}>채팅 문의</button>
                                         </>
                                     )}
-                            </div>
+                                </div>
 
-                            <div className="user-order-hr"></div>
+                                <div className="user-order-hr"></div>
                             </div>
-                            ))
+                        ))
                         }
                     </div>
                 )}
