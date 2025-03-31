@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "../../css/User.css";
 import storeMapMarker from "../../images/user/storeMapMarker.svg"
 import userMapMarker from "../../images/user/UserMapMarker.svg"
@@ -28,6 +28,10 @@ const UserDeliveryStatus = () => {
 
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
+
+    const location = useLocation();
+    const chatSectionRef = useRef(null);
+    const [highlight, setHighlight] = useState(false);
 
     // 로그인 확인
     useEffect(() => {
@@ -195,6 +199,16 @@ const UserDeliveryStatus = () => {
                 });
         }
     };
+
+    // 반짝
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get("scrollToChat") === "true" && chatSectionRef.current) {
+            chatSectionRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            setHighlight(true);
+            setTimeout(() => setHighlight(false), 2000); // 2초 후 효과 제거
+        }
+    }, [location]);
 
     return (
         <div className="user-delivery-status-container">
