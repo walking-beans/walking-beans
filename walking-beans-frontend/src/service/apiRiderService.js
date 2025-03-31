@@ -255,7 +255,8 @@ const apiRiderService = {
             )
             .catch(
                 (err) => {
-                    console.error("채팅방 insert 중 오류가 발생 err 문제 개발자가 확인하기 : " + err)
+                    alert("채팅방 insert 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             );
     },
@@ -270,7 +271,8 @@ const apiRiderService = {
             )
             .catch(
                 (err) => {
-                    console.error("채팅방 insert 중 오류가 발생 err 문제 개발자가 확인하기 : " + err)
+                    alert("채팅방 insert 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
                 }
             );
     }

@@ -114,26 +114,16 @@ const UserOrderCheckout = () => {
         }, [userId]);
 
         // 장바구니 메뉴 삭제
-    const handleDelete = (deleteCartId) => {
-        if (!deleteCartId) return;
-
-        const isLastItem = carts.length === 1;
-
-        if (isLastItem) {
-            const confirmGoBack = window.confirm("마지막 메뉴입니다. 삭제 후 가게로 돌아가시겠습니까?");
-            if (!confirmGoBack) return;
-        }
-
-        apiUserOrderService.deleteUserOrderCart(deleteCartId)
-            .then(() => apiUserOrderService.getUserCartByUserId(userId))
-            .then((updatedCart) => {
-                setCarts(updatedCart);
-                if (isLastItem) {
-                    window.location.href = `/store/${storeId}`;
-                }
-            })
-            .catch(err => console.error("장바구니 삭제 오류:", err));
-    };
+        // 마지막 메뉴 지울 때 삭제하면 다시 가게로 돌아가기 설정
+        const handleDelete = (deleteCartId) => {
+            if (!deleteCartId) return;
+            apiUserOrderService.deleteUserOrderCart(deleteCartId)
+                .then(() => apiUserOrderService.getUserCartByUserId(userId))
+                .then((updatedCart) => {
+                    setCarts(updatedCart);
+                })
+                .catch(err => console.error("장바구니 삭제 오류:", err));
+        };
 
         // 결제 방법 선택
         const handlePayMethodClick = (method) => {
