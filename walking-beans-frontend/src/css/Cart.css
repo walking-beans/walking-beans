@@ -49,10 +49,11 @@
 }
 
 .user-title-center {
-    font-size: 33px;
+    font-size: 32px;
     font-weight: bold;
     color: #5A3D21;
     text-align: center;
+    letter-spacing: -1.9px;
 }
 
 .user-cart-grid {

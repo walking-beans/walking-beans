@@ -54,6 +54,7 @@ import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
 import UserCart from "../pages/user/UserCart";
+import ErrorPage from "../pages/layout/ErrorPage";
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -104,6 +105,9 @@ function PathRoute() {
                         {/* <div className="col-md-8 col-12">*/}
                         <div className=" col-12">
                             <Routes>
+                                {/* 에러 페이지 */}
+                                <Route path="/error" element={<ErrorPage />} />
+
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
