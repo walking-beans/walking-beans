@@ -146,18 +146,18 @@ className="cursor-pointer text-primary fw-bold"
 .user-insert-address-container .address-alias,
 .user-insert-address-container .detailed-address {
     padding: 3px;
-    border-radius: 10px;
+    border-radius: 30px;
     border: 2px solid #AB7A44;
     text-align: center;
     display: block;
-    width: 80%;
+    width: 70%;
     margin: 10px auto 0;
 }
 
 /* 포커스 상태에서 테두리 색상 변경 방지 */
 .user-insert-address-container .address-alias:focus,
 .user-insert-address-container .detailed-address:focus,
-.user-insert-address-container .insert-address:focus {
+.user-insert-address-container .insert-address:checked {
     outline: none;
     border: 2px solid #AB7A44;
 }
@@ -173,22 +173,33 @@ className="cursor-pointer text-primary fw-bold"
 .user-insert-address-container .save-btn,
 .user-insert-address-container .cancel-btn {
     padding: 10px 20px;
-    border-radius: 8px;
-    width: 120px;
+    border-radius: 30px;
+    width: 130px;
     text-align: center;
     background-color: #AB7A44;
+    border: none;
+    color: #F4EDDF;
+    font-weight: bold;
 }
 
 .user-insert-address-container .insert-address {
     flex: 1;
     height: 60px;
     font-size: 22px;
-    color: #D2B595;
+    color: #5A3D21;
     border: none;
     outline: none;
     background-color: transparent;
     padding-left: 50px;
     padding-right: 15px;
+    cursor: pointer;
+}
+
+/* placeholder 색상 설정*/
+.user-insert-address-container .insert-address::placeholder,
+.user-insert-address-container .detailed-address::placeholder,
+.user-insert-address-container .address-alias::placeholder {
+    color: #D2B595;
 }
 
 .user-insert-address-container .input-group {
