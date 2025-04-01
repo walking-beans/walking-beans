@@ -15,6 +15,8 @@ const UserMenuOptionGroup = ({optionName, options, selectedOptions, onOptionChan
                         optionPrice={option.optionPrice}
                         onChange={() => onOptionChange(optionName, option)}
                         checked={selectedOptions && selectedOptions.some(selected => selected.optionId === option.optionId)}
+                        type="radio"
+                        name={optionName}
                     />
                 ))}
             </div>
