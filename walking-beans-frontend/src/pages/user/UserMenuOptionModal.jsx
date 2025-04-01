@@ -34,20 +34,12 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
     const handleOptionChange = (optionName, option) => {
         setSelectedOptions((prev) => {
             // 해당 옵션 그룹에 대한 현재 선택 상태 가져오기
-            const currentSelected = prev[optionName] || [];
+            const newSelectedOptions = {...prev};
 
-            // 이미 선택된 옵션인지 확인
-            const isAlreadySelected = currentSelected.some(item => item.optionId === option.optionId);
+            // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
+            newSelectedOptions[optionName] = [option];
 
-            // 선택된 경우 제거, 그렇지 않으면 추가
-            const updatedOptions = isAlreadySelected
-                ? currentSelected.filter(item => item.optionId !== option.optionId)
-                : [...currentSelected, option];
-
-            return {
-                ...prev,
-                [optionName]: updatedOptions
-            };
+            return newSelectedOptions;
         });
     };
 

@@ -31,7 +31,6 @@ export function UserCheckoutPage() {
     const [storeId, setStoreId] = useState(null);
     const [addressId, setAddressId] = useState(null);
 
-
     useEffect(() => {
         async function fetchPaymentWidgets() {
             if (widgetInitialized.current) return; // 이미 위젯이 생성되었으면 다시 실행하지 않음
@@ -151,7 +150,7 @@ export function UserCheckoutPage() {
                                     });
                                 } catch (error) {
                                     console.error("결제 요청 실패:", error.response?.data || error.message);
-                                    navigate(`/sandbox/fail`);
+                                    navigate(`/sandbox/fail`, {replace: true});
                                 }
                             }}
                         >
@@ -161,7 +160,7 @@ export function UserCheckoutPage() {
                     <div className="user-order-click-btn-one">
                         <button
                             className="user-order-paymethod-text"
-                            onClick={() => (navigate(-1))}
+                            onClick={() => navigate(`/order/checkout/${userId}`)}
                                 >결제수단 변경하기</button>
                     </div>
                 </div>
