@@ -180,10 +180,20 @@ const UserInsertAddress = ({user}) => {
 
             <div>
                 <div className="input-group">
-                    <button className="insert-address" onClick={handleSearchAddress}>
-                        <img src={searchIcon} alt="search icon" className="button-icon"/>
-                        주소를 입력해 주세요.
-                    </button>
+                    <img
+                        src={searchIcon}
+                        alt="search icon"
+                        className="input-icon"
+                        onClick={handleSearchAddress}
+                    />
+                    <input
+                        type="text"
+                        className="insert-address"
+                        placeholder="주소를 입력해 주세요."
+                        value={address}
+                        readOnly
+                        onClick={handleSearchAddress}
+                    />
                 </div>
                 {address && (
                     <>

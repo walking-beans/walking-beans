@@ -180,18 +180,34 @@ className="cursor-pointer text-primary fw-bold"
 }
 
 .user-insert-address-container .insert-address {
-    border-radius: 30px;
-    border: 1px solid #AB7A44;
-    width: 100%;
+    flex: 1;
     height: 60px;
     font-size: 22px;
     color: #D2B595;
-    background-color: #FFFFFF;
-    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left: 50px;
+    padding-right: 15px;
+}
+
+.user-insert-address-container .input-group {
+    position: relative;
     display: flex;
     align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
+    width: 100%;
+    border-radius: 30px;
+    border: 1px solid #AB7A44;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+.user-insert-address-container .input-icon {
+    position: absolute;
+    left: 15px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 }
 
 .user-insert-address-container .button-icon {
