@@ -1,12 +1,11 @@
 import axios, {call} from "axios";
-import {Link} from "react-router-dom";
 
 const USER_API_URL = "http://localhost:7070/api/users"
 
 const apiUserService = {
     // 로그인 api
     login:
-        function (userEmail, userPassword, callback) {
+        function (userEmail, userPassword, callback, navigate) {
             axios
                 .post(`${USER_API_URL}/login`,
                     {userEmail, userPassword}, {withCredentials: true}
@@ -24,13 +23,14 @@ const apiUserService = {
                 .catch(
                     (err) => {
                         console.log("백엔드에서 오류가 발생했습니다.(로그인)" + err);
+                        navigate("/error");
                     }
                 )
         },
 
     //로그아웃 api
     logout:
-        function () {
+        function (navigate) {
             axios
                 .post(`${USER_API_URL}/logout`, {withCredentials: true})
                 .then(
@@ -42,6 +42,7 @@ const apiUserService = {
                 .catch(
                     (err) => {
                         console.log("백엔드에서 오류가 발생했습니다.(로그아웃)" + err);
+                        navigate("/error");
                     }
                 )
         },
@@ -59,7 +60,7 @@ const apiUserService = {
 
     // 유저 롤 수정하는 api
     updateRole:
-        function (userEmail, userRole, callback) {
+        function (userEmail, userRole, callback, navigate) {
             axios
                 .put(`${USER_API_URL}/${userEmail}/${userRole}`)
                 .then(
@@ -69,13 +70,14 @@ const apiUserService = {
                 )
                 .catch(
                     (err) => {
-                        alert("등급을 수정하는데 백엔드에서 문제가 생겼습니다.");
+                        alert("등급을 수정하는데 문제가 생겼습니다.");
+                        navigate("/error");
                     }
                 )
         },
 
     kakaoLogin:
-        function (callback) {
+        function (callback, navigate) {
             axios
                 .get("/oauth/kakao/login")
                 .then(
@@ -85,14 +87,15 @@ const apiUserService = {
                 )
                 .catch(
                     (err) => {
-                        alert("백엔드와의 연결에 실패했습니다.");
+                        //alert("백엔드와의 연결에 실패했습니다.");
                         console.log("err: ", err);
+                        navigate("/error");
                     }
                 )
         },
 
     kakaoCallback:
-        function (code, dataCallback){
+        function (code, dataCallback, navigate){
             axios
                 .get(`/oauth/kakao/callback?code=${code}`)
                 .then(
@@ -103,13 +106,14 @@ const apiUserService = {
                     })
                 .catch(
                     (err) => {
-                        alert("백엔드에서 오류가 발생했습니다.");
+                        //alert("백엔드에서 오류가 발생했습니다.");
+                        navigate("/error");
                     }
                 )
         },
 
     naverLogin:
-        function (callback) {
+        function (callback, navigate) {
             axios
                 .get("/oauth/naver/login")
                 .then(
@@ -119,7 +123,8 @@ const apiUserService = {
                 )
                 .catch(
                     (err) => {
-                        alert("백엔드와의 연결에 실패했습니다.");
+                        //alert("백엔드와의 연결에 실패했습니다.");
+                        navigate("/error");
                     }
                 )
         },

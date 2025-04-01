@@ -34,7 +34,7 @@ const AdminLoginNomal = () => {
             } else {
                 setLoginresult("fail");
             }
-        }));
+        }), navigate);
     }
 
     useEffect(() => {
@@ -133,7 +133,6 @@ const AdminLoginSocial = () => {
     const [KakaoCallback, setKakaoCallback] = useState("");
     const [NaverCallback, setNaverCallback] = useState("");
     const [role, setRole] = useState(null);
-    //const [code, setCode] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -152,13 +151,14 @@ const AdminLoginSocial = () => {
                     setRole(user.user_role);
                 } else {
                     console.log("로그인 실패");
+                    navigate("/error");
                 }
-            });
+            }, navigate)
         }
     }, [location, navigate]);
 
     const kakaoLogin = () => {
-        apiUserService.kakaoLogin(setKakaoCallback);
+        apiUserService.kakaoLogin(setKakaoCallback, navigate);
     }
 
     useEffect(() => {
@@ -169,7 +169,7 @@ const AdminLoginSocial = () => {
 
 
     const naverLogin = () => {
-        apiUserService.naverLogin(setNaverCallback);
+        apiUserService.naverLogin(setNaverCallback, navigate);
     }
 
     useEffect(() => {

@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
+
+/* 전체 레이아웃 */
+.mypage-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fef6ea;
+    color: #5a3d21;
+    text-align: center;
+}
+
+/* 프로필 섹션 */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.profile-picture {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #5a3d21;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+/* 이름 표시 */
+.profile-userName p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+/* 서브 메뉴 (리뷰 관리 / 주소 관리) */
+.sub-menu-links {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    color: #888;
+}
+
+.sub-menu-links div {
+    cursor: pointer;
+}
+
+/* 회원정보 수정 */
+.infoCertification {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.infoCertification div {
+    background-color: #5a3d21;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* 사용자 정보 */
+.mypage-info {
+    text-align: left;
+    padding: 0 16px;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.mypage-info p {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+}
+
+/* 하단 메뉴 */
+.menu-links,
+.mypage-end-menu-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 16px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.menu-links div,
+.mypage-end-menu-links div {
+    text-align: center;
+    cursor: pointer;
+}

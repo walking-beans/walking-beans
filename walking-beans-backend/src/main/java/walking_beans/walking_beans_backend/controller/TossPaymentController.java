@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.model.dto.ChattingRoom;
+import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Payments;
+import walking_beans.walking_beans_backend.model.dto.Stores;
+import walking_beans.walking_beans_backend.service.chattingRoomService.ChattingRoomServiceImpl;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
+import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentService;
 import walking_beans.walking_beans_backend.service.tossPaymentService.TossPaymentServiceImpl;
 import walking_beans.walking_beans_backend.service.userCartService.UserCartServiceImpl;
@@ -29,6 +34,8 @@ public class TossPaymentController {
     private final TossPaymentServiceImpl tossPaymentService;
     private final OrderServiceImpl orderService;
     private final UserCartServiceImpl cartService;
+    private final StoreServiceImpl storeService;
+    private final ChattingRoomServiceImpl chattingRoomService;
 
     @PostMapping("/request")
     public ResponseEntity<Map<String, Object>> requestPayment(@RequestBody Map<String, Object> requestData) {
@@ -113,14 +120,23 @@ public class TossPaymentController {
                 payment.setPaymentStatus("완료");
                 tossPaymentService.insertPayments(payment);
 
+                // ✅ 주문 생성 후 채팅방 자동 생성 추가
+                createChattingRoomForOrder(orderId);
+
             } else {
                 boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
                 response = tossPaymentService.confirmPayment(requestData, isApiPayment);
 
+
                 if (response.get("error") == null) {
                     Long orderId = orderService.createOrder(requestData);
                     response.put("orderId", orderId);
+
+
                     log.info("주문 생성 완료! 주문 ID: {}", orderId);
+
+                    // ✅ 주문 생성 후 채팅방 자동 생성 추가
+                    createChattingRoomForOrder(orderId);
                 }
             }
 
@@ -142,6 +158,30 @@ public class TossPaymentController {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "서버 처리 중 오류 발생"));
+        }
+    }
+
+    // ✅ 채팅방 자동 생성 메서드 추가
+    private void createChattingRoomForOrder(Long orderId) {
+        try {
+            // 주문 정보 조회
+            Orders order = orderService.findOrderById(orderId);
+            if (order == null) {
+                log.error("주문 ID {}에 대한 정보를 찾을 수 없음", orderId);
+                return;
+            }
+
+            Long userId = order.getUserId();
+            Long storeId = order.getStoreId();
+
+            // 매장 정보 조회
+            Stores store = storeService.findStoresById(storeId);
+            if (store == null) {
+                log.error("매장 ID {}에 대한 정보를 찾을 수 없음", storeId);
+                return;
+            }
+        } catch (Exception e) {
+            log.error("🚨 주문 채팅방 자동 생성 중 오류 발생: ", e);
         }
     }
 

@@ -57,7 +57,24 @@ const HeaderAlarm = ({userId, bell}) => {
 
                         setUnreadCount((prevCount) => prevCount +1);
                     }
-                });
+                })
+                /************ 전체 알림 수신 코드 ********************/
+                stompClient.subscribe(`/topic/alarms/admin`, (message) => {
+                    console.log("관리자 알람 수신: ",message.body);
+                    const receivedData = JSON.parse(message.body);
+
+                    // 관리자의 알림을 처리
+                        setNotifications((prevNotifications) => [
+                            {
+                                message: receivedData.alarmContent,
+                                type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
+                                url: receivedData.alarmUrl,
+                            },
+                            ...prevNotifications,
+                        ]);
+                        setUnreadCount((prevCount) => prevCount + 1);
+                })
+                /**************************** **************************/
             },
             onStompError: (frame) => {
                 console.error("❌ WebSocket 오류:", frame);
