@@ -61,7 +61,7 @@
 PRIMARY KEY (`store_id`),
 CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`)
      -->
-    <insert id="addStores">
+    <insert id="addStore">
         INSERT INTO Stores (store_id,
                             user_id,
                             store_name,
@@ -109,7 +109,7 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     </insert>
 
     <!--매장정보 수정하기 -->
-    <update id="updateStores">
+    <update id="updateStore">
         UPDATE stores
         SET (
                 store_name = #{storeName}

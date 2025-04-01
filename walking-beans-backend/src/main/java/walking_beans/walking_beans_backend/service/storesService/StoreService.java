@@ -1,5 +1,6 @@
 package walking_beans.walking_beans_backend.service.storesService;
 
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 
@@ -23,7 +24,7 @@ public interface StoreService {
     void addStore(Stores stores);
 
     // 매장정보 수정하기
-    void updateStores(Stores stores);
+    void updateStore(Stores stores);
 
     // 매장 소유주 확인 수정 권한 검증용
     long getStoreIdByUserId(long userId);

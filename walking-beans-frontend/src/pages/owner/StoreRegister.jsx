@@ -12,26 +12,27 @@ const StoreRegister = () => {
     const {id}= useParams(); // 유저 아이디
     console.log("유저아이디 확인용: "+ id);
     const [formData, setFormData] = useState({
-        user_id: {id},
-        store_name: "",
-        store_description: "",
-        store_main_menu: "",
-        store_business_number: "",
-        store_phone: "",
-        store_operation_hours: "09:00 - 18:00",
-        store_closed_dates: "",
-        store_status: "운영 중", // 기본값
-        store_review_count: 0,   // 기본값
-        store_rating: 0.0,       // 기본값
-        store_min_delivery_time: "",
-        store_max_delivery_time: "",
-        store_delivery_tip: "",
-        store_delivery_address: "",
-        store_address: "",
-        store_latitude: "00.000001",
-        store_longitude: "00.000001",
-        store_picture_url: null, // 파일 초기화
+        userId: id,
+        storeName: "",
+        storeDescription: "",
+        storeMainMenu: 0,
+        storeBusinessNumber: "",
+        storePhone: "",
+        storeOperationHours: "09:00 - 18:00",
+        storeClosedDates: "",
+        storeStatus: "운영 중", // 기본값
+        storeReviewCount: 0,   // 기본값
+        storeRating: 0.0,       // 기본값
+        storeMinDeliveryTime: "",
+        storeMaxDeliveryTime: "",
+        storeDeliveryTip: "",
+        storeDeliveryAddress: "",
+        storeAddress: "",
+        storeLatitude: "00.000001",
+        storeLongitude: "00.000001",
+        storePictureUrl: null, // 파일 초기화
     });
+
 
     // 텍스트 입력 핸들러
     const handleChange = (e) => {
@@ -41,36 +42,66 @@ const StoreRegister = () => {
 
     // 파일 입력
     const handleFileChange = (file) => {
-        setFormData((prev)=>({...prev, store_picture_url: file }));
+        console.log("파일 선택됨: ", file ? file.name : "null"); // 파일 이름 확인
+        setFormData((prev)=>({...prev, storePictureUrl: file }));
     };
 
     // 폼 제출
     const handleSubmit = () => {
         const uploadData = new FormData();
+        console.log("파일 상태: ", formData.storePictureUrl ? formData.storePictureUrl.name : "null");
         // 파일 추가
-        if(formData.store_picture_url){
-            uploadData.append("store_picture_url", formData.store_picture_url);
+        if(formData.storePictureUrl){
+            uploadData.append("storePictureUrl", formData.storePictureUrl);
+            console.log("FormData에 추가된 파일: ", formData.storePictureUrl.name);
+        } else {
+            console.log("파일 없음: storePictureUrl이 null입니다");
         }
 
         // 나머지 필드
-        uploadData.append("user_id", formData.user_id);
-        uploadData.append("store_name", formData.store_name);
-        uploadData.append("store_description", formData.store_description);
-        uploadData.append("store_main_menu", formData.store_main_menu);
-        uploadData.append("store_business_number", formData.store_business_number);
-        uploadData.append("store_phone", formData.store_phone);
-        uploadData.append("store_operation_hours", formData.store_operation_hours);
-        uploadData.append("store_closed_dates", formData.store_closed_dates);
-        uploadData.append("store_status", formData.store_status);
-        uploadData.append("store_review_count", formData.store_review_count);
-        uploadData.append("store_rating", formData.store_rating);
-        uploadData.append("store_min_delivery_time", formData.store_min_delivery_time);
-        uploadData.append("store_max_delivery_time", formData.store_max_delivery_time);
-        uploadData.append("store_delivery_tip", formData.store_delivery_tip);
-        uploadData.append("store_delivery_address", formData.store_delivery_address);
-        uploadData.append("store_address", formData.store_address);
-        uploadData.append("store_latitude", formData.store_latitude);
-        uploadData.append("store_longitude", formData.store_longitude);
+        /*
+        uploadData.append("userId", formData.userId);
+        uploadData.append("storeName", formData.storeName);
+        uploadData.append("storeDescription", formData.storeDescription);
+        uploadData.append("storeMainMenu", formData.storeMainMenu);
+        uploadData.append("storeBusinessNumber", formData.storeBusinessNumber);
+        uploadData.append("storePhone", formData.storePhone);
+        uploadData.append("storeOperationHours", formData.storeOperationHours);
+        uploadData.append("storeClosedDates", formData.storeClosedDates);
+        uploadData.append("storeStatus", formData.storeStatus);
+        uploadData.append("storeReviewCount", formData.storeReviewCount);
+        uploadData.append("storeRating", formData.storeRating);
+        uploadData.append("storeMinDeliveryTime", formData.storeMinDeliveryTime);
+        uploadData.append("storeMaxDeliveryTime", formData.storeMaxDeliveryTime);
+        uploadData.append("storeDeliveryTip", formData.storeDeliveryTip);
+        uploadData.append("storeDeliveryAddress", formData.storeDeliveryAddress);
+        uploadData.append("storeAddress", formData.storeAddress);
+        uploadData.append("storeLatitude", formData.storeLatitude);
+        uploadData.append("storeLongitude", formData.storeLongitude);
+        */
+        const storeData = {
+            userId: formData.userId,
+            storeName: formData.storeName,
+            storeDescription: formData.storeDescription,
+            storeMainMenu: formData.storeMainMenu,
+            storeBusinessNumber: formData.storeBusinessNumber,
+            storePhone: formData.storePhone,
+            storeOperationHours: formData.storeOperationHours,
+            storeClosedDates: formData.storeClosedDates,
+            storeStatus: formData.storeStatus, // 기본값
+            storeReviewCount: formData.storeReviewCount,   // 기본값
+            storeRating:formData.storeRating,       // 기본값
+            storeMinDeliveryTime: formData.storeMinDeliveryTime,
+            storeMaxDeliveryTime: formData.storeMaxDeliveryTime,
+            storeDeliveryTip: formData.storeDeliveryTip,
+            storeDeliveryAddress: formData.storeDeliveryAddress,
+            storeAddress: formData.storeAddress,
+            storeLatitude: formData.storeLatitude,
+            storeLongitude: formData.storeLongitude,
+        };
+        uploadData.append("stores", JSON.stringify(storeData));
+
+        console.log("전송 데이터:", Array.from(uploadData.entries()));
 
         axios
             .post("http://localhost:7070/api/store",
@@ -78,12 +109,10 @@ const StoreRegister = () => {
                 {headers: {"Content-Type": "multipart/form-data"},
                 })
             .then((res)=>{
-                console.log("가게등록성공");
+                console.log("가게등록성공", res.data);
             })
             .catch((err)=>{
-                console.log("가게등록실패", err);
-                console.log("가게등록실패", uploadData);
-
+                console.log("가게등록실패", err.response ? err.response.data : err.message);
             })
     }
 

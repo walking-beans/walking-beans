@@ -1,47 +1,51 @@
 import MenuInputTag from "../MenuInputTag";
 
 
-const DeliveryInfoForm = ({formData, handleChange}) => {
+const DeliveryInfoForm = ({formData, handleChange, isEditing}) => {
 
 
     return(
         <div className="form-section">
             <h2>배달 정보</h2>
             <MenuInputTag
-                id="store_min_delivery_time"
+                id="storeMinDeliveryTime"
                 label="최소 배달 시간 (분)"
                 placeholder="예: 30"
-                value={formData.store_min_delivery_time}
+                value={formData.storeMinDeliveryTime}
                 onChange={handleChange}
                 type="number"
                 required={false}
+                isEditing={isEditing}
             />
             <MenuInputTag
-                id="store_max_delivery_time"
+                id="storeMaxDeliveryTime"
                 label="최대 배달 시간 (분)"
                 placeholder="예: 60"
-                value={formData.store_max_delivery_time}
+                value={formData.storeMaxDeliveryTime}
                 onChange={handleChange}
                 type="number"
                 required={false}
+                isEditing={isEditing}
             />
             <MenuInputTag
-                id="store_delivery_tip"
+                id="storeDeliveryTip"
                 label="배달 팁 (원)"
                 placeholder="예: 3000"
-                value={formData.store_delivery_tip}
+                value={formData.storeDeliveryTip}
                 onChange={handleChange}
                 type="number"
                 required={true}
+                isEditing={isEditing}
             />
             <MenuInputTag
-                id="store_delivery_address"
+                id="storeDeliveryAddress"
                 label="배달 가능 구역"
                 placeholder="배달 가능 지역을 입력하세요"
-                value={formData.store_delivery_address}
+                value={formData.storeDeliveryAddress}
                 onChange={handleChange}
                 type="text"
                 required={false}
+                isEditing={isEditing}
             />
 
         </div>

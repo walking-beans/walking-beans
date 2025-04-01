@@ -1,34 +1,34 @@
 import MenuInputTag from "../MenuInputTag";
 
-const LocationInfoForm = ({formData, handleChange}) => {
+const LocationInfoForm = ({formData, handleChange, isEditing}) => {
 
 
     return(
         <div className="form-section">
             <h2>위치 정보</h2>
             <MenuInputTag
-                id="store_address"
+                id="storeAddress"
                 label="가게 주소"
                 placeholder="가게 주소를 입력하세요"
-                value={formData.store_address}
+                value={formData.storeAddress}
                 onChange={handleChange}
                 type="text"
                 required={true}
             />
             <MenuInputTag
-                id="store_latitude"
+                id="storeLatitude"
                 label="위도"
                 placeholder="예: 37.123456"
-                value={formData.store_latitude}
+                value={formData.storeLatitude}
                 onChange={handleChange}
                 type="number"
                 required={true}
             />
             <MenuInputTag
-                id="store_longitude"
+                id="storeLongitude"
                 label="경도"
                 placeholder="예: 126.123456"
-                value={formData.store_longitude}
+                value={formData.storeLongitude}
                 onChange={handleChange}
                 type="number"
                 required={true}

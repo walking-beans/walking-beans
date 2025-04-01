@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.service.FileStorageService;
 import walking_beans.walking_beans_backend.service.orderService.OrderService;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
 import walking_beans.walking_beans_backend.service.storesService.StoreServiceImpl;
@@ -25,6 +26,9 @@ public class StoreAPIController {
 
     @Autowired
     private StoreServiceImpl storeService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     private
@@ -62,28 +66,27 @@ public class StoreAPIController {
      *  유저 정보 추가후 재검증 필요 외래키 부족
      * @param stores
      */
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     public void addStore(
-            @ModelAttribute Stores stores,
-            @RequestParam(value = "store_picture_url", required = false) MultipartFile storePictureUrl
-                        )
-            throws IOException { // 이미지 처리
-        if (storePictureUrl != null && !storePictureUrl.isEmpty()) {
-            String fileUrl = saveFile(storePictureUrl);
-            stores.setStorePictureUrl(fileUrl);
-        }
+            @RequestPart("stores") Stores stores,
+            @RequestPart(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
+            { // 이미지 처리 -> 서비스로 이동
+                System.out.println("컨트롤러 진입");
+                System.out.println("컨트롤러 - 수신된 Stores: " + stores);
+                System.out.println("컨트롤러 - 수신된 파일: " + (storePictureUrl != null ? storePictureUrl.getOriginalFilename() : "null"));
+
+                try { // MultipartFile, ModelAttribur 에러 가능성이 높다고 경고하여 추가
+                    if(storePictureUrl != null && !storePictureUrl.isEmpty()) { // 파일이 존재할때
+                        String fileUrl = fileStorageService.saveFile(storePictureUrl);
+                        stores.setStorePictureUrl(fileUrl);
+                    }
         // 가게 등록
         storeService.addStore(stores);
-
         // 유저 역활 업데이트
         userService.updateUserRoleStore(stores.getUserId(), (byte) 3); // 1 -> 3으로 변경
-    }
-
-    private String saveFile(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        String filePath = "/uploads/" + fileName;
-        file.transferTo(new File(filePath));
-        return filePath;
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
     }
 
     /**매장정보 수정하기
@@ -92,9 +95,17 @@ public class StoreAPIController {
      * @return
      */
     @PutMapping("/update/{storeId}")
-    public void updateStore(@PathVariable long storeId, @RequestBody Stores stores) {
-        stores.setStoreId(storeId);
-        storeService.updateStores(stores);
+    public void updateStore(@PathVariable long storeId,
+                            @ModelAttribute Stores stores,
+                            @RequestParam(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
+    {
+        try { // MultipartFile, ModelAttribur 에러 가능성이 높다고 경고하여 추가
+            stores.setStoreId(storeId);
+            storeService.updateStore(stores);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     /** 메인메뉴에서 매장 검색

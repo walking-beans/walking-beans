@@ -1,4 +1,4 @@
-const MenuInputTag = ({id, label, placeholder, value, onChange}) => {
+const MenuInputTag = ({id, label, placeholder, value, onChange, type = "text", required = false, isEditing = true}) => {
 
     return (
         <div className="MenuInputTag-container">
@@ -6,11 +6,13 @@ const MenuInputTag = ({id, label, placeholder, value, onChange}) => {
                 <input className="form-control"
                        id={id}
                        name={id}
-                       type="text"
+                       type={type}
                        placeholder={placeholder}
                        value={value}
                        onChange={onChange}
-                       data-sb-validations="required"/>
+                       required={required}
+                       disabled={!isEditing}
+                       data-sb-validations={required ? "required" : ""}/>
                 <label htmlFor={id}>{label} : </label>
                 <div className="invalid-feedback" data-sb-feedback={`${id}:required`}>{/* + 대신 : */}
                     {label}은(는) 필수로 입력해야 합니다.
