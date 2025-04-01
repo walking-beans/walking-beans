@@ -24,9 +24,6 @@ const UserHome = ({ user: initialUser }) => {
     const [ratingStats, setRatingStats] = useState({ average: 0, counts: [0, 0, 0, 0, 0] });
     const [reviews, setReviews] = useState([]);
 
-
-
-
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -324,12 +321,11 @@ const UserHome = ({ user: initialUser }) => {
         <div className="user-home-container">
             {/*주소를 보여줄 공간*/}
             <div className="d-flex align-items-center px-3 mb-2">
-                <h5 className="fw-bold mb-0"
+                <div className="user-order-bordtext"
                     onClick={handleUserAddress}
                     style={{cursor: "pointer"}}>
-                    {userAddress ? userAddress.address : "주소를 입력해주세요"}
-                    <i className="bi bi-chevron-down ms-1"></i>
-                </h5>
+                    {userAddress ? `${userAddress.address} ${userAddress.detailedAddress}` : "주소를 입력해주세요"}
+                </div>
             </div>
             {/*검색 공간*/}
             <div className="input-group mb-3 px-2">
@@ -350,12 +346,12 @@ const UserHome = ({ user: initialUser }) => {
             {/*매장 리스트*/}
             <ul className="store-list">
                 {displayStores.map((store) => (
-                    <li key={store.storeId} className="store-item">
+                    <li key={store.storeId} className="store-item" onClick={() => handleStore(store.storeId)}>
                         <img className="store-picture" src={store.storePictureUrl} alt="store" />
                         <div className="store-info">
                             {/* 왼쪽: 이름 & 별점 */}
                             <div className="store-details">
-        <span className="store-name" onClick={() => handleStore(store.storeId)}>
+        <span className="store-name">
             {store.storeName}
         </span>
                                 <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>

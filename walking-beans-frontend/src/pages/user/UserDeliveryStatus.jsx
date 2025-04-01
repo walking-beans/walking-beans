@@ -22,7 +22,6 @@ const UserDeliveryStatus = () => {
     const [orderId, setOrderId] = useState(null);
     const [payments, setPayments] = useState([]);
 
-    const [chattingMemberList, setChattingMemberList] = useState({});
     const [storeRoomId, setStoreRoomId] = useState(0);
     const [riderRoomId, setRiderRoomId] = useState(0);
 

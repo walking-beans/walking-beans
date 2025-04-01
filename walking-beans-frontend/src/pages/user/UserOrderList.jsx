@@ -161,7 +161,7 @@ const UserOrderList = () => {
                                                 ) : (
                                                     <button
                                                         className="user-mini-btn-b"
-                                                        onClick={() => navigate(`/user/reviewWrite/${order.orderId}`)}
+                                                        onClick={() => navigate(`/user/reviewWrite/${order.orderId}`, { state: { storeId: order.storeId, riderId: order.riderId_on_duty } })}
                                                     >
                                                         리뷰 작성하기
                                                     </button>
