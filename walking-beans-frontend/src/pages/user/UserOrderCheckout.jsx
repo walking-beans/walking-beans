@@ -30,7 +30,7 @@ const UserOrderCheckout = () => {
         const [storeId, setStoreId] = useState(null);
         const [clicked, setClicked] = useState(null);
         const [orderRequests, setOrderRequests] = useState("");
-        const [paymentMethod, setPaymentMethod] = useState(null);
+        const [optionIds, setOptionIds] = useState(null);
 
         // 메뉴 총 금액 계산
         useEffect(() => {
@@ -110,13 +110,23 @@ const UserOrderCheckout = () => {
         }, [userId]);
 
         // 장바구니 메뉴 삭제
-        // 마지막 메뉴 지울 때 삭제하면 다시 가게로 돌아가기 설정
         const handleDelete = (deleteCartId) => {
             if (!deleteCartId) return;
+
+            const isLastItem = carts.length === 1;
+
+            if (isLastItem) {
+                const confirmGoBack = window.confirm("마지막 메뉴입니다. 삭제 후 가게로 돌아가시겠습니까?");
+                if (!confirmGoBack) return;
+            }
+
             apiUserOrderService.deleteUserOrderCart(deleteCartId)
                 .then(() => apiUserOrderService.getUserCartByUserId(userId))
                 .then((updatedCart) => {
                     setCarts(updatedCart);
+                    if (isLastItem) {
+                        window.location.href = `/store/${storeId}`;
+                    }
                 })
                 .catch(err => console.error("장바구니 삭제 오류:", err));
         };
@@ -185,6 +195,7 @@ const UserOrderCheckout = () => {
                             addressId: addressId,
                             orderRequests: orderRequests,
                             orderTotalPrice: total,
+                            optionIds: optionIds,
                         },
                         cartList: cartItems,
                         payments: {
@@ -209,10 +220,17 @@ const UserOrderCheckout = () => {
                         }
                     });
                     console.log("만나서 결제 승인:", response.data);
+
+                    const chattingRoomId = response.data.chattingRoomId;
+
                     alert("주문이 성공적으로 완료되었습니다!");
                     localStorage.removeItem("orderRequests");
 
-                    navigate(`/user/delivery/status/${orderNumber}`, {replace: true});
+                    if (chattingRoomId) {
+                        navigate(`/chat/message/${chattingRoomId}`, { replace: true });  // ✅ 채팅방으로 바로 이동!
+                    } else {
+                        navigate(`/user/delivery/status/${orderNumber}`, { replace: true }); // 기존 로직 유지
+                    }
                 } catch (err) {
                     console.error("주문 저장 실패", err);
                     alert("오류가 발생하였습니다. 다시 시도해 주세요.");
