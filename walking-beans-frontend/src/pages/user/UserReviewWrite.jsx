@@ -2,15 +2,17 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/User.css";
 import groupIcon from "../../assert/svg/Group.svg"
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 const UserReviewWrite = () => {
     const [reviews, setReviews] = useState([]);
     const [riderReview, setRiderReview] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
+    const location = useLocation();
     const { orderId } = useParams();
     const [userId, setUserId] = useState(null);
-    const [storeId, setStoreId] = useState(null);
+    const [storeId, setStoreId] = useState(location.state?.storeId || null);
+    const [riderId, setRiderId] = useState(location.state?.riderId || null);
     const navigate = useNavigate();
 
     /*  const [newReview, setNewReview] = useState({
@@ -21,28 +23,25 @@ const UserReviewWrite = () => {
           reviewContent: "",
       }); 연결되면 storeId,orderId 작성*/
     const [newReview, setNewReview] = useState({
-      /*  
       orderId: orderId, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
         userId: userId, // 🛠 테스트용 유저 ID
         storeId: storeId, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
-        */
-        orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
+      /*  orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
         userId: 1, // 🛠 테스트용 유저 ID
-        storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
-
+        storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)*/
         reviewStarRating: 5, // 기본값 5점
         reviewContent: "",
     });
-    /*const [newRiderReview,setNewRiderReview] = useState({
+    const [newRiderReview,setNewRiderReview] = useState({
         orderId: orderId,
         riderId: riderId,
         riderReviewRating: 5,
-    })*/
-    const [newRiderReview,setNewRiderReview] = useState({
+    })
+  /*  const [newRiderReview,setNewRiderReview] = useState({
         orderId: 123,
         riderId: 1,
         riderReviewRating: 5,
-    })
+    })*/
 
 
     useEffect(() => {
@@ -147,10 +146,15 @@ const UserReviewWrite = () => {
         if (orderId) {
             axios.get(`http://localhost:7070/api/orders/${orderId}`)
                 .then(res => {
-                    setNewReview(orders => ({
-                        ...orders,
+                    setNewReview(prevReview => ({
+                        ...prevReview,
                         orderId: orderId,
-                        storeId: res.data.storeId
+                        storeId: res.data.storeId, // ✅ storeId 추가
+                    }));
+                    setNewRiderReview(prevReview => ({
+                        ...prevReview,
+                        orderId: orderId,
+                        riderId: res.data.RiderIdOnDuty || null // ✅ riderId 추가 (없으면 null)
                     }));
                 })
                 .catch(err => console.error("주문 정보 조회 실패:", err));

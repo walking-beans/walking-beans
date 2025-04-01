@@ -21,6 +21,8 @@ public class Reviews {
 
     private Long userId;
 
+    private String userName;
+
     private Long storeId;
 
     private int reviewStarRating;
