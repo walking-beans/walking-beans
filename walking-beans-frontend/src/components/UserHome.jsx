@@ -1,13 +1,16 @@
 import "./UserHome.css";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
 import apiUserService from "../service/apiUserService";
+import sequence from "../images/user/sequence.svg"
+import searchIcon from "../images/user/searchIcon.svg";
+import oneStar from "../assert/svg/starNav/oneStar.svg";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
-const UserHome = ({ user: initialUser }) => {
+const UserHome = ({user: initialUser}) => {
     const [userLocation, setUserLocation] = useState(null);
     const [store, setStore] = useState([]);
     const [stores, setStores] = useState([]);
@@ -21,7 +24,7 @@ const UserHome = ({ user: initialUser }) => {
     const [userId, setUserId] = useState(null);  // userId 상태
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
-    const [ratingStats, setRatingStats] = useState({ average: 0, counts: [0, 0, 0, 0, 0] });
+    const [ratingStats, setRatingStats] = useState({average: 0, counts: [0, 0, 0, 0, 0]});
     const [reviews, setReviews] = useState([]);
 
     // 로컬스토리지에서 사용자 정보 불러오기
@@ -60,7 +63,7 @@ const UserHome = ({ user: initialUser }) => {
 
     // 기본주소 변경하는 함수
     const fetchPrimaryAddress = () => {
-       apiUserService.primaryAddress(userId,setUserAddress,setUserLat,setUserLng);
+        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
     };
 
     useEffect(() => {
@@ -181,7 +184,7 @@ const UserHome = ({ user: initialUser }) => {
         let remainingStores = storesData.length;
 
         storesData.forEach((store) => {
-            fetchReviews(store.storeId, (rating,reviewCount) => {
+            fetchReviews(store.storeId, (rating, reviewCount) => {
                 updatedStores.push({
                     ...store,
                     storeRating: rating,
@@ -295,7 +298,7 @@ const UserHome = ({ user: initialUser }) => {
             navigate("/login");
             return;
         }
-        navigate("user/search/map", { state: { lat: userLat, lng: userLng } });
+        navigate("user/search/map", {state: {lat: userLat, lng: userLng}});
     };
 
     const handleUserAddress = () => {
@@ -304,7 +307,7 @@ const UserHome = ({ user: initialUser }) => {
             alert("로그인이 필요합니다.");
             navigate("/login");
             return;
-        }else {
+        } else {
             navigate("/user/insertAddress")
         }
     }
@@ -312,49 +315,124 @@ const UserHome = ({ user: initialUser }) => {
     const handleStore = (storeId) => {
         if (!storeId) return; // storeId가 없으면 실행하지 않음
         navigate(`/store/${storeId}`);
-    };
+    }
 
+    // 순서 버튼
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelected] = useState("평점순");
 
+    const options = [
+        {value: "rating", label: "평점순"},
+        {value: "distance", label: "거리순"},
+    ];
 
+    const handleSelect = (value, label) => {
+        setSelected(label);
+        setSortType(value);
+        setIsOpen(false);
+    }
 
     return (
+
         <div className="user-home-container">
-            {/*주소를 보여줄 공간*/}
-            <div className="d-flex align-items-center px-3 mb-2">
-                <div className="user-order-bordtext"
-                    onClick={handleUserAddress}
-                    style={{cursor: "pointer"}}>
-                    {userAddress ? `${userAddress.address} ${userAddress.detailedAddress}` : "주소를 입력해주세요"}
+            <div className="user-home-m">
+                {/*주소를 보여줄 공간*/}
+                <div>
+                    <div className="user-order-bordtext"
+                         onClick={handleUserAddress}
+                         style={{cursor: "pointer"}}>
+                        {userAddress ? `${userAddress.address} ${userAddress.detailedAddress}` : "주소를 입력해주세요"}
+                    </div>
                 </div>
-            </div>
-            {/*검색 공간*/}
-            <div className="input-group mb-3 px-2">
-                <div className="d-flex">
-                    <select className="form-select rounded-start"  onChange={(e) => setSortType(e.target.value)}>
-                        <option value="rating">평점순</option>
-                        <option value="distance">거리순</option>
-                    </select>
+
+                {/*검색 공간*/}
+                <div className="user-sequence-from">
+                    <div className={`user-sequence-from-select ${isOpen ? "open" : ""}`}>
+                        <div
+                            className={`selected-option ${isOpen ? "open" : ""}`}
+                            onClick={() => setIsOpen(!isOpen)}
+                        >
+                            <img src={sequence} alt="icon"/>
+                            {selected}
+                        </div>
+                        <ul className={`options ${isOpen ? "open" : ""}`}>
+                            {options.map((option) => (
+                                <li key={option.value} onClick={() => handleSelect(option.value, option.label)}>
+                                    {option.label}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div className="input-group">
+                            <img
+                                src={searchIcon}
+                                alt="search icon"
+                                className="input-icon"
+                            />
+                            <input type="text"
+                                   className="insert-address"
+                                   placeholder="어떤 커피를 찾으시나요?"
+                                   value={searchKeyword}
+                                   onChange={(e) => setSearchKeyword(e.target.value)}
+                                   onKeyDown={handleSearch}/>
+                        </div>
+                    </div>
                 </div>
-                <input type="text"
-                       className="form-control rounded-end"
-                       placeholder="어떤 커피를 찾으시나요?"
-                       value={searchKeyword}
-                       onChange={(e) => setSearchKeyword(e.target.value)}
-                       onKeyDown={handleSearch}/>
-            </div>
-            <div id="map" onClick={handleMapClick}></div>
-            {/*매장 리스트*/}
+
+                <div className="user-order-bordtext mb-2">내 주변 카페 둘러보기</div>
+
+                <div id="map" onClick={handleMapClick}></div>
+
+                {/*매장 리스트*/}
+                <div className="user-order-mt">
+                    {displayStores.map((store, index) => {
+                        const isLastItem = index === displayStores.length - 1;
+                        return (
+                            <div key={index}>
+                                <div className="store-list">
+                                    <div className="image-grid">
+                                        <img className="store-image" src={store.storePictureUrl} alt="storeImage"/>
+                                        <img className="menu-image" alt="메뉴 이미지 넣기"/>
+                                        <img className="menu-image" alt="메뉴 이미지 넣기"/>
+                                    </div>
+                                    <div className="store-info">
+                                        <div>
+                                            <div className="store-title">{store.storeName}</div>
+                                            <img src={oneStar} alt="별점 아이콘"/>
+                                            <span
+                                                className="rating-text">{store.storeRating}({Number(store.storeReviewCount).toLocaleString()})</span>
+                                        </div>
+
+                                        <div className="store-title">
+                                            {userLat && userLng
+                                                ? `${getDistance(userLat, userLng, store.storeLatitude, store.storeLongitude)}km`
+                                                : "-"}
+                                        </div>
+                                    </div>
+                                </div>
+                                {!isLastItem && <div className="user-order-hr"></div>}
+                            </div>
+                        )
+                    })
+                    }
+                </div>
+
+
+                {/*
             <ul className="store-list">
                 {displayStores.map((store) => (
                     <li key={store.storeId} className="store-item" onClick={() => handleStore(store.storeId)}>
-                        <img className="store-picture" src={store.storePictureUrl} alt="store" />
+                        <img className="store-picture" src={store.storePictureUrl} alt="store"/>
                         <div className="store-info">
-                            {/* 왼쪽: 이름 & 별점 */}
+                            {/* 왼쪽: 이름 & 별점 * /}
                             <div className="store-details">
-        <span className="store-name">
-            {store.storeName}
-        </span>
-                                <span className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
+                            <span className="store-name">
+                                {store.storeName}
+                            </span>
+                                <span
+                                    className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
                             </div>
                             <span className="store-distance">
         {userLat && userLng
@@ -365,6 +443,8 @@ const UserHome = ({ user: initialUser }) => {
                     </li>
                 ))}
             </ul>
+            */}
+            </div>
         </div>
     );
 };
