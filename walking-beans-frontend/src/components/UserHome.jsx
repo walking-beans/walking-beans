@@ -421,7 +421,7 @@ const UserHome = ({user: initialUser}) => {
                             .map(menu => menu.menuPictureUrl)
                             .slice(0, 2);
                         return (
-                            <div key={index}>
+                            <div key={index} onClick={() => handleStore(store.storeId)}>
                                 <div className="store-list">
                                     <div className="image-grid">
                                         <img className="store-image" src={store.storePictureUrl} alt="storeImage"/>
@@ -452,32 +452,6 @@ const UserHome = ({user: initialUser}) => {
                     })
                     }
                 </div>
-
-
-                {/*
-            <ul className="store-list">
-                {displayStores.map((store) => (
-                    <li key={store.storeId} className="store-item" onClick={() => handleStore(store.storeId)}>
-                        <img className="store-picture" src={store.storePictureUrl} alt="store"/>
-                        <div className="store-info">
-                            {/* 왼쪽: 이름 & 별점 * /}
-                            <div className="store-details">
-                            <span className="store-name">
-                                {store.storeName}
-                            </span>
-                                <span
-                                    className="store-rating">★ {store.storeRating} ({store.storeReviewCount})</span>
-                            </div>
-                            <span className="store-distance">
-        {userLat && userLng
-            ? `${getDistance(userLat, userLng, store.storeLatitude, store.storeLongitude)} km`
-            : "-"}
-    </span>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-            */}
             </div>
         </div>
     );

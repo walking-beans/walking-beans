@@ -234,3 +234,7 @@
 .user-home-container .user-home-m {
     margin: 30px 0;
 }
+
+.user-home-container .menu-image {
+    object-fit: cover;
+}
