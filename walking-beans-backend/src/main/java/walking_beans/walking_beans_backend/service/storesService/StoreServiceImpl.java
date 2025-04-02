@@ -2,17 +2,27 @@ package walking_beans.walking_beans_backend.service.storesService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.mapper.StoreMapper;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
+import walking_beans.walking_beans_backend.service.FileStorageService;
 
 import java.util.List;
 
 @Service
 public class StoreServiceImpl implements StoreService {
 
+    // 이미지 저장 서비스 생성자 주입
+    private final FileStorageService fileStorageService;
+
+    public StoreServiceImpl(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
+
     @Autowired
     private StoreMapper storeMapper;
+
 
     //매장 전체 불러오기
     @Override
@@ -44,14 +54,29 @@ public class StoreServiceImpl implements StoreService {
 
     // 신규매장 등록하기
     @Override
-    public void addStore(Stores stores) {
+    public void addStore(Stores stores
+                         ) {
+
         storeMapper.addStore(stores);
+
     }
 
     // 매장정보 수정하기
     @Override
-    public void updateStores(Stores stores) {
-        storeMapper.updateStores(stores);
+    public void updateStore(Stores stores
+                            ) {
+
+        // 이미지 저장
+
+
+
+
+        storeMapper.updateStore(stores);
+    }
+    // 권한 검증용 id 확인
+    @Override
+    public long getStoreIdByUserId(long userId) {
+        return storeMapper.getStoreIdByUserId(userId);
     }
 
     // 매장정보 삭제하기

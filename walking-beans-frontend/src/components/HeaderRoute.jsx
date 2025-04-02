@@ -25,7 +25,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
             setCurrentHeader(<UserHeader user={user}/>);
         }*/
 
-        // rider
+
         if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}
                                           riderOnDuty={riderOnDuty}

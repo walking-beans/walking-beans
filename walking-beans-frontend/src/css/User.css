@@ -26,75 +26,6 @@
     height: auto;
 }
 
-/***************** UserHome *******************/
-.user-home-container {
-    min-height: 650px;
-    overflow-y: auto;
-}
-
-.user-home-container .store-list {
-    width: 100%;
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.user-home-container .store-item {
-    display: flex;
-    flex-direction: column;
-    background: #D7BEA2;
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    text-align: left;
-}
-
-.user-home-container .store-picture {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.user-home-container .store-name {
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.user-home-container .store-rating {
-    display: flex;
-    flex-direction: column; /* 별점을 이름 아래로 배치 */
-    align-items: flex-start; /* 왼쪽 정렬 */
-    color: #EE5A4C;
-}
-
-.user-home-container .store-info {
-    display: flex;
-    justify-content: space-between; /* 이름(왼쪽)과 거리(오른쪽) 정렬 */
-    align-items: flex-start;
-    margin-top: 8px;
-    width: 100%;
-    padding: 0 8px; /* 좌우 여백 */
-}
-
-.user-home-container.store-distance {
-    font-size: 14px;
-    color: #7f8c8d;
-    margin-top: 4px;
-    margin-left: auto;
-}
-
-.user-home-container .user-hr {
-    border: none;
-    border-top: 2px #5A3D21 solid;
-    margin: 30px 0;
-}
-
-
 /***************** UserSearchMap *******************/
 /*
 5A3D21
@@ -122,7 +53,7 @@ className="cursor-pointer text-primary fw-bold"
     position: relative;
 }
 
-.user-search-map-container h3 {
+.user-search-map-container .store-info {
     cursor: pointer;
 }
 
@@ -138,6 +69,8 @@ className="cursor-pointer text-primary fw-bold"
 
 /***************** UserInsertAddress *******************/
 .user-insert-address-container {
+    width: 100%;
+    height: 70vh;
     background-color: #F4EDDF;
     padding: 30px;
     overflow-y: auto;

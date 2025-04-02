@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import apiUserService from "../../service/apiUserService";
+import '../../css/admin/AdminMypageUnlink.css';
 
 
 function AdminMypageUnlink() {
@@ -8,7 +9,7 @@ function AdminMypageUnlink() {
     const[isCheck, setCheck] = useState(false);
     const[isDelete, setDelete] = useState(false);
     const navigate = useNavigate();
-
+    const [userRole, setUserRole] = useState("user");
 
 
 
@@ -16,6 +17,7 @@ function AdminMypageUnlink() {
         apiUserService.sessionData((response) => {  //  sessionData() 올바르게 호출
             if (response && response.user_id) {
                 setuserId(response.user_id);  //  userId 설정
+                setUserRole(response.user_role || "user");
             } else {
                 alert("로그인이 필요합니다.");
                 navigate("/login");  //  로그인 페이지로 이동
@@ -58,9 +60,9 @@ function AdminMypageUnlink() {
 
 
     return (
-        <div>
+        <div className={`unlink-container ${userRole}`}>
             <h2>탈퇴 약관</h2>
-            <div>
+            <div className="Withdrawal Policy">
                 <p>1. 약관 내용1</p>
                 <p>2. 약관 내용2</p>
                 <p>3. 약관 내용3</p>

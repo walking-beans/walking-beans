@@ -193,11 +193,9 @@ const UserSearchMap = () => {
         <div className="user-search-map-container">
             <div id="search-map" style={{ width: "100%", height: "700px" }}></div>
             {selectedStore && (
-                <div className="store-info">
+                <div className="store-info" onClick={handleStore}> {/* 여기 추가됨 */}
                     <div className="user-order-hr"></div>
-                    <h3 onClick={handleStore}>
-                        {selectedStore.storeName}
-                    </h3>
+                    <h3>{selectedStore.storeName}</h3>
                     <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
                     <p>{selectedStore.storeStatus} : {selectedStore.storeOperationHours}</p>
                     <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장 이미지" />
