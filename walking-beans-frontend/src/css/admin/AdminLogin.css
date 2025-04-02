@@ -93,6 +93,13 @@
     color: #5A3D21;
 }
 
+.login-container .login-text-mini {
+    font-size: 17px;
+    align-items: center;
+    color: #5A3D21;
+    letter-spacing: -1px;
+}
+
 @media (max-width: 480px) {
     .login-container {
         padding: 16px;

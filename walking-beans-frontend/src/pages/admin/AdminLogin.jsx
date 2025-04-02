@@ -118,6 +118,7 @@ const AdminLoginNomal = () => {
                 </form>
 
                 <div className="login-text">소셜 계정으로 로그인 하기</div>
+                <div className="login-text-mini">가입된 정보가 없을 경우 자동으로 가입됩니다</div>
                 <div className="social-login">
                     <button className="kakao-login">
                         <img src={kakaoLoginButton} alt="Kakao"/>
