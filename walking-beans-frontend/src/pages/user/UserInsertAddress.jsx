@@ -175,7 +175,7 @@ const UserInsertAddress = ({user}) => {
 
     return (
         <div className="user-insert-address-container">
-            <h5 className="user-title-center">주소 설정</h5>
+            <div className="user-title-center">주소 설정</div>
             <div className="user-order-hr"></div>
 
             <div>

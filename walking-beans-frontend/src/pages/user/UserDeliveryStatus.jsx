@@ -215,10 +215,11 @@ const UserDeliveryStatus = () => {
 
             <div className="user-status-modal-container">
                 <div>
+                    <div className="user-order-bordtext">도착예정시간</div>
                     {orderId && (
                         <RiderOrderStatus
                             orderId={orderId}
-                            message="초과 현재 위치는 라이더 채팅을 이용해 주세요."
+                            message="초과! 현재 위치는 라이더 채팅을 이용해 주세요."
                             css={{
                                 order_status_time_div: "user-menu-option-group-container",
                                 order_status_time_remaining: "user-order-big-text",

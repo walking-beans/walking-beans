@@ -99,7 +99,7 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: location.pathname === "/admin/mypage" ? "/" : "/admin/mypage",
+            user: location.pathname === "/mypage" ? "/" : "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
             owner: location.pathname === "/owner" ? "/" : "/owner",
             admin: "/admin"

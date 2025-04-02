@@ -100,7 +100,7 @@ function PathRoute() {
                 <div className="content-wrapper">
                     <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
-                        <div className=" col-12">
+
                             <Routes>
                                 {/* 에러 페이지 */}
                                 <Route path="/error" element={<ErrorPage />} />
@@ -229,7 +229,7 @@ function PathRoute() {
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
 
                             </Routes>
-                        </div>
+
                     </div>
                 </div>
                 {user?.user_role !== "rider" && <Footer/>}
