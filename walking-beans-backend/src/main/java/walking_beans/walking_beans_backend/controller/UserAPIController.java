@@ -35,7 +35,7 @@ public class UserAPIController {
 
         Map<String, Object> loginResult = userService.loginUser(userEmail, userPassword);
         // 전체 알림 테스트용 코드 ↓
-        alarmNotificationService.sendAdminNotification(Alarms.create(0,1,"전체공지입니다.",4,"testUrl"));
+        //alarmNotificationService.sendAdminNotification(Alarms.create(0,1,"전체공지입니다.",4,"testUrl"));
         if ("success".equals(loginResult.get("status"))) {
             session.setAttribute("user", loginResult.get("user"));
 

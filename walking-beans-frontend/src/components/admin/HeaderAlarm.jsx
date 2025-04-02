@@ -59,6 +59,7 @@ const HeaderAlarm = ({userId, bell}) => {
                     }
                 })
                 /************ 전체 알림 수신 코드 ********************/
+                /*
                 stompClient.subscribe(`/topic/alarms/admin`, (message) => {
                     console.log("관리자 알람 수신: ",message.body);
                     const receivedData = JSON.parse(message.body);
@@ -74,6 +75,7 @@ const HeaderAlarm = ({userId, bell}) => {
                         ]);
                         setUnreadCount((prevCount) => prevCount + 1);
                 })
+                 */
                 /**************************** **************************/
             },
             onStompError: (frame) => {
