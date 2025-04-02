@@ -38,6 +38,11 @@ public interface UserMapper {
     // 마이페이지 사용자 회원 탈퇴
     void deleteUserAccount(Long userId);
 
+
     // 가게 등록시 유저 역활 업데이트
     void updateUserRoleStore(long userId, byte userRole);
+
+    int updateUserRoleByUserId(Long userId, byte userRole);
+
+
 }

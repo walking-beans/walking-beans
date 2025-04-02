@@ -117,7 +117,7 @@ public class SocialLoginAPIController {
                 users.setUserRole(role);
                 users.setUserEmail(userInfo.get("email").toString());
                 users.setUserPassword("0000");
-                users.setUserName(userInfo.get("nickname").toString());
+                users.setUserName(userInfo.get("name").toString());
 
                 if (phone == null) {
                     users.setUserPhone("no phone");

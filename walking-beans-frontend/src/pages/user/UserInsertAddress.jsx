@@ -1,16 +1,17 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../../css/User.css";
+import searchIcon from "../../images/user/searchIcon.svg"
 
 
-const UserInsertAddress = ({ user }) => {
+const UserInsertAddress = ({user}) => {
     const navigate = useNavigate();
     const [address, setAddress] = useState(""); // 주소
     const [detailedAddress, setDetailedAddress] = useState(""); // 상세 주소
     const [addressName, setAddressName] = useState(""); // 주소 별칭
     const [currentUser, setCurrentUser] = useState(user);
-    const [savedAddresses,setSavedAddresses] = useState([]); // 저장된 주소 목록
+    const [savedAddresses, setSavedAddresses] = useState([]); // 저장된 주소 목록
     const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
     const [addressLatitude, setLatitude] = useState("");
     const [addressLongitude, setLongitude] = useState("");
@@ -53,19 +54,19 @@ const UserInsertAddress = ({ user }) => {
     }, []);
 
     // 로그인한 유저의 주소 목록 불러오기
-     const fetchUserAddresses = (userId) =>{
-         if (!userId) return;
+    const fetchUserAddresses = (userId) => {
+        if (!userId) return;
 
-         axios
-             .get(`http://localhost:7070/api/addresses/${userId}`)
-             .then((res) => {
-                 setSavedAddresses(res.data); // 서버에서 받은 주소 목록 저장
-                 console.log("불러온 주소 목록:", res.data);
-             })
-             .catch((error) => {
-                 console.error("주소 목록 불러오기 오류:", error);
-             });
-     }
+        axios
+            .get(`http://localhost:7070/api/addresses/${userId}`)
+            .then((res) => {
+                setSavedAddresses(res.data); // 서버에서 받은 주소 목록 저장
+                console.log("불러온 주소 목록:", res.data);
+            })
+            .catch((error) => {
+                console.error("주소 목록 불러오기 오류:", error);
+            });
+    }
     useEffect(() => {
         const currentUserId = currentUser?.user_id || currentUser?.userId;
         if (currentUserId) {
@@ -174,39 +175,45 @@ const UserInsertAddress = ({ user }) => {
 
     return (
         <div className="user-insert-address-container">
-            <div className="d-flex justify-content-between align-items-center py-3 border-bottom">
-                <i className="bi bi-arrow-left fs-4" onClick={() => navigate(-1)} style={{cursor: "pointer"}}></i>
-                <h5 className="fw-bold mb-0">주소 설정</h5>
-            </div>
+            <div className="user-title-center">주소 설정</div>
+            <div className="user-order-hr"></div>
 
-            <div className="mt-3">
+            <div>
                 <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                        <i className="bi bi-search text-muted"></i>
-                    </span>
-                    <input type="text" className="form-control bg-light border-0"
-                           placeholder="주소를 입력해 주세요."
-                           value={address}
-                           readOnly
-                           onClick={handleSearchAddress}/>
+                    <img
+                        src={searchIcon}
+                        alt="search icon"
+                        className="input-icon"
+                        onClick={handleSearchAddress}
+                    />
+                    <input
+                        type="text"
+                        className="insert-address"
+                        placeholder="주소를 입력해 주세요."
+                        value={address}
+                        readOnly
+                        onClick={handleSearchAddress}
+                    />
                 </div>
                 {address && (
                     <>
-                        <div className="d-flex align-items-center mt-2">
-                            <input type="text" className="form-control me-2"
-                                   style={{flex: "0 0 60%"}}
-                                   placeholder="주소 별칭 (예: 집, 회사)"
-                                   value={addressName}
-                                   onChange={(e) => setAddressName(e.target.value)}/>
+                        <input type="text" className="address-alias"
+                               style={{flex: "0 0 60%"}}
+                               placeholder="주소 별칭 (예: 집, 회사)"
+                               value={addressName}
+                               onChange={(e) => setAddressName(e.target.value)}/>
 
-                            <button className="btn btn-dark me-2 "
-                                    style={{flex: "0 0 19%"}}
+                        <input type="text" className="detailed-address"
+                               placeholder="상세 주소 입력"
+                               value={detailedAddress}
+                               onChange={(e) => setDetailedAddress(e.target.value)}/>
+                        <div className="button-container">
+                            <button className="save-btn"
                                     onClick={handleSaveAddress}>
                                 저장
                             </button>
 
-                            <button className="btn btn-secondary"
-                                    style={{flex: "0 0 18%"}}
+                            <button className="cancel-btn"
                                     onClick={() => {
                                         setAddress("");
                                         setAddressName("");
@@ -215,10 +222,6 @@ const UserInsertAddress = ({ user }) => {
                                 취소
                             </button>
                         </div>
-                        <input type="text" className="form-control mt-2"
-                               placeholder="상세 주소 입력"
-                               value={detailedAddress}
-                               onChange={(e) => setDetailedAddress(e.target.value)}/>
                     </>
                 )
                 }
@@ -226,26 +229,36 @@ const UserInsertAddress = ({ user }) => {
 
             </div>
             <div className="mt-3">
-                {savedAddresses.map((addr) => (
-                    <div key={addr.id} onClick={() => handleSetPrimaryAddress(addr.addressId)} className="p-3 border-bottom d-flex justify-content-between">
-                        <div>
-                            <h6 className="fw-bold mb-0">
-                                <i className="bi bi-geo-alt-fill me-2"></i> {addr.addressName}
-                            </h6>
-                            <p className="text-muted small">{addr.address} {addr.detailedAddress}</p>
-                            {addr.addressRole === 1 && <span>기본 주소</span>}
+                {savedAddresses.map((addr, index) => {
+                    const isLastItem = index === savedAddresses.length - 1;  // savedAddresses.length로 수정
+
+                    return (
+                        <div key={addr.id}>
+                            <div onClick={() => handleSetPrimaryAddress(addr.addressId)}
+                                 className="p-3 d-flex justify-content-between">
+                                <div>
+                                    <div className="user-order-bordtext">{addr.addressName}</div>
+                                    <p className="user-order-address-text">{addr.address} {addr.detailedAddress}</p>
+                                    {addr.addressRole === 1 && <button className="btn-mini">기본 주소</button>}
+                                </div>
+                                <button
+                                    className="btn btn-sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // 부모 이벤트 전파 방지
+                                        handleDeleteAddress(addr.addressId);
+                                    }}
+                                >
+                                    삭제
+                                </button>
+                            </div>
+                            {!isLastItem && <div className="user-order-hr-mini"></div>}
                         </div>
-                        <button
-                            className="btn btn-sm"
-                            onClick={(e) => {
-                                e.stopPropagation(); //  부모 이벤트 전파 방지
-                                handleDeleteAddress(addr.addressId);
-                            }}
-                        >
-                            삭제
-                        </button>
-                    </div>
-                ))}
+                    );
+                })}
+            </div>
+
+            <div className="user-order-click-btn-one">
+                <button className="user-order-btn-b" onClick={() => navigate(-1)}>선택 완료</button>
             </div>
 
         </div>

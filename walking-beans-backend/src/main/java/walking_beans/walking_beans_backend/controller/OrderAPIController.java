@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
 import walking_beans.walking_beans_backend.model.vo.OrderRequest;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
@@ -167,6 +169,7 @@ public class OrderAPIController {
         return ResponseEntity.ok(order);
     }
 
+
     /****************************mochoping********************************/
 
 
@@ -182,4 +185,33 @@ public class OrderAPIController {
         return orderService.getOrderForStore(orderNumber);
     }
 
+
+
+    // 주문 상세 내역 정보 가져오기
+    @GetMapping("/detail/orderNumber/{orderNumber}")
+    public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
+        List<OrderDetailDTO> orderDetails = orderService.getOrderDetailsByOrderNumber(orderNumber);
+        log.info("orderDetails: {}", orderDetails);
+        System.out.println("orderDetails = " + orderDetails);
+        if (orderDetails.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(orderDetails);
+    }
+
+    // 주문 삭제
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<?> deleteOrderById(@PathVariable long orderId) {
+        try {
+            orderService.deleteOrderById(orderId);
+            return ResponseEntity.ok("주문 내역이 성공적으로 삭제되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("주문 삭제 중 예상치 못한 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류로 인해 주문 삭제에 실패했습니다.");
+        }
+    }
 }
+
