@@ -105,22 +105,21 @@ const UserReviewWrite = () => {
         formData.append("reviewStarRating", newReview.reviewStarRating);
         formData.append("reviewContent", newReview.reviewContent);
 
+        //  이미지 파일 올바르게 추가
+        selectedImages.forEach((img) => {
+            formData.append("file", img.file);
+        });
+
+        //  콘솔에서 확인
+        console.log("업로드할 이미지 목록:", selectedImages);
         selectedImages.forEach((img, index) => {
-            formData.append(`file${index}`, img.file);
+            console.log(`이미지 ${index + 1}:`, img.file);
         });
 
-        // 🖼 여러 개의 이미지 추가
-        selectedImages.forEach((file) => {
-            formData.append("file", file); // 백엔드에서 `@RequestParam("file") MultipartFile file`으로 받음
-        });
-
-        axios
-            .post("http://localhost:7070/api/reviews", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
+        axios.post("http://localhost:7070/api/reviews", formData)
             .then((res) => {
                 alert("리뷰가 성공적으로 등록되었습니다!");
-                navigate("/order")
+                navigate("/order");
                 setNewReview((prevReview) => ({
                     ...prevReview,
                     reviewStarRating: 5,
@@ -133,9 +132,7 @@ const UserReviewWrite = () => {
                 alert("백엔드에 리뷰를 저장하지 못했습니다.");
             });
 
-        axios.post("http://localhost:7070/api/riderReview", newRiderReview, {
-            headers: { "Content-Type": "application/json" },
-        })
+        axios.post("http://localhost:7070/api/riderReview", newRiderReview)
             .catch(() => {
                 alert("백엔드에서 라이더 별점을 저장하지 못했습니다.");
             });
