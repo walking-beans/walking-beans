@@ -3,6 +3,8 @@ import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
 import "../../css/admin/AdminLogin.css";
+import kakaoLoginButton from "../../images/kakaoLoginButton.png"
+import naverLoginButton from "../../images/naverLoginButton.png"
 
 const AdminLogin = () => {
     return (
@@ -83,41 +85,45 @@ const AdminLoginNomal = () => {
         <div className="login-container">
             <div className="login-box">
                 <div className="login-header">
-                    <h3>로그인</h3>
+                    <div className="user-title-center">로그인</div>
+                    <div className="user-order-hr" alt="구분선"></div>
                 </div>
+
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">아이디(이메일)</label>
+                        <label className="user-cart-bordtext mb-2">아이디(이메일)</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className="user-order-requests"
                             value={userEmail}
                             onChange={(e) => setUserEmail(e.target.value)}
                             required
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">비밀번호</label>
+                        <label className="user-cart-bordtext mb-2">비밀번호</label>
                         <input
                             type="password"
-                            className="form-control"
+                            className="user-order-requests"
                             value={userPassword}
                             onChange={(e) => setUserPassword(e.target.value)}
                             required
                         />
                     </div>
-                    <button type="submit" className="login-btn">
-                        로그인
-                    </button>
+                    <div className="user-order-click-btn-one">
+                        <button type="submit" className="login-btn">
+                            로그인
+                        </button>
+                    </div>
                 </form>
+
+                <div className="login-text">소셜 계정으로 로그인 하기</div>
                 <div className="social-login">
                     <button className="kakao-login">
-                        <img src="/images/kakao_icon.png" alt="Kakao"/>
-                        로그인
+                        <img src={kakaoLoginButton} alt="Kakao"/>
                     </button>
                     <button className="naver-login">
-                        <img src="/images/naver_icon.png" alt="Naver"/>
-                        로그인
+                        <img src={naverLoginButton} alt="Naver"/>
                     </button>
                 </div>
 
