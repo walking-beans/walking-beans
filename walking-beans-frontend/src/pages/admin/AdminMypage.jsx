@@ -44,6 +44,7 @@ const AdminMypage = () => {
         }, [userId]);
 
     const handleProfileChange = (event) => {
+
         const file = event.target.files[0];
         if (file && userId) {
             apiUserService.uploadProfileImage(
@@ -51,6 +52,7 @@ const AdminMypage = () => {
                 file,
                 (data) => {
                     console.log("프로필 이미지 변경 성공:", data);
+                    console.log("프로필 이미지 변경 성공:", data.imageUrl);
                     setUser({ ...user, user_picture_url: data.imageUrl });
                 },
                 (errorMessage) => {
@@ -109,7 +111,7 @@ const AdminMypage = () => {
                 <div onClick={() => navigate("/notices")}>공지 사항</div>
             </div>
             <div className="mypage-end-menu-links">
-                <div onClick={() => navigate("/unlink")}>회원 탈퇴</div>
+                <div onClick={() => navigate("/certification")}>회원 탈퇴</div>
             </div>
         </div>
     );

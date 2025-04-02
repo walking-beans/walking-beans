@@ -39,6 +39,7 @@ import AdminResultFindPw from "../pages/admin/AdminResultFindPw";
 import AdminMypageInfoCorrection from "../pages/admin/AdminMypageInfoCorrection";
 import AdminMypageUnlink from "../pages/admin/AdminMypageUnlink";
 import AdminMypageUnlinkSuccess from "../pages/admin/AdminMypageUnlinkSuccess";
+import AdminMypageCertification from "../pages/admin/AdminMypageCertification";
 
 
 
@@ -100,7 +101,7 @@ function PathRoute() {
                                 <Route path="/updaterole" element={<AdminChangeRole />}/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
-                                { /* <Route path="/certification" element={<AdminMypageCertification/>}/> */ }
+                                <Route path="/certification" element={<AdminMypageCertification/>}/>
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
                                 <Route path="/unlink" element={<AdminMypageUnlink/>}/>
                                 <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>

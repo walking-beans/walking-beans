@@ -212,6 +212,22 @@ const apiUserService = {
     },
 
 
+    sendEmailCode: function (email, callback, errorCallback) {
+        axios
+            .post(`${USER_API_URL}/sendCode`, { email })
+            .then((res) => callback && callback(res.data))
+            .catch((err) => errorCallback && errorCallback(err));
+    },
+
+    checkEmailCode: function (email, code, callback, errorCallback) {
+        axios
+            .post(`${USER_API_URL}/checkCode`, { email, code })
+            .then((res) => callback && callback(res.data))
+            .catch((err) => errorCallback && errorCallback(err));
+    },
+
+
+
 }
 
 export default apiUserService;

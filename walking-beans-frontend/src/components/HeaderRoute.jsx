@@ -53,7 +53,32 @@ const HeaderRoute = ({user}) => {
                     // admin or default
                     setCurrentHeader(<UserHeader user={user}/>);
                 }
-                // /
+            } else if (location.pathname === "/infoCorrection") {
+                if (user.user_role === "rider") {
+                    setCurrentHeader(<RiderLoginHeader user={user} />);
+                } else if (user.user_role === "user" || user.user_role === "owner") {
+                    setCurrentHeader(<UserHeader user={user} />);
+                }
+            } else if (location.pathname === "/unlink") {
+                if (user.user_role === "rider") {
+                    setCurrentHeader(<RiderLoginHeader user={user} />);
+                } else if (user.user_role === "user" || user.user_role === "owner") {
+                    setCurrentHeader(<UserHeader user={user} />);
+                }
+
+            } else if (location.pathname === "/unlink/success") {
+                if (user.user_role === "rider") {
+                    setCurrentHeader(<RiderLoginHeader user={user} />);
+                } else if (user.user_role === "user" || user.user_role === "owner") {
+                    setCurrentHeader(<UserHeader user={user} />);
+                }
+            } else if (location.pathname === "/certification") {
+                if (user.user_role === "rider") {
+                    setCurrentHeader(<RiderLoginHeader user={user} />);
+                } else if (user.user_role === "user" || user.user_role === "owner") {
+                    setCurrentHeader(<UserHeader user={user} />);
+                }
+
             } else {
                 setCurrentHeader(<UserHeader user={user}/>);
             }
