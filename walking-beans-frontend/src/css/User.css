@@ -131,6 +131,7 @@ className="cursor-pointer text-primary fw-bold"
     text-align: center;
     font-weight: bold;
 }
+
 .store-info .store-picture {
     width: 180px;
     height: 180px;
@@ -143,10 +144,12 @@ className="cursor-pointer text-primary fw-bold"
 /***************** UserInsertAddress *******************/
 .user-insert-address-container {
     width: 100%;
-    height: 70vh;
+    height: auto;
     background-color: #F4EDDF;
     padding: 30px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #AB7A44 #F4EDDF;
 }
 
 .user-insert-address-container .address-alias,
@@ -268,8 +271,16 @@ className="cursor-pointer text-primary fw-bold"
     border: none;
     border-radius: 20px;
     font-size: 17px;
-    padding: 0 12px;
+    padding: 0 15px;
     margin: 0;
+    font-weight: bold;
+}
+
+.user-insert-address-container .address-grid {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 /******************* user delivery status ********************/
