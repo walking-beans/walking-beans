@@ -91,7 +91,6 @@ const UserOrderList = () => {
         }
     }, [orders]);
 
-
     return (
         <div className="user-order-background">
             <div className="user-order-menu-container">
@@ -151,41 +150,31 @@ const UserOrderList = () => {
                                         </Link>
                                     </div>
                                 </div>
-                                <div className="user-order-click-btn">
-                                    {order.orderStatus <= 3 ? (
-                                        <>
-                                            <button className="user-mini-btn-b"
+                                <div>
+                                    {order.orderStatus === 6 ? (
+                                            <div className="user-order-click-btn">
+                                                {reviewStatus[order.orderId] ? (
+                                                    <button className="user-mini-btn-bb"
+                                                            onClick={() => navigate(`/user/review/${order.storeId}`)}>
+                                                        작성한 리뷰 보기
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className="user-mini-btn-b"
+                                                        onClick={() => navigate(`/user/reviewWrite/${order.orderId}`, { state: { storeId: order.storeId, riderId: order.riderId_on_duty } })}
+                                                    >
+                                                        리뷰 작성하기
+                                                    </button>
+                                                )}
+                                                <button className="user-mini-btn-bb" onClick={() => navigate("/chat/chattingroom")}>채팅 문의</button>
+                                            </div>
+                                        ) : (
+                                        <div className="user-order-click-btn-one">
+                                            <button className="user-order-btn-b"
                                                     onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달
                                                 현황 보기
                                             </button>
-                                            <button className="user-mini-btn-bb">채팅 문의</button>
-                                        </>
-                                    ) : order.orderStatus === 6 ? (
-                                        <>
-                                            {reviewStatus[order.orderId] ? (
-                                                <button className="user-mini-btn-bb"
-                                                        onClick={() => navigate(`/user/review/${order.storeId}`)}>
-                                                    작성한 리뷰 보기
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    className="user-mini-btn-b"
-                                                    onClick={() => navigate(`/user/reviewWrite/${order.orderId}`)}
-                                                >
-                                                    리뷰 작성하기
-                                                </button>
-                                            )}
-                                            <button className="user-mini-btn-bb">채팅 문의</button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <button className="user-mini-btn-b"
-                                                    onClick={() => navigate(`/user/delivery/status/${order.orderNumber}`)}>배달
-                                                현황 보기
-                                            </button>
-                                            <button className="user-mini-btn-bb"
-                                                    onClick={() => navigate(`/chat/chattingroom`)}>채팅 문의</button>
-                                        </>
+                                        </div>
                                     )}
                                 </div>
 

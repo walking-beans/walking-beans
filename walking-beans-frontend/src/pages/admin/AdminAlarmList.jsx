@@ -29,7 +29,7 @@ const AdminAlarmList = () => {
                     console.log(res.data);
                 })
                 .catch((err) => {
-                    alert("백엔드에서 리스트를 가져오는데 실패했습니다.");
+                    navigate("/error");
                 });
         }
     }, [userId]);
@@ -49,7 +49,7 @@ const AdminAlarmList = () => {
                 .catch(
                     (err) => {
                         console.log("err: ", err);
-                        alert("백엔드에 문제가 생겼습니다.");
+                        navigate("/error");
                     }
                 )
         }
@@ -80,7 +80,7 @@ const AdminAlarmList = () => {
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
                             <p>{value.alarmContent}</p>
                             <p>
-                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
+                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')}<br/>
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
                                     hour: '2-digit',
                                     minute: '2-digit'

@@ -245,14 +245,12 @@ public class OrderServiceImpl implements OrderService {
                     String optionIds = item.containsKey("optionIds")
                             ? item.get("optionIds").toString()
                             : null;
-                    Long optionId = null;
-                    if (optionIds != null && !optionIds.isEmpty()) {
-                        String[] optionIdArray = optionIds.split(",");
-                        optionId = Long.parseLong(optionIdArray[0]);
-                    }
 
                     // `quantity` 처리
-                    Object quantityObj = item.get("totalQuantities");
+                    Object quantityObj = item.get("cartQuantity") != null
+                            ? item.get("cartQuantity")
+                            : item.get("totalQuantities");
+
                     if (quantityObj == null) {
                         log.warn("수량 정보가 없는 아이템 스킵");
                         continue;
@@ -263,7 +261,7 @@ public class OrderServiceImpl implements OrderService {
                     Map<String, Object> orderItemParams = new HashMap<>();
                     orderItemParams.put("orderNumber", orderNumber);
                     orderItemParams.put("menuId", menuId);
-                    orderItemParams.put("optionId", optionId);
+                    orderItemParams.put("optionIds", optionIds);
                     orderItemParams.put("quantity", quantity);
 
                     // `order_items` 테이블에 삽입
@@ -286,6 +284,40 @@ public class OrderServiceImpl implements OrderService {
     // 주문 상세 내역 정보 가져오기
     @Override
     public List<OrderDetailDTO> getOrderDetailsByOrderNumber(String orderNumber) {
+
         return orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+    }
+
+    // 주문 삭제
+    @Override
+    public void deleteOrderById(long orderId) {
+        log.info("주문 삭제 요청: orderId={}", orderId);
+
+        // 먼저 주문 정보 확인
+        Orders order = orderMapper.findOrderById(orderId);
+
+        if (order == null) {
+            log.error("삭제할 주문을 찾을 수 없음: {}", orderId);
+            throw new RuntimeException("주문을 찾을 수 없습니다.");
+        }
+
+        log.info("주문 상태 확인: orderStatus={}", order.getOrderStatus());
+
+        // 주문 상태가 6(배달 완료)인지 명시적으로 확인
+        if (order.getOrderStatus() != 6) {
+            log.error("배달 완료 상태가 아닌 주문 삭제 시도: orderId={}, orderStatus={}",
+                    orderId, order.getOrderStatus());
+            throw new RuntimeException("배달 완료된 주문만 삭제할 수 있습니다.");
+        }
+
+        int deleteCount = orderMapper.deleteOrderById(orderId);
+
+        if (deleteCount == 0) {
+            log.error("주문 삭제 실패: orderId={}, orderStatus={}",
+                    orderId, order.getOrderStatus());
+            throw new RuntimeException("주문 삭제에 실패했습니다. 다시 시도해주세요.");
+        }
+
+        log.info("주문 삭제 성공: orderId={}", orderId);
     }
 }

@@ -25,7 +25,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
             setCurrentHeader(<UserHeader user={user}/>);
         }*/
 
-        // rider
+
         if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}
                                           riderOnDuty={riderOnDuty}
@@ -38,7 +38,13 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
         } else if (location.pathname.startsWith("/user/search/map")) {
             setCurrentHeader(<SearchHeader user={user}/>);
             // /mypage || /chat
-        } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat") || location.pathname.startsWith("/alarmlist")) {
+        } else if (location.pathname.startsWith("/mypage") ||
+            location.pathname.startsWith("/chat") ||
+            location.pathname.startsWith("/alarmlist") ||
+            location.pathname === "/certification" ||
+            location.pathname === "/infoCorrection" ||
+            location.pathname === "/unlink" ||
+            location.pathname === "/unlink/success") {
             if (user.user_role === "user") {
                 setCurrentHeader(<UserHeader user={user}/>);
             } else if (user.user_role === "rider") {

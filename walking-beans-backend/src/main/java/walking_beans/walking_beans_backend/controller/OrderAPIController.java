@@ -35,8 +35,6 @@ public class OrderAPIController {
 
     @Autowired
     private AlarmNotificationService alarmNotificationService;
-    @Autowired
-    private OrderMapper orderMapper;
 
     /**************************************** LEO ****************************************/
     /**
@@ -173,10 +171,27 @@ public class OrderAPIController {
     // 주문 상세 내역 정보 가져오기
     @GetMapping("/detail/orderNumber/{orderNumber}")
     public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
-        List<OrderDetailDTO> orderDetails = orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+        List<OrderDetailDTO> orderDetails = orderService.getOrderDetailsByOrderNumber(orderNumber);
+        log.info("orderDetails: {}", orderDetails);
+        System.out.println("orderDetails = " + orderDetails);
         if (orderDetails.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(orderDetails);
+    }
+
+    // 주문 삭제
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<?> deleteOrderById(@PathVariable long orderId) {
+        try {
+            orderService.deleteOrderById(orderId);
+            return ResponseEntity.ok("주문 내역이 성공적으로 삭제되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("주문 삭제 중 예상치 못한 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류로 인해 주문 삭제에 실패했습니다.");
+        }
     }
 }

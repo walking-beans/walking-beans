@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import UserSelectMenu from "./UserSelectMenu";
 
@@ -8,10 +8,10 @@ const UserOrderDetail = () => {
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [orderId, setOrderId] = useState(null);
     const [totalMenuPrice, setTotalMenuPrice] = useState(0);
     const [orderItems, setOrderItems] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:7070/api/orders/detail/orderNumber/${orderNumber}`)
@@ -21,6 +21,41 @@ const UserOrderDetail = () => {
                     const baseOrderInfo = response.data[0];
                     setOrder(baseOrderInfo);
                     setOrderItems(response.data);
+
+                    for (const item of response.data) {
+                        // 옵션 정보 문자열을 배열로 변환 (빈 문자열 처리 개선)
+                        const names = item.optionNames && item.optionNames.trim() !== '' ?
+                            item.optionNames.split(',') : [];
+
+                        const contents = item.optionContents && item.optionContents.trim() !== '' ?
+                            item.optionContents.split(',') : [];
+
+                        const prices = item.optionPrices && item.optionPrices.trim() !== '' ?
+                            item.optionPrices.split(',').map(price => {
+                                const num = Number(price);
+                                return isNaN(num) ? 0 : num;  // NaN 값도 처리
+                            }) : [];
+
+                        // 옵션 데이터가 모두 비어있으면 배열도 비워주기
+                        if (names.length === 1 && names[0] === '' &&
+                            contents.length === 1 && contents[0] === '' &&
+                            prices.length === 1 && prices[0] === 0) {
+                            item.optionNameArray = [];
+                            item.optionContentArray = [];
+                            item.optionPriceArray = [];
+                        } else {
+                            item.optionNameArray = names;
+                            item.optionContentArray = contents;
+                            item.optionPriceArray = prices;
+                        }
+
+                        // 디버깅 출력 추가
+                        console.log(`주문 항목 ${item.order_item_id}의 옵션:`, {
+                            names: item.optionNameArray,
+                            contents: item.optionContentArray,
+                            prices: item.optionPriceArray
+                        });
+                    }
 
                     // 메뉴 총액 계산
                     const menuTotal = response.data.reduce((sum, item) => {
@@ -57,7 +92,7 @@ const UserOrderDetail = () => {
 
                     console.log('총 메뉴 금액:', menuTotal);
 
-                    const deliveryTip = parseInt(order.storeDeliveryTip) || 0;
+                    const deliveryTip = parseInt(baseOrderInfo.storeDeliveryTip) || 0;
                     const totalPrice = menuTotal + deliveryTip;
                     setTotalPrice(totalPrice);
 
@@ -72,6 +107,36 @@ const UserOrderDetail = () => {
             })
             .finally(() => setLoading(false));
     }, [orderNumber]);
+
+    const handleDeleteOrder = () => {
+        console.log("현재 주문 상태:", order.orderStatus);  // 상태 확인용 로그
+
+        // 삭제 조건 확인
+        if (order.orderStatus !== 6) {
+            alert(`배달 완료된 주문만 삭제할 수 있습니다. (현재 상태: ${order.orderStatus})`);
+            return;
+        }
+
+        // 사용자에게 삭제 확인 요청
+        const confirmDelete = window.confirm(`주문번호 ${order.orderNumber}를 삭제하시겠습니까?\n삭제 후 복구는 불가능 합니다.`);
+
+        if (confirmDelete) {
+            axios.delete(`http://localhost:7070/api/orders/delete/${order.orderId}`)
+                .then(() => {
+                    // 성공 메시지 표시
+                    alert("주문 내역이 성공적으로 삭제되었습니다.");
+                    // 주문 목록 페이지로 리다이렉트
+                    navigate("/order");
+                })
+                .catch((error) => {
+                    console.error("주문 삭제 오류:", error.response ? error.response.data : error);
+                    alert(
+                        error.response?.data ||
+                        "주문 내역 삭제 중 오류가 발생했습니다. 다시 시도해주세요."
+                    );
+                });
+        }
+    };
 
     return (
         <div className="user-order-background">
@@ -88,7 +153,7 @@ const UserOrderDetail = () => {
                     <div className="user-order-mt">
                         <div>
                             <span className="user-order-basic-text-m-0">주문일시 : </span> <span
-                            className="user-select-mid-text">{order?.orderCreateDate
+                            className="user-select-qyt-text">{order?.orderCreateDate
                             ? new Date(order.orderCreateDate).toLocaleString('ko-KR', {
                                 year: 'numeric',
                                 month: '2-digit',
@@ -121,21 +186,24 @@ const UserOrderDetail = () => {
                             return (
                                 <div key={index}>
                                     <div className="user-order-detail-grid">
-                                    <div className="user-order-left">
-                                        <div className="user-order-address-detail-text">{item.menuName}</div>
-                                        {item.optionNames && (
+                                        <div className="user-order-left">
+                                            <div className="user-order-address-detail-text">{item.menuName}</div>
+                                            {item.optionNameArray && item.optionNameArray.length > 0 && (
+                                                <div className="user-cart-detailtext">
+                                                    {item.optionNameArray.map((name, i) => (
+                                                        <span key={i}>
+                                                             {i > 0 ? ', ' : ''}
+                                                            {name} {item.optionContentArray[i]}
+                                                            ({item.optionPriceArray[i] > 0 ? `+${item.optionPriceArray[i].toLocaleString()}원` : '+0원'})
+                                                         </span>
+                                                    ))}
+                                                </div>
+                                            )}
                                             <div className="user-cart-detailtext">
-                                                {item.optionNames} {item.optionContents}
-                                                {item.optionPrices === "0" ? "" : item.optionPrices && ` (+${Number(item.optionPrices).toLocaleString()}원)`}
+                                                {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                             </div>
-                                        )}
-                                        <div className="user-cart-detailtext">
-                                            {Number(item.menuPrice + (item.totalOptionPrice || 0)).toLocaleString()}원
                                         </div>
-                                    </div>
-
-                                    {/* 오른쪽: 개수 */}
-                                    <div className="user-select-mid-text">{item.quantity}개</div>
+                                        <div className="user-select-mid-text">{item.quantity}개</div>
                                     </div>
                                     {!isLastItem && <div className="user-order-hr-mini"></div>}
                                 </div>
@@ -178,7 +246,18 @@ const UserOrderDetail = () => {
                 </div>
 
                 <div className="user-order-click-btn-one">
-                    <button className="user-order-btn-b">주문내역 삭제</button>
+                    {order.orderStatus === 6 ? (
+                        <button
+                            className="user-order-btn-b"
+                            onClick={handleDeleteOrder}
+                        >
+                            주문내역 삭제
+                        </button>
+                    ) : (
+                        <div className="user-order-guide">
+                            배달 완료 후 주문 내역을 삭제할 수 있습니다.
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

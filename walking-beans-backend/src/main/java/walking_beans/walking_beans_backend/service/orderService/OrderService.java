@@ -51,4 +51,7 @@ public interface OrderService {
 
     // 주문 상세 내역 정보 가져오기
     List<OrderDetailDTO> getOrderDetailsByOrderNumber(@Param("orderNumber") String orderNumber);
+
+    // 주문 삭제
+    void deleteOrderById(long orderId);
 }

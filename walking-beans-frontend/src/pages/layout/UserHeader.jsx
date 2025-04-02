@@ -42,11 +42,27 @@ const UserHeader = ({user}) => {
             setUserId(parsedUser.user_id);
         }
     }, [user]);
+
     //  userId가 설정된 후 대표 주소 가져오기
     useEffect(() => {
 
         apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
     }, [userId]);
+
+    // 네비게이션 항목을 역할에 맞게 설정
+    const navItems = currentUser?.user_role === "user"
+        ? [
+            { icon: person, text: "마이페이지", path: "/mypage" },
+            { icon: receipt, text: "주문내역", path: "/order" },
+            { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
+        ]
+        : currentUser?.user_role === "owner"
+            ? [
+                { icon: person, text: "마이페이지", path: "/mypage" },
+                { icon: receipt, text: "매출 조회", path: "/owner/revenue" },
+                { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
+            ]
+            : [];
 
     /**
      * 네비게이션바 토글아이콘  함수
@@ -83,10 +99,10 @@ const UserHeader = ({user}) => {
 
         const parsedUser = JSON.parse(storedUser);
         const rolePaths = {
-            user: location.pathname === "/admin/mypage" ? "/" : "/admin/mypage",
+            user: location.pathname === "/mypage" ? "/" : "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
             owner: location.pathname === "/owner" ? "/" : "/owner",
-            admin: "/admin"
+            admin: location.pathname === "/adminpage" ? "/" : "/adminpage"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
@@ -110,12 +126,25 @@ const UserHeader = ({user}) => {
                         <img src={userIcon} className="header-icon" alt="role-icon" onClick={handleUserIconClick}/>
                     </div>
                     <div className="center-logo">
-                        <img src={logoImg} className="logo-img" alt="logo" onClick={() => navigate("/")}/>
+                        <img
+                            src={logoImg}
+                            className="logo-img"
+                            alt="logo"
+                            onClick={() => {
+                                if (currentUser?.user_role === "user") {
+                                    navigate("/");
+                                } else if (currentUser?.user_role === "owner") {
+                                    navigate("/owner");
+                                } else {
+                                    navigate("/");
+                                }
+                            }}
+                        />
                     </div>
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-                                <HeaderAlarm userId={currentUser.user_id} bell={false} />
+                                <HeaderAlarm userId={currentUser.user_id} bell={false}/>
                                 <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
 
                             </>
@@ -132,12 +161,7 @@ const UserHeader = ({user}) => {
                         </button>
                         */}
                         <ul className="nav-menu list-unstyled">
-                            {[
-                                {icon: person, text: "마이페이지", path: "/mypage"},
-                                {icon: shoppingBasket, text: "장바구니", path: "/"},
-                                {icon: receipt, text: "주문내역", path: "/order"},
-                                {icon: chatBubble, text: "채팅", path: "/chat/chattingroom"}
-                            ].map(({icon, text, path}) => (
+                            {navItems.map(({ icon, text, path }) => (
                                 <li key={text}>
                                     <a href={path}>
                                         <img src={icon} alt={text}/> {text}

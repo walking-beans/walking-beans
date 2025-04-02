@@ -28,11 +28,13 @@ public class OrderDetailDTO {
     private String menuName;
     private int menuPrice;
     private int quantity;
-
+// optionIds
+    private String optionIds;
     private String optionNames;
     private String optionContents;
     private String optionPrices;
     private int totalOptionPrice;
+    private long optionId;
 
     // 총 메뉴 가격(메뉴 + 옵션 * 수량)을 계산하는 메소드
     public int calculateItemTotalPrice() {

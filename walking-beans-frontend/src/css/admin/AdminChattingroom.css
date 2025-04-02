@@ -1,14 +1,11 @@
 .admin-chattingroom-base {
-    flex-grow: 1;
     display: block;
     flex-direction: column;
     width: 100%;
     max-width: 600px;
-    min-height: 800px;
+    min-height: 500px;
     margin: 0 auto;
-
-    background-color : #fff9d8;
-
+    background-color : #F4EDDF;
 }
 
 .admin-button-base {

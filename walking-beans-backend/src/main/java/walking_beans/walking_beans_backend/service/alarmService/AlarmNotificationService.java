@@ -22,4 +22,15 @@ public class AlarmNotificationService {
 
         alarmService.sendNotification(alarm);
     }
+
+    // 전체 알림 전송
+    public void sendAdminNotification(Alarms adminAlarm) {
+        String destination = "/topic/alarms/admin"; // 관리자 알림을 전체 사용자에게 전송
+        log.info("WebSocket 관리자 알림 전송: {} -> {}", destination, adminAlarm);
+
+        // 관리자 알림을 전송
+        messagingTemplate.convertAndSend(destination, adminAlarm);
+
+        alarmService.sendNotification(adminAlarm);
+    }
 }
