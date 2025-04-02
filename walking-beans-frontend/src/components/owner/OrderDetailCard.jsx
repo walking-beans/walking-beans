@@ -6,6 +6,7 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(null); // 모달 로딩
 
+
     useEffect(() => {
         if (order){
             // 주문정보로 상세정보 가져오기
