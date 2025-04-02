@@ -35,13 +35,18 @@ const UserHeader = ({user}) => {
 
     // 유저 정보 로드
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
+        const updateUser = () => {
+            const storedUser = localStorage.getItem("user");
             const parsedUser = JSON.parse(storedUser);
-            setCurrentUser(parsedUser);
+            setCurrentUser(storedUser ? JSON.parse(storedUser) : null);
             setUserId(parsedUser.user_id);
-        }
-    }, [user]);
+        };
+        updateUser();
+        window.addEventListener("userChanged", updateUser);
+        return () => {
+            window.removeEventListener("userChanged", updateUser);
+        };
+    }, []);
 
     //  userId가 설정된 후 대표 주소 가져오기
     useEffect(() => {
@@ -106,8 +111,6 @@ const UserHeader = ({user}) => {
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
-
-
 
     // /user/search/map
     const handleOpenSearch = () => {

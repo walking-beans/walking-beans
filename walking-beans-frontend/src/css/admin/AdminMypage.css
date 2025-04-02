@@ -2,12 +2,11 @@
 
 /* 전체 공통 */
 .mypage-container {
+    width: 100%;
     padding: 24px 16px;
     font-family: 'Noto Sans KR', sans-serif;
-
     background-color: #F4EDDF;
     color: #5A3D21;
-
     text-align: center;
     min-height: 100vh;
     box-sizing: border-box;
@@ -101,15 +100,13 @@
 ---------------------------------*/
 
 .mypage-container.user,
-.mypage-container.owner,
-.mypage-container.store {
+.mypage-container.owner {
     background-color: #fef6ea;
     color: #5a3d21;
 }
 
 .mypage-container.user .infoCertification div,
-.mypage-container.owner .infoCertification div,
-.mypage-container.store .infoCertification div {
+.mypage-container.owner .infoCertification div {
     background-color: #5a3d21;
 }
 
