@@ -39,6 +39,7 @@ const UserStoreReview = () => {
                 const reviewsData = res.data;
                 setReviews(reviewsData);
                 updateRatingStats(reviewsData);
+                console.log("유저 이름 가져오는지 테스트 : "+reviewsData)
             })
             .catch((err) => console.error("리뷰 정보를 불러오지 못했습니다.", err));
     };

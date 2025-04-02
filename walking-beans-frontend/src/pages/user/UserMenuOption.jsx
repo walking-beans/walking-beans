@@ -1,13 +1,14 @@
 import "../../css/Order.css";
 
-const UserMenuOption = ({optionContent, optionPrice, onChange, checked}) => {
+const UserMenuOption = ({optionContent, optionPrice, onChange, checked, type="checkbox", name}) => {
 
     return (
         <div className="user-menu-option-container">
             <div className="user-order-option-info">
                 <label className="user-order-optiontext">
                     <input
-                        type="checkbox"
+                        type={type}
+                        name={name}
                         className="user-order-option-select"
                         onChange={onChange}
                         checked={checked || false}
