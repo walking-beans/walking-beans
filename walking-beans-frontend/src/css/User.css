@@ -111,7 +111,7 @@ className="cursor-pointer text-primary fw-bold"
     color: #5A3D21;
 }
 
-.user-search-map-container .info-text-bold{
+.user-search-map-container .info-text-bold {
     font-size: 17px;
     color: #5A3D21;
     font-weight: bold;
@@ -140,11 +140,11 @@ className="cursor-pointer text-primary fw-bold"
 }
 
 
-
 /***************** UserInsertAddress *******************/
 .user-insert-address-container {
     width: 100%;
     height: auto;
+    max-height: 700px;
     background-color: #F4EDDF;
     padding: 30px;
     overflow-y: auto;
@@ -294,20 +294,22 @@ className="cursor-pointer text-primary fw-bold"
 
 /******************* userReviewWrite ********************/
 .user-review-container {
-    width: 100%;
-    height: 70vh;
-    max-width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #F4EDDF;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 650px;
-    overflow-y: auto;
+    background: #F4EDDF;
+    scrollbar-width: thin;
+    scrollbar-color: #AB7A44 #F4EDDF;
+}
 
+.user-review-container .review-all {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.user-review-container .review-info {
+    margin: 30px 0;
+    width: 600px;
 }
 
 .user-review-container form {
@@ -322,15 +324,21 @@ className="cursor-pointer text-primary fw-bold"
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 15px;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .user-review-container .star-rating p {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #333;
+    color: #fff;
     text-align: center;
+    background: #D2B595;
+    border-radius: 30px;
+    align-content: center;
+    width: 170px;
+    height: 50px;
 }
 
 .user-review-container .star-container {
@@ -357,21 +365,21 @@ className="cursor-pointer text-primary fw-bold"
 
 
 .user-review-container textarea {
-    width: 600px;
-    max-width: 500px;
+    width: 540px;
     height: 200px;
-    padding: 12px;
+    padding: 15px;
     font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #5A3D21;
     resize: none;
     outline: none;
     margin-bottom: 15px;
-    box-sizing: border-box;
     text-align: left;
     vertical-align: top;
     background-color: white;
+}
 
+.user-review-container textarea::placeholder {
+    color: #D2B595;
 }
 
 .user-review-container .file-upload {
@@ -405,17 +413,19 @@ className="cursor-pointer text-primary fw-bold"
     display: block;
 }
 
-.user-review-container button {
-    width: 200px;
-    padding: 10px;
-    font-size: 18px;
-    background-color: #D2B595;
-    color: black;
+.user-review-container .submit-button {
+    width: 411px;
+    height: 60px;
+    border-radius: 30px;
+    background: #5A3D21;
+    color: #F4EDDF;
     border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    display: block;
-    margin: 20px auto 15px;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration-line: none;
 }
 
 .user-review-container .image-preview-wrapper {
@@ -440,6 +450,7 @@ className="cursor-pointer text-primary fw-bold"
 }
 
 /************** UserStoreReview ******************/
+
 .user-store-review {
     max-width: 100%;
     padding: 20px;
