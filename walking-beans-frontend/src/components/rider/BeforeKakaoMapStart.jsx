@@ -4,7 +4,7 @@ import "../../css/rider/BeforeKakaoMapStart.css";
 
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 
-const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
+const BeforeKakaoMapStart = ({user, riderOnDuty, setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
 
@@ -68,6 +68,10 @@ const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
     }, [userLocation]);
 
     function handleRiderOnDuty() {
+        if (user.user_role !== "rider") {
+            alert("접근 권한이 없습니다.");
+            return;
+        }
         setRiderOnDuty(prevState => !prevState);
         console.log("BeforeKakaoMapStart : " + riderOnDuty);
     }
