@@ -156,6 +156,8 @@ public class UserServiceImpl implements UserService {
     /****************** 가게 등록시 역활 업데이트 ********************/
     @Override
     public void updateUserRoleStore(long userId, byte userRole) {
+        userMapper.updateUserRoleStore(userId, userRole);
+    }
 
     @Override
     public int updateUserRoleByUserId(Long userId, byte userRole) {
