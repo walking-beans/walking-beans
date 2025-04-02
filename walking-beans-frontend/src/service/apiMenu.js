@@ -20,16 +20,16 @@ const apiMenu = {
         },
     //메뉴 검색
     findAllMenuById:
-        function (menuId,setMenus,{updateFormData}){
+        function (menuId,setMenus,updateFormData){
             axios
                 .get(`${API_MENU_URL}/${menuId}`)
                 .then((res) => {
-                    console.log(res)
+                    console.log("findAllMenuById 응답:", res.data);
                     setMenus(res.data);
                     updateFormData(res.data);
                 })
                 .catch((err) => {
-                    console.log(err)
+                    console.log("findAllMenuById 오류:", err);
                 })
             // setIsLoading(false);
     },

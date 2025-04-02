@@ -10,28 +10,29 @@ const StoreMenuDetail = () => {
     // 메뉴 정보
     const {storeId} = useParams();
     const {menuId} = useParams();
+
     const [menus, setMenus] = useState({});
-    const [formData, setFormData] = useState({
-        menu_id: menuId,
-        menuName: "",
-        menuPrice: 0,
-        menuCategory: "",
-        menuDescription: "",
-        menuPictureUrl: "",
-    });
+    const [formData, setFormData] = useState({});
     const [imgFile, setImgFile] = useState("");
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
     const imgRef = useRef();
+
+    // 데이터 초기화 함수
     const updateFormData = (data) =>{
-        setFormData({
+        console.log("updateFormData 호출, 받은 데이터:", data);
+        const newFormData = {
             menu_id: menuId,
             menuName: data.menuName || "",
             menuPrice: data.menuPrice || 0,
             menuCategory: data.menuCategory || "",
             menuDescription: data.menuDescription || "",
             menuPictureUrl: data.menuPictureUrl || "",
-        });
+        };
+        setFormData(newFormData);
+        console.log("업데이트된 formData:", newFormData);
+        setIsLoading(false); // 데이터 로드 완료
     };
-    // const [isLoading, setIsLoading] = useState(true); // 로딩상태 관리
+
     // 초기값 가져오기
     useEffect(() => {
         console.log("renderingCheck")
@@ -53,7 +54,7 @@ const StoreMenuDetail = () => {
         }
     }, [menuId]);
 
-
+    // 썸네일 보여주기 (미리보기용)
     const setThumbnail = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -62,9 +63,18 @@ const StoreMenuDetail = () => {
             reader.onloadend = () => {
                 setImgFile(reader.result);
             };
-
         }
     };
+
+    // 인풋 변경 제어
+    const handleInputChange = (e) => {
+        const {name, value} = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    }
+
     // 폼 제출
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -78,6 +88,7 @@ const StoreMenuDetail = () => {
             submitData.append("menuPictureUrl", imgRef.current.files[0]);
         }
         console.log(submitData);
+
         // 권한 확인 및 반응에 따라서 페이지 이동 기능 포함.
         axios
             .put(`http://localhost:7070/api/menu/owner/${storeId}/menu/${menuId}`,
@@ -92,6 +103,7 @@ const StoreMenuDetail = () => {
             .then((res) => {
                 console.log(res.data)
                 alert("메뉴가 성공적으로 수정되었습니다.!")
+                navigate(`/owner/${storeId}/menu`) // 수정 완료후 이동 페이지
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
@@ -111,53 +123,7 @@ const StoreMenuDetail = () => {
     const handleDelete = () => {
     // 메뉴삭제 작성필요
     }
-    // 인풋 변경 제어
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    }
-    // 로딩중 상태 추가
-    /*if (isLoading){
-        return <div> 로딩중 ...</div>;
-    }*/
 
-    // 세션 확인
-/*
-    useEffect(() => {
-        // 쿠키에서 JSESSIONID 확인
-        const getJSessionId = () => {
-            const cookies = document.cookie.split("; ");
-            for (let cookie of cookies) {
-                const [name, value] = cookie.split("=");
-                if (name === "JSESSIONID") {
-                    console.log("JSESSIONID:", value);
-                    return value;
-                }
-            }
-            console.log("JSESSIONID를 찾을 수 없습니다.");
-            return null;
-        };
-
-        getJSessionId();
-
-        // 서버에서 JSESSIONID 확인
-        axios
-            .get("http://localhost:8080/api/users/getSessionData", {
-                withCredentials: true, // 세션 쿠키(JSESSIONID)를 포함
-            })
-            .then((response) => {
-                console.log("서버에서 받은 JSESSIONID:", response.data.JSESSIONID);
-                console.log("전체 응답:", response.data);
-            })
-            .catch((error) => {
-                console.error("세션 확인 오류:", error);
-            });
-    }, []);
-
-*/
 
     return (
         <>
@@ -178,67 +144,46 @@ const StoreMenuDetail = () => {
                         />
                     </div>
                     <br/>
-                    <div className={"form-floating mb-3"}>
-                        <input type={"text"}
-                               className="form-control"
-                               id={"floatingInput"}
-                               placeholder={"제육볶음"}
-                               Value={menus.menuName}
-                               name={"menuName"}
-                               onChange={handleInputChange}
-                        />
-                        <label htmlFor={"floatingInput"}>메뉴 이름</label>
-                    </div>
-
-                    <div className={"form-floating mb-3"}>
-                        <input type={"text"}
-                               className="form-control"
-                               id={"floatingInput"}
-                               placeholder={"제육볶음"}
-                               Value={menus.menuCategory}
-                               name={"menuCategory"}
-                               onChange={handleInputChange}
-                        />
-                        <label htmlFor={"floatingInput"}>카테고리</label>
-                    </div>
-
-                    <div className={"form-floating mb-3"}>
-                        <input type={"number"}
-                               className="form-control"
-                               id={"floatingInput"}
-                               placeholder={"제육볶음"}
-                               Value={menus.menuPrice}
-                               name={"menuPrice"}
-                               onChange={handleInputChange}
-                        />
-                        <label htmlFor={"floatingInput"}>가격</label>
-                    </div>
-
-                    <div className={"form-floating mb-3"}>
-                        <input type={"text"}
-                               className="form-control"
-                               id={"floatingTextarea"}
-                               placeholder={"제육볶음은 맛있습니다."}
-                               Value={menus.menuDescription}
-                               name={"menuDescription"}
-                               onChange={handleInputChange}
-                        />
-                        <label htmlFor={"floatingTextarea"}>메뉴 설명</label>
-                    </div>
-
-                    <div className={"form-floating mb-3"}>
-                        <input type={"text"}
-                               className="form-control"
-                               id={"floatingInput"}
-                               placeholder={"제육볶음"}
-                               defaultValue={menus.menuModifiedDate}
-                               name={"menuModifiedDate"}
-                               onChange={() => {
-                               }}
-                               disabled
-                        />
-                        <label htmlFor={"floatingInput"}>수정일</label>
-                    </div>
+                    <MenuInputTag
+                        id="menuName"
+                        label="메뉴 이름"
+                        placeholder="제육볶음"
+                        value={formData.menuName}
+                        onChange={handleInputChange}
+                        required={true}
+                    />
+                    <MenuInputTag
+                        id="menuCategory"
+                        label="카테고리"
+                        placeholder="한식"
+                        value={formData.menuCategory}
+                        onChange={handleInputChange}
+                        required={true}
+                    />
+                    <MenuInputTag
+                        id="menuPrice"
+                        label="가격"
+                        placeholder="10000"
+                        value={formData.menuPrice}
+                        onChange={handleInputChange}
+                        type="number"
+                        required={true}
+                    />
+                    <MenuInputTag
+                        id="menuDescription"
+                        label="메뉴 설명"
+                        placeholder="제육볶음은 맛있습니다."
+                        value={formData.menuDescription}
+                        onChange={handleInputChange}
+                    />
+                    <MenuInputTag
+                        id="menuModifiedDate"
+                        label="수정일"
+                        placeholder="수정일"
+                        value={menus.menuModifiedDate || ""}
+                        onChange={() => {}}
+                        isEditing={false} // 수정 불가
+                    />
                     <button type={"submit"}>수정완료</button>
                     <button type="button" onClick={handleDelete}>삭제하기</button>
                 </form>

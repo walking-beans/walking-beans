@@ -33,9 +33,10 @@ public class StoreAPIController {
     @Autowired
     private
     UserServiceImpl userService;
+
     /**매장 전체정보 불러오기
      * List<Stores>
-     * @return
+     * @return ResponseEntity<List<Stores>>
      */
     @GetMapping
     public ResponseEntity<List<Stores>> findAllStores() {
@@ -45,7 +46,7 @@ public class StoreAPIController {
     /**특정 매장 불러오기
      *
      * @param storeId
-     * @return 매장 아이디로 조회
+     * @return Stores
      */
     @GetMapping("/{storeId}")
     public Stores findStoresById(@PathVariable("storeId") long storeId) {
@@ -55,11 +56,22 @@ public class StoreAPIController {
     /**회원(업주) ID로 매장 불러오기
      *
      * @param userId
-     * @return
+     * @return Stores
      */
     @GetMapping("/mystore/{userId}")
     public Stores findStoresByuserId(@PathVariable long userId) {
         return storeService.findStoresByuserId(userId);
+    }
+
+
+    /**회원 ID 로 매장 ID 찾기
+     *
+     * @param userId
+     * @return StoreId
+     */
+    @GetMapping("/valid/{userId}")
+    public long getStoreIdByUserId(@PathVariable long userId) {
+        return storeService.getStoreIdByUserId(userId);
     }
 
     /**신규매장 등록하기

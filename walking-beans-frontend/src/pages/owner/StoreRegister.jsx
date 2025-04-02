@@ -57,9 +57,7 @@ const StoreRegister = () => {
         } else {
             console.log("파일 없음: storePictureUrl이 null입니다");
         }
-
-        // 나머지 필드
-        /*
+        // 이미지 제외 나머지 필드
         uploadData.append("userId", formData.userId);
         uploadData.append("storeName", formData.storeName);
         uploadData.append("storeDescription", formData.storeDescription);
@@ -78,30 +76,6 @@ const StoreRegister = () => {
         uploadData.append("storeAddress", formData.storeAddress);
         uploadData.append("storeLatitude", formData.storeLatitude);
         uploadData.append("storeLongitude", formData.storeLongitude);
-        */
-        const storeData = {
-            userId: formData.userId,
-            storeName: formData.storeName,
-            storeDescription: formData.storeDescription,
-            storeMainMenu: formData.storeMainMenu,
-            storeBusinessNumber: formData.storeBusinessNumber,
-            storePhone: formData.storePhone,
-            storeOperationHours: formData.storeOperationHours,
-            storeClosedDates: formData.storeClosedDates,
-            storeStatus: formData.storeStatus, // 기본값
-            storeReviewCount: formData.storeReviewCount,   // 기본값
-            storeRating:formData.storeRating,       // 기본값
-            storeMinDeliveryTime: formData.storeMinDeliveryTime,
-            storeMaxDeliveryTime: formData.storeMaxDeliveryTime,
-            storeDeliveryTip: formData.storeDeliveryTip,
-            storeDeliveryAddress: formData.storeDeliveryAddress,
-            storeAddress: formData.storeAddress,
-            storeLatitude: formData.storeLatitude,
-            storeLongitude: formData.storeLongitude,
-        };
-        uploadData.append("stores", JSON.stringify(storeData));
-
-        console.log("전송 데이터:", Array.from(uploadData.entries()));
 
         axios
             .post("http://localhost:7070/api/store",

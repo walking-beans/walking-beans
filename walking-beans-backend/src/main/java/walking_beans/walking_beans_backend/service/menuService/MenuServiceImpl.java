@@ -57,46 +57,51 @@ public class MenuServiceImpl implements MenuService {
                            String menuCategory,
                            MultipartFile menuPictureUrl) {
 
-        String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
-
-        try{
-            File file = new File(uploadImg+uniqueFileName);
-            menuPictureUrl.transferTo(file);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
         Menu menu = new Menu();
         menu.setMenuName(menuName);
         menu.setMenuId(menuId);
         menu.setMenuDescription(menuDescription);
         menu.setMenuCategory(menuCategory);
         menu.setMenuPrice(menuPrice);
-        menu.setMenuPictureUrl("/upload/"+ uniqueFileName);
 
+        // 이미지 파일이 수정되었을 경우에만 변경
+        if(menuPictureUrl != null && !menuPictureUrl.isEmpty()) {
+            String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
+
+            try {
+                File file = new File(uploadImg + uniqueFileName);
+                menuPictureUrl.transferTo(file);
+                menu.setMenuPictureUrl("/upload/"+ uniqueFileName);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
         menuMapper.updateMenu(menu);
     }
 
     @Override
     public void addMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile menuPictureUrl) {
 
-        String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
-
-        try{
-            File file = new File(uploadImg+uniqueFileName);
-            menuPictureUrl.transferTo(file);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
         Menu menu = new Menu();
         menu.setMenuName(menuName);
         menu.setMenuId(menuId);
         menu.setMenuDescription(menuDescription);
         menu.setMenuCategory(menuCategory);
         menu.setMenuPrice(menuPrice);
-        menu.setMenuPictureUrl("/upload/"+uniqueFileName);
+        // 이미지 미등록시
+        if(menuPictureUrl != null && !menuPictureUrl.isEmpty()) {
+            String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
 
+            try {
+                File file = new File(uploadImg + uniqueFileName);
+                menuPictureUrl.transferTo(file);
+                menu.setMenuPictureUrl("/upload/"+ uniqueFileName);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
         menuMapper.addMenu(menu);
     }
 

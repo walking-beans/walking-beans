@@ -95,7 +95,7 @@ public class MenuAPIController {
                                            @RequestParam("menuCategory") String menuCategory,
                                            @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
                                   ) {
-
+        menuService.updateMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
         return ResponseEntity.ok().build(); // 성공시
     }
 
