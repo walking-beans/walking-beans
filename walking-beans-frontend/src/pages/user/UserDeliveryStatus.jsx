@@ -199,15 +199,28 @@ const UserDeliveryStatus = () => {
         }
     };
 
-    // 반짝
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        if (params.get("scrollToChat") === "true" && chatSectionRef.current) {
-            chatSectionRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-            setHighlight(true);
-            setTimeout(() => setHighlight(false), 2000); // 2초 후 효과 제거
+    const handleChatClick = async () => {
+        try {
+            // 먼저 해당 주문에 대한 채팅방이 있는지 확인
+            const response = await axios.get(`http://localhost:7070/api/chattingroom/roomId?orderId=${orderId}`);
+
+            if (response.data && response.data > 0) {
+                // 이미 채팅방이 존재하면 해당 채팅방으로 이동
+                navigate(`/chat/message/${response.data}`);
+            } else {
+                // 채팅방이 없는 경우에만 새로 생성
+                // 유저와 사장님 간 채팅방 생성
+                await apiRiderService.createChattingRoomForUserAndOwner(userId, orderId);
+
+                // 생성된 채팅방 ID 가져오기
+                const newRoomResponse = await axios.get(`http://localhost:7070/api/chattingroom/roomId?orderId=${orderId}`);
+                navigate(`/chat/message/${newRoomResponse.data}`);
+            }
+        } catch (error) {
+            console.error("채팅방 접속 중 오류가 발생했습니다.", error);
+            alert("채팅방 접속에 실패했습니다.");
         }
-    }, [location]);
+    };
 
     return (
         <div className="user-delivery-status-container">
