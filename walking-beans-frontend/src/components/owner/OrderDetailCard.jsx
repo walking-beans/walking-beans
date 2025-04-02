@@ -8,11 +8,12 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
 
     useEffect(() => {
         if (order){
-            // 상세정보 가져오기 크아아악
+            // 주문정보로 상세정보 가져오기
             axios
-                .get(`http://localhost:7070/api/orders/${order.orderId}`)
+                .get(`http://localhost:7070/api/orders/ordernumber/${order.orderNumber}`)
                 .then((res) => {
                     setOrderDetails(res.data);
+                    console.log(res.data);
                     setLoading(false);
                 })
                 .catch((err) => {
@@ -55,12 +56,16 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
                     <>
                         <h2>주문 상세 정보</h2>
                         <p>주문 번호: {orderDetails.orderNumber}</p>
-                        <p>상태: {orderDetails.orderStatus}</p>
+                        <p>주문 메뉴: {orderDetails.orderList}</p>
+                        <p>요청사항: {orderDetails.orderRequests}</p>
+                        <p>가격: {orderDetails.totalPayment}</p>
                     </>
                 ) : (
                     <p>주문 정보를 불러오지 못했습니다.</p>
                 )}
                 <button onClick={onClose}>닫기</button>
+                <button>주문수락</button>
+                <button>조리완료</button>
             </div>
         </>
     )
