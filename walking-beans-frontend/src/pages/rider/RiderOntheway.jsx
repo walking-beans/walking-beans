@@ -146,7 +146,7 @@ const RiderOntheway = ({user}) => {
                     { offset: new window.kakao.maps.Point(20, 42) }
                 );
 
-                if (!onDelivery) {
+                if (orderStatus !== 5 && !onDelivery) {
                     setStoreMarker(new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(order.storeLatitude, order.storeLongitude),
                         map: map,
