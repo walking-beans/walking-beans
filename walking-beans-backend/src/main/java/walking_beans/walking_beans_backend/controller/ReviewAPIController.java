@@ -49,7 +49,7 @@ public class ReviewAPIController {
         try {
             List<String> imageUrls = new ArrayList<>();
 
-            // ✅ 여러 개의 이미지 업로드 처리
+            // 여러 개의 이미지 업로드 처리
             if (files != null) {
                 for (MultipartFile file : files) {
                     if (!file.isEmpty()) {
@@ -61,14 +61,14 @@ public class ReviewAPIController {
                 }
             }
 
-            // ✅ `Reviews` 객체 생성 후 `setter` 사용
+            // `Reviews` 객체 생성 후 `setter` 사용
             Reviews review = new Reviews();
             review.setUserId(userId);
             review.setStoreId(storeId);
             review.setOrderId(orderId);
             review.setReviewStarRating(reviewStarRating);
             review.setReviewContent(reviewContent);
-            review.setReviewPictureUrl(String.join(",", imageUrls)); // ⭐ 여러 개의 이미지 URL을 쉼표로 구분하여 저장
+            review.setReviewPictureUrl(String.join(",", imageUrls)); //  여러 개의 이미지 URL을 쉼표로 구분하여 저장
             review.setReviewCreatedDate(LocalDateTime.now());
             review.setReviewModifiedDate(LocalDateTime.now());
 
