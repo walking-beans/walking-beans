@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmService;
 
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.List;
 public class AlarmAPIController {
     @Autowired
     private AlarmService alarmService;
+
+    @Autowired
+    private AlarmNotificationService alarmNotificationService;
 
     // 사장님이 특정 알림을 읽음 처리
     @PutMapping("/read/{alarmId}")
@@ -38,5 +42,11 @@ public class AlarmAPIController {
     @DeleteMapping("/api/alarm/delete/{userId}")
     public void deleteAllAlarms(@PathVariable("userId") byte userId) {
         alarmService.deleteAllAlarm(userId);
+    }
+
+    @PostMapping("/api/alarm/announcementAlarm")
+    public void announcementAlarm(@RequestBody String announcement) {
+        alarmNotificationService.sendAdminNotification(Alarms.create(0,1,announcement,4,"testUrl"));
+        System.out.println("전체공지발송:"+announcement);
     }
 }
