@@ -93,24 +93,35 @@ const HeaderAlarm = ({userId, bell}) => {
         };
     }, [userId]);
 /*
+    // 미확인 알림 가져오기
     useEffect(() => {
         if (userId) {
             axios
                 .get(`http://localhost:7070/api/noreadalarms/${userId}`)
                 .then((res) => {
-                    setAlarms(res.data);
+                    // 알림 데이터를 이전 알림 목록에 추가
+                    setNotifications((prevNotifications) => [
+                        ...res.data.map((receivedData) => ({
+                            message: receivedData.alarmContent,  // 알림 내용
+                            type: receivedData.alarmRole,       // 관리자 알림을 구분하는 타입
+                            url: receivedData.alarmUrl,         // 알림 URL
+                        })),
+                        ...prevNotifications,  // 이전 알림 목록
+                    ]);
+
                     // 읽지 않은 알람의 개수 카운트
                     const countFalseStatus = res.data.filter(
                         (alarm) => alarm.alarmStatus === false
                     ).length;
-                    setCount(countFalseStatus);
+                    setUnreadCount(countFalseStatus);
+                    console.log("안읽은 알림: ", JSON.stringify(res.data, null, 2));
                 })
                 .catch((err) => {
                     console.log("읽지 않은 알람리스트 불러오기 실패" + err);
                 });
         }
-    }, [userId]);*/
-
+    }, []);
+*/
 
     //알람 토글
     const toggleAlarm = () => {
@@ -156,6 +167,19 @@ const HeaderAlarm = ({userId, bell}) => {
                             </Link>
                         </div>
                     )}
+
+                    {/*모든 알림 확인*/}
+                    {/*
+                    {notifications.length > 0 && (
+                        <div className="MarkAllAsRead" onClick={() => {
+                            // 모든 알림을 확인 완료로 처리하는 로직 (예: 상태 업데이트)
+                            // 예시로, 알림의 상태를 변경하거나, 서버에 알림 확인 요청을 보낼 수 있음
+                            //markAllAsRead();
+                            setShowDropdown(false); // 알림목록 닫기
+                        }}>
+                            <button>모든 알림 확인 완료</button>
+                        </div>
+                    )}*/}
                 </div>
             )}
         </div>
