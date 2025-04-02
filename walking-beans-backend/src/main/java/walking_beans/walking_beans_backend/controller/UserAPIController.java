@@ -160,6 +160,10 @@ public class UserAPIController {
         return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
     }
 
-
+    // user_role update
+    @PatchMapping("/updateRole")
+    public ResponseEntity<Integer> updateUserRoleByUserId(@RequestParam("userId") long userId, @RequestParam("userRole") byte userRole) {
+        return ResponseEntity.ok(userService.updateUserRoleByUserId(userId, userRole));
+    }
 }
 

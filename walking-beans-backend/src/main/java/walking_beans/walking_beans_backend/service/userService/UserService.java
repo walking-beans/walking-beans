@@ -43,4 +43,7 @@ public interface UserService {
 
     // 마이페이지 사용자 회원 탈퇴
     void deleteUserAccount(Long userId);
+
+    int updateUserRoleByUserId(Long userId, byte userRole);
+
 }
