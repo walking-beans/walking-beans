@@ -178,48 +178,32 @@ const UserDeliveryStatus = () => {
         }
     };
 
-        // 매장 채팅 핸들러
-    const handleStoreChat = () => {
-        if (storeRoomId) {
-            navigate(`/chat/message/${storeRoomId}`);
-        } else {
-            // 채팅방 생성 API 직접 호출
-            axios.get(`http://localhost:7070/api/chattingroom/userinsert?userId=${userId}&orderId=${orderId}&storeId=${store.storeId}`)
-                .then(() => {
-                    // 채팅방 ID 다시 가져오기
-                    apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
-                        if (data["3"]) {
-                            setStoreRoomId(data["3"]);
-                            navigate(`/chat/message/${data["3"]}`);
-                        } else {
-                            alert("매장 채팅방을 찾을 수 없습니다. 잠시 후 다시 시도해주세요.");
-                        }
-                    });
-                });
-        }
-    };
-
-    const handleChatClick = async () => {
-        try {
-            // 먼저 해당 주문에 대한 채팅방이 있는지 확인
-            const response = await axios.get(`http://localhost:7070/api/chattingroom/roomId?orderId=${orderId}`);
-
-            if (response.data && response.data > 0) {
-                // 이미 채팅방이 존재하면 해당 채팅방으로 이동
-                navigate(`/chat/message/${response.data}`);
+    // 매장 채팅 핸들러
+    const handleChatClick = () => {
+        // 기존 채팅방이 있는지 확인
+        apiRiderService.getUserAndStoreRoomId(orderId, userId, (roomData) => {
+            if (roomData && Object.keys(roomData).length > 0) {
+                // 채팅방이 존재하면 해당 채팅방으로 이동
+                // roomData는 {receiverRelation: roomId} 형태의 맵
+                const roomId = Object.values(roomData)[0]; // 첫 번째 룸 ID 사용
+                navigate(`/chat/message/${roomId}`);
             } else {
                 // 채팅방이 없는 경우에만 새로 생성
-                // 유저와 사장님 간 채팅방 생성
-                await apiRiderService.createChattingRoomForUserAndOwner(userId, orderId);
-
-                // 생성된 채팅방 ID 가져오기
-                const newRoomResponse = await axios.get(`http://localhost:7070/api/chattingroom/roomId?orderId=${orderId}`);
-                navigate(`/chat/message/${newRoomResponse.data}`);
+                apiRiderService.createChattingRoomForUserAndOwner(userId, orderId);
+                // 생성 후 바로 채팅방 ID 조회해서 이동
+                setTimeout(() => {
+                    apiRiderService.getUserAndStoreRoomId(orderId, userId, (newRoomData) => {
+                        if (newRoomData && Object.keys(newRoomData).length > 0) {
+                            const newRoomId = Object.values(newRoomData)[0];
+                            navigate(`/chat/message/${newRoomId}`);
+                        } else {
+                            console.error("채팅방을 찾을 수 없습니다.");
+                            alert("채팅방 접속에 실패했습니다.");
+                        }
+                    });
+                }, 500); // 채팅방 생성 후 데이터베이스 반영을 위한 짧은 대기 시간
             }
-        } catch (error) {
-            console.error("채팅방 접속 중 오류가 발생했습니다.", error);
-            alert("채팅방 접속에 실패했습니다.");
-        }
+        });
     };
 
     return (
@@ -274,7 +258,7 @@ const UserDeliveryStatus = () => {
                         <div className="user-order-click-btn">
                             <button
                                 className="user-mini-btn-b"
-                                onClick={handleStoreChat}
+                                onClick={handleChatClick}
                             >
                                 매장 채팅하기
                             </button>
@@ -291,7 +275,7 @@ const UserDeliveryStatus = () => {
                             <div className="user-order-click-btn">
                                 <button
                                     className="user-mini-btn-b"
-                                    onClick={handleStoreChat}
+                                    onClick={handleChatClick}
                                 >
                                     매장 채팅하기
                                 </button>
