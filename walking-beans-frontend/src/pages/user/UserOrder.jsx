@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import UserCart from "../user/UserCart";
 import "../../css/Order.css";
 import "../../css/Cart.css";
@@ -8,26 +8,29 @@ import "../../css/Owner.css";
 import UserMenuOptionModal from "../user/UserMenuOptionModal";
 import oneStar from "../../assert/svg/starNav/oneStar.svg";
 import detailBtn from "../../images/user/detailbtn.svg";
-import UserMainMenuForm from "../user/UserMainMenuForm";
 import UserMenuCategory from "../user/UserMenuCategory";
 
 const UserOrder = () => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
-    const userId = user ? user.user_id : null;
+    const userId = user ? user.user_id : "";
     const navigate = useNavigate();
+
+    useEffect(() => {
+        console.log("UserMenuOptionModal userId:", userId);
+    }, []);
 
     useEffect(() => {
         if (!userId) {
             alert("로그인 후 주문 가능합니다.");
             setTimeout(() => {
-                navigate("/login", { replace: true });
-            }, 5000);
+                navigate("/login", {replace: true}); // 뒤로가기 방지
+            }, 500);
         }
     }, [userId, navigate]);
 
     const [carts, setCarts] = useState([]);
-    const { orderId, cartId, storeId } = useParams();
+    const {storeId} = useParams();
     const [totalAmount, setTotalAmount] = useState(0);
     const [menu, setMenu] = useState([]);
     const [store, setStore] = useState([]);
@@ -36,7 +39,11 @@ const UserOrder = () => {
     const [menus, setMenus] = useState([]);
     const [groupedMenus, setGroupedMenus] = useState({});
     const [mainMenu, setMainMenu] = useState(null);
+    const [orderId, setOrderId] = useState(null);
+    const validCarts = carts.filter(cart => cart.cartId !== null);
+    const [orderNumber, setOrderNumber] = useState(0);
 
+    // 메뉴 클릭 시 메뉴 옵션 모달 열기
     const handleMenuClick = (menu) => {
         if (!menu.menuId) {
             console.error("handleMenuClick 오류: menuId가 없습니다.");
@@ -47,6 +54,7 @@ const UserOrder = () => {
         document.body.style.overflow = "hidden";
     };
 
+    // 장바구니 데이터 조회
     useEffect(() => {
         if (userId) {
             console.log("userId:", userId);
@@ -70,28 +78,25 @@ const UserOrder = () => {
         }
     }, [userId]);
 
+    // 총합
     const calculateTotalAmount = (cartItems) => {
         const total = cartItems.reduce((sum, cart) => {
-            const validMenuPrice = cart.menuPrices ? Number(cart.menuPrices) : 0;
-            const validOptionPrice = cart.optionPrices ? Number(cart.optionPrices) : 0;
-            const validQuantity = cart.totalQuantities ? Number(cart.totalQuantities) : 1;
-            return sum + (validMenuPrice + validOptionPrice) * validQuantity;
+            const menuPrice = Number(cart.menuPrices) || 0;
+            const optionPrices = cart.optionPrices ? cart.optionPrices.split(',').reduce((acc, price) => acc + (Number(price) || 0), 0) : 0;
+            const quantity = Number(cart.totalQuantities) || 1;
+            return sum + (menuPrice + optionPrices) * quantity;
         }, 0);
-        setTotalAmount(total);
+        return total;
     };
 
+    // 장바구니 총합
     useEffect(() => {
-        if (orderId) {
-            apiUserOrderService.getUserOrderByOrderId(orderId)
-                .then((data) => {
-                    if (Array.isArray(data)) {
-                        setCarts(data);
-                    }
-                })
-                .catch((err) => console.error("주문 데이터 오류:", err));
-        }
-    }, [orderId]);
+        const total = calculateTotalAmount(carts);
+        setTotalAmount(total);
+        console.log("총 결제 금액 계산:", total);
+    }, [carts]);
 
+    // 장바구니 메뉴 삭제
     const handleDelete = (deleteCartId) => {
         if (!deleteCartId) return;
         apiUserOrderService.deleteUserOrderCart(deleteCartId)
@@ -101,20 +106,6 @@ const UserOrder = () => {
             })
             .catch(err => console.error("장바구니 삭제 오류:", err));
     };
-    useEffect(() => {
-        if (carts.length > 0) {
-            const total = carts.reduce((sum, cart) => {
-                const validMenuPrice = cart.menuPrices ? Number(cart.menuPrices) || 0 : 0;
-                const validOptionPrice = cart.optionPrices ? Number(cart.optionPrices) || 0 : 0;
-                const validQuantity = cart.totalQuantities ? Number(cart.totalQuantities) || 1 : 1;
-                return sum + (validMenuPrice + validOptionPrice) * validQuantity;
-            }, 0);
-            console.log("총 결제 금액 계산:", total);
-            setTotalAmount(total);
-        } else {
-            setTotalAmount(0);
-        }
-    }, [carts]);
 
     useEffect(() => {
         if (storeId) {
@@ -133,20 +124,25 @@ const UserOrder = () => {
         if (storeId) {
             apiUserOrderService.getMenuByStoreId(storeId)
                 .then((data) => {
-                    console.log("가져온 메뉴 데이터: ", data);
                     setMenus(data);  // 전체 메뉴를 상태에 저장
                     setGroupedMenus(groupMenusByCategory(data));  // 카테고리별 메뉴 그룹화
 
                     if (store?.storeMainMenu) {
                         const mainMenuItem = data.find(menu => menu.menuId === store.storeMainMenu);
-                        setMainMenu(mainMenuItem || null);  // 없으면 null 설정
-                        console.log("메인메뉴 : ", mainMenuItem);
+                        if (mainMenuItem) {
+                            setMainMenu(mainMenuItem);
+                            console.log("메인메뉴 : ", mainMenuItem);
+                        } else {
+                            console.warn("대표메뉴를 찾을 수 없음");
+                            setMainMenu(null);
+                        }
                     }
                 })
                 .catch(err => console.error("메뉴 데이터 오류:", err));
         }
     }, [storeId, store]);
 
+    // 카테고리별로 메뉴 가져오기
     const groupMenusByCategory = (menus) => {
         return menus.reduce((acc, menu) => {
             const category = menu.menuCategory || "기타";
@@ -156,47 +152,67 @@ const UserOrder = () => {
         }, {});
     };
 
-    const openModal = (menu) => {
-        setSelectedMenu(menu);
-        setModalOpen(true);
-        document.body.style.overflow = "hidden";
-    };
-
+    // 모달 닫기
     const closeModal = () => {
         setModalOpen(false);
         document.body.style.overflow = "auto";
     };
 
+    // 주문하기
+    const handleOrderNow = () => {
+        if (carts.length === 0 || validCarts.length === 0) {
+            alert("장바구니가 비어있습니다.")
+            console.log("카트", carts)
+            return;
+        }
+        apiUserOrderService.insertOrder()
+        navigate(`/order/checkout/${userId}?totalAmount=${totalAmount}`);
+    }
+
+    // 장바구니에 새로운 메뉴 추가됐을 때 제일 아래로 내리기
+    const cartMenuInfoRef = useRef(null);
+    const prevCartLength = useRef(carts.length); // 카트 길이 저장
+    useEffect(() => {
+        if (carts.length > prevCartLength.current && cartMenuInfoRef.current) {
+            cartMenuInfoRef.current.scrollTop = cartMenuInfoRef.current.scrollHeight;
+        }
+
+        prevCartLength.current = carts.length;
+    }, [carts]);
+
     return (
         <div className="user-order-container">
             <div className="user-order-background">
                 <div className="user-order-menu-container">
-                    <div className="user-title">{store?.storeName}</div>
+                    <div className="user-title-l">{store?.storeName}</div>
                     <div>
                         <img src={oneStar} alt="별점 아이콘"/>
                         <span className="store-menu-title">
                             {store?.storeRating}({store?.storeReviewCount})
                         </span>
-                        <Link to={`/user/order/${storeId}`}>
+                        <Link to={`/user/review/${storeId}`}>
                             <img src={detailBtn} alt="가게 평점 자세히보기"/>
                         </Link>
                     </div>
 
-                    <div className="user-order-hr"></div>
-                    <div className="user-cart-bordtext">대표메뉴</div>
-                    <div className="user-order-mainmenu-grid">
-                        {mainMenu ? (
-                            <div key={mainMenu.menuId} className="menu-item">
-                                <div className="user-menu-photo">
-                                <img src={mainMenu.menuPictureUrl} alt={mainMenu.menuName} className="menu-image" />
+                    {/* 대표 메뉴 , 없으면 삭제*/}
+                    {mainMenu ? (
+                        <>
+                            <div className="user-order-hr"></div>
+                            <div className="user-cart-bordtext">대표메뉴</div>
+                            <div className="user-order-mainmenu-grid">
+                                <div key={mainMenu.menuId} className="user-main-menu-container"
+                                     onClick={() => handleMenuClick(mainMenu)}>
+                                    <div className="user-menu-photo">
+                                        <img src={mainMenu.menuPictureUrl} alt={mainMenu.menuName}
+                                             className="menu-image"/>
+                                    </div>
+                                    <div className="store-menu-title">{mainMenu.menuName}</div>
+                                    <div className="store-menu-price">{Number(mainMenu.menuPrice).toLocaleString()}원</div>
                                 </div>
-                                <div className="menu-name">{mainMenu.menuName}</div>
-                                <div className="menu-price">{mainMenu.menuPrice}원</div>
                             </div>
-                        ) : (
-                            <div>대표메뉴가 없습니다</div>
-                        )}
-                    </div>
+                        </>
+                    ) : null}
 
                     {/* 카테고리별 메뉴 */}
                     <div className="user-order-menu">
@@ -212,24 +228,26 @@ const UserOrder = () => {
                 </div>
 
                 {/* 옵션 모달 */}
-                {modalOpen && selectedMenu && (
+                {modalOpen && selectedMenu && userId && (
                     <div className="modal-backdrop" onClick={closeModal}>
-                        <div className="user-menu-option-modal-container" onClick={(e) => e.stopPropagation()}>
-                            <UserMenuOptionModal
-                                userId={userId}
-                                menu={selectedMenu}
-                                onClose={closeModal}
-                                updateCart={setCarts}
-                            />
+                        <div className="user-order-modal-container">
+                            <div className="user-menu-option-modal-container" onClick={(e) => e.stopPropagation()}>
+                                <UserMenuOptionModal
+                                    userId={userId}
+                                    menu={selectedMenu}
+                                    onClose={closeModal}
+                                    updateCart={setCarts}
+                                    handleOrderNow={handleOrderNow}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
-
                 <div className="user-cart-background">
                     <div className="user-title">장바구니</div>
-                    <div className="user-cart-menuinfo">
-                        {carts.length > 0 ? (
-                            carts.map(cart => (
+                    <div className="user-cart-menuinfo" ref={cartMenuInfoRef}>
+                        {validCarts.length > 0 ? (
+                            validCarts.map(cart => (
                                 <UserCart
                                     key={cart.cartId}
                                     {...cart}
@@ -238,19 +256,25 @@ const UserOrder = () => {
                                 />
                             ))
                         ) : (
-                            <div>장바구니가 비어 있습니다.</div>
+                            <div className="user-order-click-btn-one">
+                                <div className="user-order-emptybtn">메뉴를 선택해 주세요</div>
+                            </div>
                         )}
-
-                        <div className="cart-fixed">
-                            <button
-                                className="user-order-btn"
-                                onClick={() => navigate(`/checkout?totalAmount=${totalAmount}&storeId=${storeId}&addressId=${user.addressId}`)}
-
-                            >
-                                주문하기
-                            </button>
-
+                    </div>
+                    <div className="cart-fixed">
+                        <div className="user-order-hr"></div>
+                        <div className="user-cart-grid">
+                            <div className="user-cart-pricetext">최종 결제 금액</div>
+                            <div className="user-title">{totalAmount.toLocaleString()}원</div>
                         </div>
+                    </div>
+
+                    <div className="user-order-click-btn-one">
+                        <button
+                            className="user-order-btn"
+                            onClick={handleOrderNow}>
+                            주문하기
+                        </button>
                     </div>
                 </div>
             </div>

@@ -21,7 +21,6 @@
     margin: 0 auto;
     position: relative;
     z-index: 1050;
-    font-family: 'Noto Serif KR', serif;
     border-radius: 0 0 20px 20px;
     display: flex;
     align-items: center;
@@ -90,7 +89,6 @@
     z-index: 3000;
     transition: right 0.3s ease-in-out;
     display: none;
-    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .rider-header-wrapper .rider-side-nav.open {
@@ -156,6 +154,22 @@
     white-space: nowrap;
 }
 
+.rider-unstatus-btn {
+    background-color: grey;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    white-space: nowrap;
+}
+
 .rider-header-wrapper .rider-status-btn:hover {
     background-color: #FFC107;
 }
@@ -200,6 +214,58 @@
 
 .rider-header-wrapper .rider-nav-logout-btn:hover {
     background-color: #64B5F6;
+}
+
+.AlarmNotificationContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.AlarmDropdown .NoAlarmNotificationItem {
+    text-align: center;
+}
+
+.AlarmNotificationItem:hover {
+    cursor: pointer;
+}
+
+.AlarmDropdown .AlarmLink {
+    text-decoration: none;
+}
+
+
+.AlarmBadge {
+    position: absolute;
+    top: -1px;
+    right: +3px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.AlarmDropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 250px;
+    background: #EEE4D8;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 9999;
+}
+
+.AlarmNotificationItem {
+    border: 1px solid #ab7a44;
+    border-radius : 3%;
+    margin-top : 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding : 10px;
+    background-color :#F4EDDF;
 }
 
 @media (max-width: 768px) {
@@ -287,6 +353,8 @@
         height: 28px;
     }
 }
+
+
 
 /*
 @media (max-width: 768px) {

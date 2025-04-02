@@ -1,0 +1,113 @@
+.rider_income_container {
+    margin: auto;
+}
+
+.rider_income_dates {
+    height : 200px;
+    text-align: center;
+    font-weight: bold;
+    color : white;
+    background-color : #4169e1;
+    margin : 0 10px 0 10px;
+    padding : 50px;
+}
+
+.rider_income_dates_myIncome {
+    margin : 0 0 20px 0;
+}
+
+.rider_income_dates_left {
+    font-size : 18px;
+
+}
+
+.rider_income_dates_right {
+    font-size : 18px;
+}
+
+.rider_income_dates_left:hover {
+    cursor: pointer;
+}
+
+.rider_income_dates_right:hover {
+    cursor: pointer;
+}
+
+.rider_income_total_container {
+    position: relative;
+    z-index : 1;
+    top: -50px;
+
+    display : block;
+    padding : 20px;
+    margin : 0 20px 10px 20px;
+    width : 560px;
+    height : 170px;
+    border-radius : 50px;
+    border : #A0A0A0 solid 1px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    background-color: white;
+
+}
+
+
+.rider_income_total_title {
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    color : #A0A0A0;
+    font-size : 18px;
+}
+
+.rider_income_total_price {
+    text-align: center;
+    color : #228b22;
+    font-weight: bold;
+    font-size : 32px;
+    margin-bottom : 10px;
+}
+
+.rider_income_total_times {
+    text-align: center;
+}
+
+.rider_income_table_thead {
+    display : flex;
+    justify-content: space-between;
+}
+
+.rider_income_table {
+    position: relative;
+    top: -40px;
+    display : flex;
+    justify-content: space-around;
+    margin : 0 20px;
+
+}
+
+.rider_income_table_tr {
+    display : flex;
+    justify-content: space-between;
+
+}
+
+.rider_income_table_tr_income_index {
+
+}
+
+.rider_income_table_tr_income_date {
+
+}
+
+.rider_income_table_tr_income_amount {
+
+}
+
+
+.rider_income_table_nodata {
+    padding: 20px 0;
+    color : red;
+    text-align : center;
+    font-size : 20px;
+}

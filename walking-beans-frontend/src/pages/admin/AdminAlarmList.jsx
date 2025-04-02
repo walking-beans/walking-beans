@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminAlarmList.css";
 
 
 const AdminAlarmList = () => {
     const [userId, setUserId] = useState(0);
     const [AlarmList, setAlarmList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // localStorage에서 user 객체를 가져온 후 JSON.parse로 객체로 변환
@@ -25,9 +26,10 @@ const AdminAlarmList = () => {
                 .get(`http://localhost:7070/api/chat/${userId}`)
                 .then((res) => {
                     setAlarmList(res.data);
+                    console.log(res.data);
                 })
                 .catch((err) => {
-                    alert("백엔드에서 리스트를 가져오는데 실패했습니다.");
+                    navigate("/error");
                 });
         }
     }, [userId]);
@@ -47,7 +49,7 @@ const AdminAlarmList = () => {
                 .catch(
                     (err) => {
                         console.log("err: ", err);
-                        alert("백엔드에 문제가 생겼습니다.");
+                        navigate("/error");
                     }
                 )
         }
@@ -69,16 +71,16 @@ const AdminAlarmList = () => {
             ) : (
                 AlarmList.map((value, index) => (
                     <div key={index}>
-                        <div className="AlarmList">
+                        <div className="AlarmList" onClick={() => {
+                            const targetUrl = value.alarmUrl;
+                            console.log(targetUrl);
+                            navigate(targetUrl);
+                        }}>
                             <h3>{value.alarmRole === 1
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
-                            <p>{value.alarmRole === 1
-                                ? <Link to="/link1">{value.alarmContent}</Link>
-                                : value.alarmRole === 2
-                                    ? <Link to={`/chat/message/${value.alarmSenderId}`}>{value.alarmContent}</Link>
-                                    : value.alarmContent}</p>
+                            <p>{value.alarmContent}</p>
                             <p>
-                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')} /
+                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')}<br/>
                                 {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
                                     hour: '2-digit',
                                     minute: '2-digit'
@@ -89,8 +91,6 @@ const AdminAlarmList = () => {
                 ))
             )}
         </div>
-    );
-};
-// 메세지 발신인 띄우기
-// DB문제 해결 -> null 문제
+    )
+}
 export default AdminAlarmList;

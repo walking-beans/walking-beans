@@ -2,10 +2,12 @@
 
 /* 전체 공통 */
 .mypage-container {
-    max-width: 600px;
-    margin: 0 auto;
     padding: 24px 16px;
     font-family: 'Noto Sans KR', sans-serif;
+
+    background-color: #F4EDDF;
+    color: #5A3D21;
+
     text-align: center;
     min-height: 100vh;
     box-sizing: border-box;

@@ -67,7 +67,7 @@ const AdminMypage = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className={`mypage-container ${userRole}`}>
+        <div className="mypage-container">
 
             <div className="profile-section">
                 <img

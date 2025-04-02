@@ -7,8 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Users;
+
 import walking_beans.walking_beans_backend.model.vo.Vertification;
+
+import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
@@ -22,6 +27,9 @@ public class UserAPIController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private AlarmNotificationService alarmNotificationService;
+
     /**************************** 로그인 ****************************/
     // 로그인
     @PostMapping("/login")
@@ -30,7 +38,8 @@ public class UserAPIController {
         String userPassword = loginData.get("userPassword");
 
         Map<String, Object> loginResult = userService.loginUser(userEmail, userPassword);
-
+        // 전체 알림 테스트용 코드 ↓
+        //alarmNotificationService.sendAdminNotification(Alarms.create(0,1,"전체공지입니다.",4,"testUrl"));
         if ("success".equals(loginResult.get("status"))) {
             session.setAttribute("user", loginResult.get("user"));
 
@@ -67,6 +76,7 @@ public class UserAPIController {
     //유저 롤 업데이트
     @PutMapping("/{userEmail}/{userRole}")
     public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
+        alarmNotificationService.sendOrderNotification(Alarms.create(15,1,"롤이 변경되었습니다.",15,"testUrl"));
         userService.updateUserRole(userEmail, userRole);
     }
 

@@ -1,0 +1,63 @@
+.riderontheway-text-container {
+    background-color: black;
+    color:white;
+    border-radius: 20px 20px 0px 0px;
+    padding : 10px 0;
+}
+
+.riderontheway-orderdetail-deliveryfee {
+    font-size : 25px;
+    font-weight: bold;
+    text-align: center;
+    padding : 15px 0 0 0;
+}
+
+.riderontheway-orderdetail-request-div {
+    padding : 0 0 0 40px;
+}
+
+.riderontheway-orderdetail-requests-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.riderontheway-orderdetail-requests-content {
+    padding : 0 0 0 10px;
+}
+
+.riderontheway-orderdetail {
+
+}
+
+.btn-container {
+    display : flex;
+    justify-content: space-evenly;
+    color : white;
+    margin : 10px 0 20px 0;
+}
+
+.pickingup-delivery-btn {
+    color : white;
+    width :  300px;
+}
+
+.pickingup-delivery-btn:hover {
+    color : white;
+    font-weight:bold;
+    width :  300px;
+}
+
+.kakao-btn {
+    width :  300px;
+    margin: 10px 0;
+}
+
+.loading {
+    display : block;
+    text-align: center;
+    font-size : 16px;
+    color : red;
+    font-weight : bold;
+
+    margin : 10px auto;
+}

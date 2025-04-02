@@ -2,7 +2,7 @@ import "../../css/Order.css"
 import UserMenuOption from "./UserMenuOption";
 import {useState} from "react";
 
-const UserMenuOptionGroup = ({optionName, options, selectedOption, onOptionChange}) => {
+const UserMenuOptionGroup = ({optionName, options, selectedOptions, onOptionChange}) => {
 
     return (
         <div className="user-menu-option-group-container">
@@ -14,7 +14,9 @@ const UserMenuOptionGroup = ({optionName, options, selectedOption, onOptionChang
                         optionContent={option.optionContent}
                         optionPrice={option.optionPrice}
                         onChange={() => onOptionChange(optionName, option)}
-                        checked={selectedOption && selectedOption.optionId === option.optionId}  // 선택된 옵션이 있으면 checked가 true
+                        checked={selectedOptions && selectedOptions.some(selected => selected.optionId === option.optionId)}
+                        type="radio"
+                        name={optionName}
                     />
                 ))}
             </div>

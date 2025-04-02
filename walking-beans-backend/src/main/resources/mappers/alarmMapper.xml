@@ -5,8 +5,8 @@
 
     <!-- 알람 추가 -->
     <insert id="insertAlarm">
-        INSERT INTO Alarms (user_id, alarm_role, alarm_sender_id, alarm_content, alarm_status, alarm_create_date)
-        VALUES (#{userId}, #{alarmRole}, #{alarmSenderId}, #{alarmContent}, #{alarmStatus}, #{alarmCreateDate})
+        INSERT INTO Alarms (user_id, alarm_role, alarm_sender_id, alarm_content, alarm_status, alarm_create_date, alarm_url)
+        VALUES (#{userId}, #{alarmRole}, #{alarmSenderId}, #{alarmContent}, #{alarmStatus}, #{alarmCreateDate}, #{alarmUrl})
     </insert>
 
     <!-- 알람 리스트 가져오기 -->
@@ -14,6 +14,7 @@
         SELECT *
         FROM Alarms
         WHERE user_id = #{userId}
+        ORDER BY alarm_id DESC
     </select>
 
     <!-- 알람 모두 지우기 -->
@@ -22,4 +23,47 @@
         FROM Alarms
         WHERE user_id = #{userId}
     </delete>
+
+    <!-- 읽지 않은 알림 가져오기 -->
+    <select id="getNotReadAlarms">
+        SELECT *
+        FROM Alarms
+        WHERE alarm_status = false
+        AND user_id = #{userId}
+        ORDER BY alarm_id DESC
+    </select>
+
+    <!-- 특정 알림 읽음 상태 업데이트 -->
+    <update id="markNotificationAsRead">
+        UPDATE Alarms SET alarm_status = TRUE WHERE alarm_id = #{alarmId}
+    </update>
+
+    <!-- 채팅알람 정보 가져오기-->
+    <select id="getChattingUserInfo">
+        SELECT *
+        FROM view_chatting_info
+        WHERE room_id = #{roomId}
+        AND sender_id = #{senderId}
+    </select>
+
+    <!-- 알림용 주문 상태 데이터 가져오기-->
+    <select id="getOrderInfoForAlarm">
+        SELECT *
+        FROM view_orders_stores
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 리뷰용 스토어 아이디로 유저아이디 가져오기-->
+    <select id="getUserIdForReview">
+        SELECT *
+        FROM view_orders_stores
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 주문알림용 스토어아이디로 스토어 주인 유저 아이디 가져오기-->
+    <select id="getUserIdForOrderAlarm">
+        SELECT *
+        FROM view_orders_stores
+        WHERE order_number = #{orderNumber}
+    </select>
 </mapper>

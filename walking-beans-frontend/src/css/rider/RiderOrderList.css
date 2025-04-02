@@ -1,0 +1,41 @@
+.rider-order-list-container {
+    padding : 10px 0;
+}
+
+.rider-order-list-order {
+    margin : 20px 0;
+}
+
+.rider-order-list-order-container {
+
+}
+
+.rider-order-list-order-container:hover {
+    cursor: pointer;
+}
+
+.rider-order-list-order-ordernumber {
+    font-weight: bold;
+    font-size : 17px;
+}
+
+.rider-order-list-order-orderstatus {
+    font-weight: bold;
+    color : red;
+}
+
+.rider-order-list-order-finishedorderstatus {
+    font-weight: bold;
+}
+
+.rider-order-list-order-orderprice {
+
+}
+
+.rider-order-list-order-orderdate {
+
+}
+
+.rider-order-list-noorders {
+
+}

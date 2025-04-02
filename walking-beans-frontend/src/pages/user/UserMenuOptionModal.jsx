@@ -1,18 +1,19 @@
 import UserMenuOptionGroup from "./UserMenuOptionGroup";
 import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
+import {useNavigate} from "react-router-dom";
 
-const UserMenuOptionModal = ({ menu, userId, onClose,updateCart }) => {
-    const [selectedOption, setSelectedOption] = useState({});
+const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
+
+    const [selectedOptions, setSelectedOptions] = useState({});
     const [options, setOptions] = useState([]);
     const [grouped, setGrouped] = useState({});
-    const [paymentMethod, setPaymentMethod] = useState("CASH");
-    const [selectedOrderRequests, setSelectedOrderRequests] = useState("");
     const modalBodyRef = useRef(null);
 
+
     useEffect(() => {
-        if (menu?.menuId) {
+        if (userId && menu?.menuId) {
             apiUserOrderService.getOptionsByMenuId(menu.menuId, (data) => {
                 setOptions(data);
             });
@@ -31,20 +32,25 @@ const UserMenuOptionModal = ({ menu, userId, onClose,updateCart }) => {
     }, [options]);
 
     const handleOptionChange = (optionName, option) => {
-        setSelectedOption((prev) => ({
-            ...prev,
-            [optionName]: option
-        }));
+        setSelectedOptions((prev) => {
+            // 해당 옵션 그룹에 대한 현재 선택 상태 가져오기
+            const newSelectedOptions = {...prev};
+
+            // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
+            newSelectedOptions[optionName] = [option];
+
+            return newSelectedOptions;
+        });
     };
 
     const handleAddToCart = async () => {
-        if (!menu?.menuId) {
-            alert("메뉴를 선택하세요.");
+        if (!userId || userId === 'undefined') {
+            alert("사용자 인증이 필요합니다.");
             return;
         }
 
-        const selectedOptionData = Object.values(selectedOption);
-        const optionIds = selectedOptionData.map(option => option.optionId);
+        const allSelectedOptions = Object.values(selectedOptions).flat();
+        const optionIds = allSelectedOptions.map(option => option.optionId);
         const optionIdsString = optionIds.join(",");
 
         const cartData = {
@@ -69,12 +75,11 @@ const UserMenuOptionModal = ({ menu, userId, onClose,updateCart }) => {
         }
     };
 
-
     return (
         <div>
             <div className="user-title">{menu?.menuName || "메뉴 상세"}</div>
             <div className="order-option-photo">
-            <img src={menu?.menuPictureUrl || defaultDetailImage} alt="메뉴 사진"/>
+                <img src={menu?.menuPictureUrl || defaultDetailImage} alt="메뉴 사진"/>
             </div>
             <div className="user-order-description">{menu?.menuDescription}</div>
 
@@ -91,7 +96,7 @@ const UserMenuOptionModal = ({ menu, userId, onClose,updateCart }) => {
                             key={optionName}
                             optionName={optionName}
                             options={options}
-                            selectedOption={selectedOption[optionName]}
+                            selectedOptions={selectedOptions[optionName]}
                             onOptionChange={handleOptionChange}
                         />
                     ))
@@ -102,7 +107,7 @@ const UserMenuOptionModal = ({ menu, userId, onClose,updateCart }) => {
             {/* 기존 담겨있는 stored_id 와 일치하지 않으면 장바구니 비우고 새로 담기*/}
             <div className="user-order-click-btn">
                 <button type="submit" className="user-mini-btn" onClick={handleAddToCart}>장바구니추가</button>
-                <button type="submit" className="user-mini-btn">주문하기</button>
+                <button type="submit" className="user-mini-btn" onClick={handleOrderNow}>주문하기</button>
             </div>
         </div>
     );

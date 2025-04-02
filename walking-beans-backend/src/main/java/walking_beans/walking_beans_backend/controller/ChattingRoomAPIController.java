@@ -34,4 +34,28 @@ public class ChattingRoomAPIController {
 
         return ResponseEntity.ok(chattingRoomService.getAllChattingRoomByReceiverRelation(userId, receiverRelation));
     }
+
+    @GetMapping("/roomId")
+    public ResponseEntity<Long> getRoomIdByOrderId(@RequestParam("orderId") long orderId) {
+        log.info("=== /api/chattingroom?orderId=" + orderId);
+        return ResponseEntity.ok(chattingRoomService.getRoomIdByOrderId(orderId));
+    }
+
+    @GetMapping("/insert")
+    public ResponseEntity<Void> createChattingRoomForRider(@RequestParam("riderId") long riderId, @RequestParam("userId") long userId, @RequestParam("ownerId") long ownerId, @RequestParam("orderId") long orderId) {
+
+        chattingRoomService.createChattingRoomForRider(riderId, userId, ownerId, orderId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/userinsert")
+    public ResponseEntity<Void> createChattingRoomForUserAndOwner(
+            @RequestParam("userId") long userId,
+            @RequestParam("orderId") long orderId) {
+
+        chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);
+
+        return ResponseEntity.ok().build();
+    }
 }
