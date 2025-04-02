@@ -50,9 +50,13 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
+
+import StoreRegister from "../pages/owner/StoreRegister";
+
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -194,35 +198,42 @@ function PathRoute() {
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menu" element={
+                                {/*id = storeId */}
+                                <Route path="/owner/:id/menu" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/menu/:id" element={
+                                <Route path="/owner/:storeId/menu/:menuId" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
-                                {/* id는 연결되는 메뉴id */}
-                                <Route path="/owner/menuoption/:id" element={
+                                <Route path="/owner/:storeId/:menuId/menuoption" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/mystore" element={
+                                {/* id = userId 유저 id, 유저만 신규 가게 등록이 가능하도록 제한*/}
+                                <Route path="/user/:id/storeregister/" element={
+                                    <ProtectedRoute allowedRoles={["user"]}>
+                                        <StoreRegister/>
+                                    </ProtectedRoute>
+                                }/>
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/mystore/" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/order" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/order" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/revenue" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/revenue" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>

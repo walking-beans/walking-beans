@@ -6,7 +6,6 @@
     <select id="findAllStores">
         SELECT *
         FROM stores
-
     </select>
 
     <!--//매장 검색, KEYWORD 로 매장 이름, 설명, 메뉴 검색가능. -->
@@ -62,7 +61,7 @@
 PRIMARY KEY (`store_id`),
 CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`)
      -->
-    <insert id="addStores">
+    <insert id="addStore">
         INSERT INTO Stores (store_id,
                             user_id,
                             store_name,
@@ -110,7 +109,7 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
     </insert>
 
     <!--매장정보 수정하기 -->
-    <update id="updateStores">
+    <update id="updateStore">
         UPDATE stores
         SET (
                 store_name = #{storeName}
@@ -135,6 +134,13 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
         WHERE store_id = #{storeId}
 
     </update>
+
+    <!-- 가게 정보(메뉴,메뉴옵션,가게) 조작 권한 검증-->
+    <select id="getStoreIdByUserId">
+        SELECT store_id AS storeId
+        FROM stores
+        WHERE user_id = #{userId}
+    </select>
 
     <!--매장정보 삭제하기 -->
     <delete id="deleteStores">
