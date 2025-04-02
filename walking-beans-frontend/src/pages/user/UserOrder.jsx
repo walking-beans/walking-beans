@@ -208,7 +208,7 @@ const UserOrder = () => {
                                              className="menu-image"/>
                                     </div>
                                     <div className="store-menu-title">{mainMenu.menuName}</div>
-                                    <div className="store-menu-price">{mainMenu.menuPrice}원</div>
+                                    <div className="store-menu-price">{Number(mainMenu.menuPrice).toLocaleString()}원</div>
                                 </div>
                             </div>
                         </>

@@ -1,12 +1,15 @@
 package walking_beans.walking_beans_backend.service.orderService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import walking_beans.walking_beans_backend.config.WebSocketHandlerOrder;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
+import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
 import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
@@ -22,6 +25,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    // 웹소켓 가게에서 주문정보리스트 자동 업데이트
+    @Autowired
+    private WebSocketHandlerOrder webSocketHandler;
 
     @Autowired
     private AlarmServiceImpl alarmService;
@@ -40,11 +47,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId) {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
-    }
-
-    @Override
-    public Integer updateOrderStatus(long orderId, int orderStatus) {
-        return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
     @Override
@@ -71,6 +73,46 @@ public class OrderServiceImpl implements OrderService {
         return orderStatusDTO;
     }
 
+
+    /**********************************************mochoping**********************************************/
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    @Override
+    public List<Orders> getLatestOrderForStore(long storeId) {
+        return orderMapper.getLatestOrderForStore(storeId);
+    }
+    // 주문번호로 뷰 테이블에서 전체 정보 가져오기
+    @Override
+    public UserOrderDTO getOrderForStore(String orderNumber) {
+        return orderMapper.getOrderForStore(orderNumber);
+    }
+
+    // 웹소켓 통신용 메서드
+    // 주문상태 2 이상 업데이트시 업주에게 자동 업데이트
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        Integer updatedRows = orderMapper.updateOrderStatus(orderId, orderStatus);
+        System.out.println("업데이트된 행 수: " + updatedRows + ", 상태: " + orderStatus); // 로그
+        //알림받을 조건
+        System.out.println("if 블록 진입 직전");
+        if (orderStatus > 1 ) { // 주문상태 2이상인 주문들만 필터
+            System.out.println("if 블록 진입 성공");
+            try {
+                // 주문 정보 조회 (알림에 필요한 데이터)
+                Orders order = orderMapper.findOrderById(orderId);
+                if (order != null) {
+                    String message = "{\"orderId\": " + orderId +
+                            ", \"orderNumber\": \"" + order.getOrderNumber() +
+                            "\", \"orderStatus\": " + orderStatus + "}";
+                    webSocketHandler.sendOrderUpdate(message);
+                }
+            } catch (Exception e) {
+                System.out.println("예외처리 : "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return updatedRows;
+    }
+
     /****************************************  ****************************************/
 
 
@@ -93,6 +135,8 @@ public class OrderServiceImpl implements OrderService {
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
     }
+
+
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
@@ -243,14 +287,12 @@ public class OrderServiceImpl implements OrderService {
                     String optionIds = item.containsKey("optionIds")
                             ? item.get("optionIds").toString()
                             : null;
-                    Long optionId = null;
-                    if (optionIds != null && !optionIds.isEmpty()) {
-                        String[] optionIdArray = optionIds.split(",");
-                        optionId = Long.parseLong(optionIdArray[0]);
-                    }
 
                     // `quantity` 처리
-                    Object quantityObj = item.get("totalQuantities");
+                    Object quantityObj = item.get("cartQuantity") != null
+                            ? item.get("cartQuantity")
+                            : item.get("totalQuantities");
+
                     if (quantityObj == null) {
                         log.warn("수량 정보가 없는 아이템 스킵");
                         continue;
@@ -261,7 +303,7 @@ public class OrderServiceImpl implements OrderService {
                     Map<String, Object> orderItemParams = new HashMap<>();
                     orderItemParams.put("orderNumber", orderNumber);
                     orderItemParams.put("menuId", menuId);
-                    orderItemParams.put("optionId", optionId);
+                    orderItemParams.put("optionIds", optionIds);
                     orderItemParams.put("quantity", quantity);
 
                     // `order_items` 테이블에 삽입
@@ -273,11 +315,53 @@ public class OrderServiceImpl implements OrderService {
             }
             // 매장에 주문수락 요청 알림 보내기
             OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
-            alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(),1,"새로운 주문이 들어왔습니다.",0,"/user/delivery/status/"+orderNumber));
+            alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
             return userId;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");
         }
     }
+
+
+    // 주문 상세 내역 정보 가져오기
+    @Override
+    public List<OrderDetailDTO> getOrderDetailsByOrderNumber(String orderNumber) {
+
+        return orderMapper.getOrderDetailsByOrderNumber(orderNumber);
+    }
+
+    // 주문 삭제
+    @Override
+    public void deleteOrderById(long orderId) {
+        log.info("주문 삭제 요청: orderId={}", orderId);
+
+        // 먼저 주문 정보 확인
+        Orders order = orderMapper.findOrderById(orderId);
+
+        if (order == null) {
+            log.error("삭제할 주문을 찾을 수 없음: {}", orderId);
+            throw new RuntimeException("주문을 찾을 수 없습니다.");
+        }
+
+        log.info("주문 상태 확인: orderStatus={}", order.getOrderStatus());
+
+        // 주문 상태가 6(배달 완료)인지 명시적으로 확인
+        if (order.getOrderStatus() != 6) {
+            log.error("배달 완료 상태가 아닌 주문 삭제 시도: orderId={}, orderStatus={}",
+                    orderId, order.getOrderStatus());
+            throw new RuntimeException("배달 완료된 주문만 삭제할 수 있습니다.");
+        }
+
+        int deleteCount = orderMapper.deleteOrderById(orderId);
+
+        if (deleteCount == 0) {
+            log.error("주문 삭제 실패: orderId={}, orderStatus={}",
+                    orderId, order.getOrderStatus());
+            throw new RuntimeException("주문 삭제에 실패했습니다. 다시 시도해주세요.");
+        }
+
+        log.info("주문 삭제 성공: orderId={}", orderId);
+    }
+
 }

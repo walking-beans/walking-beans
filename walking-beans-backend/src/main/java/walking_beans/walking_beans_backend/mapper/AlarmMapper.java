@@ -20,6 +20,9 @@ public interface AlarmMapper {
     // 알림 전체 삭제
     void deleteAllAlarm(byte userId);
 
+    // 읽지 않은 알람 가져오기
+    List<Alarms>getNotReadAlarms (long userId);
+
     // 특정 알림을 읽음 처리
     void markNotificationAsRead(@Param("alarmId") Long alarmId);
 

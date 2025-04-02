@@ -10,6 +10,7 @@ import "../../pages/layout/UserHeader.css";
 //라이더용 벨 아이콘
 import riderBellIcon from "../../assert/svg/riderBell.svg";
 import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
+import axios from "axios";
 
 
 const HeaderAlarm = ({userId, bell}) => {
@@ -17,6 +18,9 @@ const HeaderAlarm = ({userId, bell}) => {
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
+
+    const [alarms, setAlarms] = useState([]); // 알림 리스트 (서버에서 불러온)
+    const [count, setCount] = useState(0); // 읽지 않은 알람 수
     const navigate = useNavigate();
 
     const alarmIconToShow = bell ? riderAlarmIcon : alarmIcon;
@@ -35,19 +39,44 @@ const HeaderAlarm = ({userId, bell}) => {
                     console.log("알림 수신:", message.body);
                     const receivedData = JSON.parse(message.body);
                     console.log(receivedData);  // 알림 데이터가 어떻게 들어오는지 확인
-                    if (receivedData.userId === userId) {
+
+                    if (receivedData.alarmUrl === window.location.pathname) { //채팅방에 들어가있으면 알람을 받지 않게 수정
+                        console.log("해당페이지입니다.");
+                        return;
+                    }
+
+                    if (receivedData.userId === userId ) {
                         setNotifications((prevNotifications) => [
                             {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
-                                url: receivedData.alarmUrl
+                                url: receivedData.alarmUrl,
                             },
                             ...prevNotifications,
                         ])
 
                         setUnreadCount((prevCount) => prevCount +1);
                     }
-                });
+                })
+                /************ 전체 알림 수신 코드 ********************/
+
+                stompClient.subscribe(`/topic/alarms/admin`, (message) => {
+                    console.log("관리자 알람 수신: ",message.body);
+                    const receivedData = JSON.parse(message.body);
+
+                    // 관리자의 알림을 처리
+                        setNotifications((prevNotifications) => [
+                            {
+                                message: receivedData.alarmContent,
+                                type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
+                                url: receivedData.alarmUrl,
+                            },
+                            ...prevNotifications,
+                        ]);
+                        setUnreadCount((prevCount) => prevCount + 1);
+                })
+
+                /**************************** **************************/
             },
             onStompError: (frame) => {
                 console.error("❌ WebSocket 오류:", frame);
@@ -63,6 +92,36 @@ const HeaderAlarm = ({userId, bell}) => {
             stompClient.deactivate();
         };
     }, [userId]);
+/*
+    // 미확인 알림 가져오기
+    useEffect(() => {
+        if (userId) {
+            axios
+                .get(`http://localhost:7070/api/noreadalarms/${userId}`)
+                .then((res) => {
+                    // 알림 데이터를 이전 알림 목록에 추가
+                    setNotifications((prevNotifications) => [
+                        ...res.data.map((receivedData) => ({
+                            message: receivedData.alarmContent,  // 알림 내용
+                            type: receivedData.alarmRole,       // 관리자 알림을 구분하는 타입
+                            url: receivedData.alarmUrl,         // 알림 URL
+                        })),
+                        ...prevNotifications,  // 이전 알림 목록
+                    ]);
+
+                    // 읽지 않은 알람의 개수 카운트
+                    const countFalseStatus = res.data.filter(
+                        (alarm) => alarm.alarmStatus === false
+                    ).length;
+                    setUnreadCount(countFalseStatus);
+                    console.log("안읽은 알림: ", JSON.stringify(res.data, null, 2));
+                })
+                .catch((err) => {
+                    console.log("읽지 않은 알람리스트 불러오기 실패" + err);
+                });
+        }
+    }, []);
+*/
 
     //알람 토글
     const toggleAlarm = () => {
@@ -74,8 +133,6 @@ const HeaderAlarm = ({userId, bell}) => {
         }
 
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
-        //setShowDropdown(!showDropdown);
-        //setUnreadCount(0);
     };
 
     return (
@@ -86,7 +143,8 @@ const HeaderAlarm = ({userId, bell}) => {
             </div>
             {showDropdown && (
                 <div className={"AlarmDropdown"}>
-                    {notifications.length > 0 ? (
+                    {
+                        notifications.length > 0 ? (
                         notifications.map((noti, index) => (
                             <div key={index} className={"AlarmNotificationItem"} onClick={() => {
                                 if (noti.type === 1) {
@@ -109,6 +167,19 @@ const HeaderAlarm = ({userId, bell}) => {
                             </Link>
                         </div>
                     )}
+
+                    {/*모든 알림 확인*/}
+                    {/*
+                    {notifications.length > 0 && (
+                        <div className="MarkAllAsRead" onClick={() => {
+                            // 모든 알림을 확인 완료로 처리하는 로직 (예: 상태 업데이트)
+                            // 예시로, 알림의 상태를 변경하거나, 서버에 알림 확인 요청을 보낼 수 있음
+                            //markAllAsRead();
+                            setShowDropdown(false); // 알림목록 닫기
+                        }}>
+                            <button>모든 알림 확인 완료</button>
+                        </div>
+                    )}*/}
                 </div>
             )}
         </div>

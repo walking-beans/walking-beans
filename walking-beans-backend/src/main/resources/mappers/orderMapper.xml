@@ -76,8 +76,8 @@
     </insert>
 
     <insert id="insertOrderItem">
-        INSERT INTO order_items (order_number, menu_id, option_id, quantity)
-        VALUES (#{orderNumber}, #{menuId}, #{optionId}, #{quantity});
+        INSERT INTO order_items (order_number, menu_id, option_ids, quantity)
+        VALUES (#{orderNumber}, #{menuId}, #{optionIds}, #{quantity});
     </insert>
 
     <!-- 주문정보 가져오기 -->
@@ -122,6 +122,7 @@
     <!-- 유저의 기존 주문 내역리스트들 -->
     <select id="getOrdersByUserId">
         SELECT user_id,
+               order_id,
                customer_name,
                store_name,
                order_date,
@@ -151,8 +152,58 @@
                total_payment,
                order_requests,
                order_list,
+               quantity,
+               order_status
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <!--store 확인용-->
+    <!-- 가게 id로 주문번호, 주문상태만 가져오기 storeOrder -->
+    <select id="getLatestOrderForStore">
+        SELECT order_number, order_status, order_id, order_modified_date
+        FROM orders
+        WHERE store_id = #{storeId}
+    </select>
+    <!-- 주문리스트 클릭시 주문정보 로딩용-->
+    <select id="getOrderForStore">
+        SELECT order_id,
+               user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               delivery_address,
+               detailed_address,
+               total_payment,
+               order_requests,
+               order_list,
                quantity
         FROM user_orders_view
         WHERE order_number = #{orderNumber}
     </select>
+
+    <!-- 주문 상태 변경 -->
+    <update id="storeUpdateOrderStatus">
+        UPDATE orders
+        SET order_status = #{orderStatus}
+        WHERE order_number = #{orderNumber}
+    </update>
+
+
+
+
+    <!-- 주문 번호로 상세 정보 조회-->
+    <select id="getOrderDetailsByOrderNumber">
+        SELECT * FROM order_detail_view
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <!-- 주문 삭제 -->
+    <delete id="deleteOrderById">
+        DELETE FROM orders
+        WHERE order_id = #{orderId}
+          AND order_status = 6
+    </delete>
+
 </mapper>

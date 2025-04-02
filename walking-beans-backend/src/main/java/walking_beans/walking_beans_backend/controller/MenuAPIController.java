@@ -1,8 +1,11 @@
 package walking_beans.walking_beans_backend.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
 import walking_beans.walking_beans_backend.model.dto.Menu;
 import walking_beans.walking_beans_backend.service.menuService.MenuServiceImpl;
 
@@ -19,7 +22,7 @@ public class MenuAPIController {
      *
      * @return
      */
-    @GetMapping
+    @GetMapping()
     public List<Menu> findAllMenu() {
         return menuService.findAllMenu();
     }
@@ -60,7 +63,7 @@ public class MenuAPIController {
      * @param menuCategory
      * @param menuPictureUrl
      */
-    @PostMapping
+    @PostMapping("/owner/{storeId}/menu/{menuId}")
     public void addMenu(@RequestParam("menuName") String menuName,
                         @RequestParam("menuId") long menuId,
                         @RequestParam("menuPrice") int menuPrice,
@@ -79,23 +82,28 @@ public class MenuAPIController {
      *      * @param menuDescription
      *      * @param menuCategory
      *      * @param menuPictureUrl
+     *      권한 검증을 위한 세션 포함
      */
-    @PutMapping("/{menuId}")
-    public void updateMenu(@PathVariable long menuId,
-                           @RequestParam("menuName") String menuName,
-                           @RequestParam("menuPrice") int menuPrice,
-                           @RequestParam("menuDescription") String menuDescription,
-                           @RequestParam("menuCategory") String menuCategory,
-                           @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl) {
-
+    @PutMapping("/owner/{storeId}/menu/{menuId}")
+    @OwnershipCheck
+    public ResponseEntity<?> updateMenu(   HttpSession session,
+                                           @PathVariable("storeId")long storeId,
+                                           @PathVariable("menuId") long menuId,
+                                           @RequestParam("menuName") String menuName,
+                                           @RequestParam("menuPrice") int menuPrice,
+                                           @RequestParam("menuDescription") String menuDescription,
+                                           @RequestParam("menuCategory") String menuCategory,
+                                           @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
+                                  ) {
         menuService.updateMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
+        return ResponseEntity.ok().build(); // 성공시
     }
 
     /**삭제하기
      *
      * @param menuId
      */
-    @DeleteMapping("/{menuId}")
+    @DeleteMapping("/owner/{storeId}/menu/{menuId}")
     public void deleteMenu(@PathVariable long menuId) {
         menuService.deleteMenu(menuId);
     }

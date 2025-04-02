@@ -5,10 +5,12 @@ import apiUserOrderService from "../../service/apiUserOrderService";
 import {useNavigate} from "react-router-dom";
 
 const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
-    const [selectedOption, setSelectedOption] = useState([]);
+
+    const [selectedOptions, setSelectedOptions] = useState({});
     const [options, setOptions] = useState([]);
     const [grouped, setGrouped] = useState({});
     const modalBodyRef = useRef(null);
+
 
     useEffect(() => {
         if (userId && menu?.menuId) {
@@ -30,10 +32,15 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
     }, [options]);
 
     const handleOptionChange = (optionName, option) => {
-        setSelectedOption((prev) => ({
-            ...prev,
-            [optionName]: option
-        }));
+        setSelectedOptions((prev) => {
+            // 해당 옵션 그룹에 대한 현재 선택 상태 가져오기
+            const newSelectedOptions = {...prev};
+
+            // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
+            newSelectedOptions[optionName] = [option];
+
+            return newSelectedOptions;
+        });
     };
 
     const handleAddToCart = async () => {
@@ -42,8 +49,8 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
             return;
         }
 
-        const selectedOptionData = Object.values(selectedOption);
-        const optionIds = selectedOptionData.map(option => option.optionId);
+        const allSelectedOptions = Object.values(selectedOptions).flat();
+        const optionIds = allSelectedOptions.map(option => option.optionId);
         const optionIdsString = optionIds.join(",");
 
         const cartData = {
@@ -89,7 +96,7 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
                             key={optionName}
                             optionName={optionName}
                             options={options}
-                            selectedOption={selectedOption[optionName]}
+                            selectedOptions={selectedOptions[optionName]}
                             onOptionChange={handleOptionChange}
                         />
                     ))

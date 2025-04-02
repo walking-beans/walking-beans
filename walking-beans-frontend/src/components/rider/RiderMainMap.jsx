@@ -186,7 +186,7 @@ const RiderMainMap = ({user}) => {
     return (
         <div>
             {/* 맵 출력 */}
-            <div id="map" style={{ width: "100%", height: "650px" }}></div>
+            <div id="map" style={{ width: "100%", height: "800px" }}></div>
 
             {/* 가게에 따른 untaken 주문들 출력 */}
             {
