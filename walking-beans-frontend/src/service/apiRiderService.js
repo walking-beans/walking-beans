@@ -3,6 +3,23 @@ import axios from "axios";
 const API_URL = "http://localhost:7070/api";
 
 const apiRiderService = {
+    /***************** Address *****************/
+    updateUserRoleByUserId : function (userId, userRole) {
+        axios
+            .patch(`${API_URL}/users/updateRole?userId=${userId}&userRole=${userRole}`)
+            .then(
+                (res) => {
+                    console.log("userId : " + userId);
+                    console.log(res.data + "개 변경");
+                }
+            )
+            .catch(
+                (err) => {
+                    alert("유저 계급을 수정 중 오류가 발생했습니다.");
+                    console.error("err 문제 개발자가 확인하기 : " + err)
+                }
+            )
+    },
 
     /***************** Address *****************/
     // get user main address
