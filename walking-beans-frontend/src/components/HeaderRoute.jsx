@@ -26,67 +26,10 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
         }*/
 
 
-        if (user) {
-            // rider
-            if (location.pathname.startsWith("/rider")) {
-                setCurrentHeader(<RiderLoginHeader user={user}/>);
-                // /owner
-            } else if (location.pathname.startsWith("/owner")) {
-                /** 추후 변경 요망 **/
-                setCurrentHeader(<UserHeader user={user}/>);
-                // /user/search/map
-            } else if (location.pathname.startsWith("/user/search/map")) {
-                setCurrentHeader(<SearchHeader user={user}/>);
-                // /mypage || /chat
-            } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat")) {
-                if (user.user_role === "user") {
-                    setCurrentHeader(<UserHeader user={user}/>);
-                } else if (user.user_role === "rider") {
-                    setCurrentHeader(<RiderLoginHeader user={user}/>);
-                } else if (user.user_role === "owner") {
-                    /** 추후 변경 요망 **/
-                    setCurrentHeader(<UserHeader user={user}/>);
-                } else {
-                    // admin or default
-                    setCurrentHeader(<UserHeader user={user}/>);
-                }
-            } else if (location.pathname === "/infoCorrection") {
-                if (user.user_role === "rider") {
-                    setCurrentHeader(<RiderLoginHeader user={user} />);
-                } else if (user.user_role === "user" || user.user_role === "owner") {
-                    setCurrentHeader(<UserHeader user={user} />);
-                }
-            } else if (location.pathname === "/unlink") {
-                if (user.user_role === "rider") {
-                    setCurrentHeader(<RiderLoginHeader user={user} />);
-                } else if (user.user_role === "user" || user.user_role === "owner") {
-                    setCurrentHeader(<UserHeader user={user} />);
-                }
-
-            } else if (location.pathname === "/unlink/success") {
-                if (user.user_role === "rider") {
-                    setCurrentHeader(<RiderLoginHeader user={user} />);
-                } else if (user.user_role === "user" || user.user_role === "owner") {
-                    setCurrentHeader(<UserHeader user={user} />);
-                }
-            } else if (location.pathname === "/certification") {
-                if (user.user_role === "rider") {
-                    setCurrentHeader(<RiderLoginHeader user={user} />);
-                } else if (user.user_role === "user" || user.user_role === "owner") {
-                    setCurrentHeader(<UserHeader user={user} />);
-                }
-
-            } else {
-                setCurrentHeader(<UserHeader user={user}/>);
-            }
-        } else {
-           
-        // rider
         if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}
                                           riderOnDuty={riderOnDuty}
                                           setRiderOnDuty={setRiderOnDuty}/>);
-
             // /owner
         } else if (location.pathname.startsWith("/owner")) {
             /** 추후 변경 요망 **/
@@ -95,7 +38,13 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
         } else if (location.pathname.startsWith("/user/search/map")) {
             setCurrentHeader(<SearchHeader user={user}/>);
             // /mypage || /chat
-        } else if (location.pathname.startsWith("/mypage") || location.pathname.startsWith("/chat") || location.pathname.startsWith("/alarmlist")) {
+        } else if (location.pathname.startsWith("/mypage") ||
+            location.pathname.startsWith("/chat") ||
+            location.pathname.startsWith("/alarmlist") ||
+            location.pathname === "/certification" ||
+            location.pathname === "/infoCorrection" ||
+            location.pathname === "/unlink" ||
+            location.pathname === "/unlink/success") {
             if (user.user_role === "user") {
                 setCurrentHeader(<UserHeader user={user}/>);
             } else if (user.user_role === "rider") {

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
 
 .unlink-container {
+    width: 100%;
     max-width: 600px;
     margin: 0 auto;
     padding: 24px 16px;

@@ -2,6 +2,7 @@
 
 /* 전체 레이아웃 */
 .info-correction-container {
+    width: 100%;
     max-width: 600px;
     margin: 0 auto;
     padding: 40px 16px 24px;
@@ -12,15 +13,11 @@
 
 /* 역할별 배경색 + 글자색 */
 .info-correction-container.user,
-.info-correction-container.store {
+.info-correction-container.owner {
     background-color: #fef6ea;
     color: #5a3d21;
 }
 
-.info-correction-container.owner {
-    background-color: #fff7ee;
-    color: #4a2c14;
-}
 
 .info-correction-container.rider {
     background-color: #f0f9ff;
@@ -66,13 +63,11 @@
 
 /* 역할별 버튼 배경색 */
 .info-correction-container.user .submit-btn,
-.info-correction-container.store .submit-btn {
-    background-color: #5a3d21;
+.info-correction-container.owner .submit-btn {
+    background-color: #8d5d2c;
 }
 
-.info-correction-container.owner .submit-btn {
-    background-color: #5a3d21;
-}
+
 
 .info-correction-container.rider .submit-btn {
     background-color: #1f3f66;
