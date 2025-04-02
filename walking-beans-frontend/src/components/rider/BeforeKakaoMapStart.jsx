@@ -8,8 +8,6 @@ const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
 
-    const [riderOD, setRiderOD] = useState(riderOnDuty);
-
     useEffect(() => {
         // 현재 위치 가져오기
         if (navigator.geolocation) {
@@ -70,14 +68,13 @@ const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
     }, [userLocation]);
 
     function handleRiderOnDuty() {
-        setRiderOnDuty(prevState => {
-            console.log("BeforeKakaoMapStart : " + !prevState);
-            setRiderOD(true);
-            console.log("handleRiderStatus : " + !prevState);
-            setRiderOD(!prevState);
-            return !prevState
-        });
+        setRiderOnDuty(prevState => !prevState);
+        console.log("BeforeKakaoMapStart : " + riderOnDuty);
     }
+
+    useEffect(() => {
+        console.log("Map Updated riderOnDuty:", riderOnDuty);
+    }, [riderOnDuty]);
 
     return (
         <div className="before-kakao-map-start">
