@@ -98,7 +98,6 @@ function PathRoute() {
                              setRiderOnDuty={setRiderOnDuty}
                 />
                 <div className="content-wrapper">
-                    <div className="container d-flex justify-content-center p-0">
                         {/* <div className="col-md-8 col-12">*/}
 
                             <Routes>
@@ -229,8 +228,6 @@ function PathRoute() {
                                 <Route path="/alarmlist" element={<AdminAlarmList />}/>
 
                             </Routes>
-
-                    </div>
                 </div>
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
