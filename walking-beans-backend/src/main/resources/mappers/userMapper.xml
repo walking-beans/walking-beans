@@ -85,5 +85,12 @@
     </delete>
 
 
+    <!-- user_role update -->
+    <update id="updateUserRoleByUserId">
+        UPDATE users
+        SET user_role = #{userRole}
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>
 

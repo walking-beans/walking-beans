@@ -151,4 +151,9 @@ public class UserServiceImpl implements UserService {
     public void deleteUserAccount(Long userId) {
         userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
     }
+
+    @Override
+    public int updateUserRoleByUserId(Long userId, byte userRole) {
+        return userMapper.updateUserRoleByUserId(userId, userRole);
+    }
 }

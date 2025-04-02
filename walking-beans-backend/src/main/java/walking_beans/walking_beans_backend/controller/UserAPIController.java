@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequestMapping("/api/users")
 @RestController
 public class UserAPIController {
@@ -164,6 +166,12 @@ public class UserAPIController {
         return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
     }
 
+    // user_role update
+    @PatchMapping("/updateRole")
+    public ResponseEntity<Integer> updateUserRoleByUserId(@RequestParam("userId") long userId, @RequestParam("userRole") byte userRole) {
+        log.info("=== /users/updateRole&userId={}&userRole={} ===", userId, userRole);
 
+        return ResponseEntity.ok(userService.updateUserRoleByUserId(userId, userRole));
+    }
 }
 
