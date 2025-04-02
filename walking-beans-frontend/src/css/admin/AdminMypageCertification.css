@@ -26,8 +26,8 @@
 .certification-container input[type="email"],
 .certification-container input[type="text"] {
     width: 100%;
-    max-width: 400px;
-    padding: 12px;
+    max-width: 500px;
+    padding: 20px;
     margin: 12px auto;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -39,7 +39,7 @@
 /* 버튼 공통 */
 .certification-container button {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     padding: 12px;
     margin: 8px auto 16px;
     border: none;
