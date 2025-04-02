@@ -101,8 +101,8 @@ const UserHome = ({user: initialUser}) => {
 
     // 주소로 지도 가져오기
     useEffect(() => {
-        const centerLat = userId ? userLat : userLocation?.lat;
-        const centerLng = userId ? userLng : userLocation?.lng;
+        const centerLat = userLat || userLocation?.lat;  // 대표 주소 없으면 현재 위치 사용
+        const centerLng = userLng || userLocation?.lng;
 
         if (!centerLat || !centerLng) return; // 좌표가 없으면 실행 X
 
@@ -116,15 +116,6 @@ const UserHome = ({user: initialUser}) => {
                 const mapContainer = document.getElementById("map");
                 if (!mapContainer) return;
 
-                let centerLat = userLat;
-                let centerLng = userLng;
-
-                //  로그인하지 않은 유저라면 현재 위치를 기본 중심으로 설정
-                if (!userId && userLocation) {
-                    centerLat = userLocation.lat;
-                    centerLng = userLocation.lng;
-                }
-
                 const mapOption = {
                     center: new window.kakao.maps.LatLng(centerLat, centerLng),
                     level: 5,
@@ -132,11 +123,11 @@ const UserHome = ({user: initialUser}) => {
                 const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
                 setMap(newMap);
 
-                //  지도에 마커 추가
+                // 지도에 마커 추가
                 new window.kakao.maps.Marker({
                     position: new window.kakao.maps.LatLng(centerLat, centerLng),
                     map: newMap,
-                    title: userId ? "대표 주소" : "현재 위치"
+                    title: userLat && userLng ? "대표 주소" : "현재 위치"
                 });
             });
         };
@@ -144,7 +135,7 @@ const UserHome = ({user: initialUser}) => {
         return () => {
             document.head.removeChild(script);
         };
-    }, [userLat, userLng, userLocation]);  // 📌 대표 주소 변경될 때마다 실행
+    }, [userLat, userLng, userLocation]);  //  대표 주소 변경될 때마다 실행
 
     // 사용자 위치 업데이트 (Geolocation API를 통해 현재 위치를 설정)
     useEffect(() => {
@@ -246,7 +237,7 @@ const UserHome = ({user: initialUser}) => {
             Math.sin(dLng / 2) * Math.sin(dLng / 2);
 
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return parseFloat((R * c).toFixed(1)); // 🔹 숫자로 변환하여 반환
+        return parseFloat((R * c).toFixed(1)); // 숫자로 변환하여 반환
     };
 
 
@@ -299,6 +290,10 @@ const UserHome = ({user: initialUser}) => {
         if (!storedUser) {
             alert("로그인이 필요합니다.");
             navigate("/login");
+            return;
+        }
+        if (!userLat || !userLng) {
+            alert("대표 주소를 설정해 주세요.");
             return;
         }
         navigate("user/search/map", {state: {lat: userLat, lng: userLng}});
