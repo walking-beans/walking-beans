@@ -44,6 +44,7 @@ public class AlarmAPIController {
         alarmService.deleteAllAlarm(userId);
     }
 
+    //전체 공지 보내는 api
     @PostMapping("/api/alarm/announcementAlarm")
     public void announcementAlarm(@RequestBody String announcement) {
         alarmNotificationService.sendAdminNotification(Alarms.create(0,1,announcement,4,"testUrl"));

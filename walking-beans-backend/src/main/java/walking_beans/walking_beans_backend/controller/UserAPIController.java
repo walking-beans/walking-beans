@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -9,13 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.Users;
+
+import walking_beans.walking_beans_backend.model.vo.Vertification;
+
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
+
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequestMapping("/api/users")
 @RestController
 public class UserAPIController {
@@ -77,7 +83,7 @@ public class UserAPIController {
     }
 
     /************************* 이메일 인증 ****************************/
-    /*
+
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
         String email = vr.getEmail();
@@ -92,7 +98,7 @@ public class UserAPIController {
         boolean isValid = userService.verifyCodeWithVo(vr);
         return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
     }
-    */
+
 
     // 회원정보 수정
     @PutMapping("/infoCorrection")
@@ -111,12 +117,12 @@ public class UserAPIController {
     public ResponseEntity<?> uploadProfileImage(@PathVariable Long userId,
                                                 @RequestParam("file") MultipartFile file) {
 
-        System.out.println("📢 [백엔드] 프로필 업로드 요청 도착! userId: " + userId);
-        System.out.println("📢 [백엔드] 요청 Headers: " + file);
+        System.out.println(" [백엔드] 프로필 업로드 요청 도착! userId: " + userId);
+        System.out.println(" [백엔드] 요청 Headers: " + file);
 
-        // 🔍 file이 비어있는지 확인!
+        //  file이 비어있는지 확인!
         if (file == null || file.isEmpty()) {
-            System.out.println("❌ 파일이 전달되지 않았습니다!");
+            System.out.println(" 파일이 전달되지 않았습니다!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일이 필요합니다!");
         }
         try {
@@ -132,9 +138,9 @@ public class UserAPIController {
 
 
             file.transferTo(new File(filePath));
-            String profileUrl = "http://localhost:7070/uploaded/" + fileName;
+            String profileUrl = "http://localhost:7070/upload/" + fileName;
             userService.updateUserProfile(userId, profileUrl);
-            return ResponseEntity.ok(Map.of("프로필 사진 업로드 성공!", profileUrl));
+            return ResponseEntity.ok(Map.of("imageUrl", profileUrl));
         }catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("프로필 업로드 실패", e.getMessage()));
         }
@@ -160,6 +166,12 @@ public class UserAPIController {
         return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
     }
 
+    // user_role update
+    @PatchMapping("/updateRole")
+    public ResponseEntity<Integer> updateUserRoleByUserId(@RequestParam("userId") long userId, @RequestParam("userRole") byte userRole) {
+        log.info("=== /users/updateRole&userId={}&userRole={} ===", userId, userRole);
 
+        return ResponseEntity.ok(userService.updateUserRoleByUserId(userId, userRole));
+    }
 }
 
