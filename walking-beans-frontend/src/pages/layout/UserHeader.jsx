@@ -35,13 +35,15 @@ const UserHeader = ({user}) => {
 
     // 유저 정보 로드
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            setCurrentUser(parsedUser);
-            setUserId(parsedUser.user_id);
-        }
-    }, [user]);
+        const updateUser = () => {
+            const storedUser = localStorage.getItem("user");
+            setCurrentUser(storedUser ? JSON.parse(storedUser) : null);
+        };
+        window.addEventListener("userChanged", updateUser);
+        return () => {
+            window.removeEventListener("userChanged", updateUser);
+        };
+    }, []);
 
     //  userId가 설정된 후 대표 주소 가져오기
     useEffect(() => {
