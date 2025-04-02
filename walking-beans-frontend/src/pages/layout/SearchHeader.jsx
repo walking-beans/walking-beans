@@ -107,7 +107,9 @@ const SearchHeader = ({setSearchResults}) => {
                             { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
                         ].map(({ icon, text, path }) => (
                             <li key={text} onClick={() => navigate(path)}>
+                                <a>
                                 <img src={icon} alt={text} /> {text}
+                                </a>
                             </li>
                         ))}
                     </ul>
