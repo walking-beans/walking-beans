@@ -1,14 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
 
-/* 전체 레이아웃 */
+/* 전체 공통 */
 .mypage-container {
     padding: 24px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+
     background-color: #F4EDDF;
     color: #5A3D21;
+
     text-align: center;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
-/* 프로필 섹션 */
+/* 공통 요소 */
 .profile-section {
     display: flex;
     flex-direction: column;
@@ -21,19 +26,17 @@
     height: 96px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #5a3d21;
     margin-bottom: 12px;
     cursor: pointer;
+    border: 3px solid currentColor;
 }
 
-/* 이름 표시 */
 .profile-userName p {
     font-size: 18px;
     font-weight: bold;
     margin: 0 0 8px 0;
 }
 
-/* 서브 메뉴 (리뷰 관리 / 주소 관리) */
 .sub-menu-links {
     display: flex;
     justify-content: center;
@@ -47,7 +50,6 @@
     cursor: pointer;
 }
 
-/* 회원정보 수정 */
 .infoCertification {
     display: flex;
     justify-content: center;
@@ -55,12 +57,12 @@
 }
 
 .infoCertification div {
-    background-color: #5a3d21;
     color: white;
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: 999px;
     font-size: 14px;
     cursor: pointer;
+    display: inline-block;
 }
 
 /* 사용자 정보 */
@@ -92,4 +94,32 @@
 .mypage-end-menu-links div {
     text-align: center;
     cursor: pointer;
+}
+
+/* -------------------------------
+   역할별 스타일 (배경/색상/버튼)
+---------------------------------*/
+
+.mypage-container.user,
+.mypage-container.owner,
+.mypage-container.store {
+    background-color: #fef6ea;
+    color: #5a3d21;
+}
+
+.mypage-container.user .infoCertification div,
+.mypage-container.owner .infoCertification div,
+.mypage-container.store .infoCertification div {
+    background-color: #5a3d21;
+}
+
+/* rider → 파란 테마 */
+.mypage-container.rider {
+    background-color: #f0f9ff;
+    color: #1f3f66;
+}
+
+.mypage-container.rider .infoCertification div {
+    background-color: #91d2f3;
+    color: #1f3f66;
 }
