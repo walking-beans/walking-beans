@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
+const MenuOptionForm = ({menuId ,optionName, onUpdate}) => {
     const {id} = useParams();
 
     // 입력필드
-    const[formField, setFormFields] = useState([{menuId : menuId ,optionName:'',optionPrice:'' ,optionContent: option_content}]);
+    const[formField, setFormFields] = useState([{menuId : menuId ,optionName:optionName, optionPrice:'' ,optionContent: ''}]);
 
     //필드추가기능
     const handleAddFields = () => {
-        const values = [...formField, {menuId : menuId, optionName:'',optionPrice:'', optionContent: option_content}];
+        const values = [...formField, {menuId : menuId, optionName:optionName , optionPrice:'', optionContent:''}];
         setFormFields(values);
     };
 
@@ -31,7 +31,7 @@ const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
         const values= [...formField];
 
         if(e.target.name === 'name'){
-            values[index].optionName = e.target.value;
+            values[index].optionContent = e.target.value;
         } else {
             values[index].optionPrice = e.target.value;
         }
@@ -44,7 +44,7 @@ const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
         console.log('필드값 확인용',formField);
     }, [formField, onUpdate]);
 
-    console.log("Rendering MenuOptionForm for", option_content)
+    console.log("Rendering MenuOptionForm for", optionName)
 
     return (
         <div>
@@ -54,7 +54,7 @@ const MenuOptionForm = ({menuId ,option_content, onUpdate}) => {
                         type='text'
                         placeholder='옵션'
                         name='name'
-                        value={field.optionName}
+                        value={field.optionContent}
                         onChange={(e) => handleInputChange(index, e)}
                         style={{ marginRight: 10 }}
                     />

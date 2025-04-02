@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
+
+.certification-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    min-height: 100vh;
+}
+
+/* 역할별 배경 + 글자색 */
+.certification-container.user,
+.certification-container.owner {
+    background-color: #fef6ea;
+    color: #5a3d21;
+}
+
+.certification-container.rider {
+    background-color: #f9fdff;
+    color: #1f3f66;
+}
+
+/* 입력 필드 */
+.certification-container input[type="email"],
+.certification-container input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin: 12px auto;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* 버튼 공통 */
+.certification-container button {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    margin: 8px auto 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    display: block;
+}
+
+/* 역할별 버튼 색상 */
+.certification-container.user button,
+.certification-container.owner button {
+    background-color: #8d5d2c;
+}
+
+.certification-container.rider button {
+    background-color: #3694dc;
+}
+
+/* 메시지 텍스트 */
+.certification-container p {
+    margin-top: 12px;
+    font-size: 14px;
+}

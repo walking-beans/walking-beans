@@ -70,8 +70,9 @@ public class OrderAPIController {
         log.info("=== /onme?riderId: {} ===", riderId);
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
-    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
 
+    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
+    // 상태2 이상 변경시 업주에게 자동 업데이트
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -168,6 +169,24 @@ public class OrderAPIController {
         return ResponseEntity.ok(order);
     }
 
+
+    /****************************mochoping********************************/
+
+
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    @GetMapping("/store/{storeId}")
+    public List<Orders> getLatestOrderForStore(@PathVariable("storeId") long storeId) {
+        return orderService.getLatestOrderForStore(storeId);
+    }
+
+    // 주문번호로 뷰 테이블에서 전체 정보 가져오기
+    @GetMapping("/ordernumber/{orderNumber}")
+    public UserOrderDTO getOrderForStore(@PathVariable String orderNumber) {
+        return orderService.getOrderForStore(orderNumber);
+    }
+
+
+
     // 주문 상세 내역 정보 가져오기
     @GetMapping("/detail/orderNumber/{orderNumber}")
     public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
@@ -195,3 +214,4 @@ public class OrderAPIController {
         }
     }
 }
+

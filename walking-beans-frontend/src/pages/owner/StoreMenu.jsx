@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import apiMenu from "../../service/apiMenu";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import HorizentalCategory from "../../components/owner/HorizentalCategory";
 import MenuCard from "../../components/owner/MenuCard";
 import SelectCategory from "../../components/owner/SelectCategory";
 
 
 const StoreMenu = () => {
+    const {id} = useParams();
     const [menus, setMenus] = useState([]);
     const [err, setErr] = useState(null);
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const StoreMenu = () => {
     }
 
     useEffect(() => {
-        apiMenu.fetchAllMenu(setMenus, setErr)
+        apiMenu.fetchAllMenu(id,setMenus, setErr)
     }, []);
 
     const handleDelete = () => {

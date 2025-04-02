@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from "react";
 import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
 import "../../css/rider/BeforeKakaoMapStart.css";
+import apiRiderService from "../../service/apiRiderService";
 
 const KAKAO_MAP_API_KEY = process.env.REACT_APP_KAKAO_MAP_API_KEY_LEO;
 
-const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
+const BeforeKakaoMapStart = ({user, riderOnDuty, setRiderOnDuty}) => {
 
     const [userLocation, setUserLocation] = useState(null);
-
-    const [riderOD, setRiderOD] = useState(riderOnDuty);
 
     useEffect(() => {
         // 현재 위치 가져오기
@@ -70,14 +69,25 @@ const BeforeKakaoMapStart = ({riderOnDuty, setRiderOnDuty}) => {
     }, [userLocation]);
 
     function handleRiderOnDuty() {
-        setRiderOnDuty(prevState => {
-            console.log("BeforeKakaoMapStart : " + !prevState);
-            setRiderOD(true);
-            console.log("handleRiderStatus : " + !prevState);
-            setRiderOD(!prevState);
-            return !prevState
-        });
+        if (user.user_role === "owner") {
+            alert("접근 권한이 없습니다.");
+            return;
+        }
+
+        if (user.user_role === "user") {
+            if (window.confirm("라이더로 업그레이드하셔야 됩니다. 진행하시겠습니까?")) {
+                apiRiderService.updateUserRoleByUserId(user.user_id, 2);
+            } else {
+                return;
+            }
+        }
+        setRiderOnDuty(prevState => !prevState);
+        console.log("BeforeKakaoMapStart : " + riderOnDuty);
     }
+
+    useEffect(() => {
+        console.log("Map Updated riderOnDuty:", riderOnDuty);
+    }, [riderOnDuty]);
 
     return (
         <div className="before-kakao-map-start">

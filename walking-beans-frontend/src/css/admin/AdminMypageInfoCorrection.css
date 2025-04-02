@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
+
+/* 전체 레이아웃 */
+.info-correction-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 16px 24px;
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    background-color: #f0f9ff; /* rider 기준 배경 */
+}
+
+/* 역할별 배경색 + 글자색 */
+.info-correction-container.user,
+.info-correction-container.owner {
+    background-color: #fef6ea;
+    color: #5a3d21;
+}
+
+
+.info-correction-container.rider {
+    background-color: #f0f9ff;
+    color: #1f3f66;
+}
+
+/* 내부 폼 구조 */
+.info-correction {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.info-correction label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+/* 입력창 스타일 */
+.info-correction input[type="tel"] {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 32px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 버튼 공통 스타일 */
+.submit-btn {
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 역할별 버튼 배경색 */
+.info-correction-container.user .submit-btn,
+.info-correction-container.owner .submit-btn {
+    background-color: #8d5d2c;
+}
+
+
+
+.info-correction-container.rider .submit-btn {
+    background-color: #1f3f66;
+}
+
+/* 버튼 hover 효과 (선택) */
+.submit-btn:hover {
+    opacity: 0.9;
+}

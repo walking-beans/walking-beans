@@ -104,7 +104,7 @@ const UserHeader = ({user}) => {
             user: location.pathname === "/mypage" ? "/" : "/mypage",
             rider: location.pathname === "/rider" ? "/" : "/rider",
             owner: location.pathname === "/owner" ? "/" : "/owner",
-            admin: "/admin"
+            admin: location.pathname === "/adminpage" ? "/" : "/adminpage"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
