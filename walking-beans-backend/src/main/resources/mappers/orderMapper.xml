@@ -164,6 +164,7 @@
         SELECT order_number, order_status, order_id, order_modified_date
         FROM orders
         WHERE store_id = #{storeId}
+        ORDER BY order_modified_date DESC
     </select>
     <!-- 주문리스트 클릭시 주문정보 로딩용-->
     <select id="getOrderForStore">

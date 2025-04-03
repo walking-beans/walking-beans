@@ -185,8 +185,6 @@ public class OrderAPIController {
         return orderService.getOrderForStore(orderNumber);
     }
 
-
-
     // 주문 상세 내역 정보 가져오기
     @GetMapping("/detail/orderNumber/{orderNumber}")
     public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {

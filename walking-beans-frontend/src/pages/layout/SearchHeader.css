@@ -10,7 +10,8 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 30px 30px;
+    z-index: 10;
 }
 
 .custom-search-header {
@@ -19,13 +20,13 @@
     justify-content: space-between;
     width: 100%;
     max-width: 600px;
-    padding: 10px;
+    padding: 15px;
     background-color: #5a3d21;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 30px 30px;
 }
 
 .logo-img {
-    width: 50px;
+    width: 45px;
     height: auto;
     cursor: pointer;
     margin-left: 10px;
@@ -33,15 +34,15 @@
 
 .search-input {
     flex: 1;
-    height: 35px;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 20px;
+    height: 45px;
+    padding: 5px 20px;
+    font-size: 15px;
+    border-radius: 30px;
     border: none;
     outline: none;
     background-color: white;
     color: black;
-    margin: 0 10px;
+    margin: 0 20px;
 }
 
 .header-icon {
@@ -58,7 +59,6 @@
     width: 260px;
     background-color: #d2b595;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
     padding: 15px;
     opacity: 1;
     z-index: 3000;
@@ -87,25 +87,25 @@
 
 .search-header-wrapper  .nav-menu li a {
     text-decoration: none;
-    color: #3a2d22;
+    color: #5A3D21;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .search-header-wrapper  .nav-logout-btn {
     background-color: #AB7A44;
     color: white;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 30px;
     width: 100%;
-    padding: 12px 0;
+    height: 50px;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 0;
     text-align: center;
 }
 
