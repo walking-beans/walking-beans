@@ -175,7 +175,7 @@
 .user-header-wrapper .AlarmDropdown {
     position: absolute;
     top: 30px;
-    right: 0;
+    right: -100px;
     width: 250px;
     background: #D2B595;
     border-radius: 10px;
