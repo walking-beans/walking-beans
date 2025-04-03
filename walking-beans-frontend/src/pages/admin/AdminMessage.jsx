@@ -276,6 +276,7 @@ const AdminMessage = ({user}) => {
                         className="admin-message-input"
                         onChange={handleInputChange}
                         disabled={isDisabled}
+                        maxLength={80}
                     />
                     <div className="admin-message-ImgAndBtnDiv">
                         <label htmlFor="fileInput"

@@ -36,44 +36,120 @@ className="cursor-pointer text-primary fw-bold"
     height: 6px;
     background-color: #5A3D21;
     border: none;
-    margin: 5px auto 10px;
+    margin: -10px auto 30px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .user-search-map-container {
     height: 100%;
     width: 100%;
-}
-
-.user-search-map-container .store-info {
-    background-color: #F4EDDF;
-    color: white;
-    border-radius: 20px 20px 0px 0px;
-    padding: 10px;
     position: relative;
 }
 
 .user-search-map-container .store-info {
+    z-index: 10;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: slideUp 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.user-search-map-container .store-info .store-modal {
+    max-height: 530px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background: #F4EDDF;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 30px 30px 0 0;
+    overflow-y: auto;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    top: auto;
+    z-index: 11;
     cursor: pointer;
 }
 
-.user-search-map-container p, h3 {
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.user-search-map-container .info-text-big {
     color: #5A3D21;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.user-search-map-container .search-map {
+    width: 100%;
+    height: 650px;
+    margin-top: -30px;
+}
+
+.user-search-map-container .info-grid {
+    display: grid;
+    grid-template-columns: 180px 100%;
+    gap: 20px;
+}
+
+.user-search-map-container .info-text {
+    font-size: 17px;
+    color: #5A3D21;
+}
+
+.user-search-map-container .info-text-bold {
+    font-size: 17px;
+    color: #5A3D21;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user-search-map-container .status-btn-mini {
+    background: #EE5A4C;
+    color: #F4EDDF;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    padding: 2px 8px;
+    margin-bottom: 5px;
+    width: 100%;
+    max-width: 120px;
+    text-align: center;
     font-weight: bold;
 }
 
 .store-info .store-picture {
-    width: 50%;
-    height: 50%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+
 }
+
 
 /***************** UserInsertAddress *******************/
 .user-insert-address-container {
     width: 100%;
-    height: 70vh;
+    height: auto;
+    max-height: 700px;
     background-color: #F4EDDF;
     padding: 30px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #AB7A44 #F4EDDF;
 }
 
 .user-insert-address-container .address-alias,
@@ -195,8 +271,16 @@ className="cursor-pointer text-primary fw-bold"
     border: none;
     border-radius: 20px;
     font-size: 17px;
-    padding: 0 12px;
+    padding: 0 15px;
     margin: 0;
+    font-weight: bold;
+}
+
+.user-insert-address-container .address-grid {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 /******************* user delivery status ********************/
@@ -210,26 +294,28 @@ className="cursor-pointer text-primary fw-bold"
 
 /******************* userReviewWrite ********************/
 .user-review-container {
-    width: 100%;
-    height: 70vh;
-    max-width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #F4EDDF;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 650px;
-    overflow-y: auto;
+    background: #F4EDDF;
+    scrollbar-width: thin;
+    scrollbar-color: #AB7A44 #F4EDDF;
+}
 
+.user-review-container .review-all {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.user-review-container .review-info {
+    margin: 30px 0;
+    width: 600px;
 }
 
 .user-review-container form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
 }
@@ -237,16 +323,7 @@ className="cursor-pointer text-primary fw-bold"
 .user-review-container .star-rating {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-.user-review-container .star-rating p {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
-    text-align: center;
+    margin-bottom: 30px;
 }
 
 .user-review-container .star-container {
@@ -257,10 +334,9 @@ className="cursor-pointer text-primary fw-bold"
 
 .user-review-container .star {
     font-size: 30px;
-    color: #ddd;
+    color: #D2B595;
     cursor: pointer;
     transition: color 0.3s;
-    margin: 0 5px;
 }
 
 .user-review-container .star.filled {
@@ -273,39 +349,72 @@ className="cursor-pointer text-primary fw-bold"
 
 
 .user-review-container textarea {
-    width: 600px;
-    max-width: 500px;
+    width: 100%;
+    max-width: 540px;
     height: 200px;
-    padding: 12px;
+    padding: 15px;
     font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #5A3D21;
     resize: none;
     outline: none;
     margin-bottom: 15px;
-    box-sizing: border-box;
     text-align: left;
     vertical-align: top;
     background-color: white;
+}
 
+.user-review-container textarea::placeholder {
+    color: #D2B595;
+}
+
+.user-review-container .file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .user-review-container .file-upload {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border: 1px solid #5A3D21;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-    justify-content: flex-start;
-    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+.user-review-container .file-upload label,
+.user-review-container .file-upload .btn-text,
+.user-review-container .file-upload input[type="file"] {
+    cursor: pointer;
+}
+
+.user-review-container .file-btn {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border: 1px solid #5A3D21;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-review-container .btn-text {
+    font-size: 14px;
+    color: #5A3D21;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 .user-review-container .file-upload label {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    display: block;
-    margin-right: 15px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user-review-container input[type="file"] {
@@ -313,49 +422,109 @@ className="cursor-pointer text-primary fw-bold"
 }
 
 .user-review-container .image-preview {
-    margin-top: 10px;
     width: 120px;
     height: 120px;
-    border-radius: 8px;
+    border-radius: 5px;
     object-fit: cover;
-    display: block;
+
 }
 
-.user-review-container button {
-    width: 200px;
-    padding: 10px;
-    font-size: 18px;
-    background-color: #D2B595;
-    color: black;
+.user-review-container .submit-button {
+    width: 411px;
+    height: 60px;
+    border-radius: 30px;
+    background: #5A3D21;
+    color: #F4EDDF;
     border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    display: block;
-    margin: 20px auto 15px;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration-line: none;
+}
+
+.user-review-container .image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .user-review-container .image-preview-wrapper {
     position: relative;
-    display: inline-block;
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    object-fit: cover;
+
 }
 
 .user-review-container .remove-image {
     position: absolute;
     top: 5px;
     right: 5px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
 }
 
+.user-review-container .remove-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.user-review-container .review-divider {
+    border: none;
+    border-top: 2px #D7BEA2 solid;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.user-review-container .button-center-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.user-review-container .user-order-address-text{
+    font-weight: bold;
+}
+
+.user-review-container .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-review-container .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
 /************** UserStoreReview ******************/
+
 .user-store-review {
     max-width: 100%;
     padding: 20px;
@@ -505,3 +674,4 @@ className="cursor-pointer text-primary fw-bold"
     max-height: 100px;
     margin: 5px;
 }
+

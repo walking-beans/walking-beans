@@ -35,13 +35,17 @@ const UserHeader = ({user}) => {
 
     // 유저 정보 로드
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
+        const updateUser = () => {
+            const storedUser = localStorage.getItem("user");
             const parsedUser = JSON.parse(storedUser);
-            setCurrentUser(parsedUser);
-            setUserId(parsedUser.user_id);
-        }
-    }, [user]);
+            setCurrentUser(storedUser ? JSON.parse(storedUser) : null);
+        };
+        updateUser();
+        window.addEventListener("userChanged", updateUser);
+        return () => {
+            window.removeEventListener("userChanged", updateUser);
+        };
+    }, []);
 
     //  userId가 설정된 후 대표 주소 가져오기
     useEffect(() => {
@@ -50,7 +54,7 @@ const UserHeader = ({user}) => {
     }, [userId]);
 
     // 네비게이션 항목을 역할에 맞게 설정
-    const navItems = currentUser?.user_role === "user"
+    const navItems = currentUser?.user_role === "user" || currentUser?.user_role === "rider" || currentUser?.user_role === "admin"
         ? [
             { icon: person, text: "마이페이지", path: "/mypage" },
             { icon: receipt, text: "주문내역", path: "/order" },
@@ -106,8 +110,6 @@ const UserHeader = ({user}) => {
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
-
-
 
     // /user/search/map
     const handleOpenSearch = () => {

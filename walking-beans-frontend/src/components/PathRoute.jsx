@@ -50,9 +50,15 @@ import UserOrderDetail from "../pages/user/UserOrderDetail";
 import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
+
+import StoreRegister from "../pages/owner/StoreRegister";
+
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+
+import UserProtectedRoute from './UserProtectedRoute';
+
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -108,7 +114,11 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/updaterole" element={<AdminChangeRole/>}/>
+                                <Route path="/updaterole" element={
+                                <ProtectedRoute allowedRoles={["noRole"]}>
+                                    <AdminChangeRole/>
+                                </ProtectedRoute>
+                        }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
@@ -123,11 +133,11 @@ function PathRoute() {
                                 {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder/>}/>
 
+                                <Route element={<UserProtectedRoute />}>
                                 {/* 주문하기 페이지*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout/>}/>
 
                                 {/* 결제하기 페이지*/}
-                                {/* 1. checkout toss API KEY 인증*/}
                                 <Route path="/checkout" element={<UserCheckoutPage/>}/>
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
@@ -144,8 +154,7 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail/>}/>
-
-                                <Route path="/order/test" element={<RiderOrderStatus/>}/>
+                                </Route>
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
                                 <Route path="/user/reviewWrite/:orderId"
@@ -194,35 +203,42 @@ function PathRoute() {
                                         <StoreMain/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/menu" element={
+                                {/*id = storeId */}
+                                <Route path="/owner/:id/menu" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/menu/:id" element={
+                                <Route path="/owner/:storeId/menu/:menuId" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuDetail/>
                                     </ProtectedRoute>
                                 }/>
-                                {/* id는 연결되는 메뉴id */}
-                                <Route path="/owner/menuoption/:id" element={
+                                <Route path="/owner/:storeId/:menuId/menuoption" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenuOption/>
                                     </ProtectedRoute>
                                 }/>
-
-                                <Route path="/owner/mystore" element={
+                                {/* id = userId 유저 id, 유저만 신규 가게 등록이 가능하도록 제한*/}
+                                <Route path="/user/:id/storeregister/" element={
+                                    <ProtectedRoute allowedRoles={["user"]}>
+                                        <StoreRegister/>
+                                    </ProtectedRoute>
+                                }/>
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/mystore/" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMyStore/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/order" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/order" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreOrder/>
                                     </ProtectedRoute>
                                 }/>
-                                <Route path="/owner/revenue" element={
+                                {/* id = storeId 업주 본인 가게 id*/}
+                                <Route path="/owner/:id/revenue" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRevenue/>
                                     </ProtectedRoute>
@@ -232,12 +248,13 @@ function PathRoute() {
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom user={user}/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
 
-                                {/*관리자 페이지*/}
+                                 {/*관리자 페이지*/}
                                 <Route path="/adminpage" element={
-                                    <ProtectedRoute allowedRoles={["admin"]}>
-                                        <AdminPage/>
-                                    </ProtectedRoute>
+                                  <ProtectedRoute allowedRoles={["admin"]}>
+                                      <AdminPage />
+                                   </ProtectedRoute>
                                 }/>
+
 
                                 <Route path="/alarmlist" element={<AdminAlarmList/>}/>
                             </Routes>

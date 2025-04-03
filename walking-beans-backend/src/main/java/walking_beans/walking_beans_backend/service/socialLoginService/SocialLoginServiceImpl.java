@@ -50,6 +50,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     public int checkEmailExists(String email) {
         return userMapper.checkEmailExists(email);
     }
+    
 */
     /******************** 카카오 로그인 *******************************/
 /*
@@ -109,6 +110,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
 
     }
+    
 */
     /********************* 네이버 로그인 *************************/
 /*
@@ -167,5 +169,6 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         resultMap.put("phone", phoneWithoutHyphen);
         return resultMap;
     }
+
 */
 }

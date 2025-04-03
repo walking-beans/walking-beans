@@ -40,6 +40,7 @@ public class SocialLoginAPIController {
 
     @Value("${naver.redirect-url}")
     private String naverRedirectUrl;
+
 */
     /******************** 카카오 로그인 **************************/
 /*

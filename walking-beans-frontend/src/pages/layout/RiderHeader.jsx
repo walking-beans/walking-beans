@@ -159,12 +159,16 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        apiRiderService.getRiderStarRating(2, (newStar) => {
+        if (!user) {
+            console.log("Rider Header no user data!");
+            return;
+        }
+
+        apiRiderService.getRiderStarRating(user.user_id, (newStar) => {
             setStar(newStar);
             starRatingPath.getStarPath(newStar, setStarPath);
         });
-    }, []);
+    }, [user]);
 
     //알람 토글
     const toggleAlarm = () => {

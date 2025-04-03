@@ -1,11 +1,10 @@
 import {useEffect, useState} from "react";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
-//import "./HeaderAlarm.css";
+import "../admin/HeaderAlarm.css";
 import {Link, useNavigate} from "react-router-dom";
 import bellIcon from "../../assert/svg/bell.svg";
 import alarmIcon from "../../assert/svg/alarm.svg";
-import "../../pages/layout/UserHeader.css";
 
 //라이더용 벨 아이콘
 import riderBellIcon from "../../assert/svg/riderBell.svg";
@@ -92,7 +91,7 @@ const HeaderAlarm = ({userId, bell}) => {
             stompClient.deactivate();
         };
     }, [userId]);
-/*
+
     // 미확인 알림 가져오기
     useEffect(() => {
         if (userId) {
@@ -121,19 +120,35 @@ const HeaderAlarm = ({userId, bell}) => {
                 });
         }
     }, []);
-*/
+
 
     //알람 토글
     const toggleAlarm = () => {
         if (showDropdown) { //true
-            setNotifications([]);// 알림 리스트를 초기화
+            //setNotifications([]);// 알림 리스트를 초기화
         } else {
             // 알림을 열 때는 기존 알림 리스트를 비우지 않음
-            setUnreadCount(0);  // 알림 아이콘 배지 초기화
+            //setUnreadCount(0);  // 알림 아이콘 배지 초기화
         }
 
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
     };
+
+    const markAllReadAlarms = () => {
+        axios
+            .put("http://localhost:7070/api/allreadalarms/"+userId)
+            .then(
+                (res) => {
+                    setNotifications([]);
+                    setUnreadCount(0);
+                }
+            )
+            .catch(
+                (err)=>{
+                    console.log("err" + err);
+                }
+            )
+    }
 
     return (
         <div className="notification-container">
@@ -150,9 +165,12 @@ const HeaderAlarm = ({userId, bell}) => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
                                     setShowDropdown(false); // 알림목록 닫기
+                                    setUnreadCount(-1); //
+
                                 } else if (noti.type === 2) {
                                     navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
+                                    setUnreadCount(-1);
                                 }
                             }
                             }>
@@ -169,17 +187,15 @@ const HeaderAlarm = ({userId, bell}) => {
                     )}
 
                     {/*모든 알림 확인*/}
-                    {/*
+
                     {notifications.length > 0 && (
-                        <div className="MarkAllAsRead" onClick={() => {
-                            // 모든 알림을 확인 완료로 처리하는 로직 (예: 상태 업데이트)
-                            // 예시로, 알림의 상태를 변경하거나, 서버에 알림 확인 요청을 보낼 수 있음
-                            //markAllAsRead();
+                        <div className="MarkAllAsReadContainer" onClick={() => {
+                            markAllReadAlarms();
                             setShowDropdown(false); // 알림목록 닫기
                         }}>
-                            <button>모든 알림 확인 완료</button>
+                            <button className="MarkAllAsReadBtn">모든 알림 확인 완료</button>
                         </div>
-                    )}*/}
+                    )}
                 </div>
             )}
         </div>

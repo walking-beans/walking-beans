@@ -1,8 +1,23 @@
 import "../../css/Order.css"
 import UserMenuOption from "./UserMenuOption";
-import {useState} from "react";
+import { useState } from "react";
 
 const UserMenuOptionGroup = ({optionName, options, selectedOptions, onOptionChange}) => {
+    const [selectedOptionId, setSelectedOptionId] = useState(
+        selectedOptions && selectedOptions.length > 0 ? selectedOptions[0].optionId : null
+    );
+
+    const handleOptionChange = (optionId, option) => {
+        // 이미 선택된 옵션을 다시 클릭하면 선택 해제
+        if (selectedOptionId === optionId) {
+            setSelectedOptionId(null);
+            onOptionChange(optionName, null);
+        } else {
+            // 새 옵션 선택
+            setSelectedOptionId(optionId);
+            onOptionChange(optionName, option);
+        }
+    };
 
     return (
         <div className="user-menu-option-group-container">
@@ -13,15 +28,15 @@ const UserMenuOptionGroup = ({optionName, options, selectedOptions, onOptionChan
                         key={option.optionId}
                         optionContent={option.optionContent}
                         optionPrice={option.optionPrice}
-                        onChange={() => onOptionChange(optionName, option)}
-                        checked={selectedOptions && selectedOptions.some(selected => selected.optionId === option.optionId)}
+                        onChange={() => handleOptionChange(option.optionId, option)}
+                        checked={selectedOptionId === option.optionId}
                         type="radio"
                         name={optionName}
                     />
                 ))}
             </div>
         </div>
-    )
+    );
 };
 
 export default UserMenuOptionGroup;
