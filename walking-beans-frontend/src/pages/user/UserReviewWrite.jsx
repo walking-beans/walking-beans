@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/User.css";
+import "../../css/Order.css";
 import groupIcon from "../../assert/svg/Group.svg"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import XIcon from "../../images/user/XIcon.svg"
 
 const UserReviewWrite = () => {
     const [reviews, setReviews] = useState([]);
@@ -15,6 +17,8 @@ const UserReviewWrite = () => {
     const [riderId, setRiderId] = useState(location.state?.riderId || null);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [storeName, setStoreName] = useState('');
+
 
     /*  const [newReview, setNewReview] = useState({
           orderId: orderId,
@@ -162,6 +166,17 @@ const UserReviewWrite = () => {
         }
     }, [orderId]);
 
+    // 가게 정보 가져오기
+    useEffect(() => {
+        if (storeId) {
+            axios.get(`http://localhost:7070/api/store/${storeId}`)
+                .then(res => {
+                    setStoreName(res.data.storeName); // 가게 이름 상태 저장
+                })
+                .catch(err => console.error("가게 정보 조회 실패:", err));
+        }
+    }, [storeId]);
+
     return (
         <div className="user-review-container">
             <div className="review-all">
@@ -169,9 +184,28 @@ const UserReviewWrite = () => {
                     <div className="user-title-center">리뷰 작성하기</div>
                     <div className="user-order-hr"></div>
 
+
                     {isLoading ? ( // 로딩 중 메시지 추가
                         <div className="loading-container">
                             <p>리뷰를 등록하는 중입니다...</p>
+                    <form onSubmit={handleReviewSubmit}>
+                        {/* 매장 별점 */}
+                        <div className="star-rating">
+                            <div className="user-order-bordtext">매장 별점 및 리뷰</div>
+                            <div className="user-order-address-text">{storeName}</div>
+                            <div className="star-container">
+                                {[...Array(5)].map((_, index) => (
+                                    <span
+                                        key={index}
+                                        className={index < newReview.reviewStarRating ? "star filled" : "star"}
+                                        onClick={() => handleStarClick(index + 1)}
+                                    >
+                                ★
+                            </span>
+                                ))}
+
+                            </div>
+
                         </div>
                     ) : (
                         <form onSubmit={handleReviewSubmit}>
@@ -206,6 +240,7 @@ const UserReviewWrite = () => {
                                 <label htmlFor="file-input">
                                     <img src={groupIcon} alt="업로드" className="upload-icon"/>
                                 </label>
+
                                 <input id="file-input" type="file" accept="image/*" multiple onChange={handleFileChange}/>
 
                                 <div className="image-preview-container">
@@ -213,6 +248,7 @@ const UserReviewWrite = () => {
                                         <div key={index} className="image-preview-wrapper">
                                             <div className="remove-image" onClick={() => removeImage(index)}>❌</div>
                                             <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview"/>
+
                                         </div>
                                     ))}
                                 </div>
@@ -236,6 +272,7 @@ const UserReviewWrite = () => {
                             <button type="submit" className="submit-button">작성하기</button>
                         </form>
                     )}
+
                 </div>
             </div>
         </div>

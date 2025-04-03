@@ -2,7 +2,6 @@ import UserMenuOptionGroup from "./UserMenuOptionGroup";
 import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
 import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import {useNavigate} from "react-router-dom";
 
 const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
 

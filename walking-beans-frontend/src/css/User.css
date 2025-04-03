@@ -315,7 +315,7 @@ className="cursor-pointer text-primary fw-bold"
 .user-review-container form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
 }
@@ -323,22 +323,7 @@ className="cursor-pointer text-primary fw-bold"
 .user-review-container .star-rating {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin-bottom: 30px;
-}
-
-.user-review-container .star-rating p {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #fff;
-    text-align: center;
-    background: #D2B595;
-    border-radius: 30px;
-    align-content: center;
-    width: 170px;
-    height: 50px;
 }
 
 .user-review-container .star-container {
@@ -349,10 +334,9 @@ className="cursor-pointer text-primary fw-bold"
 
 .user-review-container .star {
     font-size: 30px;
-    color: #ddd;
+    color: #D2B595;
     cursor: pointer;
     transition: color 0.3s;
-    margin: 0 5px;
 }
 
 .user-review-container .star.filled {
@@ -365,7 +349,8 @@ className="cursor-pointer text-primary fw-bold"
 
 
 .user-review-container textarea {
-    width: 540px;
+    width: 100%;
+    max-width: 540px;
     height: 200px;
     padding: 15px;
     font-size: 16px;
@@ -382,22 +367,50 @@ className="cursor-pointer text-primary fw-bold"
     color: #D2B595;
 }
 
-.user-review-container .file-upload {
+.user-review-container .file-upload-wrapper {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-    justify-content: flex-start;
-    width: 100%;
+    gap: 15px;
+}
+
+.user-review-container .file-upload {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border: 1px solid #5A3D21;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.user-review-container .file-btn {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border: 1px solid #5A3D21;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-review-container .btn-text {
+    font-size: 14px;
+    color: #5A3D21;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 .user-review-container .file-upload label {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    display: block;
-    margin-right: 15px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user-review-container input[type="file"] {
@@ -405,12 +418,11 @@ className="cursor-pointer text-primary fw-bold"
 }
 
 .user-review-container .image-preview {
-    margin-top: 10px;
     width: 120px;
     height: 120px;
-    border-radius: 8px;
+    border-radius: 5px;
     object-fit: cover;
-    display: block;
+
 }
 
 .user-review-container .submit-button {
@@ -428,26 +440,52 @@ className="cursor-pointer text-primary fw-bold"
     text-decoration-line: none;
 }
 
+.user-review-container .image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .user-review-container .image-preview-wrapper {
     position: relative;
-    display: inline-block;
-    margin-left: 30px;
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    object-fit: cover;
+
 }
 
 .user-review-container .remove-image {
     position: absolute;
     top: 5px;
     right: 5px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
+}
+
+.user-review-container .remove-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.user-review-container .review-divider {
+    border: none;
+    border-top: 2px #D7BEA2 solid;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.button-center-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .user-review-container .loading-container {
