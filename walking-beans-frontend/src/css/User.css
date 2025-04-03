@@ -378,12 +378,16 @@ className="cursor-pointer text-primary fw-bold"
     height: 80px;
     background: #fff;
     border: 1px solid #5A3D21;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+.user-review-container .file-upload label,
+.user-review-container .file-upload .btn-text,
+.user-review-container .file-upload input[type="file"] {
+    cursor: pointer;
 }
 
 .user-review-container .file-btn {
@@ -481,11 +485,15 @@ className="cursor-pointer text-primary fw-bold"
     width: 100%;
 }
 
-.button-center-wrapper {
+.user-review-container .button-center-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
     margin-top: 20px;
+}
+
+.user-review-container .user-order-address-text{
+    font-weight: bold;
 }
 
 .user-review-container .loading-container {
@@ -495,7 +503,25 @@ className="cursor-pointer text-primary fw-bold"
     width: 100%;
     height: 100%;
     min-height: 300px;
+    flex-direction: column;
+    gap: 20px;
 }
+
+.user-review-container .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 
 /************** UserStoreReview ******************/
 
