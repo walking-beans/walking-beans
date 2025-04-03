@@ -16,7 +16,9 @@ const UserReviewWrite = () => {
     const [storeId, setStoreId] = useState(location.state?.storeId || null);
     const [riderId, setRiderId] = useState(location.state?.riderId || null);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [storeName, setStoreName] = useState('');
+
 
     /*  const [newReview, setNewReview] = useState({
           orderId: orderId,
@@ -101,6 +103,8 @@ const UserReviewWrite = () => {
             return;
         }
 
+        setIsLoading(true);
+
         const formData = new FormData();
         formData.append("userId", newReview.userId);
         formData.append("storeId", newReview.storeId);
@@ -113,14 +117,13 @@ const UserReviewWrite = () => {
             formData.append("file", img.file);
         });
 
-        //  콘솔에서 확인
-        console.log("업로드할 이미지 목록:", selectedImages);
-        selectedImages.forEach((img, index) => {
-            console.log(`이미지 ${index + 1}:`, img.file);
-        });
+
 
         axios.post("http://localhost:7070/api/reviews", formData)
-            .then((res) => {
+            .then(() => {
+                return axios.post("http://localhost:7070/api/riderReview", newRiderReview);
+            })
+            .then(() => {
                 alert("리뷰가 성공적으로 등록되었습니다!");
                 navigate("/order");
                 setNewReview((prevReview) => ({
@@ -128,16 +131,18 @@ const UserReviewWrite = () => {
                     reviewStarRating: 5,
                     reviewContent: "",
                 }));
-                setSelectedImages([]); // 이미지 초기화
+                setNewRiderReview((prevReview) => ({
+                    ...prevReview,
+                    riderReviewRating: 5,
+                }));
+                setSelectedImages([]);
             })
             .catch((err) => {
                 console.error("리뷰 저장 실패", err);
                 alert("백엔드에 리뷰를 저장하지 못했습니다.");
-            });
-
-        axios.post("http://localhost:7070/api/riderReview", newRiderReview)
-            .catch(() => {
-                alert("백엔드에서 라이더 별점을 저장하지 못했습니다.");
+            })
+            .finally(() => {
+                setIsLoading(false); //모든 요청 완료 후 로딩 종료
             });
     };
 
@@ -149,12 +154,12 @@ const UserReviewWrite = () => {
                     setNewReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        storeId: res.data.storeId, // ✅ storeId 추가
+                        storeId: res.data.storeId, // storeId 추가
                     }));
                     setNewRiderReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        riderId: res.data.RiderIdOnDuty || null // ✅ riderId 추가 (없으면 null)
+                        riderId: res.data.RiderIdOnDuty || null //  riderId 추가 (없으면 null)
                     }));
                 })
                 .catch(err => console.error("주문 정보 조회 실패:", err));
@@ -179,24 +184,28 @@ const UserReviewWrite = () => {
                     <div className="user-title-center">리뷰 작성하기</div>
                     <div className="user-order-hr"></div>
 
-                    <form onSubmit={handleReviewSubmit}>
-                        {/* 매장 별점 */}
-                        <div className="star-rating">
-                            <div className="user-order-bordtext">매장 별점 및 리뷰</div>
-                            <div className="user-order-address-text">{storeName}</div>
-                            <div className="star-container">
-                                {[...Array(5)].map((_, index) => (
-                                    <span
-                                        key={index}
-                                        className={index < newReview.reviewStarRating ? "star filled" : "star"}
-                                        onClick={() => handleStarClick(index + 1)}
-                                    >
-                                ★
-                            </span>
-                                ))}
-
-                            </div>
+                    {isLoading ? (
+                        <div className="loading-container">
+                            <div className="loading-spinner"></div>
+                            <p>리뷰를 등록하는 중입니다...</p>
                         </div>
+                    ) : (
+                        <form onSubmit={handleReviewSubmit}>
+                            <div className="star-rating">
+                                <div className="user-order-bordtext">매장 별점 및 리뷰</div>
+                                <div className="user-order-address-text">{storeName}</div>
+                                <div className="star-container">
+                                    {[...Array(5)].map((_, index) => (
+                                        <span
+                                            key={index}
+                                            className={index < newReview.reviewStarRating ? "star filled" : "star"}
+                                            onClick={() => handleStarClick(index + 1)}
+                                        >
+                                    ★
+                                </span>
+                                    ))}
+                                </div>
+                            </div>
 
                         {/* 리뷰 입력 */}
                         <textarea
@@ -255,6 +264,7 @@ const UserReviewWrite = () => {
                             <button type="submit" className="submit-button">작성하기</button>
                         </div>
                     </form>
+                    )}
                 </div>
             </div>
         </div>

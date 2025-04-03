@@ -47,7 +47,7 @@ const UserSearchMap = () => {
     const fetchNearbyStores = (lat, lng) => {
         axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
             .then((res) => {
-                console.log("📌 주변 매장 데이터:", res.data);
+                console.log(" 주변 매장 데이터:", res.data);
 
                 let updatedStores = [];
                 let remainingStores = res.data.length;
@@ -128,28 +128,27 @@ const UserSearchMap = () => {
         markersRef.current = [];
     };
 
+    // 검색 결과로 나온 매장의 경우 stores에서 해당 매장을 찾아 상세 정보를 가져옴
     const handleMarkerClick = (store) => {
-        fetchReviews(store.storeId, (rating, reviewCount) => {
+        const fullStoreData = stores.find(s => s.storeId === store.storeId) || store;
 
-            //  별점이 제대로 업데이트된 후 setSelectedStore 실행
-            setSelectedStore(prevStore => ({
-                ...prevStore,
-                ...store,
-                storeRating: rating, // 최신 리뷰 반영
-                storeReviewCount: reviewCount,
-            }));
+        fetchReviews(store.storeId, (rating, reviewCount) => {
+            setSelectedStore({
+                ...fullStoreData,  // 기존 stores에서 찾은 데이터 우선 사용
+                storeRating: rating,  // 최신 별점 반영
+                storeReviewCount: reviewCount,  //  최신 리뷰 개수 반영
+            });
         });
 
         mapRef.current.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
     };
-
     useEffect(() => {
         if (!mapRef.current) return;
 
         clearMarkers(); // 기존 마커 삭제
 
         const displayStores = searchResults.length > 0 ? searchResults : stores;
-        console.log("🗺️ 지도에 표시할 매장 목록:", displayStores);
+        console.log(" 지도에 표시할 매장 목록:", displayStores);
 
         displayStores.forEach((store) => {
             const marker = new window.kakao.maps.Marker({

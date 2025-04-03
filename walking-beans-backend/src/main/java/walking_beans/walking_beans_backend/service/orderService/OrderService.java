@@ -24,6 +24,8 @@ public interface OrderService {
 
     RiderOrderStatusDTO getOrderStatusWithRemainingTime(@Param("orderId") long orderId);
 
+    Integer checkingRiderIdOnDuty(@Param("orderId") long orderId, @Param("riderIdOnDuty") long riderIdOnDuty);
+
     /****************************************************************************************/
 
 

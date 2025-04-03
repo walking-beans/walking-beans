@@ -56,6 +56,7 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+
 import UserProtectedRoute from './UserProtectedRoute';
 
 
@@ -113,7 +114,11 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/updaterole" element={<AdminChangeRole/>}/>
+                                <Route path="/updaterole" element={
+                                <ProtectedRoute allowedRoles={["noRole"]}>
+                                    <AdminChangeRole/>
+                                </ProtectedRoute>
+                        }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
@@ -243,12 +248,13 @@ function PathRoute() {
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom user={user}/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
 
-                                {/*관리자 페이지*/}
+                                 {/*관리자 페이지*/}
                                 <Route path="/adminpage" element={
-                                    <ProtectedRoute allowedRoles={["admin"]}>
-                                        <AdminPage/>
-                                    </ProtectedRoute>
+                                  <ProtectedRoute allowedRoles={["admin"]}>
+                                      <AdminPage />
+                                   </ProtectedRoute>
                                 }/>
+
 
                                 <Route path="/alarmlist" element={<AdminAlarmList/>}/>
                             </Routes>

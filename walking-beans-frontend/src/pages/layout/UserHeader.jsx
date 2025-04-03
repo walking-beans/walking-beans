@@ -47,14 +47,31 @@ const UserHeader = ({user}) => {
         };
     }, []);
 
+    // userId가 localStorage에 있다면 설정
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (storedUser?.user_id) {
+            setUserId(storedUser.user_id);
+        }
+    }, []);
+
     //  userId가 설정된 후 대표 주소 가져오기
     useEffect(() => {
-
-        apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+        if (userId) {
+            apiUserService.primaryAddress(userId, setUserAddress, setUserLat, setUserLng);
+        }
     }, [userId]);
+    // /user/search/map으로 이동하는 함수 수정
+    const handleOpenSearch = () => {
+        if (!userLat || !userLng) {
+            alert("대표 주소 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+            return;
+        }
+        navigate("/user/search/map", { state: { lat: userLat, lng: userLng } });
+    };
 
     // 네비게이션 항목을 역할에 맞게 설정
-    const navItems = currentUser?.user_role === "user"
+    const navItems = currentUser?.user_role === "user" || currentUser?.user_role === "rider" || currentUser?.user_role === "admin"
         ? [
             { icon: person, text: "마이페이지", path: "/mypage" },
             { icon: receipt, text: "주문내역", path: "/order" },
@@ -109,15 +126,6 @@ const UserHeader = ({user}) => {
             admin: location.pathname === "/adminpage" ? "/" : "/adminpage"
         };
         navigate(rolePaths[parsedUser.user_role] || "/");
-    };
-
-    // /user/search/map
-    const handleOpenSearch = () => {
-        if (!userLat || !userLng) {
-            alert("대표 주소 정보를 불러올 수 없습니다.");
-            return;
-        }
-        navigate("/user/search/map",{ state: { lat: userLat, lng: userLng }  });
     };
 
     return (
