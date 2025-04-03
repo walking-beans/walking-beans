@@ -55,25 +55,52 @@ const AdminAlarmList = () => {
         }
     }
 
+    const AllReadAlrms = () => {
+        axios
+            .put("http://localhost:7070/api/allreadalarms/" + userId)
+            .then(
+                () => { // 읽음 처리후 다시 리스트 불러오기
+                    axios
+                        .get(`http://localhost:7070/api/chat/${userId}`)
+                        .then((res) => {
+                            setAlarmList(res.data); // 새로 고침된 알림 목록을 업데이트
+                        })
+                        .catch((err) => {
+                            console.log("알림 목록 불러오기 오류:", err);
+                        });
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("err" + err);
+                }
+            )
+    }
+
     return (
         <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (
                 <div className="AlarmDeleteContainer">
+                    <button className="AllReadBtn" onClick={AllReadAlrms}>
+                        모두 읽음
+                    </button>
+
                     <button type={"submit"} onClick={deleteAllAlrams} className="AlarmDeleteBtn">
-                        알림 모두 지우기
+                        전체 삭제
                     </button>
                 </div>
             )}
 
-            {/* 알림 리스트가 없을 때 */}
+            {/* 알림 리스트가 없을 경우 / 알림 리스트가 있을 경우*/}
             {AlarmList.length === 0 ? (
                 <h3 className="NoAlarmList">알람이 없습니다</h3>
             ) : (
                 AlarmList.map((value, index) => (
                     <div key={index}>
-                        <div className="AlarmList" onClick={() => {
+                        <div
+                            className={`${value.alarmStatus ? 'AlarmListRead' : 'AlarmListUnread'}`}
+                            onClick={() => {
                             const targetUrl = value.alarmUrl;
-                            console.log(targetUrl);
                             navigate(targetUrl);
                         }}>
                             <h3>{value.alarmRole === 1

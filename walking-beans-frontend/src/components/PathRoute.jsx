@@ -113,7 +113,11 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/updaterole" element={<AdminChangeRole/>}/>
+                                <Route path="/updaterole" element={
+                            <ProtectedRoute allowedRoles={["noRole"]}>
+                                <AdminChangeRole/>
+                            </ProtectedRoute>
+                        }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
