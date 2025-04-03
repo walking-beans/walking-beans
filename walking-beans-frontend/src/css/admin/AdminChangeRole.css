@@ -1,34 +1,66 @@
-.AdminChangeRoleContainer {
+.admin-change-role-container {
     text-align: center;
     background-color: #F4EDDF;
-    min-height: 70vh;
+    height: auto;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    padding: 0 30px;
 }
 
-.AdminChangeRoleContainer .changeRoleText{
-    padding-top: 20px;
-    color: #3c1e1e;
-    margin-bottom: 20px;
+.admin-change-role-container .change-role-text {
+    color: #5A3D21;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 30px;
 }
 
-.AdminChangeRoleContainer .changeRoleDesText {
+.admin-change-role-container .box {
+    background-color: #fff;
+    border: 1px #5A3D21 solid;
+}
+
+.admin-change-role-container .info-text-big {
+    font-size: 23px;
+    color: #5A3D21;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+.admin-change-role-container .info-text {
+    font-size: 17px;
+    color: #5A3D21;
+    margin-top: 5px;
+}
+
+
+.admin-change-role-container .changeRoleDesText {
     color: #3a2d22;
 }
 
-.roleInputLabel {
-    display: inline-block;
+.admin-change-role-container .role-input-label {
+    display: flex;
     justify-content: center;
-    padding: 40px;
-    margin: 10px;
+    margin-bottom: 30px;
+    gap: 60px;
 }
 
-.roleInputLabel label {
-    font-size: 20px;
+.admin-change-role-container .role-input-label label {
+    display: flex;
     align-items: center;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.AdminChangeRoleContainer .saveBtn {
-    border-radius: 5px;
-    background-color: #AB7A44;
-    width: 411px;
-    height: 50px;
+.admin-change-role-container .role-input-label > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.admin-change-role-container .role-input-label input {
+    appearance: none;
+    margin-right: 8px;
+    position: relative;
 }
