@@ -115,9 +115,9 @@ function PathRoute() {
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
                                 <Route path="/updaterole" element={
-                            <ProtectedRoute allowedRoles={["noRole"]}>
-                                <AdminChangeRole/>
-                            </ProtectedRoute>
+                                <ProtectedRoute allowedRoles={["noRole"]}>
+                                    <AdminChangeRole/>
+                                </ProtectedRoute>
                         }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
