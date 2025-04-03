@@ -65,12 +65,13 @@ const AdminMypage = () => {
     // 역할별 클래스 설정
     const roleClass = userRole === "rider" || userRole === "3" ? "rider" : "user";
     const textColor = roleClass === "rider" ? "#010C22" : "#5A3D21";
+    const backgroundColor = roleClass === "rider" ? "#E2F2FA" : "#F4EDDF";
 
     return (
         <div className={`mypage-container ${roleClass}`}>
-            <div className="user-order-background">
+            <div className="user-order-background" style={{backgroundColor}}>
                 <div className="user-order-menu-container">
-                    <h2 className="mypage-title-center" style={{ color: textColor }}>마이페이지</h2>
+                    <h2 className="mypage-title-center" style={{color: textColor}}>마이페이지</h2>
                     <div className="mypage-hr"></div>
 
                     <div className="profile-section">
@@ -83,23 +84,25 @@ const AdminMypage = () => {
                         <input
                             type="file"
                             id="profileInput"
-                            style={{ display: "none" }}
+                            style={{display: "none"}}
                             onChange={handleProfileChange}
                         />
 
                         <div className="mypage-info">
                             <div>
-                                <span className="mypage-text-big" style={{ color: textColor }}>
+                                <span className="mypage-text-big" style={{color: textColor}}>
                                     {user.userName || "정보 없음"}
                                 </span>
-                                <span className="mypage-text" style={{ color: textColor }}>님</span>
+                                <span className="mypage-text" style={{color: textColor}}>님</span>
                             </div>
                             <div className="mt-4">
-                                <div className="mypage-text" style={{ color: textColor }}>{user.userEmail || "정보 없음"}</div>
-                                <div className="mypage-text" style={{ color: textColor }}>
+                                <div className="mypage-text"
+                                     style={{color: textColor}}>{user.userEmail || "정보 없음"}</div>
+                                <div className="mypage-text" style={{color: textColor}}>
                                     {user.userPhone.replace(/^(\d{3})(\d{4})(\d{4})$/, " $1-$2-$3") || "정보 없음"}
                                 </div>
-                                <div className="mypage-text" style={{ color: textColor }}>{user.userBirthday || "정보 없음"}</div>
+                                <div className="mypage-text"
+                                     style={{color: textColor}}>{user.userBirthday || "정보 없음"}</div>
                             </div>
                         </div>
                     </div>
@@ -114,7 +117,7 @@ const AdminMypage = () => {
                     </div>
 
                     <div className="mypage-grid" onClick={() => navigate("/certification")}>
-                        <div className="mypage-text" style={{ color: textColor }}>회원 탈퇴</div>
+                        <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
                         <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn} alt="회원 탈퇴 버튼"/>
                     </div>
                 </div>
