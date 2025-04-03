@@ -12,8 +12,8 @@ import halfStar from "../../assert/svg/starNav/halfStar.svg";
 const starPath  = {
 
     getStarPath : function (star, setStarPath) {
-        if (star === 5) {
-            setStarPath(fiveStar);
+        if (star === 0) {
+            setStarPath(null);
         } else if (star > 0 && star < 1) {
             setStarPath(halfStar);
         } else if (star === 1) {
@@ -33,7 +33,7 @@ const starPath  = {
         } else if (star > 4 && star < 5) {
             setStarPath(fourHalfStar);
         } else {
-            setStarPath(null);
+            setStarPath(fiveStar);
         }
 
     }
