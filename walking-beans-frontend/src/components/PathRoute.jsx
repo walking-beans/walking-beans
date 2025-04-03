@@ -128,11 +128,10 @@ function PathRoute() {
                                 {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder/>}/>
 
+                                <Route element={<UserProtectedRoute />}>
                                 {/* 주문하기 페이지*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout/>}/>
 
-
-                                <Route element={<UserProtectedRoute />}>
                                 {/* 결제하기 페이지*/}
                                 <Route path="/checkout" element={<UserCheckoutPage/>}/>
 
