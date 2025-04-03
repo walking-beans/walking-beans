@@ -56,6 +56,7 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+import UserProtectedRoute from './UserProtectedRoute';
 
 
 function PathRoute() {
@@ -130,8 +131,9 @@ function PathRoute() {
                                 {/* 주문하기 페이지*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout/>}/>
 
+
+                                <Route element={<UserProtectedRoute />}>
                                 {/* 결제하기 페이지*/}
-                                {/* 1. checkout toss API KEY 인증*/}
                                 <Route path="/checkout" element={<UserCheckoutPage/>}/>
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
@@ -148,8 +150,7 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail/>}/>
-
-                                <Route path="/order/test" element={<RiderOrderStatus/>}/>
+                                </Route>
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
                                 <Route path="/user/reviewWrite/:orderId"

@@ -39,7 +39,6 @@ const UserHeader = ({user}) => {
             const storedUser = localStorage.getItem("user");
             const parsedUser = JSON.parse(storedUser);
             setCurrentUser(storedUser ? JSON.parse(storedUser) : null);
-            setUserId(parsedUser.user_id);
         };
         updateUser();
         window.addEventListener("userChanged", updateUser);
