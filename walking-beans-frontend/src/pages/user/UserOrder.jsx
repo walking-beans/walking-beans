@@ -197,6 +197,14 @@ const UserOrder = () => {
             console.log("카트", carts)
             return;
         }
+
+        // 사용자 권한 체크
+        const userRole = user?.user_role;
+        if (userRole !== 'user' && userRole !== 1) {
+            alert("해당 페이지는 일반으로 가입해야 이용할 수 있습니다.\n 일반이용자로 가입하여 이용해 주세요.");
+            return;
+        }
+
         apiUserOrderService.insertOrder()
         navigate(`/order/checkout/${userId}?totalAmount=${totalAmount}`);
     }
