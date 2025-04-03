@@ -56,8 +56,6 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
-import AdminMain from "../pages/admin/AdminMain";
-
 
 function PathRoute() {
     const [searchResults, setSearchResults] = useState([]);
@@ -244,26 +242,16 @@ function PathRoute() {
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom user={user}/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
 
+                                {/*관리자 페이지*/}
+                                <Route path="/adminpage" element={
+                                    <ProtectedRoute allowedRoles={["admin"]}>
+                                        <AdminPage />
+                                    </ProtectedRoute>
+                                }/>
 
                                 <Route path="/alarmlist" element={<AdminAlarmList/>}/>
                             </Routes>
                 </div>
-                <Routes>
-
-                    {/*관리자 페이지*/}
-                    <Route path="/adminpage" element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                            <AdminPage />
-                        </ProtectedRoute>
-                    }/>
-
-                    {/*관리자 페이지*/}
-                    <Route path="/admin" element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                            <AdminMain />
-                        </ProtectedRoute>
-                    }/>
-                </Routes>
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
         </div>
