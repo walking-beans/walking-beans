@@ -24,7 +24,7 @@ public interface MenuService {
     void updateMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile imagePath);
 
     // 메뉴 추가하기
-    void addMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile imagePath);
+    void addMenu(String menuName, long storeId, long userId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile imagePath);
 
     // 메뉴 삭제하기
     void deleteMenu(long menuId);

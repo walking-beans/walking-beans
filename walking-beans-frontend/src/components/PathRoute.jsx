@@ -56,6 +56,7 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+import StoreMenuRegister from "../pages/owner/StoreMenuRegister";
 
 
 function PathRoute() {
@@ -202,6 +203,11 @@ function PathRoute() {
                                 <Route path="/owner/:id/menu" element={
                                     <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreMenu/>
+                                    </ProtectedRoute>
+                                }/>
+                                <Route path="/owner/:storeId/menuresister" element={
+                                    <ProtectedRoute allowedRoles={["owner"]}>
+                                        <StoreMenuRegister/>
                                     </ProtectedRoute>
                                 }/>
                                 <Route path="/owner/:storeId/menu/:menuId" element={

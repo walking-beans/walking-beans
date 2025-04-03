@@ -57,21 +57,27 @@ public class MenuAPIController {
 
     /**추가하기
      *
-     * @param menuId
+     * @param storeId
+     * @param userId
      * @param menuPrice
-     * @param menuDescription
-     * @param menuCategory
      * @param menuPictureUrl
+     * @param menuName
+     * @param menuCategory
+     * @param menuDescription
      */
-    @PostMapping("/owner/{storeId}/menu/{menuId}")
-    public void addMenu(@RequestParam("menuName") String menuName,
-                        @RequestParam("menuId") long menuId,
+    @PostMapping("/owner/{storeId}/menu/resister/{userId}")
+    public ResponseEntity<?> addMenu( HttpSession session,
+                         @PathVariable("storeId")long storeId, // 권한 검증용
+                                      @PathVariable("userId") long userId,
+                        @RequestParam("menuName") String menuName,
                         @RequestParam("menuPrice") int menuPrice,
                         @RequestParam("menuDescription") String menuDescription,
                         @RequestParam("menuCategory") String menuCategory,
                         @RequestParam(value = "menuPictureUrl",required = false) MultipartFile menuPictureUrl
                         ) {
-        menuService.addMenu(menuName, menuId, menuPrice ,menuDescription, menuCategory, menuPictureUrl);
+        System.out.println("컨트롤러 도달 요청 받음");
+        menuService.addMenu( menuName, storeId, userId, menuPrice , menuDescription, menuCategory, menuPictureUrl);
+        return ResponseEntity.ok().build(); // 성공시
     }
 
 
@@ -84,10 +90,10 @@ public class MenuAPIController {
      *      * @param menuPictureUrl
      *      권한 검증을 위한 세션 포함
      */
-    @PutMapping("/owner/{storeId}/menu/{menuId}")
+    @PatchMapping("/owner/{storeId}/menu/{menuId}")
     @OwnershipCheck
     public ResponseEntity<?> updateMenu(   HttpSession session,
-                                           @PathVariable("storeId")long storeId,
+                                           @PathVariable("storeId")long storeId, // 권한 검증용
                                            @PathVariable("menuId") long menuId,
                                            @RequestParam("menuName") String menuName,
                                            @RequestParam("menuPrice") int menuPrice,

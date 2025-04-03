@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import apiMenu from "../../service/apiMenu";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import HorizentalCategory from "../../components/owner/HorizentalCategory";
 import MenuCard from "../../components/owner/MenuCard";
 import SelectCategory from "../../components/owner/SelectCategory";
@@ -29,6 +29,7 @@ const StoreMenu = () => {
 
     useEffect(() => {
         apiMenu.fetchAllMenu(id,setMenus, setErr)
+
     }, []);
 
     const handleDelete = () => {
@@ -52,6 +53,8 @@ const StoreMenu = () => {
         return menus.menuCategory.trim().includes(value);
     });
 
+    // 디버깅
+    console.log(" 이미지 주소 확인 "+menus.menuPictureUrl);
 
 
     return (
@@ -64,7 +67,10 @@ const StoreMenu = () => {
 
             <div>
                 <p className="col-1">{filterMenus.length}개</p>
-                <button className={"col-1"} onClick={handleRow}>{barrel ? "3열 보기" : "1열 보기"}</button>
+                <button className={"col-2"} onClick={handleRow}>{barrel ? "3열 보기" : "1열 보기"}</button>
+                <Link to={`/owner/${id}/menuresister`}>
+                <button className={"col-4 offset-6" }>새로운 메뉴 등록하기</button>
+                </Link>
                 <div className={"row"}>
                     {filterMenus.map((menus) => (
                         <MenuCard key={menus.menuId}

@@ -50,7 +50,7 @@
     <!-- 메뉴 추가하기 -->
     <insert id="addMenu">
         INSERT INTO Menu (
-                          menu_id,
+
                           store_id,
                           user_id,
                           menu_price,
@@ -62,7 +62,7 @@
                           menu_modified_date)
         VALUES
             (
-             #{menuId},
+
              #{storeId},
              #{userId},
              #{menuPrice},
