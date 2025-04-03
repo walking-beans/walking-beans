@@ -69,17 +69,9 @@ const BeforeKakaoMapStart = ({user, riderOnDuty, setRiderOnDuty}) => {
     }, [userLocation]);
 
     function handleRiderOnDuty() {
-        if (user.user_role === "owner") {
+        if (user.user_role !== "rider") {
             alert("접근 권한이 없습니다.");
             return;
-        }
-
-        if (user.user_role === "user") {
-            if (window.confirm("라이더로 업그레이드하셔야 됩니다. 진행하시겠습니까?")) {
-                apiRiderService.updateUserRoleByUserId(user.user_id, 2);
-            } else {
-                return;
-            }
         }
         setRiderOnDuty(prevState => !prevState);
         console.log("BeforeKakaoMapStart : " + riderOnDuty);

@@ -54,7 +54,16 @@ const RiderOntheway = ({user}) => {
 
     useEffect(() => {
         console.log("ros orderId : " + orderId);
-;
+
+        apiRiderService.checkingRiderIdOnDuty(orderId, user.user_id,
+            (result) => {
+                console.log(result);
+                if (result !== 1) {
+                    alert("접근 권한이 없습니다.");
+                    navigate("/rider");
+                }
+            })
+
         apiRiderService.getOrderStatusWithRemainingTime(orderId, (no) => {
             setOrderInfo(no);
             if (no.orderStatus === 6) {

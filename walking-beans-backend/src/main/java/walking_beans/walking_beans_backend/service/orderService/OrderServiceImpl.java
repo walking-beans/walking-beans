@@ -73,6 +73,11 @@ public class OrderServiceImpl implements OrderService {
         return orderStatusDTO;
     }
 
+    @Override
+    public Integer checkingRiderIdOnDuty(long orderId, long riderIdOnDuty) {
+        return orderMapper.checkingRiderIdOnDuty(orderId, riderIdOnDuty);
+    }
+
 
     /**********************************************mochoping**********************************************/
     // 가게 id로 주문정보, 주문상태만 가져오기

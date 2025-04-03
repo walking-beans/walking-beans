@@ -65,6 +65,14 @@
         WHERE O.order_id = #{orderId}
     </select>
 
+    <select id="checkingRiderIdOnDuty">
+        SELECT EXISTS (
+            SELECT 1
+            FROM orders
+            WHERE order_id = #{orderId} AND rider_id_on_duty = #{riderIdOnDuty}
+        ) AS result
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
 

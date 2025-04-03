@@ -114,6 +114,12 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.getOrderStatusWithRemainingTime(orderId));
     }
 
+    @GetMapping("/checkingRiderIdOnDuty")
+    public ResponseEntity<Integer> checkingRiderIdOnDuty(@RequestParam("orderId") long orderId, @RequestParam("riderIdOnDuty") long riderIdOnDuty) {
+        log.info("=== /checkingRiderIdOnDuty?orderId={}&riderIdOnDuty={}  ===", orderId, riderIdOnDuty);
+        return ResponseEntity.ok(orderService.checkingRiderIdOnDuty(orderId, riderIdOnDuty));
+    }
+
     /****************************************  ****************************************/
 
     // 주문 저장
