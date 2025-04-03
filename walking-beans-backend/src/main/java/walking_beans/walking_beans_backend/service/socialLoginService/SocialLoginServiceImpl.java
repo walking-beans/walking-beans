@@ -1,4 +1,3 @@
-/*
 package walking_beans.walking_beans_backend.service.socialLoginService;
 
 
@@ -52,8 +51,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return userMapper.checkEmailExists(email);
     }
 
-    */
-/******************** 카카오 로그인 *******************************//*
+/******************* 카카오 로그인 ******************************/
 
 
     @Override
@@ -113,8 +111,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
     }
 
-    */
-/********************* 네이버 로그인 *************************//*
+/******************** 네이버 로그인 ************************/
 
 
     @Override
@@ -173,4 +170,4 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
     }
 
-}*/
+}

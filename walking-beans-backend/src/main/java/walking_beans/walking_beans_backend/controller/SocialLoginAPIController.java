@@ -1,4 +1,3 @@
-/*
 package walking_beans.walking_beans_backend.controller;
 
 
@@ -42,8 +41,7 @@ public class SocialLoginAPIController {
     @Value("${naver.redirect-url}")
     private String naverRedirectUrl;
 
-    */
-/******************** 카카오 로그인 **************************//*
+/******************* 카카오 로그인 *************************/
 
 
     @GetMapping("/oauth/kakao/login")
@@ -91,8 +89,7 @@ public class SocialLoginAPIController {
         }
     }
 
-    */
-/**************** 네이버 로그인 *******************************//*
+/*************** 네이버 로그인 ******************************/
 
 
     @GetMapping("/oauth/naver/login")
@@ -139,4 +136,4 @@ public class SocialLoginAPIController {
         }
     }
 
-}*/
+}
