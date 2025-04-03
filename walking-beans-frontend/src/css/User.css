@@ -473,10 +473,18 @@ className="cursor-pointer text-primary fw-bold"
     height: 20px;
 }
 
-.user-review-container .hr-mini {
+.user-review-container .review-divider {
     border: none;
     border-top: 2px #D7BEA2 solid;
     margin: 20px 0;
+    width: 100%;
+}
+
+.button-center-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
 }
 
 /************** UserStoreReview ******************/

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/User.css";
-import "../../css/Order.css"
+import "../../css/Order.css";
 import groupIcon from "../../assert/svg/Group.svg"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import XIcon from "../../images/user/XIcon.svg"
@@ -217,7 +217,8 @@ const UserReviewWrite = () => {
                                     <img src={groupIcon} alt="업로드" className="upload-icon"/>
                                 </label>
                                 <div className="btn-text">사진 추가</div>
-                                <input id="file-input" type="file" accept="image/*" multiple onChange={handleFileChange}/>
+                                <input id="file-input" type="file" accept="image/*" multiple
+                                       onChange={handleFileChange}/>
                             </div>
 
                             {/* 이미지 미리보기 */}
@@ -225,7 +226,7 @@ const UserReviewWrite = () => {
                                 {selectedImages.map((img, index) => (
                                     <div key={index} className="image-preview-wrapper">
                                         <div className="remove-image" onClick={() => removeImage(index)}>
-                                            <img src={XIcon} alt="삭제 아이콘" className="remove-icon" />
+                                            <img src={XIcon} alt="삭제 아이콘" className="remove-icon"/>
                                         </div>
                                         <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview"/>
                                     </div>
@@ -233,7 +234,7 @@ const UserReviewWrite = () => {
                             </div>
                         </div>
 
-                        <div className="hr-mini"></div>
+                        <div className="review-divider"></div>
 
                         {/* 라이더 별점 */}
                         <div className="star-rating">
@@ -250,11 +251,10 @@ const UserReviewWrite = () => {
                                 ))}
                             </div>
                         </div>
-
+                        <div className="button-center-wrapper">
+                            <button type="submit" className="submit-button">작성하기</button>
+                        </div>
                     </form>
-                    <div className="user-order-click-btn-one">
-                    <button type="submit" className="submit-button">작성하기</button>
-                    </div>
                 </div>
             </div>
         </div>
