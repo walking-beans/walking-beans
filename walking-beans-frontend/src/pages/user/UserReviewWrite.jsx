@@ -154,12 +154,12 @@ const UserReviewWrite = () => {
                     setNewReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        storeId: res.data.storeId, // ✅ storeId 추가
+                        storeId: res.data.storeId, // storeId 추가
                     }));
                     setNewRiderReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        riderId: res.data.RiderIdOnDuty || null // ✅ riderId 추가 (없으면 null)
+                        riderId: res.data.RiderIdOnDuty || null //  riderId 추가 (없으면 null)
                     }));
                 })
                 .catch(err => console.error("주문 정보 조회 실패:", err));
@@ -184,24 +184,28 @@ const UserReviewWrite = () => {
                     <div className="user-title-center">리뷰 작성하기</div>
                     <div className="user-order-hr"></div>
 
-                    <form onSubmit={handleReviewSubmit}>
-                        {/* 매장 별점 */}
-                        <div className="star-rating">
-                            <div className="user-order-bordtext">매장 별점 및 리뷰</div>
-                            <div className="user-order-address-text">{storeName}</div>
-                            <div className="star-container">
-                                {[...Array(5)].map((_, index) => (
-                                    <span
-                                        key={index}
-                                        className={index < newReview.reviewStarRating ? "star filled" : "star"}
-                                        onClick={() => handleStarClick(index + 1)}
-                                    >
-                                ★
-                            </span>
-                                ))}
-
-                            </div>
+                    {isLoading ? (
+                        <div className="loading-container">
+                            <div className="loading-spinner"></div>
+                            <p>리뷰를 등록하는 중입니다...</p>
                         </div>
+                    ) : (
+                        <form onSubmit={handleReviewSubmit}>
+                            <div className="star-rating">
+                                <div className="user-order-bordtext">매장 별점 및 리뷰</div>
+                                <div className="user-order-address-text">{storeName}</div>
+                                <div className="star-container">
+                                    {[...Array(5)].map((_, index) => (
+                                        <span
+                                            key={index}
+                                            className={index < newReview.reviewStarRating ? "star filled" : "star"}
+                                            onClick={() => handleStarClick(index + 1)}
+                                        >
+                                    ★
+                                </span>
+                                    ))}
+                                </div>
+                            </div>
 
                         {/* 리뷰 입력 */}
                         <textarea
@@ -260,6 +264,7 @@ const UserReviewWrite = () => {
                             <button type="submit" className="submit-button">작성하기</button>
                         </div>
                     </form>
+                    )}
                 </div>
             </div>
         </div>
