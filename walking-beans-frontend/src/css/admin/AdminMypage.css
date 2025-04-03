@@ -1,28 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
-
-/* 전체 공통 */
-.mypage-container {
-    width: 100%;
-    padding: 24px 16px;
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #F4EDDF;
-    color: #5A3D21;
-    text-align: center;
-    min-height: 100vh;
-    box-sizing: border-box;
-}
-
 /* 공통 요소 */
 .profile-section {
     display: flex;
-    flex-direction: column;
+    justify-content: start;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 30px;
+    gap: 30px;
 }
 
 .profile-picture {
-    width: 96px;
-    height: 96px;
+    width: 170px;
+    height: 170px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 12px;
@@ -36,40 +23,13 @@
     margin: 0 0 8px 0;
 }
 
-.sub-menu-links {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    font-size: 14px;
-    margin-bottom: 16px;
-    color: #888;
-}
-
-.sub-menu-links div {
-    cursor: pointer;
-}
-
-.infoCertification {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-}
-
-.infoCertification div {
-    color: white;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-block;
-}
-
 /* 사용자 정보 */
 .mypage-info {
     text-align: left;
     padding: 0 16px;
     font-size: 14px;
     margin-bottom: 24px;
+    width: 100%;
 }
 
 .mypage-info p {
@@ -78,45 +38,69 @@
     margin: 6px 0;
 }
 
-/* 하단 메뉴 */
-.menu-links,
-.mypage-end-menu-links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 0 16px;
-    font-size: 14px;
-    margin-bottom: 16px;
-}
-
 .menu-links div,
 .mypage-end-menu-links div {
     text-align: center;
     cursor: pointer;
 }
 
-/* -------------------------------
-   역할별 스타일 (배경/색상/버튼)
----------------------------------*/
-
-.mypage-container.user,
-.mypage-container.owner {
-    background-color: #fef6ea;
-    color: #5a3d21;
+.mypage-text-big {
+    font-size: 28px;
+    font-weight: bold;
+    color: #5A3D21;
 }
 
-.mypage-container.user .infoCertification div,
-.mypage-container.owner .infoCertification div {
-    background-color: #5a3d21;
+.mypage-text {
+    font-size: 20px;
+    color: #5A3D21;
 }
 
-/* rider → 파란 테마 */
-.mypage-container.rider {
-    background-color: #f0f9ff;
-    color: #1f3f66;
+.mypage-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    align-items: center;
+    text-align: center;
+    margin-top: 60px;
+    cursor: pointer;
 }
 
-.mypage-container.rider .infoCertification div {
-    background-color: #91d2f3;
-    color: #1f3f66;
+.mypage-title-center {
+    font-size: 32px;
+    font-weight: bold;
+    color: #5A3D21;
+    text-align: center;
+    letter-spacing: -1.9px;
+}
+
+.mypage-hr {
+    border: none;
+    border-top: 2px #5A3D21 solid;
+    margin: 30px 0;
+}
+
+.mypage-btn {
+    width: 263px;
+    height: 60px;
+    border-radius: 30px;
+    background: #5A3D21;
+    color: white;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+.mypage-container .rider {
+    background-color: #FCFBF7;
+    color: #010C22;
+}
+
+.mypage-container.rider .mypage-btn {
+    background: #010C22;
+}
+
+.mypage-container.rider .mypage-hr {
+    border-top: 2px #010C22 solid;
 }
