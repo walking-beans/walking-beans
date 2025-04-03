@@ -38,6 +38,13 @@
         UPDATE Alarms SET alarm_status = TRUE WHERE alarm_id = #{alarmId}
     </update>
 
+    <!-- 전체 알림 읽음 표시 -->
+    <update id="markAllNotificationsAsRead">
+        UPDATE Alarms
+        SET alarm_status = TRUE
+        WHERE user_id = #{userId}
+    </update>
+
     <!-- 채팅알람 정보 가져오기-->
     <select id="getChattingUserInfo">
         SELECT *

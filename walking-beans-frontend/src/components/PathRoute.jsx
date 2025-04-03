@@ -56,7 +56,8 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
-import AdminMain from "../pages/admin/AdminMain";
+
+import UserProtectedRoute from './UserProtectedRoute';
 
 
 function PathRoute() {
@@ -113,7 +114,11 @@ function PathRoute() {
                                 {/* 기본 페이지 및 로그인 */}
                                 <Route path="/" element={<UserHome/>}/>
                                 <Route path="/login" element={<AdminLogin/>}/>
-                                <Route path="/updaterole" element={<AdminChangeRole/>}/>
+                                <Route path="/updaterole" element={
+                            <ProtectedRoute allowedRoles={["noRole"]}>
+                                <AdminChangeRole/>
+                            </ProtectedRoute>
+                        }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
 
@@ -128,11 +133,11 @@ function PathRoute() {
                                 {/* 유저 관련 라우트*/}
                                 <Route path="/store/:storeId" element={<UserOrder/>}/>
 
+                                <Route element={<UserProtectedRoute />}>
                                 {/* 주문하기 페이지*/}
                                 <Route path="/order/checkout/:userId" element={<UserOrderCheckout/>}/>
 
                                 {/* 결제하기 페이지*/}
-                                {/* 1. checkout toss API KEY 인증*/}
                                 <Route path="/checkout" element={<UserCheckoutPage/>}/>
 
                                 {/*2. 인증 완료되었을 경우 결제 실행*/}
@@ -149,8 +154,7 @@ function PathRoute() {
 
                                 {/*주문 상세정보*/}
                                 <Route path="/order/:orderNumber" element={<UserOrderDetail/>}/>
-
-                                <Route path="/order/test" element={<RiderOrderStatus/>}/>
+                                </Route>
 
                                 <Route path="user/review/:storeId" element={<UserStoreReview/>}/>
                                 <Route path="/user/reviewWrite/:orderId"
@@ -244,26 +248,17 @@ function PathRoute() {
                                 <Route path="/chat/chattingroom" element={<AdminChattingroom user={user}/>}/>
                                 <Route path="/chat/message/:roomId" element={<AdminMessage user={user}/>}/>
 
+                                 {/*관리자 페이지*/}
+                                <Route path="/adminpage" element={
+                                  <ProtectedRoute allowedRoles={["admin"]}>
+                                      <AdminPage />
+                                   </ProtectedRoute>
+                                }/>
+
 
                                 <Route path="/alarmlist" element={<AdminAlarmList/>}/>
                             </Routes>
                 </div>
-                <Routes>
-
-                    {/*관리자 페이지*/}
-                    <Route path="/adminpage" element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                            <AdminPage />
-                        </ProtectedRoute>
-                    }/>
-
-                    {/*관리자 페이지*/}
-                    <Route path="/admin" element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                            <AdminMain />
-                        </ProtectedRoute>
-                    }/>
-                </Routes>
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
         </div>

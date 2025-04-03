@@ -25,6 +25,12 @@ public class AlarmAPIController {
         return ResponseEntity.ok("알림이 읽음 처리되었습니다.");
     }
 
+    // 전체 알람 읽음 처리
+    @PutMapping("/api/allreadalarms/{userId}")
+    public void markAllReadAlarms(@PathVariable Long userId) {
+        alarmService.markAllNotificationsAsRead(userId);
+    }
+
     // 알림 리스트 가져오기
     @GetMapping("/api/chat/{userId}")
     public List<Alarms> getUserAlarm(@PathVariable("userId") int userId) {
