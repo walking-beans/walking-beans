@@ -184,10 +184,6 @@ const UserReviewWrite = () => {
                     <div className="user-title-center">리뷰 작성하기</div>
                     <div className="user-order-hr"></div>
 
-
-                    {isLoading ? ( // 로딩 중 메시지 추가
-                        <div className="loading-container">
-                            <p>리뷰를 등록하는 중입니다...</p>
                     <form onSubmit={handleReviewSubmit}>
                         {/* 매장 별점 */}
                         <div className="star-rating">
@@ -205,74 +201,65 @@ const UserReviewWrite = () => {
                                 ))}
 
                             </div>
-
                         </div>
-                    ) : (
-                        <form onSubmit={handleReviewSubmit}>
-                            <div className="star-rating">
-                                <p>매장 별점</p>
-                                <div className="star-container">
-                                    {[...Array(5)].map((_, index) => (
-                                        <span
-                                            key={index}
-                                            className={index < newReview.reviewStarRating ? "star filled" : "star"}
-                                            onClick={() => handleStarClick(index + 1)}
-                                        >
-                                    ★
-                                </span>
-                                    ))}
-                                </div>
-                            </div>
 
-                            <div className="star-rating"><p>리뷰 입력하기</p></div>
-                            <textarea
-                                placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요."
-                                value={newReview.reviewContent}
-                                onChange={(e) =>
-                                    setNewReview((prevReview) => ({
-                                        ...prevReview,
-                                        reviewContent: e.target.value,
-                                    }))
-                                }
-                            />
+                        {/* 리뷰 입력 */}
+                        <textarea
+                            placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요."
+                            value={newReview.reviewContent}
+                            onChange={(e) =>
+                                setNewReview((prevReview) => ({
+                                    ...prevReview,
+                                    reviewContent: e.target.value,
+                                }))
+                            }
+                        />
 
+                        <div className="file-upload-wrapper">
+                            {/* 사진 추가 버튼 */}
                             <div className="file-upload">
                                 <label htmlFor="file-input">
                                     <img src={groupIcon} alt="업로드" className="upload-icon"/>
                                 </label>
+                                <div className="btn-text">사진 추가</div>
+                                <input id="file-input" type="file" accept="image/*" multiple
+                                       onChange={handleFileChange}/>
+                            </div>
 
-                                <input id="file-input" type="file" accept="image/*" multiple onChange={handleFileChange}/>
-
-                                <div className="image-preview-container">
-                                    {selectedImages.map((img, index) => (
-                                        <div key={index} className="image-preview-wrapper">
-                                            <div className="remove-image" onClick={() => removeImage(index)}>❌</div>
-                                            <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview"/>
-
+                            {/* 이미지 미리보기 */}
+                            <div className="image-preview-container">
+                                {selectedImages.map((img, index) => (
+                                    <div key={index} className="image-preview-wrapper">
+                                        <div className="remove-image" onClick={() => removeImage(index)}>
+                                            <img src={XIcon} alt="삭제 아이콘" className="remove-icon"/>
                                         </div>
-                                    ))}
-                                </div>
+                                        <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview"/>
+                                    </div>
+                                ))}
                             </div>
+                        </div>
 
-                            <div className="star-rating">
-                                <p>라이더 별점</p>
-                                <div className="star-container">
-                                    {[...Array(5)].map((_, index) => (
-                                        <span
-                                            key={index}
-                                            className={index < newRiderReview.riderReviewRating ? "star filled" : "star"}
-                                            onClick={() => handleRiderStarClick(index + 1)}
-                                        >
-                                    ★
-                                </span>
-                                    ))}
-                                </div>
+                        <div className="review-divider"></div>
+
+                        {/* 라이더 별점 */}
+                        <div className="star-rating">
+                            <div className="user-order-bordtext">라이더 별점</div>
+                            <div className="star-container">
+                                {[...Array(5)].map((_, index) => (
+                                    <span
+                                        key={index}
+                                        className={index < newRiderReview.riderReviewRating ? "star filled" : "star"}
+                                        onClick={() => handleRiderStarClick(index + 1)}
+                                    >
+                                ★
+                            </span>
+                                ))}
                             </div>
-
+                        </div>
+                        <div className="button-center-wrapper">
                             <button type="submit" className="submit-button">작성하기</button>
-                        </form>
-                    )}
-
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
