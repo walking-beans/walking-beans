@@ -165,12 +165,21 @@ const HeaderAlarm = ({userId, bell}) => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
                                     setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1); //
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
 
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
                                 } else if (noti.type === 2) {
                                     navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1);
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
                                 }
                             }
                             }>

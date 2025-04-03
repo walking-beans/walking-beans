@@ -107,11 +107,20 @@ const AdminAlarmList = () => {
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
                             <p>{value.alarmContent}</p>
                             <p>
-                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')}<br/>
-                                {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
+                                {value?.alarmCreateDate
+                                    ? new Date(value.alarmCreateDate).toLocaleString('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        weekday: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    })
+                                        .replace(/\. /g, '-')  // YYYY.MM.DD → YYYY-MM-DD
+                                        .replace(/\./, '')     // 마지막에 남은 점 제거
+                                        .replace(/-(?=\([가-힣]{1}\))/, ' ')  // DD- (날짜 뒤의 `-`만 제거)
+                                    : '날짜 정보 없음'}
                             </p>
                         </div>
                     </div>
