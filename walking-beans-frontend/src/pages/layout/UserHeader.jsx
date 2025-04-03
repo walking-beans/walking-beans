@@ -54,7 +54,7 @@ const UserHeader = ({user}) => {
     }, [userId]);
 
     // 네비게이션 항목을 역할에 맞게 설정
-    const navItems = currentUser?.user_role === "user"
+    const navItems = currentUser?.user_role === "user" || currentUser?.user_role === "rider" || currentUser?.user_role === "admin"
         ? [
             { icon: person, text: "마이페이지", path: "/mypage" },
             { icon: receipt, text: "주문내역", path: "/order" },

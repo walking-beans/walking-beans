@@ -1,18 +1,30 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import apiOrdersStoresService from "../../service/apiOrdersStoresService";
 import deliveredIcon from "../../assert/images/rider/deliveredIcon.jpg"
 import check from "../../assert/images/rider/check.png"
 import "../../css/rider/RiderResult.css"
+import apiRiderService from "../../service/apiRiderService";
 
 const RiderResult = ({user}) => {
 
     const {orderId} = useParams();
     const [order, setOrder] = useState(null);
 
+    const navigate = useNavigate();
+
     // orderId 통해서 order 추가
     useEffect(() => {
         if (!orderId) return;
+
+        apiRiderService.checkingRiderIdOnDuty(orderId, user.user_id,
+            (result) => {
+                console.log(result);
+                if (result !== 1) {
+                    alert("접근 권한이 없습니다.");
+                    navigate("/rider");
+                }
+            })
 
         apiOrdersStoresService.getOrderByOrderId(orderId, setOrder);
     }, [orderId]);
