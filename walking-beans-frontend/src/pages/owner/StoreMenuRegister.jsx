@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import MenuInputTag from "../../components/owner/MenuInputTag";
 import blankImg from "../../images/menu/default-menu-img.png";
@@ -9,7 +9,7 @@ const StoreMenuRegister = () => {
     const navigate = useNavigate();
     const {storeId}= useParams();
     const [userId, setUserId] = useState();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({ // 초기화세팅
         menuName: "",
         menuPrice: 0,
         menuCategory: "",
@@ -28,7 +28,7 @@ const StoreMenuRegister = () => {
             setUserId(userData.user_id);
             console.log("storeId:", storeId, "userId:", userId); // 디버깅 로그 추가
         }
-    }, []);
+    }, [userId]);
 
 
     //로딩상태변경
@@ -153,7 +153,9 @@ const StoreMenuRegister = () => {
                 />
 
                 <button type={"submit"}>메뉴 저장하기</button>
+                <Link to={`/owner/${storeId}/menu`}>
                 <button type="button" >메뉴목록으로 돌아가기</button>
+                </Link>
             </form>
         </div>
     )
