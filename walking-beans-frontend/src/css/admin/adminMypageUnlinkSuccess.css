@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
 
 .unlink-success-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 24px 16px;
-    font-family: 'Noto Sans KR', sans-serif;
-    text-align: center;
-    min-height: 100vh;
+    background: #F4EDDF;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
 }
 
 /* 배경/글자색 - 역할별 */
@@ -22,36 +21,58 @@
     color: #1f3f66;
 }
 
-/* 메시지 박스 */
-.message-box {
-    background-color: white;
-    padding: 32px 24px;
-    margin: 40px auto 24px;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-}
-
 /* 버튼 공통 */
 .unlink-success-container button {
-    width: 100%;
-    max-width: 300px;
-    padding: 12px;
+    width: 411px;
+    height: 60px;
+    border-radius: 30px;
+    background: #5A3D21;
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    color: white;
+    font-size: 32px;
     font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration-line: none;
 }
 
 /* 역할별 버튼 색상 */
 .unlink-success-container.user button,
 .unlink-success-container.owner button {
-    background-color: #8d5d2c;
+    background-color: #5A3D21;
 }
 
 .unlink-success-container.rider button {
-    background-color: #3694dc;
+    background-color: #010C22;
+}
+
+.unlink-success-container.user .unlink-big-text,
+.unlink-success-container.owner .unlink-big-text {
+    color: #5A3D21;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.unlink-success-container.rider .unlink-big-text {
+    color: #010C22;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.unlink-success-container.user .unlink-text,
+.unlink-success-container.owner .unlink-text {
+    color: #5A3D21;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.unlink-success-container.rider .unlink-text {
+    color: #010C22;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
 }

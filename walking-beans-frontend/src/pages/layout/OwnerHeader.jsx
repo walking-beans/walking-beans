@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./UserHeader.css";
+import "./OwnerHeader.css";
 
 import bellIcon from "../../assert/svg/bell.svg";
 import chatBubble from "../../assert/svg/userNav/chat_bubble.svg";

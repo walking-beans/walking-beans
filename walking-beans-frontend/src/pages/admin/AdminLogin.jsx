@@ -9,6 +9,9 @@ import naverLoginButton from "../../images/naverLoginButton.png"
 const AdminLogin = () => {
     return (
         <div>
+            <AdminLoginNomal/>아이디 비밀번호 로그인
+            {/*<AdminLoginSocial/>/!*소셜 로그인*!/*/}
+
             <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
             {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
         </div>
@@ -64,19 +67,19 @@ const AdminLoginNomal = () => {
         if (role !== null) {
             switch (role) {
                 case "user":
-                    navigate("/");
+                    window.location.href = "/"; // 새로고침해서 맞는 헤더로 변경
                     break;
                 case "rider":
-                    navigate("/rider");
+                    window.location.href = "/rider";
                     break;
                 case "owner":
-                    navigate("/owner");
+                    window.location.href = "/owner";
                     break;
                 case "noRole":
-                    navigate("/updaterole");
+                    window.location.href = "/updaterole";
                     break;
                 default:
-                    navigate("/");
+                    window.location.href = "/";
                     break;
             }
         }
@@ -210,9 +213,15 @@ const AdminLoginSocial = () => {
     }, [role]); // role이 변경될 때마다 실행
 
     return (
-        <div>
-            <div className="login-container">
-                <h3>로그인</h3>
+        <div className="login-container">
+            <div className="login-box">
+                <div className="login-header">
+                    <div className="user-title-center">로그인</div>
+                    <div className="user-order-hr" alt="구분선"></div>
+                </div>
+
+                <div className="login-text">소셜 계정으로 로그인 하기</div>
+                <div className="login-text-mini">가입된 정보가 없을 경우 자동으로 가입됩니다</div>
                 <div className="social-login">
                     <button className="kakao-login">
                         <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
@@ -221,7 +230,6 @@ const AdminLoginSocial = () => {
                         <img src={require('../../images/naverLoginButton.png')} onClick={naverLogin}/>
                     </button>
                 </div>
-                <p>* 가입된 정보가 없을 경우 자동으로 가입됩니다! *</p>
             </div>
         </div>
     )
