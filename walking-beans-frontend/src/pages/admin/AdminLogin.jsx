@@ -64,19 +64,19 @@ const AdminLoginNomal = () => {
         if (role !== null) {
             switch (role) {
                 case "user":
-                    navigate("/");
+                    window.location.href = "/"; // 새로고침해서 맞는 헤더로 변경
                     break;
                 case "rider":
-                    navigate("/rider");
+                    window.location.href = "/rider";
                     break;
                 case "owner":
-                    navigate("/owner");
+                    window.location.href = "/owner";
                     break;
                 case "noRole":
-                    navigate("/updaterole");
+                    window.location.href = "/updaterole";
                     break;
                 default:
-                    navigate("/");
+                    window.location.href = "/";
                     break;
             }
         }

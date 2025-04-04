@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
 import "../admin/HeaderAlarm.css";
@@ -12,7 +12,7 @@ import riderAlarmIcon from "../../assert/svg/riderAlarm.svg";
 import axios from "axios";
 
 
-const HeaderAlarm = ({userId, bell, alarmRef, showDropdown, setShowDropdown}) => {
+const HeaderAlarm = ({userId, bell, showDropdown, setShowDropdown}) => {
     const [alarmMessages, setAlarmMessages] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
     // const [showDropdown, setShowDropdown] = useState(false); //토글
@@ -24,6 +24,7 @@ const HeaderAlarm = ({userId, bell, alarmRef, showDropdown, setShowDropdown}) =>
 
     const alarmIconToShow = bell ? riderAlarmIcon : alarmIcon;
     const bellIconToShow = bell ? riderBellIcon : bellIcon;
+    const alarmRef = useRef(null);
 
     useEffect(() => {
         console.log("🔌 WebSocket 연결 시도...");
@@ -171,6 +172,20 @@ const HeaderAlarm = ({userId, bell, alarmRef, showDropdown, setShowDropdown}) =>
 
     }
 
+    // 다른 곳 클릭했을 때 알림창 닫기
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (alarmRef.current && !alarmRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [alarmRef, setShowDropdown]);
+    
     return (
         <div className="notification-container" ref={alarmRef}>
             <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
@@ -178,7 +193,7 @@ const HeaderAlarm = ({userId, bell, alarmRef, showDropdown, setShowDropdown}) =>
                 {unreadCount > 0 && <span className={"AlarmBadge"}>{unreadCount}</span>}
             </div>
             {showDropdown && (
-                <div className={"AlarmDropdown"}>
+                <div ref={alarmRef} className={"AlarmDropdown"}>
                     {
                         notifications.length > 0 ? (
                             notifications.map((noti, index) => (
