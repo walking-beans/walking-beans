@@ -1,4 +1,3 @@
-/*
 .notification-container {
     position: relative;
     display: inline-block;
@@ -55,4 +54,23 @@
     color: white;
     border: none;
     cursor: pointer;
-}*/
+}
+
+.MarkAllAsReadBtn {
+    background-color: #AB7A44;
+    color: white;
+    font-weight: bold;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.MarkAllAsReadBtn:hover {
+    background-color: #5a3d21;
+}
+
+.MarkAllAsReadContainer {
+    text-align: center;
+}

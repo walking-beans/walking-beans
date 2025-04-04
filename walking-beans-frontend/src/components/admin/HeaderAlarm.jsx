@@ -1,11 +1,10 @@
 import {useEffect, useState} from "react";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
-//import "./HeaderAlarm.css";
+import "../admin/HeaderAlarm.css";
 import {Link, useNavigate} from "react-router-dom";
 import bellIcon from "../../assert/svg/bell.svg";
 import alarmIcon from "../../assert/svg/alarm.svg";
-import "../../pages/layout/UserHeader.css";
 
 //라이더용 벨 아이콘
 import riderBellIcon from "../../assert/svg/riderBell.svg";
@@ -51,10 +50,11 @@ const HeaderAlarm = ({userId, bell}) => {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
                                 url: receivedData.alarmUrl,
+                                alarmId:receivedData.alarmId,
                             },
                             ...prevNotifications,
                         ])
-
+                        console.log(receivedData.alarmId);
                         setUnreadCount((prevCount) => prevCount +1);
                     }
                 })
@@ -70,6 +70,7 @@ const HeaderAlarm = ({userId, bell}) => {
                                 message: receivedData.alarmContent,
                                 type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
                                 url: receivedData.alarmUrl,
+                                alarmId:receivedData.alarmId,
                             },
                             ...prevNotifications,
                         ]);
@@ -92,37 +93,83 @@ const HeaderAlarm = ({userId, bell}) => {
             stompClient.deactivate();
         };
     }, [userId]);
-/*
+
+    // 미확인 알림 가져오기
     useEffect(() => {
         if (userId) {
             axios
                 .get(`http://localhost:7070/api/noreadalarms/${userId}`)
                 .then((res) => {
-                    setAlarms(res.data);
+                    // 알림 데이터를 이전 알림 목록에 추가
+                    setNotifications((prevNotifications) => [
+                        ...res.data.map((receivedData) => ({
+                            message: receivedData.alarmContent,  // 알림 내용
+                            type: receivedData.alarmRole,       // 관리자 알림을 구분하는 타입
+                            url: receivedData.alarmUrl,         // 알림 URL
+                            alarmId:receivedData.alarmId,
+                        })),
+                        ...prevNotifications,  // 이전 알림 목록
+                    ]);
+
                     // 읽지 않은 알람의 개수 카운트
                     const countFalseStatus = res.data.filter(
                         (alarm) => alarm.alarmStatus === false
                     ).length;
-                    setCount(countFalseStatus);
+                    setUnreadCount(countFalseStatus);
+                    console.log("안읽은 알림: ", JSON.stringify(res.data, null, 2));
                 })
                 .catch((err) => {
                     console.log("읽지 않은 알람리스트 불러오기 실패" + err);
                 });
         }
-    }, [userId]);*/
+    }, []);
 
 
     //알람 토글
     const toggleAlarm = () => {
         if (showDropdown) { //true
-            setNotifications([]);// 알림 리스트를 초기화
+            //setNotifications([]);// 알림 리스트를 초기화
         } else {
             // 알림을 열 때는 기존 알림 리스트를 비우지 않음
-            setUnreadCount(0);  // 알림 아이콘 배지 초기화
+            //setUnreadCount(0);  // 알림 아이콘 배지 초기화
         }
 
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
     };
+
+    //모든 알람 읽음 처리
+    const markAllReadAlarms = () => {
+        axios
+            .put("http://localhost:7070/api/allreadalarms/"+userId)
+            .then(
+                (res) => {
+                    setNotifications([]);
+                    setUnreadCount(0);
+                }
+            )
+            .catch(
+                (err)=>{
+                    console.log("err" + err);
+                }
+            )
+    }
+
+    // 읽음 표시
+    const changeAlarmStatus = (alarmId) => {
+        axios
+            .put("http://localhost:7070/api/read/"+alarmId)
+            .then(
+                (res) => {
+                    console.log("상태 변경 완료");
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("err",err);
+                }
+            )
+
+    }
 
     return (
         <div className="notification-container">
@@ -139,9 +186,24 @@ const HeaderAlarm = ({userId, bell}) => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
                                     setShowDropdown(false); // 알림목록 닫기
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
+                                    changeAlarmStatus(noti.alarmId);
+
                                 } else if (noti.type === 2) {
                                     navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
+                                    changeAlarmStatus(noti.alarmId);
                                 }
                             }
                             }>
@@ -154,6 +216,17 @@ const HeaderAlarm = ({userId, bell}) => {
                             <Link to="/alarmlist" className={"AlarmLink"} onClick={() => setShowDropdown(false)}>
                                 목록 보기
                             </Link>
+                        </div>
+                    )}
+
+                    {/*모든 알림 확인*/}
+
+                    {notifications.length > 0 && (
+                        <div className="MarkAllAsReadContainer" onClick={() => {
+                            markAllReadAlarms();
+                            setShowDropdown(false); // 알림목록 닫기
+                        }}>
+                            <button className="MarkAllAsReadBtn">모든 알림 확인 완료</button>
                         </div>
                     )}
                 </div>

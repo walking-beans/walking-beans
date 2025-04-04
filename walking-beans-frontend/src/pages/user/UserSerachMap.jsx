@@ -1,14 +1,15 @@
 import React, {useEffect, useRef, useState} from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "../../css/User.css";
 import userCurrentLocation from "../../assert/images/rider/userCurrentLocation.svg";
 import axios from "axios";
+import oneStar from "../../assert/svg/starNav/oneStar.svg";
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 
 const UserSearchMap = () => {
     const location = useLocation();
-    const { lat, lng, searchResults = [] } = location.state || {};
+    const {lat, lng, searchResults = []} = location.state || {};
     const mapRef = useRef(null);
     const [stores, setStores] = useState([]);
     const [selectedStore, setSelectedStore] = useState(null);
@@ -24,7 +25,6 @@ const UserSearchMap = () => {
             sessionStorage.setItem("userLng", lng);
         }
     }, [lat, lng]);
-
 
 
     //  매장의 리뷰를 가져와 업데이트하는 함수
@@ -47,7 +47,7 @@ const UserSearchMap = () => {
     const fetchNearbyStores = (lat, lng) => {
         axios.get(`http://localhost:7070/api/store/nearby?lat=${lat}&lng=${lng}`)
             .then((res) => {
-                console.log("📌 주변 매장 데이터:", res.data);
+                console.log(" 주변 매장 데이터:", res.data);
 
                 let updatedStores = [];
                 let remainingStores = res.data.length;
@@ -101,7 +101,7 @@ const UserSearchMap = () => {
                 const userMarkerImage = new window.kakao.maps.MarkerImage(
                     userCurrentLocation,
                     new window.kakao.maps.Size(40, 42),
-                    { offset: new window.kakao.maps.Point(20, 42) }
+                    {offset: new window.kakao.maps.Point(20, 42)}
                 );
 
                 new window.kakao.maps.Marker({
@@ -122,35 +122,33 @@ const UserSearchMap = () => {
     }, [lat, lng]); // `mapRef.current` 제거
 
 
-
     // 기존 마커를 지도에서 삭제하는 함수
     const clearMarkers = () => {
         markersRef.current.forEach(marker => marker.setMap(null));
         markersRef.current = [];
     };
 
+    // 검색 결과로 나온 매장의 경우 stores에서 해당 매장을 찾아 상세 정보를 가져옴
     const handleMarkerClick = (store) => {
-        fetchReviews(store.storeId, (rating, reviewCount) => {
+        const fullStoreData = stores.find(s => s.storeId === store.storeId) || store;
 
-            //  별점이 제대로 업데이트된 후 setSelectedStore 실행
-            setSelectedStore(prevStore => ({
-                ...prevStore,
-                ...store,
-                storeRating: rating, // 최신 리뷰 반영
-                storeReviewCount: reviewCount,
-            }));
+        fetchReviews(store.storeId, (rating, reviewCount) => {
+            setSelectedStore({
+                ...fullStoreData,  // 기존 stores에서 찾은 데이터 우선 사용
+                storeRating: rating,  // 최신 별점 반영
+                storeReviewCount: reviewCount,  //  최신 리뷰 개수 반영
+            });
         });
 
         mapRef.current.panTo(new window.kakao.maps.LatLng(store.storeLatitude, store.storeLongitude));
     };
-
     useEffect(() => {
         if (!mapRef.current) return;
 
         clearMarkers(); // 기존 마커 삭제
 
         const displayStores = searchResults.length > 0 ? searchResults : stores;
-        console.log("🗺️ 지도에 표시할 매장 목록:", displayStores);
+        console.log(" 지도에 표시할 매장 목록:", displayStores);
 
         displayStores.forEach((store) => {
             const marker = new window.kakao.maps.Marker({
@@ -191,14 +189,47 @@ const UserSearchMap = () => {
 
     return (
         <div className="user-search-map-container">
-            <div id="search-map" style={{ width: "100%", height: "700px" }}></div>
+            <div id="search-map" className="search-map"></div>
             {selectedStore && (
                 <div className="store-info" onClick={handleStore}> {/* 여기 추가됨 */}
-                    <div className="user-order-hr"></div>
-                    <h3>{selectedStore.storeName}</h3>
-                    <p>평점: ★ {selectedStore.storeRating} ({selectedStore.storeReviewCount} 리뷰)</p>
-                    <p>{selectedStore.storeStatus} : {selectedStore.storeOperationHours}</p>
-                    <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장 이미지" />
+                    <div className="store-modal">
+                        <div className="user-order-hr" onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedStore(null);
+                        }}></div>
+                        <div className="info-grid">
+                            <div>
+                                <img className="store-picture" src={selectedStore.storePictureUrl} alt="매장 이미지"/>
+                            </div>
+                            <div>
+                                <div className="status-btn-mini">{selectedStore.storeStatus} </div>
+                                <div className="info-text-big">{selectedStore.storeName}</div>
+                                <div className="info-text-bold">{selectedStore.storeDescription}</div>
+                                <img src={oneStar}/>
+                                <span
+                                    className="info-text"> {selectedStore.storeRating} ({selectedStore.storeReviewCount})</span>
+                                <div>
+                                    <span className="info-text-bold">영업시간</span>
+                                    <span className="info-text"> {selectedStore.storeOperationHours}</span>
+                                </div>
+
+                                <div>
+                                    <span className="info-text-bold">주소</span>
+                                    <span className="info-text"> {selectedStore.storeAddress}</span>
+                                </div>
+
+                                <div>
+                                    <span className="info-text-bold">전화번호</span>
+                                    <span className="info-text">
+                                      {selectedStore.storePhone
+                                          ? selectedStore.storePhone.replace(/^(\d{2})(\d{4})(\d{4})$/, " $1-$2-$3")
+                                          : ""}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

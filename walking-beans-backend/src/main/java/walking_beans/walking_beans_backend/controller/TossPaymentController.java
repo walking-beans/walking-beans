@@ -111,6 +111,7 @@ public class TossPaymentController {
 
                 // 주문 생성
                 Long orderId = orderService.createOrder(requestData);
+                long userId = Long.parseLong(requestData.get("userId").toString());
                 response.put("orderId", orderId);
                 log.info("주문 생성 완료! 주문 ID: {}", orderId);
 
@@ -121,7 +122,7 @@ public class TossPaymentController {
                 tossPaymentService.insertPayments(payment);
 
                 // ✅ 주문 생성 후 채팅방 자동 생성 추가
-                createChattingRoomForOrder(orderId);
+                chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);
 
             } else {
                 boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
@@ -130,13 +131,14 @@ public class TossPaymentController {
 
                 if (response.get("error") == null) {
                     Long orderId = orderService.createOrder(requestData);
+                    Long userId = Long.valueOf(requestData.get("userId").toString());
                     response.put("orderId", orderId);
 
 
                     log.info("주문 생성 완료! 주문 ID: {}", orderId);
 
                     // ✅ 주문 생성 후 채팅방 자동 생성 추가
-                    createChattingRoomForOrder(orderId);
+                    chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);
                 }
             }
 

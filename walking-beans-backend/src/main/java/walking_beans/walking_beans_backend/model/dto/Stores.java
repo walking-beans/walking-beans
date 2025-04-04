@@ -24,7 +24,7 @@ public class Stores {
 
     private long storeMainMenu;
 
-    private long storeBusinessNumber;
+    private int storeBusinessNumber;
 
     private String storePhone;
 
@@ -38,13 +38,13 @@ public class Stores {
 
     private int storeReviewCount;
 
-    private String storeRating;
+    private double storeRating;
 
-    private short storeMinDeliveryTime;
+    private int  storeMinDeliveryTime;
 
-    private short storeMaxDeliveryTime;
+    private int  storeMaxDeliveryTime;
 
-    private String storeDeliveryTip;
+    private int  storeDeliveryTip;
 
     private String storeDeliveryAddress;
 

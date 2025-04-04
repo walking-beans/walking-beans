@@ -55,36 +55,88 @@ const AdminAlarmList = () => {
         }
     }
 
+    const AllReadAlrms = () => {
+        axios
+            .put("http://localhost:7070/api/allreadalarms/" + userId)
+            .then(
+                () => { // 읽음 처리후 다시 리스트 불러오기
+                    axios
+                        .get(`http://localhost:7070/api/chat/${userId}`)
+                        .then((res) => {
+                            setAlarmList(res.data); // 새로 고침된 알림 목록을 업데이트
+                        })
+                        .catch((err) => {
+                            console.log("알림 목록 불러오기 오류:", err);
+                        });
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("err" + err);
+                }
+            )
+    }
+
+    const setAlreadyRead = (alarmId) => {
+        axios
+            .put("http://localhost:7070/api/read/"+alarmId)
+            .then(
+                (res) => {
+                    console.log("읽음처리 완료: "+res);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("에러: " + err);
+                }
+            )
+    }
+
     return (
         <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (
                 <div className="AlarmDeleteContainer">
+                    <button className="AllReadBtn" onClick={AllReadAlrms}>
+                        모두 읽음
+                    </button>
+
                     <button type={"submit"} onClick={deleteAllAlrams} className="AlarmDeleteBtn">
-                        알림 모두 지우기
+                        전체 삭제
                     </button>
                 </div>
             )}
 
-            {/* 알림 리스트가 없을 때 */}
+            {/* 알림 리스트가 없을 경우 / 알림 리스트가 있을 경우*/}
             {AlarmList.length === 0 ? (
                 <h3 className="NoAlarmList">알람이 없습니다</h3>
             ) : (
                 AlarmList.map((value, index) => (
                     <div key={index}>
-                        <div className="AlarmList" onClick={() => {
+                        <div
+                            className={`${value.alarmStatus ? 'AlarmListRead' : 'AlarmListUnread'}`}
+                            onClick={() => {
                             const targetUrl = value.alarmUrl;
-                            console.log(targetUrl);
+                                setAlreadyRead(value.alarmId);
                             navigate(targetUrl);
                         }}>
                             <h3>{value.alarmRole === 1
                                 ? "🔔" : value.alarmRole === 2 ? "💬" : ""}</h3>
                             <p>{value.alarmContent}</p>
                             <p>
-                                {new Date(value.alarmCreateDate).toLocaleDateString('ko-KR').replace(/\./g, '')}<br/>
-                                {new Date(value.alarmCreateDate).toLocaleTimeString('en-GB', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
+                                {value?.alarmCreateDate
+                                    ? new Date(value.alarmCreateDate).toLocaleString('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        weekday: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    })
+                                        .replace(/\. /g, '-')  // YYYY.MM.DD → YYYY-MM-DD
+                                        .replace(/\./, '')     // 마지막에 남은 점 제거
+                                        .replace(/-(?=\([가-힣]{1}\))/, ' ')  // DD- (날짜 뒤의 `-`만 제거)
+                                    : '날짜 정보 없음'}
                             </p>
                         </div>
                     </div>

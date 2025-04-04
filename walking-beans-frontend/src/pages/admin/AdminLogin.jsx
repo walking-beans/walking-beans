@@ -9,8 +9,8 @@ import naverLoginButton from "../../images/naverLoginButton.png"
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginNomal/>*/}{/*아이디 비밀번호 로그인*/}
+            <AdminLoginSocial/>{/*소셜 로그인*/}
         </div>
     )
 
@@ -33,6 +33,7 @@ const AdminLoginNomal = () => {
         apiUserService.login(userEmail, userPassword, (response => {
             if (response === "success") { // 로그인 결과에 따른 값
                 setLoginresult("success");
+                window.dispatchEvent(new Event("userChanged"));
             } else {
                 setLoginresult("fail");
             }
@@ -153,6 +154,7 @@ const AdminLoginSocial = () => {
                 if (status === "success") {
                     // 로그인 성공 후 로컬 스토리지에 저장된 사용자 정보 출력
                     const user = JSON.parse(localStorage.getItem("user"));
+                    window.dispatchEvent(new Event("userChanged"));
                     console.log("로그인 성공! 로컬 스토리지의 사용자 정보: ", user);
 
                     setRole(user.user_role);

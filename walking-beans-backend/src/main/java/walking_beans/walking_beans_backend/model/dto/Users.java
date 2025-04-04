@@ -30,4 +30,6 @@ public class Users {
     private Date userBirthday;
 
     private String userPictureUrl;
+
+    private Date userDate;
 }

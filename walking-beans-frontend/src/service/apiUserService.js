@@ -13,6 +13,13 @@ const apiUserService = {
                 .then(
                     (res) => {
                         if (res.data.status === "success") {
+                            const currentDate = new Date(); // 현재 날짜
+                            const userDate = new Date(res.data.user.user_date); // 문자열을 Date 객체로 변환
+                            if (userDate > currentDate){ // 현재 날짜와 비교
+                                navigate("/loginrequired"); //로그인 거부 페이지로 이동
+                                return;
+                            }
+
                             localStorage.setItem("user", JSON.stringify(res.data.user));
                             callback("success");
                         } else {

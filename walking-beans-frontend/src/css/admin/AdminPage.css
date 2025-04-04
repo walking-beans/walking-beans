@@ -1,0 +1,42 @@
+.user-ordering-container {
+    text-align: center;
+}
+
+.user-ordering-container .user-sequence-from-select {
+    background: #AB7A44;
+    border-radius: 30px;
+    width: 135px;
+    height: 60px;
+    color: #fff;
+    font-size: 25px;
+    font-weight: bold;
+    border: none;
+    margin-top: 5px;
+}
+
+.user-order-menu-container .user-order-hr {
+    border: none;
+    border-top: 2px #5A3D21 solid;
+    margin: 30px 0;
+}
+
+.user-order-menu-container .user-title-center {
+    font-size: 32px;
+    font-weight: bold;
+    color: #5A3D21;
+    text-align: center;
+    letter-spacing: -1.9px;
+}
+.insert-address {
+    flex: 1;
+    height: 60px;
+    font-size: 22px;
+    color: #5A3D21;
+    border: none;
+    outline: none;
+    /*background-color: transparent;*/
+    padding-left: 50px;
+    padding-right: 15px;
+    /*padding: 15px;*/
+    margin: 10px;
+}

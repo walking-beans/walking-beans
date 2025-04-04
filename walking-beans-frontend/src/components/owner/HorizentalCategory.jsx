@@ -1,4 +1,4 @@
-import styles from "./HorizentalCategory.modul.css";
+
 import {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 
@@ -77,11 +77,6 @@ const HorizentalCategory = ({gettingValue}) => {
 
 
  */
-
-
-
-
-
 
 
     return (

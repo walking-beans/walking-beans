@@ -65,12 +65,17 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private  AlarmMapper alarmMapper;
+    @Autowired
+    private WebSocketAlertHandler webSocketAlertHandler;
 
-    // 알림 저장 (WebSocket으로 주문이 오면 이 함수 실행)
+    // 알림 저장
     @Override
     public void sendNotification(Alarms alarm) {
         alarmMapper.insertAlarm(alarm);
+
+        alarm.setAlarmId(alarm.getAlarmId());
         log.info("알림 저장 완료" + alarm);
+        webSocketAlertHandler.sendAlert(alarm);
     }
 
     // 읽지 않은 알람 가져오기
@@ -84,6 +89,11 @@ public class AlarmServiceImpl implements AlarmService {
     public void markNotificationAsRead(Long alarmId) {
         alarmMapper.markNotificationAsRead(alarmId);
         log.info("알림 읽음 처리 완료 - 알림 ID: {}", alarmId);
+    }
+
+    @Override
+    public void markAllNotificationsAsRead (long userId) {
+        alarmMapper.markAllNotificationsAsRead(userId);
     }
 
     // 채팅 유저들 정보 가져오기
