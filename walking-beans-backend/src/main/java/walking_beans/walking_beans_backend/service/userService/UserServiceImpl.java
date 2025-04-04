@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     // 보낸 이메일 & 인증코드 저장하는 메서드
     public void saveEmailCode(String email, String code) {
         System.out.println("=== Service - Save Email Code ===");
-        verificationCodes.put(email.toLowerCase(), code);
+        verificationCodes.put(email.trim().toLowerCase(), code);
         System.out.println("Save Email Code: " + email.toLowerCase()+ " ->" + code);
         //보낸 이메일과 인증번호를 저장
         // 이메일은 소문자로 저장
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 
     // 일치여부 확인
     public boolean verifyCodeWithVo(Vertification vertification) {
-        String email = vertification.getEmail().toLowerCase();
+        String email = vertification.getEmail().trim().toLowerCase();
         System.out.println("=== Service - Verify Code With VO ===");
         System.out.println("email: " + email);
 
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
         String saveCode = verificationCodes.get(email);
         System.out.println("saveCode: " + saveCode);
 
-        return saveCode.equals(vertification.getCode());
+        return saveCode != null && saveCode.equals(getCode);
     }
 
 

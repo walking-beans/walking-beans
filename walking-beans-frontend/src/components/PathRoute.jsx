@@ -267,6 +267,7 @@ function PathRoute() {
                             </ProtectedRoute>
                         }/>
                     </Routes>
+
                 </div>
                 {user?.user_role !== "rider" && <Footer/>}
             </BrowserRouter>
