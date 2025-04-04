@@ -34,6 +34,13 @@
         VALUES (#{userRole}, #{userEmail}, #{userPassword}, #{userName}, #{userPhone}, #{userDate})
     </insert>
 
+    <!-- 유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)-->
+    <select id="getUserInfoByIdForAlarms">
+        SELECT user_role, user_name, user_date
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
     <!-- 유저 Date 업데이트 -->
     <update id="changeUserDate">
         UPDATE users

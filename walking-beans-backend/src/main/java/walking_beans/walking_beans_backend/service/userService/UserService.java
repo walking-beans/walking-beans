@@ -18,6 +18,9 @@ public interface UserService {
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    Users getUserInfoByIdForAlarms(long userId);
+
     // 유저 날짜 변경
     void changeUserDate(String userEmail, LocalDate userDate);
 

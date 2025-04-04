@@ -82,6 +82,12 @@ public class UserAPIController {
         userService.updateUserRole(userEmail, userRole);
     }
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    @GetMapping("/getuserdata/{userId}")
+    public Users getUserData(@PathVariable("userId") long userId) {
+        return userService.getUserInfoByIdForAlarms(userId);
+    }
+
     // 유저 Date 업데이트
     @PutMapping("/updateuserdate")
     public void updateUserDate(@RequestParam("userEmail") String userEmail,

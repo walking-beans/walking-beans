@@ -27,6 +27,9 @@ public interface UserMapper {
     // 유저 날짜 변경
     void changeUserDate(String userEmail, LocalDate userDate);
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    Users getUserInfoByIdForAlarms(long userId);
+
     //유저 롤 업데이트
     void updateUserRole(String userEmail, byte userRole);
 
