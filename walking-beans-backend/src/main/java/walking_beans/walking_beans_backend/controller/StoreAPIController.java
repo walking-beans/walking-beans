@@ -3,10 +3,12 @@ package walking_beans.walking_beans_backend.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderMainStoreInfo;
 import walking_beans.walking_beans_backend.service.FileStorageService;
@@ -78,7 +80,7 @@ public class StoreAPIController {
      *  유저 정보 추가후 재검증 필요 외래키 부족
      * @param stores
      */
-    @PostMapping(consumes = "multipart/form-data")
+    @PostMapping
     public void addStore(
             @RequestPart("stores") Stores stores,
             @RequestPart(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
@@ -101,23 +103,102 @@ public class StoreAPIController {
                 }
     }
 
+//                                         @PathVariable("storeId") long storeId,
+//                                         @RequestParam("userId") long userId,
+//                                         @RequestParam("storeName") String storeName,
+//                                         @RequestParam("storeDescription") String storeDescription,
+//                                         @RequestParam("storeMainMenu") long storeMainMenu,
+//                                         @RequestParam("storeBusinessNumber") int storeBusinessNumber,
+//                                         @RequestParam("storePhone") String storePhone,
+//                                         @RequestParam("storeOperationHours") String storeOperationHours,
+//                                         @RequestParam("storeClosedDates") String storeClosedDates,
+//                                         @RequestParam("storeReviewCount") int storeReviewCount,
+//                                         @RequestParam("storeRating") double storeRating,
+//                                         @RequestParam("storeMinDeliveryTime") int storeMinDeliveryTime,
+//                                         @RequestParam("storeMaxDeliveryTime") int storeMaxDeliveryTime,
+//                                         @RequestParam("storeDeliveryTip") int storeDeliveryTip,
+//                                         @RequestParam("storeDeliveryAddress") String storeDeliveryAddress,
+//                                         @RequestParam("storeAddress") String storeAddress,
+//                                         @RequestParam("storeLatitude") double storeLatitude,
+//                                         @RequestParam("storeLongitude") double storeLongitude,
+//                                         @RequestParam(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
+//    {
+//
+//                storeId,
+//                userId,
+//                storeName,
+//                storeDescription,
+//                storeMainMenu,
+//                storeBusinessNumber,
+//                storePhone,
+//                storeOperationHours,
+//                storeClosedDates,
+//                storeReviewCount,
+//                storeRating,
+//                storeMinDeliveryTime,
+//                storeMaxDeliveryTime,
+//                storeDeliveryTip,
+//                storeDeliveryAddress,
+//                storeAddress,
+//                storeLatitude,
+//                storeLongitude
     /**매장정보 수정하기
      *
      * @param storeId
      * @return
      */
-    @PutMapping("/update/{storeId}")
-    public void updateStore(@PathVariable long storeId,
-                            @ModelAttribute Stores stores,
-                            @RequestParam(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
-    {
-        try { // MultipartFile, ModelAttribur 에러 가능성이 높다고 경고하여 추가
-            stores.setStoreId(storeId);
-            storeService.updateStore(stores);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+    @PatchMapping("/update/{storeId}")
+    @OwnershipCheck
+    public ResponseEntity<?> updateStore(
+            HttpSession session,
+            @PathVariable("storeId") long storeId,
+             @RequestParam("userId") long userId,
+             @RequestParam("storeName") String storeName,
+             @RequestParam("storeDescription") String storeDescription,
+             @RequestParam("storeMainMenu") long storeMainMenu,
+             @RequestParam("storeBusinessNumber") int storeBusinessNumber,
+             @RequestParam("storePhone") String storePhone,
+             @RequestParam("storeOperationHours") String storeOperationHours,
+             @RequestParam("storeClosedDates") String storeClosedDates,
+            // @RequestParam("storeReviewCount") int storeReviewCount,
+            // @RequestParam("storeRating") double storeRating,
+             @RequestParam("storeMinDeliveryTime") int storeMinDeliveryTime,
+             @RequestParam("storeMaxDeliveryTime") int storeMaxDeliveryTime,
+             @RequestParam("storeDeliveryTip") int storeDeliveryTip,
+             @RequestParam("storeDeliveryAddress") String storeDeliveryAddress,
+             @RequestParam("storeAddress") String storeAddress,
+            @RequestParam("storeLatitude") double storeLatitude,
+            @RequestParam("storeLongitude") double storeLongitude,
+            @RequestPart(value = "storePictureUrl", required = false) MultipartFile storePictureUrl){
+
+        // DTO 생성
+        Stores store = new Stores();
+        store.setStoreId(storeId);
+        store.setUserId(userId);
+        store.setStoreName(storeName);
+        store.setStoreDescription(storeDescription);
+        store.setStoreMainMenu(storeMainMenu);
+        store.setStoreBusinessNumber(storeBusinessNumber);
+        store.setStorePhone(storePhone);
+        store.setStoreOperationHours(storeOperationHours);
+        store.setStoreClosedDates(storeClosedDates);
+       // store.setStoreReviewCount(storeReviewCount);
+       // store.setStoreRating(storeRating);
+        store.setStoreMinDeliveryTime(storeMinDeliveryTime);
+        store.setStoreMaxDeliveryTime(storeMaxDeliveryTime);
+        store.setStoreDeliveryTip(storeDeliveryTip);
+        store.setStoreDeliveryAddress(storeDeliveryAddress);
+        store.setStoreAddress(storeAddress);
+        store.setStoreLatitude(storeLatitude);
+        store.setStoreLongitude(storeLongitude);
+
+        // 서비스 전달
+        storeService.updateStore(store, storePictureUrl);
+
+        // 이미지 디버깅
+        System.out.println("컨트롤러 - storeId: " + storeId);
+        System.out.println("컨트롤러 - storePictureUrl: " + (storePictureUrl != null ? storePictureUrl.getOriginalFilename() : "null"));
+        return ResponseEntity.ok().build(); // 성공시
     }
 
     /** 메인메뉴에서 매장 검색

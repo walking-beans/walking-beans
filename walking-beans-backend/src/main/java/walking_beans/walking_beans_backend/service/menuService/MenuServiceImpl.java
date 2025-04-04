@@ -52,6 +52,24 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.findMenuByStoreId(storeId);
     }
 
+    @Override
+    public void addMenu(String menuName, long storeId, long userId,int menuPrice ,String menuDescription, String menuCategory, MultipartFile menuPictureUrl) {
+        System.out.println("서비스 도달 요청 받음");
+        Menu menu = new Menu();
+        menu.setMenuName(menuName);
+        menu.setStoreId(storeId);
+        menu.setUserId(userId);
+        menu.setMenuDescription(menuDescription);
+        menu.setMenuCategory(menuCategory);
+        menu.setMenuPrice(menuPrice);
+        // 이미지 등록시 변경
+        menu.setMenuPictureUrl(menuPictureUrl != null && !menuPictureUrl.isEmpty()
+                ? fileStorageService.saveFile(menuPictureUrl) // 파일 저장 서비스
+                : menu.getMenuPictureUrl());
+        // null이면 기본값 유지(아무 작업 안 함)
+
+        menuMapper.addMenu(menu);
+    }
 
     @Override
     public void updateMenu(String menuName,
@@ -83,24 +101,6 @@ public class MenuServiceImpl implements MenuService {
         menuMapper.updateMenu(updatedMenu);
     }
 
-    @Override
-    public void addMenu(String menuName, long storeId, long userId,int menuPrice ,String menuDescription, String menuCategory, MultipartFile menuPictureUrl) {
-        System.out.println("서비스 도달 요청 받음");
-        Menu menu = new Menu();
-        menu.setMenuName(menuName);
-        menu.setStoreId(storeId);
-        menu.setUserId(userId);
-        menu.setMenuDescription(menuDescription);
-        menu.setMenuCategory(menuCategory);
-        menu.setMenuPrice(menuPrice);
-        // 이미지 등록시 변경
-        menu.setMenuPictureUrl(menuPictureUrl != null && !menuPictureUrl.isEmpty()
-                ? fileStorageService.saveFile(menuPictureUrl) // 파일 저장 서비스
-                : menu.getMenuPictureUrl());
-        // null이면 기본값 유지(아무 작업 안 함)
-
-        menuMapper.addMenu(menu);
-    }
 
     @Override
     public void softDeleteMenu(long menuId) {

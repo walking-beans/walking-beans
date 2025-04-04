@@ -11,6 +11,7 @@ const StoreRegister = () => {
     // 폼 초기상태 설정
     const {id}= useParams(); // 유저 아이디
     console.log("유저아이디 확인용: "+ id);
+    const [isEditing, setIsEditing] = useState();
     const [formData, setFormData] = useState({
         userId: id,
         storeName: "",
@@ -32,7 +33,6 @@ const StoreRegister = () => {
         storeLongitude: "00.000001",
         storePictureUrl: null, // 파일 초기화
     });
-
 
     // 텍스트 입력 핸들러
     const handleChange = (e) => {

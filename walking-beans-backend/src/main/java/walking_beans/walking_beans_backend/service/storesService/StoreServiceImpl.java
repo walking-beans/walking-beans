@@ -63,16 +63,32 @@ public class StoreServiceImpl implements StoreService {
 
     // 매장정보 수정하기
     @Override
-    public void updateStore(Stores stores
+    public void updateStore(Stores store, MultipartFile storePictureUrl
                             ) {
+        // 디버깅용
+        System.out.println("서비스 도달 요청 받음");
+        System.out.println("서비스 - storeId: " + store.getStoreId());
+        System.out.println("서비스 - storePictureUrl: " + (storePictureUrl != null ? storePictureUrl.getOriginalFilename() : "null"));
 
-        // 이미지 저장
+        Stores existingStore = storeMapper.findStoresByuserId(store.getUserId());
+        if (existingStore == null) {
+            throw new RuntimeException("가게를 찾을 수 없습니다.");
+        }
+        // 디버깅용
+        System.out.println("서비스 - 기존 storePictureUrl: " + existingStore.getStorePictureUrl());
 
+        String newPictureUrl = storePictureUrl != null && !storePictureUrl.isEmpty()
+                ? fileStorageService.saveFile(storePictureUrl)
+                : existingStore.getStorePictureUrl();
+        // 디버깅용
+        System.out.println("서비스 - 새 storePictureUrl: " + newPictureUrl);
+        store.setStorePictureUrl(newPictureUrl);
 
-
-
-        storeMapper.updateStore(stores);
+        storeMapper.updateStore(store);
+        // 디버깅용
+        System.out.println("서비스 - DB 업데이트 완료");
     }
+
     // 권한 검증용 id 확인
     @Override
     public long getStoreIdByUserId(long userId) {
