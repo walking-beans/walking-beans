@@ -17,15 +17,27 @@ function AdminMypageCertification() {
     const redirectTo = location.state?.redirectTo || null;
 
     function authentication() {
+        if (!email.trim()) {
+            setEmailError("이메일을 입력해 주세요.");
+            setMessage("");
+            return;
+        }
+
+        if (!email.includes("@")) {
+            setEmailError("이메일 형식을 맞춰 작성해 주세요. 예) beans@naver.com");
+            setMessage("");
+            return;
+        }
+
         apiUserService.sendEmailCode(
             email,
             (data) => {
-                setEmailError(data); // 이메일 관련 메시지
-                setCodeError(""); // 이전 인증 오류 메시지 초기화
+                setEmailError(data);
+                setMessage("");
             },
             () => {
                 setEmailError("이메일 전송에 실패했습니다. 다시 시도해 주세요.");
-                setCodeError("");
+                setMessage("");
             }
         );
     }
@@ -94,7 +106,9 @@ function AdminMypageCertification() {
                             />
                             <button className="click-btn" onClick={authentication}>인증번호 받기</button>
                         </div>
-                        {emailError && <div className="error-text">{emailError}</div>}
+                        {(message || emailError) && (
+                            <div className="error-text">{message || emailError}</div>
+                        )}
                     </div>
 
                     <div className="mt-4">

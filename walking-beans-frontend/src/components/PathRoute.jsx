@@ -121,11 +121,7 @@ function PathRoute() {
                         }/>
 
                                 <Route path="/mypage" element={<AdminMypage/>}/>
-
-                              
                                 <Route path="/certification" element={<AdminMypageCertification/>}/>
-
-                                  
                                 <Route path="/infoCorrection" element={<AdminMypageInfoCorrection/>}/>
                                 <Route path="/unlink" element={<AdminMypageUnlink/>}/>
                                 <Route path="/unlink/success" element={<AdminMypageUnlinkSuccess/>}/>

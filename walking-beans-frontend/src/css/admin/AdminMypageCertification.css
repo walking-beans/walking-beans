@@ -79,6 +79,15 @@
     background-color: #010C22;
 }
 
+.certification-container.user button:hover,
+.certification-container.owner button:hover {
+    background-color: #6A5036;
+}
+
+.certification-container.rider button:hover {
+    background-color: #041C4D;
+}
+
 /* 메시지 텍스트 */
 .certification-container .error-text {
     font-size: 15px;

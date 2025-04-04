@@ -43,10 +43,26 @@ function InfoCorrectionPage() {
             );
     }, [Update, userId, userPhone]);
 
-    const handleModifiedComplete = () => {
-        setUpdate(true)
-        navigate("/mypage");
-    }
+    const handleModifiedComplete = (e) => {
+        e.preventDefault(); // form 기본 제출 막기
+
+        const trimmedPhone = userPhone.trim();
+
+        if (!trimmedPhone) {
+            alert("전화번호를 입력해 주세요.");
+            return;
+        }
+
+        const phonePattern = /^\d{10,11}$/;
+        if (!phonePattern.test(trimmedPhone)) {
+            alert("하이픈(-)없이 10~11자리로 작성해 주세요.\n예) 01012345678");
+            return;
+        }
+
+        setUpdate(true);
+        navigate("/mypage", {replace: true});
+        window.location.reload();
+    };
 
     return (
         <div className={`info-correction-container  ${userRole}`}>
