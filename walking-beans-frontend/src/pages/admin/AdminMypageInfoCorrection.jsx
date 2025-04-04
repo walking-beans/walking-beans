@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom"; // 또는 다른 HTTP 클라이언트 라이브러리
@@ -28,7 +27,6 @@ function InfoCorrectionPage() {
         });
     }, [navigate]);
 
-
     useEffect(() => {
         if (Update && userId)
             apiUserService.infoCorrection(
@@ -45,27 +43,37 @@ function InfoCorrectionPage() {
             );
     }, [Update, userId, userPhone]);
 
-
-
+    const handleModifiedComplete = () => {
+        setUpdate(true)
+        navigate("/mypage");
+    }
 
     return (
         <div className={`info-correction-container  ${userRole}`}>
-            <form >
-                <div className="info-correction">
-                    <label htmlFor="userPhone">변경할 전화번호를 작성해 주세요.</label>
-                    <input
-                        id="userPhone"
-                        type="tel"
-                        value={userPhone}
-                        onChange={(e) => setUserPhone(e.target.value)}
-                        placeholder="010-1234-5678"
-                        pattern="[0-9]{3}[0-9]{3,4}[0-9]{4}"
-                        required
-                    />
+            <div className="user-order-background">
+                <div className="user-order-menu-container">
+                    <h2 className="mypage-title-center">회원정보 수정하기</h2>
+                    <div className="mypage-hr"></div>
+                    <form>
+                        <div className="info-correction">
+                            <label htmlFor="userPhone">전화번호</label>
+                            <input
+                                id="userPhone"
+                                type="tel"
+                                value={userPhone}
+                                onChange={(e) => setUserPhone(e.target.value)}
+                                placeholder="수정할 번호를 하이픈(-) 없이 입력해 주세요."
+                                pattern="\d{10,11}"
+                                required
+                            />
 
+                        </div>
+                        <div className="user-order-click-btn-one">
+                        <button type="submit" className="submit-btn" onClick={handleModifiedComplete}>수정하기</button>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit" className="submit-btn" onClick={() => setUpdate(true)}>수정하기</button>
-            </form>
+            </div>
         </div>
     );
 }
