@@ -121,7 +121,7 @@ const AdminMypage = () => {
 
                     <div className="user-order-hr"></div>
                     <div>
-                        <div className="mypage-item" onClick={() => navigate("/certification")}>
+                        <div className="mypage-item" onClick={() => navigate("/certification", { state: { redirectTo: "/infoCorrection" } })}>
                             <div className="mypage-item-text" style={{color: textColor}}>회원정보 수정</div>
                             <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn}
                                  alt="바로가기 버튼"/>
@@ -142,7 +142,7 @@ const AdminMypage = () => {
 
                     </div>
                     <div className="user-order-hr"></div>
-                    <div className="mypage-grid" onClick={() => navigate("/certification")}>
+                    <div className="mypage-grid" onClick={() => navigate("/certification", { state: { redirectTo: "/unlink" } })}>
                     <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
                         <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn} alt="회원 탈퇴 버튼"/>
                     </div>

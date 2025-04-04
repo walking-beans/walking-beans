@@ -85,17 +85,18 @@ public class UserAPIController {
 
     @PostMapping("/sendCode")
     public String sendCode(@RequestBody Vertification vr) {
-        String email = vr.getEmail();
+        String email = vr.getEmail().trim();
         String code = userService.randomCode();
         userService.saveEmailCode(email, code);
         userService.sendEmail(email, code);
-        return "이메일을 성공적으로 보냈습니다." + email;
+        return "이메일을 성공적으로 보냈습니다.";
     }
 
     @PostMapping("/checkCode")
     public String checkCode(@RequestBody Vertification vr) {
+        vr.setEmail(vr.getEmail().trim());
         boolean isValid = userService.verifyCodeWithVo(vr);
-        return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
+        return isValid ? "" : "인증번호가 일치하지 않습니다. 다시 시도해 주세요.";
     }
 
 
