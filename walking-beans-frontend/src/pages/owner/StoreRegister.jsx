@@ -1,17 +1,19 @@
-import BasicInfoForm from "../../components/owner/storeinfo/BasicInfoForm.jsx";
-import AdditionalInfoForm from "../../components/owner/storeinfo/AdditionalInfoForm";
+
 import LocationInfoForm from "../../components/owner/storeinfo/LocationInfoForm";
 import OperationInfoForm from '../../components/owner/storeinfo/OperationInfoForm';
 import DeliveryInfoForm from '../../components/owner/storeinfo/DeliveryInfoForm';
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import BasicInfoRegisterForm from "../../components/owner/storeinfo/BasicInfoRegisterForm";
+import basicImg from "../../images/menu/default-menu-img.png"
 
 const StoreRegister = () => {
     // 폼 초기상태 설정
     const {id}= useParams(); // 유저 아이디
     console.log("유저아이디 확인용: "+ id);
-    const [isEditing, setIsEditing] = useState();
+    const imgRef = useRef();
+    const [imgFile, setImgFile] = useState("");
     const [formData, setFormData] = useState({
         userId: id,
         storeName: "",
@@ -21,9 +23,7 @@ const StoreRegister = () => {
         storePhone: "",
         storeOperationHours: "09:00 - 18:00",
         storeClosedDates: "",
-        storeStatus: "운영 중", // 기본값
-        storeReviewCount: 0,   // 기본값
-        storeRating: 0.0,       // 기본값
+        storeStatus: "준비중",
         storeMinDeliveryTime: "",
         storeMaxDeliveryTime: "",
         storeDeliveryTip: "",
@@ -33,6 +33,18 @@ const StoreRegister = () => {
         storeLongitude: "00.000001",
         storePictureUrl: null, // 파일 초기화
     });
+
+    // 썸네일 보여주기 (미리보기용)
+    const setThumbnail = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file); // 파일을URL로 만들기
+            reader.onloadend = () => {
+                setImgFile(reader.result);
+            };
+        }
+    };
 
     // 텍스트 입력 핸들러
     const handleChange = (e) => {
@@ -67,8 +79,6 @@ const StoreRegister = () => {
         uploadData.append("storeOperationHours", formData.storeOperationHours);
         uploadData.append("storeClosedDates", formData.storeClosedDates);
         uploadData.append("storeStatus", formData.storeStatus);
-        uploadData.append("storeReviewCount", formData.storeReviewCount);
-        uploadData.append("storeRating", formData.storeRating);
         uploadData.append("storeMinDeliveryTime", formData.storeMinDeliveryTime);
         uploadData.append("storeMaxDeliveryTime", formData.storeMaxDeliveryTime);
         uploadData.append("storeDeliveryTip", formData.storeDeliveryTip);
@@ -95,8 +105,21 @@ const StoreRegister = () => {
     return(
         <div>
             <h2> 가게 신규 등록</h2>
-            <AdditionalInfoForm formData={formData} handleChange={handleChange} handleFileChange={handleFileChange}/>
-            <BasicInfoForm formData={formData} handleChange={handleChange}/>
+            <div>
+                <img style={{maxWidth: '300px', marginTop: '10px'}}
+                     src={imgFile ? imgFile : basicImg}
+                     alt={"메뉴 이미지"}
+                />
+                <label htmlFor={"storePictureUrl"} className={"form-label"}></label>
+                <input className={"form-control form-control-lg"}
+                       id={"storePictureUrl"}
+                       type={"file"}
+                       name={"storePictureUrl"}
+                       onChange={setThumbnail}
+                       ref={imgRef}
+                />
+            </div>
+            <BasicInfoRegisterForm formData={formData} handleChange={handleChange}/>
             <OperationInfoForm formData={formData} handleChange={handleChange}/>
             <DeliveryInfoForm formData={formData} handleChange={handleChange}/>
             <LocationInfoForm formData={formData} handleChange={handleChange}/>

@@ -103,45 +103,6 @@ public class StoreAPIController {
                 }
     }
 
-//                                         @PathVariable("storeId") long storeId,
-//                                         @RequestParam("userId") long userId,
-//                                         @RequestParam("storeName") String storeName,
-//                                         @RequestParam("storeDescription") String storeDescription,
-//                                         @RequestParam("storeMainMenu") long storeMainMenu,
-//                                         @RequestParam("storeBusinessNumber") int storeBusinessNumber,
-//                                         @RequestParam("storePhone") String storePhone,
-//                                         @RequestParam("storeOperationHours") String storeOperationHours,
-//                                         @RequestParam("storeClosedDates") String storeClosedDates,
-//                                         @RequestParam("storeReviewCount") int storeReviewCount,
-//                                         @RequestParam("storeRating") double storeRating,
-//                                         @RequestParam("storeMinDeliveryTime") int storeMinDeliveryTime,
-//                                         @RequestParam("storeMaxDeliveryTime") int storeMaxDeliveryTime,
-//                                         @RequestParam("storeDeliveryTip") int storeDeliveryTip,
-//                                         @RequestParam("storeDeliveryAddress") String storeDeliveryAddress,
-//                                         @RequestParam("storeAddress") String storeAddress,
-//                                         @RequestParam("storeLatitude") double storeLatitude,
-//                                         @RequestParam("storeLongitude") double storeLongitude,
-//                                         @RequestParam(value = "storePictureUrl", required = false) MultipartFile storePictureUrl)
-//    {
-//
-//                storeId,
-//                userId,
-//                storeName,
-//                storeDescription,
-//                storeMainMenu,
-//                storeBusinessNumber,
-//                storePhone,
-//                storeOperationHours,
-//                storeClosedDates,
-//                storeReviewCount,
-//                storeRating,
-//                storeMinDeliveryTime,
-//                storeMaxDeliveryTime,
-//                storeDeliveryTip,
-//                storeDeliveryAddress,
-//                storeAddress,
-//                storeLatitude,
-//                storeLongitude
     /**매장정보 수정하기
      *
      * @param storeId
@@ -160,8 +121,7 @@ public class StoreAPIController {
              @RequestParam("storePhone") String storePhone,
              @RequestParam("storeOperationHours") String storeOperationHours,
              @RequestParam("storeClosedDates") String storeClosedDates,
-            // @RequestParam("storeReviewCount") int storeReviewCount,
-            // @RequestParam("storeRating") double storeRating,
+             @RequestParam("storeStatus") String storeStatus,                                  //
              @RequestParam("storeMinDeliveryTime") int storeMinDeliveryTime,
              @RequestParam("storeMaxDeliveryTime") int storeMaxDeliveryTime,
              @RequestParam("storeDeliveryTip") int storeDeliveryTip,
@@ -182,8 +142,7 @@ public class StoreAPIController {
         store.setStorePhone(storePhone);
         store.setStoreOperationHours(storeOperationHours);
         store.setStoreClosedDates(storeClosedDates);
-       // store.setStoreReviewCount(storeReviewCount);
-       // store.setStoreRating(storeRating);
+        store.setStoreStatus(storeStatus);                           //
         store.setStoreMinDeliveryTime(storeMinDeliveryTime);
         store.setStoreMaxDeliveryTime(storeMaxDeliveryTime);
         store.setStoreDeliveryTip(storeDeliveryTip);

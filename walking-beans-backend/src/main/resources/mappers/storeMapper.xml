@@ -61,7 +61,7 @@ PRIMARY KEY (`store_id`),
 CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`)
      -->
     <insert id="addStore">
-        INSERT INTO Stores (store_id,
+        INSERT INTO Stores
                             user_id,
                             store_name,
                             store_description,
@@ -72,18 +72,15 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
                             store_operation_hours,
                             store_closed_dates,
                             store_status,
-                            store_review_count,
-                            store_rating,
                             store_min_delivery_time,
                             store_max_delivery_time,
                             store_delivery_tip,
                             store_delivery_address,
                             store_address,
                             store_latitude,
-                            store_longitude)
+                            store_longitude
         VALUES
-            (
-             #{storeId},
+
              #{userId},
              #{storeName},
              #{storeDescription},
@@ -94,8 +91,6 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
              #{storeOperationHours},
              #{storeClosedDates},
              #{storeStatus},
-             #{storeReviewCount},
-             #{storeRating},
              #{storeMinDeliveryTime},
              #{storeMaxDeliveryTime},
              #{storeDeliveryTip},
@@ -104,7 +99,6 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
              #{storeLatitude},
              #{storeLongitude}
 
-            )
     </insert>
 
     <!--매장정보 수정하기 -->
