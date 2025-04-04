@@ -93,8 +93,11 @@
 }
 
 .mypage-container .rider {
-    background-color: #FCFBF7;
     color: #010C22;
+}
+
+.mypage-container .user-order-background .rider {
+    background: #E2F2FA;
 }
 
 .mypage-container.rider .mypage-btn {
