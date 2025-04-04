@@ -49,6 +49,7 @@ function AdminMypageUnlink() {
             return;
         }
         setDelete(true);
+        navigate("/unlink/success");
     };
 
     return (
