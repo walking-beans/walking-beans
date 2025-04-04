@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef } from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserHeader.css";
@@ -32,6 +32,8 @@ const UserHeader = ({user}) => {
     const [userLat, setUserLat] = useState(null);
     const [userLng, setUserLng] = useState(null);
     const [orderNumber, setOrderNumber] = useState(null);
+    const navRef = useRef();
+    const alarmRef = useRef();
 
     // 유저 정보 로드
     useEffect(() => {
@@ -136,6 +138,24 @@ const UserHeader = ({user}) => {
         navigate(rolePaths[parsedUser.user_role] || "/");
     };
 
+    // 다른 곳 클릭했을 때 토글 창 닫기
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (alarmRef.current && !alarmRef.current.contains(e.target)) {
+                setShowDropdown(false);  // 알림창 닫기
+            }
+
+            if (navRef.current && !navRef.current.contains(e.target)) {
+                setNavOpen(false);  // 사이드 메뉴 닫기
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="user-header-wrapper">
             <header className="custom-header">
@@ -162,16 +182,22 @@ const UserHeader = ({user}) => {
                     <div className="user-menu-container">
                         {currentUser && (
                             <>
-                                <HeaderAlarm userId={currentUser.user_id} bell={false}/>
-                                <img src={searchIcon} className="header-icon" alt="search" onClick={handleOpenSearch}/>
-
+                                <HeaderAlarm userId={currentUser.user_id} bell={false}
+                                             alarmRef={alarmRef}
+                                             showDropdown={showDropdown}
+                                             setShowDropdown={setShowDropdown}
+                                />
+                                {currentUser.user_role !== "admin" && (
+                                    <img src={searchIcon} className="header-icon" alt="search"
+                                         onClick={handleOpenSearch}/>
+                                )}
                             </>
                         )}
                         <img src={toggleIcon} className="header-icon" alt="toggle" onClick={handleToggleNav}/>
                     </div>
                 </div>
 
-                <div className={`side-nav ${navOpen ? "open" : ""}`}>
+                <div className={`side-nav ${navOpen ? "open" : ""}`} ref={navRef}>
                     <div className="side-nav-content">
                         {/*
                         <button className="close-btn" onClick={handleToggleNav}>
@@ -179,7 +205,7 @@ const UserHeader = ({user}) => {
                         </button>
                         */}
                         <ul className="nav-menu list-unstyled">
-                            {navItems.map(({ icon, text, path }) => (
+                            {navItems.map(({icon, text, path}) => (
                                 <li key={text}>
                                     <a href={path}>
                                         <img src={icon} alt={text}/> {text}
