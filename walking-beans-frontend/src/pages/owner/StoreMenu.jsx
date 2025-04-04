@@ -29,7 +29,9 @@ const StoreMenu = () => {
     const handleDelete = async (menuId) => {
         if (window.confirm("이 메뉴를 삭제하시겠습니까?")) {
             try {
-                await axios.patch(`http://localhost:7070/api/menu/owner/${id}/menu/delete/${menuId}`, {}, { withCredentials: true });
+                await axios.patch(`http://localhost:7070/api/menu/owner/${id}/menu/delete/${menuId}`,
+                            {},
+                            { withCredentials: true });
                 setMenus(menus.filter((menu) => menu.menuId !== menuId));
             } catch (error) {
                 console.error("삭제 실패:", error);
@@ -52,8 +54,36 @@ const StoreMenu = () => {
         setSelectedCategory(category);
     };
 
+    /*
+    const fixedOrder =["커피","coffee"]
+    const uniqueCategories = [...new Set(menus.map((menu) => menu.menuCategory.trim()))];
+    const remainCategories = uniqueCategories
+        .filter((categories) => !fixedOrder.includes(categories)) // 고정 카테고리에 없는것만 추출
+        .sort();// 알파벳순 정렬
+    const categories = ["all", ...fixedOrder.filter((categories) => uniqueCategories.includes(categories)), ...remainCategories];
+*/
     // 동적 카테고리 생성 ("all" : 전체메뉴 보기)
-    const categories = ["all", ...new Set(menus.map((menu) => menu.menuCategory.trim()))];
+    // 카테고리 생성 순서
+    const customOrder = ["커피", "coffee"];
+    const uniqueCategories = [...new Set(menus.map((menu) => menu.menuCategory.trim()))];
+
+    const { ordered, extra } = uniqueCategories.reduce(
+        (acc, category) => {
+            if (customOrder.includes(category)) {
+                acc.ordered.push(category);
+            } else {
+                acc.extra.push(category);
+            }
+            return acc;
+        },
+        { ordered: [], extra: [] }
+    );
+
+    // 전체보기는 항상 앞으로 변경필요시 "all" 제거
+    const categories = ["all", ...customOrder.filter((category) => ordered.includes(category)), ...extra];
+
+    console.log(categories);
+
 
     // 필터링된 메뉴
     const filterMenus = menus.filter((menu) =>

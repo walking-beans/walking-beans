@@ -17,7 +17,7 @@ const StoreMyStore = () => {
     // 폼 초기상태 설정 유저정보를 보여줘야함.
     useEffect(() => {
         axios
-            .get(`http://localhost:7070/api/stores/${id}`)
+            .get(`http://localhost:7070/api/store/${id}`)
             .then((res) => {
                 setFormData(res.data); // 백엔드에서 받은 데이터로 초기화
                 console.log("가게 정보 조회 성공:", res.data);

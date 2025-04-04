@@ -68,6 +68,8 @@ public class MenuAPIController {
      * @param menuName
      * @param menuCategory
      * @param menuDescription
+     *
+     * @return 권한확인후 200,401,402,403 리턴
      */
     @PostMapping("/owner/{storeId}/menu/resister/{userId}")
     @OwnershipCheck
@@ -88,12 +90,15 @@ public class MenuAPIController {
 
     /**
      * 메뉴 수정하기
+     * @param session
+     * @param storeId
+     * @param menuId
+     * @param menuPrice
+     * @param menuDescription
+     * @param menuCategory
+     * @param menuPictureUrl
      *
-     * @param menuId * @param menuPrice
-     *               * @param menuDescription
-     *               * @param menuCategory
-     *               * @param menuPictureUrl
-     *               권한 검증을 위한 세션 포함
+     * @return 권한확인후 200,401,402,403 리턴
      */
     @PatchMapping("/owner/{storeId}/menu/{menuId}")
     @OwnershipCheck
