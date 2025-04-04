@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.userService;
 import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.model.vo.Vertification;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public interface UserService {
@@ -16,6 +17,9 @@ public interface UserService {
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
+
+    // 유저 날짜 변경
+    void changeUserDate(String userEmail, LocalDate userDate);
 
     //유저 롤 변경
     void updateUserRole(String email, byte userRole);
