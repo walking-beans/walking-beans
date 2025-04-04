@@ -1,6 +1,7 @@
 import React, {use, useState} from "react";
 import axios from "axios";
 import "../../css/admin/AdminPage.css"
+import "../../css/Order.css"
 
 const AdminPage = () => {
 
@@ -113,7 +114,7 @@ const AdminPage = () => {
                                placeholder="공지 내용을 입력하세요"
                                onChange={handleChange}
                                onKeyDown={handleKeyDown}
-                        /><br/>
+                        />
                         <button onClick={handleSubmit} className="user-sequence-from-select">보내기</button>
                     </div>
 
@@ -122,26 +123,27 @@ const AdminPage = () => {
                         <p className="user-title-center">아이디 정지</p>
                         <p>*정지 해제시 아이디만 입력하세요*</p>
                         <input className="insert-address"
-                            id="loginCut"
-                            value={loginCutEmail}
-                            placeholder="정지시킬 이메일을 입력하세요"
-                            onChange={handleEmailChange}
+                               id="loginCut"
+                               value={loginCutEmail}
+                               placeholder="이메일을 입력하세요"
+                               onChange={handleEmailChange}
                         /><br/>
                         <input className="insert-address"
-                            type="date"
-                            id="loginCutDate"
-                            value={loginCutDate}
-                            placeholder="정지 기간을 입력해주세요(~까지 정지 적용)"
-                            onChange={handleDateChange}
+                               type="date"
+                               id="loginCutDate"
+                               value={loginCutDate}
+                               placeholder="정지 기간을 입력해주세요(~까지 정지 적용)"
+                               onChange={handleDateChange}
                         />
                         <br/>
-                        <button onClick={handleSubmitEmailAndDate} className="user-sequence-from-select">
-                            정지 적용
-                        </button>
-                        <br/>
-                        <button onClick={cancelLoginCut} className="user-sequence-from-select">
-                            정지 해제
-                        </button>
+                        <div className="user-order-click-btn">
+                            <button onClick={handleSubmitEmailAndDate} className="user-mini-btn-b">
+                                정지 적용
+                            </button>
+                            <button onClick={cancelLoginCut} className="user-mini-btn-sb">
+                                정지 해제
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

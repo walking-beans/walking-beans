@@ -80,6 +80,13 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePw(userEmail, userPassword);
     }
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    @Override
+    public Users getUserInfoByIdForAlarms(long userId) {
+        return userMapper.getUserInfoByIdForAlarms(userId);
+    }
+
+    // 유저 날짜 수정
     @Override
     public void changeUserDate(String userEmail, LocalDate userDate) {
         userMapper.changeUserDate(userEmail, userDate);
