@@ -120,6 +120,10 @@ function PathRoute() {
                                 <AdminChangeRole/>
                             </ProtectedRoute>
                         }/>
+
+                        {/*로그인 제한 페이지*/}
+                        <Route path="/loginrequired" element={<AdminLoginRequiredPage/>}/>
+
                         <Route path="/mypage" element={<AdminMypage/>}/>
 
 
@@ -255,7 +259,6 @@ function PathRoute() {
                             </ProtectedRoute>
                         }/>
 
-                        <Route path="/loginrequired" element={<AdminLoginRequiredPage/>}/>
 
                         {/*알림 리스트 페이지*/}
                         <Route path="/alarmlist" element={

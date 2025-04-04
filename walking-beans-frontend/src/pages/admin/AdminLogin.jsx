@@ -11,6 +11,9 @@ const AdminLogin = () => {
         <div>
             <AdminLoginNomal/>아이디 비밀번호 로그인
             {/*<AdminLoginSocial/>/!*소셜 로그인*!/*/}
+
+            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
+            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
         </div>
     )
 
