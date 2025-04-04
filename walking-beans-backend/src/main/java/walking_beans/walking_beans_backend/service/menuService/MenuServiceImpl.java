@@ -103,6 +103,17 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public void softDeleteMenu(long menuId) {
+        menuMapper.softDeleteMenu(menuId);
+    }
+
+    @Override
+    public void softRecoveryMenu(long menuId) {
+        menuMapper.softRecoveryMenu(menuId);
+    }
+
+
+    @Override
     public void deleteMenu(long menuId) {
         menuMapper.deleteMenu(menuId);
     }

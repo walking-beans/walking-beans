@@ -7,7 +7,7 @@
     <select id="findAllMenu">
         SELECT *
         FROM MENU
-
+        WHERE is_deleted = 0
     </select>
 
     <!-- 메뉴 검색 , keyword -->
@@ -16,6 +16,7 @@
         FROM MENU
         WHERE  menu_name LIKE CONCAT('%',#{keyword},'%')
         or menu_description LIKE CONCAT('%',#{keyword},'%');
+        AND is_deleted = 0
     </select>
 
     <!-- ID 로 메뉴 찾기 , long menuId-->
@@ -23,7 +24,7 @@
         SELECT *
         FROM MENU
         WHERE menu_id = #{menuId}
-
+        AND is_deleted = 0
     </select>
 
     <!-- 가게에 속한 메뉴 찾기 -->
@@ -31,6 +32,7 @@
         SELECT *
         FROM MENU
         WHERE store_id = #{storeId}
+          AND is_deleted = 0
     </select>
 
     <!-- 메뉴 수정하기 -->
@@ -44,6 +46,7 @@
             menu_picture_url = #{menuPictureUrl},
             menu_modified_date = NOW()
         WHERE menu_id = #{menuId}
+          AND is_deleted = 0
 
     </update>
 
@@ -76,6 +79,20 @@
 
     </insert>
 
+    <!--메뉴 약한 삭제-->
+    <update id="softDeleteMenu">
+        UPDATE menu
+            SET is_deleted = 1
+        WHERE menu_id = #{menuId}
+    </update>
+
+    <!--메뉴 약한 삭제 복구-->
+    <update id="softRecoveryMenu">
+        UPDATE menu
+            SET is_deleted = 0
+        WHERE menu_id = #{menuId}
+    </update>
+
     <!-- 메뉴 삭제하기 -->
     <delete id="deleteMenu">
         DELETE *
@@ -89,5 +106,6 @@
         FROM menu m
                  JOIN stores s ON m.menu_id = s.store_main_menu
         WHERE s.store_id = #{storeId}
+          AND is_deleted = 0
     </select>
 </mapper>
