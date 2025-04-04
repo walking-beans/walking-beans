@@ -8,6 +8,7 @@ import walking_beans.walking_beans_backend.mapper.UserMapper;
 import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.model.vo.Vertification;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -77,6 +78,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePw(String userEmail, String userPassword) {
         userMapper.updatePw(userEmail, userPassword);
+    }
+
+    @Override
+    public void changeUserDate(String userEmail, LocalDate userDate) {
+        userMapper.changeUserDate(userEmail, userDate);
     }
 
     @Override

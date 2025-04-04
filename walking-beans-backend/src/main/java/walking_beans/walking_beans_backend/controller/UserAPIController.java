@@ -18,6 +18,7 @@ import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificatio
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +80,15 @@ public class UserAPIController {
     public void updateUser(@PathVariable("userEmail") String userEmail, @PathVariable("userRole") byte userRole) {
         alarmNotificationService.sendOrderNotification(Alarms.create(15,1,"롤이 변경되었습니다.",15,"testUrl"));
         userService.updateUserRole(userEmail, userRole);
+    }
+
+    // 유저 Date 업데이트
+    @PutMapping("/updateuserdate")
+    public void updateUserDate(@RequestParam("userEmail") String userEmail,
+                               @RequestParam("userDate") String userDate) {
+        LocalDate localDate = LocalDate.parse(userDate);
+
+        userService.changeUserDate(userEmail, localDate);
     }
 
     /************************* 이메일 인증 ****************************/
