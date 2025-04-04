@@ -113,7 +113,7 @@ const AdminPage = () => {
                                placeholder="공지 내용을 입력하세요"
                                onChange={handleChange}
                                onKeyDown={handleKeyDown}
-                        /><br/>
+                        />
                         <button onClick={handleSubmit} className="user-sequence-from-select">보내기</button>
                     </div>
 
@@ -124,7 +124,7 @@ const AdminPage = () => {
                         <input className="insert-address"
                             id="loginCut"
                             value={loginCutEmail}
-                            placeholder="정지시킬 이메일을 입력하세요"
+                            placeholder="이메일을 입력하세요"
                             onChange={handleEmailChange}
                         /><br/>
                         <input className="insert-address"
