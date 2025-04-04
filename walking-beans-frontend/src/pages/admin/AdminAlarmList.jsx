@@ -77,6 +77,21 @@ const AdminAlarmList = () => {
             )
     }
 
+    const setAlreadyRead = (alarmId) => {
+        axios
+            .put("http://localhost:7070/api/read/"+alarmId)
+            .then(
+                (res) => {
+                    console.log("읽음처리 완료: "+res);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("에러: " + err);
+                }
+            )
+    }
+
     return (
         <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (
@@ -101,6 +116,7 @@ const AdminAlarmList = () => {
                             className={`${value.alarmStatus ? 'AlarmListRead' : 'AlarmListUnread'}`}
                             onClick={() => {
                             const targetUrl = value.alarmUrl;
+                                setAlreadyRead(value.alarmId);
                             navigate(targetUrl);
                         }}>
                             <h3>{value.alarmRole === 1

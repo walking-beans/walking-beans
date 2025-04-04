@@ -154,6 +154,7 @@ const HeaderAlarm = ({userId, bell}) => {
             )
     }
 
+    // 읽음 표시
     const changeAlarmStatus = (alarmId) => {
         axios
             .put("http://localhost:7070/api/read/"+alarmId)
