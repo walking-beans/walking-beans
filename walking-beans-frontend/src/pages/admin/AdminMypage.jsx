@@ -50,7 +50,7 @@ const AdminMypage = () => {
                 userId,
                 file,
                 (data) => {
-                    setUser({ ...user, user_picture_url: data.imageUrl });
+                    setUser({...user, user_picture_url: data.imageUrl});
                 },
                 (errorMessage) => {
                     console.error(errorMessage);
@@ -66,6 +66,18 @@ const AdminMypage = () => {
     const roleClass = userRole === "rider" || userRole === "3" ? "rider" : "user";
     const textColor = roleClass === "rider" ? "#010C22" : "#5A3D21";
     const backgroundColor = roleClass === "rider" ? "#E2F2FA" : "#F4EDDF";
+
+    // 역할에 따른 이동 경로 설정
+    let orderRoute = "/order";
+    let orderText = "주문 내역";
+
+    if (userRole === "rider" || userRole === "3") {
+        orderRoute = "/rider/orderlist";
+        orderText = "배달 기록";
+    } else if (userRole === "owner" || userRole === "2") {
+        orderRoute = "/owner/revenue";
+        orderText = "매출 조회";
+    }
 
     return (
         <div className={`mypage-container ${roleClass}`}>
@@ -107,17 +119,31 @@ const AdminMypage = () => {
                         </div>
                     </div>
 
-                    <div className="user-order-click-btn">
-                        <button className="mypage-btn" onClick={() => navigate("/certification")}>
-                            회원정보 수정
-                        </button>
-                        <button className="mypage-btn" onClick={() => navigate("/user/insertAddress")}>
-                            주소 관리
-                        </button>
-                    </div>
+                    <div className="user-order-hr"></div>
+                    <div>
+                        <div className="mypage-item" onClick={() => navigate("/certification")}>
+                            <div className="mypage-item-text" style={{color: textColor}}>회원정보 수정</div>
+                            <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn}
+                                 alt="바로가기 버튼"/>
+                        </div>
+                        <div className="mypage-hr-mini"></div>
+                        <div className="mypage-item" onClick={() => navigate("/user/insertAddress")}>
+                            <div className="mypage-item-text" style={{color: textColor}}>주소 관리</div>
+                            <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn}
+                                 alt="바로가기 버튼"/>
+                        </div>
 
+                        <div className="mypage-hr-mini"></div>
+                        <div className="mypage-item" onClick={() => navigate(orderRoute)}>
+                            <div className="mypage-item-text" style={{color: textColor}}>{orderText}</div>
+                            <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn}
+                                 alt="바로가기 버튼"/>
+                        </div>
+
+                    </div>
+                    <div className="user-order-hr"></div>
                     <div className="mypage-grid" onClick={() => navigate("/certification")}>
-                        <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
+                    <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
                         <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn} alt="회원 탈퇴 버튼"/>
                     </div>
                 </div>

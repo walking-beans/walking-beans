@@ -8,11 +8,10 @@
 }
 
 .profile-picture {
-    width: 170px;
-    height: 170px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 12px;
     cursor: pointer;
     border: 3px solid currentColor;
 }
@@ -28,7 +27,6 @@
     text-align: left;
     padding: 0 16px;
     font-size: 14px;
-    margin-bottom: 24px;
     width: 100%;
 }
 
@@ -61,7 +59,12 @@
     justify-content: end;
     align-items: center;
     text-align: center;
-    margin-top: 60px;
+    cursor: pointer;
+}
+
+.mypage-item {
+    display: flex;
+    justify-content: space-between;
     cursor: pointer;
 }
 
@@ -73,23 +76,22 @@
     letter-spacing: -1.9px;
 }
 
+.mypage-item-text {
+    font-size: 22px;
+    font-weight: bold;
+    color: #5A3D21;
+}
+
 .mypage-hr {
     border: none;
     border-top: 2px #5A3D21 solid;
     margin: 30px 0;
 }
 
-.mypage-btn {
-    width: 263px;
-    height: 60px;
-    border-radius: 30px;
-    background: #5A3D21;
-    color: white;
+.mypage-hr-mini {
     border: none;
-    font-size: 28px;
-    font-weight: bold;
-    padding: 0;
-    margin: 0;
+    border-top: 2px #D7BEA2 solid;
+    margin: 20px 0;
 }
 
 .mypage-container .rider {
@@ -106,4 +108,8 @@
 
 .mypage-container.rider .mypage-hr {
     border-top: 2px #010C22 solid;
+}
+
+.mypage-container.rider .mypage-hr-mini {
+    border-top: 2px #99D6F0 solid;
 }
