@@ -170,13 +170,13 @@
 
 .user-home-container .insert-address {
     flex: 1;
-    height: 60px;
     font-size: 22px;
     color: #5A3D21;
     border: none;
     outline: none;
     background-color: transparent;
     padding-left: 50px;
+    height: 100%;
     padding-right: 15px;
 }
 
