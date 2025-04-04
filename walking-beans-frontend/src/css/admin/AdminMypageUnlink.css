@@ -1,4 +1,10 @@
 .unlink-container {
+    background: #F4EDDF;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
 }
 
 /* 배경 및 텍스트 색상 - role 분기 */
@@ -107,4 +113,15 @@
 
 .unlink-container.rider .agree-text {
     color: #010C22;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.unlink-container.rider .mypage-title-center {
+    color: #010C22;
+}
+
+.unlink-container.rider .mypage-hr {
+    border: 1px solid #010C22;
 }

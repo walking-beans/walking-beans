@@ -89,7 +89,6 @@ function AdminMypageCertification() {
 
     return (
         <div className={`certification-container ${userRole}`}>
-            <div className="user-order-background">
                 <div className="user-order-menu-container">
                     <h2 className="mypage-title-center">이메일 인증하기</h2>
                     <div className="mypage-hr"></div>
@@ -126,7 +125,6 @@ function AdminMypageCertification() {
                         <button className="click-btn-b" onClick={verifyingAuthentication}>인증하기</button>
                     </div>
                 </div>
-            </div>
         </div>
     );
 }
