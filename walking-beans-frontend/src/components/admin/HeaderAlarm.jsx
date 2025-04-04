@@ -50,10 +50,11 @@ const HeaderAlarm = ({userId, bell}) => {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
                                 url: receivedData.alarmUrl,
+                                alarmId:receivedData.alarmId,
                             },
                             ...prevNotifications,
                         ])
-
+                        console.log(receivedData.alarmId);
                         setUnreadCount((prevCount) => prevCount +1);
                     }
                 })
@@ -69,6 +70,7 @@ const HeaderAlarm = ({userId, bell}) => {
                                 message: receivedData.alarmContent,
                                 type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
                                 url: receivedData.alarmUrl,
+                                alarmId:receivedData.alarmId,
                             },
                             ...prevNotifications,
                         ]);
@@ -104,6 +106,7 @@ const HeaderAlarm = ({userId, bell}) => {
                             message: receivedData.alarmContent,  // 알림 내용
                             type: receivedData.alarmRole,       // 관리자 알림을 구분하는 타입
                             url: receivedData.alarmUrl,         // 알림 URL
+                            alarmId:receivedData.alarmId,
                         })),
                         ...prevNotifications,  // 이전 알림 목록
                     ]);
@@ -134,6 +137,7 @@ const HeaderAlarm = ({userId, bell}) => {
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
     };
 
+    //모든 알람 읽음 처리
     const markAllReadAlarms = () => {
         axios
             .put("http://localhost:7070/api/allreadalarms/"+userId)
@@ -148,6 +152,23 @@ const HeaderAlarm = ({userId, bell}) => {
                     console.log("err" + err);
                 }
             )
+    }
+
+    // 읽음 표시
+    const changeAlarmStatus = (alarmId) => {
+        axios
+            .put("http://localhost:7070/api/read/"+alarmId)
+            .then(
+                (res) => {
+                    console.log("상태 변경 완료");
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("err",err);
+                }
+            )
+
     }
 
     return (
@@ -165,12 +186,24 @@ const HeaderAlarm = ({userId, bell}) => {
                                 if (noti.type === 1) {
                                     navigate("/alarmlist");
                                     setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1); //
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
+                                    changeAlarmStatus(noti.alarmId);
 
                                 } else if (noti.type === 2) {
                                     navigate(noti.url);
                                     setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1);
+                                    setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                    // 클릭된 알림 제거
+                                    setNotifications((prevNotifications) =>
+                                        prevNotifications.filter((notification, i) => i !== index)
+                                    );
+                                    changeAlarmStatus(noti.alarmId);
                                 }
                             }
                             }>
