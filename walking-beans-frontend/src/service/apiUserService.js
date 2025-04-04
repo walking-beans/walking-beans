@@ -36,23 +36,22 @@ const apiUserService = {
         },
 
     //로그아웃 api
-    logout:
-        function (navigate) {
-            axios
-                .post(`${USER_API_URL}/logout`, {withCredentials: true})
-                .then(
-                    (res) => {
-                        alert("로그아웃 완료");
-                        localStorage.removeItem("user");
-                    }
-                )
-                .catch(
-                    (err) => {
-                        console.log("백엔드에서 오류가 발생했습니다.(로그아웃)" + err);
-                        navigate("/error");
-                    }
-                )
-        },
+    logout: function (navigate, options = {}) {
+        axios
+            .post(`${USER_API_URL}/logout`, { withCredentials: true })
+            .then((res) => {
+                if (!options.silent) {
+                    alert("로그아웃 완료");
+                }
+                localStorage.removeItem("user");
+            })
+            .catch((err) => {
+                console.log("백엔드에서 오류가 발생했습니다.(로그아웃)" + err);
+                if (navigate) {
+                    navigate("/error");
+                }
+            });
+    },
 
     //세션 데이터를 가져오는 api
     sessionData:
