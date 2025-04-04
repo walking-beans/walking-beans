@@ -71,19 +71,27 @@ const UserHeader = ({user}) => {
     };
 
     // 네비게이션 항목을 역할에 맞게 설정
-    const navItems = currentUser?.user_role === "user" || currentUser?.user_role === "rider" || currentUser?.user_role === "admin"
-        ? [
+    const role = currentUser?.user_role;
+
+    let navItems = [];
+
+    if (["user", "rider"].includes(role)) {
+        navItems = [
             { icon: person, text: "마이페이지", path: "/mypage" },
             { icon: receipt, text: "주문내역", path: "/order" },
-            { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
-        ]
-        : currentUser?.user_role === "owner"
-            ? [
-                { icon: person, text: "마이페이지", path: "/mypage" },
-                { icon: receipt, text: "매출 조회", path: "/owner/revenue" },
-                { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
-            ]
-            : [];
+            { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" },
+        ];
+    } else if (role === "admin") {
+        navItems = [
+            { icon: person, text: "마이페이지", path: "/mypage" },
+        ];
+    } else if (role === "owner") {
+        navItems = [
+            { icon: person, text: "마이페이지", path: "/mypage" },
+            { icon: receipt, text: "매출 조회", path: "/owner/revenue" },
+            { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" },
+        ];
+    }
 
     /**
      * 네비게이션바 토글아이콘  함수
