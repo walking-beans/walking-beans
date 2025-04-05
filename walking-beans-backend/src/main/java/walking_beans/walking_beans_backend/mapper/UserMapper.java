@@ -4,6 +4,7 @@ package walking_beans.walking_beans_backend.mapper;
 import walking_beans.walking_beans_backend.model.dto.Users;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @Mapper
@@ -22,6 +23,12 @@ public interface UserMapper {
 
     //회원가입 유무 확인
     int checkEmailExists(String email);
+
+    // 유저 날짜 변경
+    void changeUserDate(String userEmail, LocalDate userDate);
+
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    Users getUserInfoByIdForAlarms(long userId);
 
     //유저 롤 업데이트
     void updateUserRole(String userEmail, byte userRole);

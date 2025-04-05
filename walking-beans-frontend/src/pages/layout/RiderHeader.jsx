@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef } from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./RiderHeader.css";
@@ -31,7 +31,7 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const [displayStores, setDisplayStores] = useState([]);
 
     const [unreadCount, setUnreadCount] = useState(0); //알림 개수
-    const [showDropdown, setShowDropdown] = useState(false); //토글
+    // const [showDropdown, setShowDropdown] = useState(false); //토글
     const [notifications, setNotifications] = useState([]); //알림 리스트
     const [alretSoket, setAlertSocket] = useState(null); // 웹소켓 상태
 
@@ -44,6 +44,8 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const [starPath, setStarPath] = useState("");
 
     const [riderOD, setRiderOD] = useState(riderOnDuty);
+    const alarmRef = useRef(null);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     // 웹소켓 열기
    /* useEffect(() => {
@@ -253,7 +255,11 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
                                         )}
                                     </div>
                                 )}*/}
-                                <HeaderAlarm userId={userId} bell={true}/>
+                                <HeaderAlarm userId={userId}
+                                             bell={true}
+                                             alarmRef={alarmRef}
+                                             showDropdown={showDropdown}
+                                             setShowDropdown={setShowDropdown}/>
                             </>
                         )}
                         <img src={toggleIcon}
