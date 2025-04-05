@@ -18,7 +18,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
 
-
+/*
 @RestController
 public class SocialLoginAPIController {
 
@@ -41,12 +41,12 @@ public class SocialLoginAPIController {
     private String naverClientSecret;
 
     @Value("${naver.redirect-url}")
-    private String naverRedirectUrl;
+    private String naverRedirectUrl;*/
 
 
     /******************** 카카오 로그인 **************************/
 
-    @GetMapping("/oauth/kakao/login")
+   /* @GetMapping("/oauth/kakao/login")
     public ResponseEntity<?> getKakaoLoginUrl() {
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
                 "&client_id=" + kakaoClientId + "&redirect_uri=" + redirectUrl;
@@ -91,11 +91,11 @@ public class SocialLoginAPIController {
             System.out.println("오류");
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     /**************** 네이버 로그인 *******************************/
 
-    @GetMapping("/oauth/naver/login")
+   /* @GetMapping("/oauth/naver/login")
     public ResponseEntity<?> getNaverLoginUrl() {
         String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code" +
                 "&client_id=" + naverClientId + "&redirect_uri=" + naverRedirectUrl +
@@ -140,3 +140,4 @@ public class SocialLoginAPIController {
     }
 
 }
+*/
