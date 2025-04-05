@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 
+/*
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
+*/
 
 /*
 @RestController
