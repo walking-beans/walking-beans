@@ -21,6 +21,10 @@ public class ChattingInfoServiceImpl implements ChattingInfoService{
 
         List<ChattingInfoDTO> chattingInfoDTOList = chattingInfoMapper.getChattingInfoBySenderId(senderId);
 
+        for (ChattingInfoDTO chattingInfoDTO : chattingInfoDTOList) {
+            chattingInfoDTO.setTimeDifference();
+        }
+
         Map<Integer, List<ChattingInfoDTO>> chattingInfoDTOMap = chattingInfoDTOList.stream().collect(Collectors.groupingBy(ChattingInfoDTO::getReceiverRelation));
 
         return chattingInfoDTOMap;
