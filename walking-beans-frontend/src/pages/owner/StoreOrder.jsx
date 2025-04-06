@@ -108,6 +108,13 @@ const StoreOrder= () => {
         }
     };
 
+    // 주문상태 변경
+    const handleOrderStatus = () => {
+        axios
+            .patch(`http://localhost:7070/api/orders/orderStatus`)
+            .then(()=>{})
+            .catch(()=>{})
+    }
     return(
         <>
             {/* 탭 UI */}
@@ -143,12 +150,12 @@ const StoreOrder= () => {
                         </div>
                         <div className="order-actions">
                             {order.orderStatus === 2 && (
-                                <button className="action-btn accept-btn">
+                                <button className="action-btn accept-btn" onClick={handleOrderStatus}>
                                     주문 수락
                                 </button>
                             )}
                             {order.orderStatus === 3 && (
-                                <button className="action-btn complete-btn">
+                                <button className="action-btn complete-btn" onClick={handleOrderStatus}>
                                     조리 완료
                                 </button>
                             )}

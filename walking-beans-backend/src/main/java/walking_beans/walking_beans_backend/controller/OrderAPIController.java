@@ -72,7 +72,7 @@ public class OrderAPIController {
     }
 
     // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
-    // 상태2 이상 변경시 업주에게 자동 업데이트
+    // 상태2 이상 변경시 업주에게 자동 업데이트, updateOrderStatus 서비스에 웹소켓 연결되어있음.
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
