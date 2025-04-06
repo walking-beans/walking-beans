@@ -139,6 +139,7 @@ const StoreOrder= () => {
                 ))
             )}
 
+
             {/* 모달 컴포넌트 */}
             {isModalOpen && (
                 <OrderDetailCard order={selectedOrder} onClose={closeModal} />
