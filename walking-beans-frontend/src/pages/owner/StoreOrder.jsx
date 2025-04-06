@@ -96,7 +96,17 @@ const StoreOrder= () => {
         setIsModalOpen(false);
     };
 
-
+    //주문 상태 텍스트로 변환
+    const getStatusText = (status) => {
+        switch (status) {
+            case 2: return "주문 요청";
+            case 3: return "준비 중";
+            case 4: return "조리 완료";
+            case 5: return "라이더 픽업 완료";
+            case 6: return "배달 완료";
+            default: return "알 수 없음";
+        }
+    };
 
     return(
         <>
