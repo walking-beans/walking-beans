@@ -100,7 +100,7 @@ const StoreOrder= () => {
     const getStatusText = (status) => {
         switch (status) {
             case 2: return "주문 요청";
-            case 3: return "준비 중";
+            case 3: return "주문 조리중";
             case 4: return "조리 완료";
             case 5: return "라이더 픽업 완료";
             case 6: return "배달 완료";
@@ -134,17 +134,34 @@ const StoreOrder= () => {
             {activeTab === "progress" ? (
                 progressOrders.map((order) => (
                     <div key={order.orderId}>
-                        <p>{order.orderNumber}</p>
-                        <p>{order.orderStatus}</p>
-                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                        <div>
+                        <p>주문번호 : {order.orderNumber}</p>
+                        <p>상태 : {getStatusText(order.orderStatus)}</p>
+                        {order.orderStatus === 2 && (
+                            <span className="new-order">새로운 주문!</span>
+                        )}
+                        </div>
+                        <div className="order-actions">
+                            {order.orderStatus === 2 && (
+                                <button className="action-btn accept-btn">
+                                    주문 수락
+                                </button>
+                            )}
+                            {order.orderStatus === 3 && (
+                                <button className="action-btn complete-btn">
+                                    조리 완료
+                                </button>
+                            )}
+                        <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                        </div>
                     </div>
                 ))
             ) : (
                 completedOrders.map((order) => (
                     <div key={order.orderId}>
-                        <p>{order.orderNumber}</p>
-                        <p>{order.orderStatus}</p>
-                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                        <h3>주문 번호: {order.orderNumber}</h3>
+                        <p>상태: {getStatusText(order.orderStatus)}</p>
+                        <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
                     </div>
                 ))
             )}
