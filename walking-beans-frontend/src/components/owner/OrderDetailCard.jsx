@@ -7,6 +7,15 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
     const [loading, setLoading] = useState(null); // 모달 로딩
 
 
+    //*************************************************************************//
+    // 랜덤 도착 시간 (5~15분)
+    const getRandomDeliveryTime = () => {
+        return Math.floor(Math.random() * 11) + 5; // 5~15 사이 랜덤 소숫점 버림
+    };
+
+
+
+
     useEffect(() => {
         if (order){
             // 주문정보로 상세정보 가져오기
@@ -57,9 +66,11 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
                     <>
                         <h2>주문 상세 정보</h2>
                         <p>주문 번호: {orderDetails.orderNumber}</p>
-                        <p>주문 메뉴: {orderDetails.orderList}</p>
-                        <p>요청사항: {orderDetails.orderRequests}</p>
-                        <p>가격: {orderDetails.totalPayment}</p>
+                        <p>주문 메뉴: {orderDetails.orderList || "메뉴 정보 없음"}</p>
+                        <p>요청사항: {orderDetails.orderRequests || "고객 요청사항 없음"}</p>
+                        <p>가격: {orderDetails.totalPayment || 0}원</p>
+                        <p>라이더 배정 상태 : {order.riderIdOnDuty ? "라이더 이동중" : "라이더 배차중"}</p>
+                        <p>라이더 도착 예상시간: {getRandomDeliveryTime()}분</p>
                     </>
                 ) : (
                     <p>주문 정보를 불러오지 못했습니다.</p>
