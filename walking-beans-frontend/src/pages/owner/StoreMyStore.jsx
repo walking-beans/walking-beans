@@ -128,6 +128,7 @@ const StoreMyStore = () => {
     return(
         <form>
             <h2>내 가게 정보보기</h2>
+            {/*조작 버튼들*/}
             {isEditing ? (
                 <>
                     <button className={"col-2 offset-8"} onClick={handleSave}>저장</button>
@@ -136,6 +137,7 @@ const StoreMyStore = () => {
             ) : (
                 <button className={"col-2 offset-10"} onClick={toggleEditMode}>수정</button>
             )}
+            {/*인풋창들*/}
             <div>
                 <img style={{maxWidth: '300px', marginTop: '10px'}}
                      src={imgFile ? imgFile : formData.storePictureUrl}
@@ -174,11 +176,6 @@ const StoreMyStore = () => {
             <OperationInfoForm formData={formData} handleChange={handleChange} isEditing={isEditing}/>
             <DeliveryInfoForm formData={formData} handleChange={handleChange} isEditing={isEditing}/>
             <LocationInfoForm formData={formData} handleChange={handleChange} isEditing={isEditing}/>
-
-            {/*
-
-            */}
-
         </form>
     )
 };

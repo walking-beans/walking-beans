@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.mail.Store;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
@@ -71,8 +73,7 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
 
-    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
-    // 상태2 이상 변경시 업주에게 자동 업데이트, updateOrderStatus 서비스에 웹소켓 연결되어있음.
+    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 주문접수대기(가게에서 확인전) 3: 조리중 4: 조리완료 5: 라이더픽업(배달중) 6: 배달완료 9: 주문취소)
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -184,6 +185,25 @@ public class OrderAPIController {
     public UserOrderDTO getOrderForStore(@PathVariable String orderNumber) {
         return orderService.getOrderForStore(orderNumber);
     }
+
+    /** 주문번호로 주문상태 업데이트 권한인증때문에 url 다름
+     *  상태2 이상 변경시 업주에게 자동 업데이트, updateOrderStatus 서비스에 웹소켓 연결되어있음.
+     * @param session 권한검증
+     * @param storeId 권한검증
+     * @param orderId 목표주문아이디
+     * @param orderStatus 변경상태( 0:결제전 1: 결제완료 2: 주문접수대기(가게에서 확인전) 3: 조리중 4: 조리완료 5: 라이더픽업(배달중) 6: 배달완료 9: 주문취소)
+     * @return 권한 검증 확인 200 성공, 401,402,403
+     */
+    @PatchMapping("{orderId}/store/{storeId}/")
+    @OwnershipCheck
+    public ResponseEntity<?> storeUpdateOrderStatus(HttpSession session,
+                                                    @PathVariable("storeId") long storeId,
+                                                    @PathVariable("orderId") long orderId,
+                                                    @RequestParam("orderStatus") int orderStatus){
+        orderService.updateOrderStatus(orderId, orderStatus);
+        return ResponseEntity.ok().build();
+    }
+
 
     // 주문 상세 내역 정보 가져오기
     @GetMapping("/detail/orderNumber/{orderNumber}")

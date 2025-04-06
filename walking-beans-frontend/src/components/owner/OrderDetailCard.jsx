@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
+const OrderDetailCard = ({order, onClose, handleOrderStatus}) => {
 
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(null); // 모달 로딩
@@ -69,8 +69,22 @@ const OrderDetailCard = ({order, onClose, UpdateOrderStatus}) => {
                         <p>주문 메뉴: {orderDetails.orderList || "메뉴 정보 없음"}</p>
                         <p>요청사항: {orderDetails.orderRequests || "고객 요청사항 없음"}</p>
                         <p>가격: {orderDetails.totalPayment || 0}원</p>
-                        <p>라이더 배정 상태 : {order.riderIdOnDuty ? "라이더 이동중" : "라이더 배차중"}</p>
+                        <p>라이더 배정 상태 : {order.riderIdOnDuty ? "라이더가 가게로 이동중입니다. " : "배달을 진행할 라이더를 찾고 있습니다."}</p>
                         <p>라이더 도착 예상시간: {getRandomDeliveryTime()}분</p>
+                        {order.orderStatus === 2 && (
+                            <button
+                                onClick={() => handleOrderStatus(order.orderId, 3)} // 주문수락
+                            >
+                                주문 수락
+                            </button>
+                        )}
+                        {order.orderStatus === 3 && (
+                            <button
+                                onClick={() => handleOrderStatus(order.orderId, 4)} // 조리완료, 라이더기다림.
+                            >
+                                조리 완료
+                            </button>
+                        )}
                     </>
                 ) : (
                     <p>주문 정보를 불러오지 못했습니다.</p>

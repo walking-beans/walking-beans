@@ -2,14 +2,16 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import OrderDetailCard from "../../components/owner/OrderDetailCard";
+import MsgToast from "../../components/owner/MsgToast";
 
 
 const StoreOrder= () => {
-    const {id} = useParams();
+    const {id} = useParams(); // 가게 아이디
     const [orders, setOrders] = useState([]);
     const [activeTab, setActiveTab] = useState("progress"); // 탭 상태: "progress" 또는 "completed"
     const [selectedOrder, setSelectedOrder] = useState(null); // 모달에 보여줄 주문
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
+    const [toastMsg, setToastMsg] = useState("");// 안내 메세지
 
     const connectWebSocket = () =>{
         // 웹소켓 상태값 2이상시 표시
@@ -108,12 +110,26 @@ const StoreOrder= () => {
         }
     };
 
-    // 주문상태 변경
-    const handleOrderStatus = () => {
+    // 주문상태 변경, 안내 메세지 포함
+    const handleOrderStatus = (orderId,orderStatus) => {
         axios
-            .patch(`http://localhost:7070/api/orders/orderStatus`)
-            .then(()=>{})
-            .catch(()=>{})
+            .patch(`http://localhost:7070/api/orders/${orderId}/store/${id}`,
+                {"orderStatus": orderStatus},
+                {withCredentials: true},
+                )
+            .then((res)=>{
+                console.log("주문상태 업데이트 완료:", res)
+                if(orderStatus === 3){
+                    setToastMsg("주문이 수락되었습니다.");
+                } else if(orderStatus === 4) {
+                    setToastMsg("조리완료 확인되었습니다. 주문번호 확인 후 라이더님에게 전달해주세요.");
+                } else {// 다른값이 들어갔을 경우 예외처리
+                    setToastMsg("주문상태 변경중 문제가 발생했습니다. 고객센터로 문의주세요.");
+                }
+            })
+            .catch((err)=>{
+                console.log("상태 업데이트 실패 :",err)
+            })
     }
 
     return(
@@ -143,20 +159,18 @@ const StoreOrder= () => {
                 progressOrders.map((order) => (
                     <div key={order.orderId}>
                         <div>
+                            {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
                         <p>주문번호 : {order.orderNumber}</p>
                         <p>상태 : {getStatusText(order.orderStatus)}</p>
-                        {order.orderStatus === 2 && (
-                            <span className="new-order">새로운 주문!</span>
-                        )}
                         </div>
                         <div className="order-actions">
                             {order.orderStatus === 2 && (
-                                <button className="action-btn accept-btn" onClick={handleOrderStatus}>
+                                <button className="action-btn accept-btn" onClick={()=>handleOrderStatus(order.orderId,3)}>
                                     주문 수락
                                 </button>
                             )}
                             {order.orderStatus === 3 && (
-                                <button className="action-btn complete-btn" onClick={handleOrderStatus}>
+                                <button className="action-btn complete-btn" onClick={()=>handleOrderStatus(order.orderId,4)}>
                                     조리 완료
                                 </button>
                             )}
@@ -173,8 +187,15 @@ const StoreOrder= () => {
                     </div>
                 ))
             )}
-
-
+            {/* 상태변경 메세지 */}
+            <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
+            {toastMsg && (
+                <MsgToast
+                    message={toastMsg}
+                    duration={3000}
+                    onClose={() => setToastMsg("")} />
+            )}
+            </div>
             {/* 모달 컴포넌트 */}
             {isModalOpen && (
                 <OrderDetailCard order={selectedOrder} onClose={closeModal} />
