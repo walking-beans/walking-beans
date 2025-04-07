@@ -26,6 +26,9 @@ public interface AlarmMapper {
     // 특정 알림을 읽음 처리
     void markNotificationAsRead(@Param("alarmId") Long alarmId);
 
+    // 전체 알람 읽음 처리
+    void markAllNotificationsAsRead(long userId);
+
     // 채팅 유저들 정보 가져오기
     ChattingInfoDTO getChattingUserInfo (long roomId, long senderId);
 

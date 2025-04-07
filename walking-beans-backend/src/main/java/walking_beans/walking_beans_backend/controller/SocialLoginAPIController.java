@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +15,10 @@ import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Map;
+
 
 
 @RestController
@@ -40,6 +44,7 @@ public class SocialLoginAPIController {
 
     @Value("${naver.redirect-url}")
     private String naverRedirectUrl;
+
 */
     /******************** 카카오 로그인 **************************/
 /*
@@ -72,6 +77,8 @@ public class SocialLoginAPIController {
             } else {
                 users.setUserPhone(phone);
             }
+            LocalDate today = LocalDate.now();
+            users.setUserDate(Date.valueOf(today));
 
             socialLoginService.insertSocialUser(users); // DB에 정보 저장
         }

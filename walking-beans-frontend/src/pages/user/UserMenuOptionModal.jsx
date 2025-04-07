@@ -2,7 +2,6 @@ import UserMenuOptionGroup from "./UserMenuOptionGroup";
 import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
 import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import {useNavigate} from "react-router-dom";
 
 const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
 
@@ -36,8 +35,13 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
             // 해당 옵션 그룹에 대한 현재 선택 상태 가져오기
             const newSelectedOptions = {...prev};
 
-            // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
-            newSelectedOptions[optionName] = [option];
+            if (option === null) {
+                // 옵션 선택 해제 시 해당 카테고리 삭제
+                delete newSelectedOptions[optionName];
+            } else {
+                // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
+                newSelectedOptions[optionName] = [option];
+            }
 
             return newSelectedOptions;
         });

@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-80q-50 0-85-35t-35-85v-120h120v-560l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-560H320v440h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h240v80H360Zm0 120v-80h240v80H360Zm320-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600Zm0 120q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm-40 0v-80 80Z"/></svg>
+<svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<mask id="mask0_127_91" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="26" height="25">
+<rect x="0.25" width="25" height="25" fill="url(#pattern0_127_91)"/>
+</mask>
+<g mask="url(#mask0_127_91)">
+<rect x="0.25" width="27.6316" height="28.2895" fill="#5A3D21"/>
+</g>
+<defs>
+<pattern id="pattern0_127_91" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_127_91" transform="scale(0.0111111)"/>
+</pattern>
+<image id="image0_127_91" width="90" height="90" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAABEElEQVR4nO3ay0rEMBiA0eLOeQPBZbNMoOlmntMLM0+pbnRbKbjXVCYh4RzIuu1XSKD9pwkAAAAAgN/kFLaSpehBQlci9CCh1/XhtKTwusTwUXqtZiuG9yXNL+fz4303oXOcr83DHQ4+X3sJfbfE8NU82MG1xPC5P4PQSehBto5wmTrZOqb9QMlpft4PmObh/r7ecpyfujoM+SF0JUIDAAAAUMxHpUqErkToQUKv5jrqhM5d/5w117HVCG2uIwk92NZhrmO7cWRzHd0qfdut77dbQgMAAABQzEelSoSuROhBQq/mOuqEzl3/nDXXsdUIba4jCT3Y1mGuY7txZHMd3Sp9263vt1tCAwAAAAAw/c83YRaWDAAej6IAAAAASUVORK5CYII="/>
+</defs>
+</svg>
