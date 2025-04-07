@@ -71,16 +71,16 @@ const OrderDetailCard = ({order, onClose, handleOrderStatus}) => {
                         <p>가격: {orderDetails.totalPayment || 0}원</p>
                         <p>라이더 배정 상태 : {order.riderIdOnDuty ? "라이더가 가게로 이동중입니다. " : "배달을 진행할 라이더를 찾고 있습니다."}</p>
                         <p>라이더 도착 예상시간: {getRandomDeliveryTime()}분</p>
-                        {order.orderStatus === 2 && (
+                        {orderDetails.orderStatus === 2 && (
                             <button
-                                onClick={() => handleOrderStatus(order.orderId, 3)} // 주문수락
+                                onClick={() => handleOrderStatus(orderDetails.orderId, 3)} // 주문수락
                             >
                                 주문 수락
                             </button>
                         )}
-                        {order.orderStatus === 3 && (
+                        {orderDetails.orderStatus === 3 && (
                             <button
-                                onClick={() => handleOrderStatus(order.orderId, 4)} // 조리완료, 라이더기다림.
+                                onClick={() => handleOrderStatus(orderDetails.orderId, 4)} // 조리완료, 라이더기다림.
                             >
                                 조리 완료
                             </button>

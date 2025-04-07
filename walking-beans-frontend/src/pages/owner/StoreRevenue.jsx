@@ -15,7 +15,7 @@ const StoreRevenue = () => {
     return(
         <>
             <h1>최근 30일간 매출 합계</h1>
-            <p>{formatAmount(totalAmount)} 원</p>
+            <p>{formatAmount()} 원</p>
         </>
     )
 }

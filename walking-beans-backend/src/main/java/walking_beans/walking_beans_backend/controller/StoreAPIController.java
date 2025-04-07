@@ -97,10 +97,11 @@ public class StoreAPIController {
         // 가게 등록
         storeService.addStore(stores);
         // 유저 역활 업데이트
-        userService.updateUserRoleStore(stores.getUserId(), (byte) 3); // 1 -> 3으로 변경
+        // userService.updateUserRoleStore(stores.getUserId(), (byte) 3); // 1 -> 3으로 변경
                 } catch (Exception e) {
                     log.error(e.getMessage());
                 }
+
     }
 
     /**매장정보 수정하기

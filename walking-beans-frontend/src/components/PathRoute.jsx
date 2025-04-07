@@ -222,7 +222,7 @@ function PathRoute() {
                                 }/>
                                 {/* id = userId 유저 id, 유저만 신규 가게 등록이 가능하도록 제한*/}
                                 <Route path="/user/:id/storeregister/" element={
-                                    <ProtectedRoute allowedRoles={["user"]}>
+                                    <ProtectedRoute allowedRoles={["owner"]}>
                                         <StoreRegister/>
                                     </ProtectedRoute>
                                 }/>

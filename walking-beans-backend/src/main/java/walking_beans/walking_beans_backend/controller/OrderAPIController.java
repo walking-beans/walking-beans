@@ -194,12 +194,12 @@ public class OrderAPIController {
      * @param orderStatus 변경상태( 0:결제전 1: 결제완료 2: 주문접수대기(가게에서 확인전) 3: 조리중 4: 조리완료 5: 라이더픽업(배달중) 6: 배달완료 9: 주문취소)
      * @return 권한 검증 확인 200 성공, 401,402,403
      */
-    @PatchMapping("{orderId}/store/{storeId}/")
+    @PatchMapping("{orderId}/store/{storeId}")
     @OwnershipCheck
     public ResponseEntity<?> storeUpdateOrderStatus(HttpSession session,
                                                     @PathVariable("storeId") long storeId,
                                                     @PathVariable("orderId") long orderId,
-                                                    @RequestParam("orderStatus") int orderStatus){
+                                                    @RequestBody int orderStatus){
         orderService.updateOrderStatus(orderId, orderStatus);
         return ResponseEntity.ok().build();
     }

@@ -37,7 +37,14 @@ const AdminPage = () => {
         }
     }
 
-
+    /****************************************************************************************/
+    // 얕은 삭제된 메뉴 복구
+    const restoreMenu = () => {
+        axios
+            .patch(``)
+            .then(()=>{})
+            .catch(()=>{})
+    }
 
     return (
         <div className="user-ordering-container">

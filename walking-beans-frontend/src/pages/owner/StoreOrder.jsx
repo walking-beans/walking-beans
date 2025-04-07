@@ -3,6 +3,8 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import OrderDetailCard from "../../components/owner/OrderDetailCard";
 import MsgToast from "../../components/owner/MsgToast";
+import OrderTime from "../../components/owner/OrderTime";
+import "./StoreOrderCss.css";
 
 
 const StoreOrder= () => {
@@ -12,6 +14,7 @@ const StoreOrder= () => {
     const [selectedOrder, setSelectedOrder] = useState(null); // 모달에 보여줄 주문
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
     const [toastMsg, setToastMsg] = useState("");// 안내 메세지
+    const [storeCookTime, setStoreCookTime] = useState(5); // 가게 기본 조리시간
 
     const connectWebSocket = () =>{
         // 웹소켓 상태값 2이상시 표시
@@ -114,8 +117,9 @@ const StoreOrder= () => {
     const handleOrderStatus = (orderId,orderStatus) => {
         axios
             .patch(`http://localhost:7070/api/orders/${orderId}/store/${id}`,
-                {"orderStatus": orderStatus},
-                {withCredentials: true},
+                orderStatus,
+                {withCredentials: true,
+                    headers: { "Content-Type": "application/json" }},
                 )
             .then((res)=>{
                 console.log("주문상태 업데이트 완료:", res)
@@ -132,11 +136,20 @@ const StoreOrder= () => {
             })
     }
 
+    // 시간 설정
+    const setMinutesToAdd = () => {
+        axios
+            .get(``)
+            .then(()=>{})
+            .catch(()=>{})
+    }
+
     return(
         <>
             {/* 탭 UI */}
-            <div>
+            <div className="tab-container">
                 <button
+                    className={`tab-button ${activeTab === "progress" ? "active" : ""}`}
                     onClick={() => setActiveTab("progress")}
                     style={{
                         fontWeight: activeTab === "progress" ? "bold" : "normal",
@@ -145,6 +158,7 @@ const StoreOrder= () => {
                     진행 중인 주문
                 </button>
                 <button
+                    className={`tab-button ${activeTab === "completed" ? "active" : ""}`}
                     onClick={() => setActiveTab("completed")}
                     style={{
                         fontWeight: activeTab === "completed" ? "bold" : "normal",
@@ -158,23 +172,45 @@ const StoreOrder= () => {
             {activeTab === "progress" ? (
                 progressOrders.map((order) => (
                     <div key={order.orderId}>
-                        <div>
-                            {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
-                        <p>주문번호 : {order.orderNumber}</p>
-                        <p>상태 : {getStatusText(order.orderStatus)}</p>
-                        </div>
-                        <div className="order-actions">
-                            {order.orderStatus === 2 && (
-                                <button className="action-btn accept-btn" onClick={()=>handleOrderStatus(order.orderId,3)}>
-                                    주문 수락
-                                </button>
-                            )}
-                            {order.orderStatus === 3 && (
-                                <button className="action-btn complete-btn" onClick={()=>handleOrderStatus(order.orderId,4)}>
-                                    조리 완료
-                                </button>
-                            )}
-                        <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                        <div className="order-card">
+                            {/* 주문 정보 (시간, 주문번호) */}
+                            <div className="order-info">
+                                <OrderTime minutesToAdd={15}/>
+                                <span className="order-number">{order.orderNumber}</span>
+
+                            </div>
+
+                            {/* 주문 상세 정보 */}
+                            <div className="order-details">
+                                {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
+                                <p>상태 : {getStatusText(order.orderStatus)}</p>
+                            </div>
+
+                            {/* 액션 버튼 */}
+                            <div className="order-actions">
+                                <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                                {order.orderStatus === 2 && (
+                                    <button className="storeOrder-accept-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 3)}>접수하기</button>
+                                )}
+                                {order.orderStatus === 3 && (
+                                    <button className="storeOrder-complete-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 4)}>조리완료</button>
+                                )}
+                                {order.orderStatus === 4 && (
+                                    <button className="storeOrder-complete-btn"
+                                            >배차 중</button>
+                                )}
+                                {order.orderStatus === 5 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >배차 중</button>
+                                )}
+                                {order.orderStatus === 6 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >배차 중</button>
+                                )}
+
+                            </div>
                         </div>
                     </div>
                 ))
@@ -188,17 +224,17 @@ const StoreOrder= () => {
                 ))
             )}
             {/* 상태변경 메세지 */}
-            <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
-            {toastMsg && (
-                <MsgToast
-                    message={toastMsg}
-                    duration={3000}
-                    onClose={() => setToastMsg("")} />
-            )}
+            <div style={{position: "relative", maxWidth: "800px", margin: "0 auto"}}>
+                {toastMsg && (
+                    <MsgToast
+                        message={toastMsg}
+                        duration={3000}
+                        onClose={() => setToastMsg("")}/>
+                )}
             </div>
             {/* 모달 컴포넌트 */}
             {isModalOpen && (
-                <OrderDetailCard order={selectedOrder} onClose={closeModal} />
+                <OrderDetailCard order={selectedOrder} onClose={closeModal} handleOrderStatus={handleOrderStatus}/>
             )}
         </>
     )
