@@ -35,11 +35,37 @@ public class ChattingInfoDTO {
        log.info("Time difference: " + duration.toMinutes() + " minutes");
        if (ofDays > 364) {
            this.timeDifference = String.valueOf(ofDays / 365) + "년 전";
+           log.info("Time difference: {}, ofDays = {}", this.timeDifference, ofDays);
            return;
        }
 
        if (ofDays > 30) {
            this.timeDifference = String.valueOf((ofDays / 30)) + "달 전";
+           log.info("Time difference: {}, ofDays = {}", this.timeDifference, ofDays);
+           return;
        }
+
+        if (ofDays > 0) {
+            this.timeDifference = String.valueOf(ofDays) + "일 전";
+            log.info("Time difference: {}, ofDays = {}", this.timeDifference, ofDays);
+            return;
+        }
+
+        long ofMinutes = duration.toMinutes();
+
+        if (ofMinutes > 59) {
+            this.timeDifference = String.valueOf(ofMinutes / 60) + "시간 전";
+            log.info("Time difference: {}, ofMinutes = {}", this.timeDifference, ofMinutes);
+            return;
+        }
+
+        if (ofMinutes > 0) {
+            this.timeDifference = String.valueOf(ofMinutes) + "분 전";
+            log.info("Time difference: {}, ofMinutes = {}", this.timeDifference, ofMinutes);
+            return;
+        }
+
+        this.timeDifference = "방금 전";
+        log.info("Time difference: {}, ofDays = {}", this.timeDifference, ofDays);
     }
 }
