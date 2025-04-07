@@ -18,17 +18,12 @@ function AdminMypageUnlinkSuccess() {
 
     return (
         <div className={`unlink-success-container ${userRole}`}>
-            <div className="user-order-menu-container">
-                <div className="message-box">
-                    <div className="unlink-big-text">회원탈퇴가 완료되었습니다.</div>
-                    <div className="unlink-text">워킹빈즈를 이용해 주셔서 감사합니다.</div>
-                </div>
-                <div className="user-order-click-btn-one">
-                    <button className="user-order-btn-b" onClick={() => navigate("/")}>
-                        메인페이지 바로가기
-                    </button>
-                </div>
+            <div className="message-box">
+                <h2>탈퇴가 완료되었습니다!</h2>
             </div>
+            <button onClick={() => navigate("/")}>
+                메인페이지로 돌아가기
+            </button>
         </div>
     );
 }

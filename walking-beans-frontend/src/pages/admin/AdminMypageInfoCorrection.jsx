@@ -43,53 +43,23 @@ function InfoCorrectionPage() {
             );
     }, [Update, userId, userPhone]);
 
-    const handleModifiedComplete = (e) => {
-        e.preventDefault(); // form 기본 제출 막기
-
-        const trimmedPhone = userPhone.trim();
-
-        if (!trimmedPhone) {
-            alert("전화번호를 입력해 주세요.");
-            return;
-        }
-
-        const phonePattern = /^\d{10,11}$/;
-        if (!phonePattern.test(trimmedPhone)) {
-            alert("하이픈(-)없이 10~11자리로 작성해 주세요.\n예) 01012345678");
-            return;
-        }
-
-        setUpdate(true);
-        navigate("/mypage", {replace: true});
-        window.location.reload();
-    };
-
     return (
         <div className={`info-correction-container  ${userRole}`}>
-            <div className="user-order-background">
-                <div className="user-order-menu-container">
-                    <h2 className="mypage-title-center">회원정보 수정하기</h2>
-                    <div className="mypage-hr"></div>
-                    <form>
-                        <div className="info-correction">
-                            <label htmlFor="userPhone">전화번호</label>
-                            <input
-                                id="userPhone"
-                                type="tel"
-                                value={userPhone}
-                                onChange={(e) => setUserPhone(e.target.value)}
-                                placeholder="수정할 번호를 하이픈(-) 없이 입력해 주세요."
-                                pattern="\d{10,11}"
-                                required
-                            />
-
-                        </div>
-                        <div className="user-order-click-btn-one">
-                        <button type="submit" className="submit-btn" onClick={handleModifiedComplete}>수정하기</button>
-                        </div>
-                    </form>
+            <form>
+                <div className="info-correction">
+                    <label htmlFor="userPhone">변경할 전화번호를 작성해 주세요.</label>
+                    <input
+                        id="userPhone"
+                        type="tel"
+                        value={userPhone}
+                        onChange={(e) => setUserPhone(e.target.value)}
+                        placeholder="010-1234-5678"
+                        pattern="[0-9]{3}[0-9]{3,4}[0-9]{4}"
+                        required
+                    />
                 </div>
-            </div>
+                <button type="submit" className="submit-btn" onClick={() => setUpdate(true)}>수정하기</button>
+            </form>
         </div>
     );
 }
