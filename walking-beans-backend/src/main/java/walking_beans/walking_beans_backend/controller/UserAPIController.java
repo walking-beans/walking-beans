@@ -15,6 +15,8 @@ import walking_beans.walking_beans_backend.model.vo.Vertification;
 
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 
+import walking_beans.walking_beans_backend.service.alarmService.AlarmService;
+import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
@@ -32,6 +34,9 @@ public class UserAPIController {
 
     @Autowired
     private AlarmNotificationService alarmNotificationService;
+
+    @Autowired
+    private AlarmServiceImpl alarmService;
 
     /**************************** 로그인 ****************************/
     // 로그인
@@ -84,8 +89,15 @@ public class UserAPIController {
 
     //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
     @GetMapping("/getuserdata/{userId}")
-    public Users getUserData(@PathVariable("userId") long userId) {
-        return userService.getUserInfoByIdForAlarms(userId);
+    public Map<String, Object> getUserData(@PathVariable("userId") long userId) {
+        Users users = userService.getUserInfoByIdForAlarms(userId);
+
+        String storeName = alarmService.getStoreName(userId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("user", users);         // Users 객체
+        result.put("storeName", storeName); // store_name 값
+
+        return result;
     }
 
     // 유저 Date 업데이트

@@ -120,6 +120,12 @@ public class AlarmServiceImpl implements AlarmService {
         return alarmMapper.getUserIdForOrderAlarm(orderNumber);
     }
 
+    // 유저 아이디로 스토어 이름 가져오기
+    @Override
+    public String getStoreName(long userId) {
+        return alarmMapper.getStoreName(userId);
+    }
+
     //알람 리스트 가져오기
     @Override
     public List<Alarms> getUserAlarmList(int userId) {

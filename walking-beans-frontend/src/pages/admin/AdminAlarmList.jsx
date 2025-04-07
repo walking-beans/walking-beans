@@ -48,8 +48,6 @@ const AdminAlarmList = () => {
                                 userRole: responses[index].data.userRole,  // userRole만 결합
                                 userName: responses[index].data.userName
                             }));
-
-                            // 알림 목록 상태 업데이트
                             setAlarmList(updatedAlarmList);
                         })
                         .catch((err) => {
@@ -185,7 +183,7 @@ const AdminAlarmList = () => {
                                     )}
 
                                     <span>
-                                        {value.alarmRole === 2 ? value.userName : "알림"}
+                                        {value.alarmRole === 2 ? value.userName + " 채팅" : "알림"}
                                         </span>
                                     <span className="AlarmDate">
                                 {value?.alarmCreateDate

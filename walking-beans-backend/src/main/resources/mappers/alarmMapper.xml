@@ -73,4 +73,10 @@
         FROM view_orders_stores
         WHERE order_number = #{orderNumber}
     </select>
+
+    <select id="getStoreName">
+        SELECT store_name
+        FROM Stores
+        WHERE user_id = #{userId}
+    </select>
 </mapper>

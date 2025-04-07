@@ -40,4 +40,7 @@ public interface AlarmMapper {
 
     // 스토어 아이디로 스토어 주인 유저 아이디 가져오기
     OrderStoreDTO getUserIdForOrderAlarm(String orderNumber);
+
+    // 유저 아이디로 스토어 이름 가져오기
+    String getStoreName(long userId);
 }
