@@ -147,6 +147,7 @@ const AdminAlarmList = () => {
                 <div className="user-title-center">알림</div>
                 <div className="user-order-hr" alt="구분선"></div>
 
+                <div className="mb-3">
                 {AlarmList.length > 0 && (
                     <div className="AlarmDeleteContainer">
                     <button className="AllReadBtn" onClick={AllReadAlrms}>
@@ -158,7 +159,7 @@ const AdminAlarmList = () => {
                     </button>
                 </div>
             )}
-
+                </div>
             {/* 알림 리스트가 없을 경우 / 알림 리스트가 있을 경우*/}
             {AlarmList.length === 0 ? (
                 <h3 className="NoAlarmList">알람이 없습니다</h3>

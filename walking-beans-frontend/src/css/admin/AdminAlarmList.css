@@ -1,8 +1,6 @@
 .AlarmListRead .AlarmImgAndDate , .AlarmListUnread .AlarmImgAndDate{
     display: grid;
     grid-template-columns: 60px auto 200px;
-    /*justify-content: space-between;*/ /* 아이콘과 날짜를 양쪽 끝에 배치 */
-    /*align-items: center; *//* 세로 중앙 정렬 */
     padding: 10px;
     align-items: center;
 }
@@ -40,11 +38,9 @@
 .AlarmListUnread { /*읽지 않은 알람*/
     border:  1px solid #5A3D21 ;
     border-radius: 35px;
-    margin: 20px;
     text-align: center;
-    background-color: #FAF1D0;
-    padding: 8px;
-
+    background-color: #F2E4C9;
+    width: 100%;
 }
 
 .AlarmListRead:hover { /*알람 마우스 올릴 때 css*/
