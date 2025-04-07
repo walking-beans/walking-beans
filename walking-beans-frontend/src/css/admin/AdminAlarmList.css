@@ -1,22 +1,24 @@
 .AlarmListRead .AlarmImgAndDate , .AlarmListUnread .AlarmImgAndDate{
     display: grid;
-    grid-template-columns: 100px auto 200px;
-    /*justify-content: space-between;*/ /* 아이콘과 날짜를 양쪽 끝에 배치 */
-    /*align-items: center; *//* 세로 중앙 정렬 */
+    grid-template-columns: 60px auto 200px;
     padding: 10px;
+    align-items: center;
 }
 
 .AlarmListRead { /*읽은 알람*/
     border:  1px solid #5A3D21 ;
     border-radius: 35px;
-    margin: 20px;
+    margin: 20px auto;
     text-align: center;
-    background-color: #B0A8A0;
-    padding: 8px;
+    background-color: #C0B3A4;
+    padding: 10px;
+    width: 100%;
 }
 
 .AlarmListRead .AlarmDate {
     text-align: right;
+    color:  #5A3D21;
+    font-size: 14px;
 }
 
 .AlarmListRead .AlarmImgContainer {
@@ -36,11 +38,9 @@
 .AlarmListUnread { /*읽지 않은 알람*/
     border:  1px solid #5A3D21 ;
     border-radius: 35px;
-    margin: 20px;
     text-align: center;
-    background-color: #FAF1D0;
-    padding: 8px;
-
+    background-color: #F2E4C9;
+    width: 100%;
 }
 
 .AlarmListRead:hover { /*알람 마우스 올릴 때 css*/
@@ -71,18 +71,17 @@
     background-color: #EE5A4C;
     border: none;
     margin-right: 5px;
+    color: white;
+    font-weight: bold;
 }
 
 .AlarmListcontainer { /*알람 컨테이너*/
-    background-color: #f8f1e4;
-
-    /*
-    max-width: 600px;
-    width: 100%;
-    margin: auto;
-    padding: 30px;
-    min-height: 70vh;
-    height: auto;*/
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
+    background: #F4EDDF;
 }
 
 .AllReadBtn { /* 모두 읽음 처리 버튼*/
@@ -93,4 +92,18 @@
     background-color: #5A3D21;
     border: none;
     margin-right: 15px;
+    font-weight: bold;
+}
+
+.AlarmListcontainer .alarm-text {
+    color: #5A3D21;
+    font-size: 20px;
+    text-align: left;
+    margin: 0 0 8px 50px;
+}
+
+.AlarmListcontainer .alarm-text-b {
+    color: #5A3D21;
+    font-weight: bold;
+    font-size: 20px;
 }

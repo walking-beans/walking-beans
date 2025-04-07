@@ -59,6 +59,7 @@
 .user-order-address-detail-text {
     font-size: 18px;
     color: #5A3D21;
+    text-align: left;
 }
 
 .user-order-requests {
