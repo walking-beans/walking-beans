@@ -3,31 +3,30 @@
     grid-template-columns: 60px auto 200px;
     padding: 10px;
     align-items: center;
+    grid-gap: 10px;
 }
 
 .AlarmListRead { /*읽은 알람*/
     border:  1px solid #5A3D21 ;
     border-radius: 35px;
-    margin: 20px auto;
+    margin: 30px auto;
     text-align: center;
     background-color: #C0B3A4;
     padding: 10px;
     width: 100%;
 }
 
-.AlarmListRead .AlarmDate {
+.AlarmListRead .AlarmDate,
+.AlarmListUnread .AlarmDate {
     text-align: right;
     color:  #5A3D21;
     font-size: 14px;
 }
 
+
 .AlarmListRead .AlarmImgContainer {
     text-align: left;
     display: inline;
-}
-
-.AlarmListRead .AlarmDate {
-    text-align: right;
 }
 
 .AlarmListcontainer p {
@@ -36,11 +35,13 @@
 }
 
 .AlarmListUnread { /*읽지 않은 알람*/
-    border:  1px solid #5A3D21 ;
+    border: 1px solid #5A3D21;
     border-radius: 35px;
     text-align: center;
-    background-color: #F2E4C9;
     width: 100%;
+    padding: 10px;
+    margin: 30px auto;
+    background-color: #F2E4C9;
 }
 
 .AlarmListRead:hover { /*알람 마우스 올릴 때 css*/
@@ -106,4 +107,5 @@
     color: #5A3D21;
     font-weight: bold;
     font-size: 20px;
+    text-align: left;
 }
