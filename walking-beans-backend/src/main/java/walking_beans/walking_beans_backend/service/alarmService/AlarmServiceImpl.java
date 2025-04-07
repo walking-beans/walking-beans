@@ -65,12 +65,17 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private  AlarmMapper alarmMapper;
+    @Autowired
+    private WebSocketAlertHandler webSocketAlertHandler;
 
     // 알림 저장
     @Override
     public void sendNotification(Alarms alarm) {
         alarmMapper.insertAlarm(alarm);
+
+        alarm.setAlarmId(alarm.getAlarmId());
         log.info("알림 저장 완료" + alarm);
+        webSocketAlertHandler.sendAlert(alarm);
     }
 
     // 읽지 않은 알람 가져오기

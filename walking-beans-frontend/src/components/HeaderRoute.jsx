@@ -3,13 +3,11 @@ import {useLocation} from "react-router-dom";
 import UserHeader from "../pages/layout/UserHeader";
 import RiderHeader from "../pages/layout/RiderHeader";
 import SearchHeader from "../pages/layout/SearchHeader";
-
+import OwnerHeader from "../pages/layout/OwnerHeader";
 
 const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation(); // 현재 URL 확인
     const [currentHeader, setCurrentHeader] = useState(<UserHeader user={user}/>);
-
-
 
     useEffect(() => {
         //   console.log("현재 로그인된 사용자:", user);
@@ -24,8 +22,6 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
         else {
             setCurrentHeader(<UserHeader user={user}/>);
         }*/
-
-
         if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}
                                           riderOnDuty={riderOnDuty}
@@ -62,6 +58,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
             setCurrentHeader(<UserHeader user={user}/>);
         }
     }, [location.pathname, user]); // URL 변경될 때마다 실행
+
 
     return currentHeader;
 };

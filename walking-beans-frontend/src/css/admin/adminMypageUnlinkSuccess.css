@@ -37,6 +37,8 @@
     width: 100%;
     max-width: 300px;
     padding: 12px;
+
+
     border: none;
     border-radius: 8px;
     font-size: 15px;
@@ -44,6 +46,8 @@
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease;
+
+
 }
 
 /* 역할별 버튼 색상 */

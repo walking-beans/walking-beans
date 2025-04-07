@@ -102,7 +102,7 @@ className="cursor-pointer text-primary fw-bold"
 
 .user-search-map-container .info-grid {
     display: grid;
-    grid-template-columns: 180px 100%;
+    grid-template-columns: 180px 350px;
     gap: 20px;
 }
 

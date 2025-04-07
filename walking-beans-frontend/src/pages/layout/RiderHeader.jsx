@@ -20,7 +20,6 @@ import bellIcon from "../../assert/svg/riderBell.svg";
 import searchIcon from "../../assert/svg/userNav/search.svg";
 import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
-
 const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation();
     const navigate = useNavigate();

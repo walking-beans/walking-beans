@@ -13,8 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import walking_beans.walking_beans_backend.mapper.UserMapper;
 import walking_beans.walking_beans_backend.model.dto.Users;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 @Service
@@ -50,9 +52,10 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     public int checkEmailExists(String email) {
         return userMapper.checkEmailExists(email);
     }
-    
-*/
-    /******************** 카카오 로그인 *******************************/
+    */
+
+
+/******************** 카카오 로그인 *******************************/
 /*
     @Override
     public Map<String, Object> KakaoCallback(String code){
@@ -110,7 +113,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
 
     }
-    
+
 */
     /********************* 네이버 로그인 *************************/
 /*

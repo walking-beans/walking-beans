@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
 import "../admin/HeaderAlarm.css";
@@ -50,10 +50,11 @@ const HeaderAlarm = ({userId, bell}) => {
                                 message:receivedData.alarmContent,
                                 type: receivedData.alarmRole,
                                 url: receivedData.alarmUrl,
+                                alarmId:receivedData.alarmId,
                             },
                             ...prevNotifications,
                         ])
-
+                        console.log(receivedData.alarmId);
                         setUnreadCount((prevCount) => prevCount +1);
                     }
                 })
@@ -64,15 +65,16 @@ const HeaderAlarm = ({userId, bell}) => {
                     const receivedData = JSON.parse(message.body);
 
                     // 관리자의 알림을 처리
-                        setNotifications((prevNotifications) => [
-                            {
-                                message: receivedData.alarmContent,
-                                type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
-                                url: receivedData.alarmUrl,
-                            },
-                            ...prevNotifications,
-                        ]);
-                        setUnreadCount((prevCount) => prevCount + 1);
+                    setNotifications((prevNotifications) => [
+                        {
+                            message: receivedData.alarmContent,
+                            type: receivedData.alarmRole,  // 관리자 알림을 구분하는 type
+                            url: receivedData.alarmUrl,
+                            alarmId:receivedData.alarmId,
+                        },
+                        ...prevNotifications,
+                    ]);
+                    setUnreadCount((prevCount) => prevCount + 1);
                 })
 
                 /**************************** **************************/
@@ -104,6 +106,7 @@ const HeaderAlarm = ({userId, bell}) => {
                             message: receivedData.alarmContent,  // 알림 내용
                             type: receivedData.alarmRole,       // 관리자 알림을 구분하는 타입
                             url: receivedData.alarmUrl,         // 알림 URL
+                            alarmId:receivedData.alarmId,
                         })),
                         ...prevNotifications,  // 이전 알림 목록
                     ]);
@@ -134,6 +137,7 @@ const HeaderAlarm = ({userId, bell}) => {
         setShowDropdown(!showDropdown);  // 드롭다운 상태 토글
     };
 
+    //모든 알람 읽음 처리
     const markAllReadAlarms = () => {
         axios
             .put("http://localhost:7070/api/allreadalarms/"+userId)
@@ -150,6 +154,23 @@ const HeaderAlarm = ({userId, bell}) => {
             )
     }
 
+    // 읽음 표시
+    const changeAlarmStatus = (alarmId) => {
+        axios
+            .put("http://localhost:7070/api/read/"+alarmId)
+            .then(
+                (res) => {
+                    console.log("상태 변경 완료");
+                }
+            )
+            .catch(
+                (err) => {
+                    console.log("err",err);
+                }
+            )
+
+    }
+
     return (
         <div className="notification-container">
             <div onClick={toggleAlarm} className={"AlarmNotificationContainer"}>
@@ -160,31 +181,45 @@ const HeaderAlarm = ({userId, bell}) => {
                 <div className={"AlarmDropdown"}>
                     {
                         notifications.length > 0 ? (
-                        notifications.map((noti, index) => (
-                            <div key={index} className={"AlarmNotificationItem"} onClick={() => {
-                                if (noti.type === 1) {
-                                    navigate("/alarmlist");
-                                    setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1); //
+                            notifications.map((noti, index) => (
+                                <div key={index} className={"AlarmNotificationItem"} onClick={() => {
+                                    if (noti.type === 1) {
+                                        navigate("/alarmlist");
+                                        setShowDropdown(false); // 알림목록 닫기
+                                        setUnreadCount(-1); //알림 카운터 하나 빼기
 
-                                } else if (noti.type === 2) {
-                                    navigate(noti.url);
-                                    setShowDropdown(false); // 알림목록 닫기
-                                    setUnreadCount(-1);
+                                        // 클릭된 알림 제거
+                                        setNotifications((prevNotifications) =>
+                                            prevNotifications.filter((notification, i) => i !== index)
+                                        );
+                                        changeAlarmStatus(noti.alarmId);
+
+                                    } else if (noti.type === 2) {
+                                        navigate(noti.url);
+                                        setShowDropdown(false); // 알림목록 닫기
+                                        setUnreadCount(-1); //알림 카운터 하나 빼기
+
+                                        // 클릭된 알림 제거
+                                        setNotifications((prevNotifications) =>
+                                            prevNotifications.filter((notification, i) => i !== index)
+                                        );
+                                        changeAlarmStatus(noti.alarmId);
+
+                                    }
                                 }
-                            }
-                            }>
-                                <strong>{noti.type === 1 ? "🔔 알림" : noti.type === 2 ? "💬 채팅" : ""}:</strong><br/> {noti.message}
-                            </div>
-                        ))
-                    ) : (
-                        <div className={"NoAlarmNotificationItem"}>
-                            <p>알림이 없습니다.</p>
-                            <Link to="/alarmlist" className={"AlarmLink"} onClick={() => setShowDropdown(false)}>
-                                목록 보기
-                            </Link>
-                        </div>
-                    )}
+                                }>
+                                    <strong>{noti.type === 1 ? "🔔 알림" : noti.type === 2 ? "💬 채팅" : ""}:</strong><br/> {noti.message}
+                                    </div>
+                                    ))
+                                    ) : (
+                                    <div className={"NoAlarmNotificationItem"}>
+                                    <p>알림이 없습니다.</p>
+                                    <Link to="/alarmlist" className={"AlarmLink"}
+                                          onClick={() => setShowDropdown(false)}>
+                                        목록 보기
+                                    </Link>
+                                </div>
+                            )}
 
                     {/*모든 알림 확인*/}
 
@@ -198,7 +233,7 @@ const HeaderAlarm = ({userId, bell}) => {
                     )}
                 </div>
             )}
-        </div>
-    )
+</div>
+)
 }
 export default HeaderAlarm;
