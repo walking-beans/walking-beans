@@ -26,6 +26,12 @@ public interface MenuMapper {
     // 메뉴 추가하기
     void addMenu(Menu menu);
 
+    // 약한 삭제
+    void softDeleteMenu(long menuId);
+
+    // 약한 삭제 복구
+    void softRecoveryMenu(long menuId);
+
     // 메뉴 삭제하기
     void deleteMenu(long menuId);
 

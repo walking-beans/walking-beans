@@ -14,6 +14,7 @@ const LocationInfoForm = ({formData, handleChange, isEditing}) => {
                 onChange={handleChange}
                 type="text"
                 required={true}
+                isEditing={isEditing}
             />
             <MenuInputTag
                 id="storeLatitude"
@@ -23,6 +24,7 @@ const LocationInfoForm = ({formData, handleChange, isEditing}) => {
                 onChange={handleChange}
                 type="number"
                 required={true}
+                isEditing={isEditing}
             />
             <MenuInputTag
                 id="storeLongitude"
@@ -32,6 +34,7 @@ const LocationInfoForm = ({formData, handleChange, isEditing}) => {
                 onChange={handleChange}
                 type="number"
                 required={true}
+                isEditing={isEditing}
             />
         </div>
     )

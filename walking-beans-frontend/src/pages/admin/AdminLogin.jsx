@@ -9,9 +9,6 @@ import naverLoginButton from "../../images/naverLoginButton.png"
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>아이디 비밀번호 로그인
-            {/*<AdminLoginSocial/>/!*소셜 로그인*!/*/}
-
             <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
             {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
         </div>
@@ -67,19 +64,22 @@ const AdminLoginNomal = () => {
         if (role !== null) {
             switch (role) {
                 case "user":
-                    window.location.href = "/"; // 새로고침해서 맞는 헤더로 변경
+                    navigate("/");
                     break;
                 case "rider":
-                    window.location.href = "/rider";
+                    navigate("/rider");
                     break;
                 case "owner":
-                    window.location.href = "/owner";
+                    navigate("/owner");
                     break;
                 case "noRole":
-                    window.location.href = "/updaterole";
+                    navigate("/updaterole");
+                    break;
+                case "admin":
+                    navigate("/adminpage");
                     break;
                 default:
-                    window.location.href = "/";
+                    navigate("/");
                     break;
             }
         }
@@ -204,6 +204,9 @@ const AdminLoginSocial = () => {
                     break;
                 case "noRole":
                     navigate("/updaterole");
+                    break;
+                case "admin":
+                    navigate("/adminpage");
                     break;
                 default:
                     navigate("/");
