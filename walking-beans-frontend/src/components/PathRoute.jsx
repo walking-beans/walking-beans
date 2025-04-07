@@ -215,6 +215,11 @@ function PathRoute() {
                                 <StoreMenu/>
                             </ProtectedRoute>
                         }/>
+                        <Route path="/owner/:storeId/menuresister" element={
+                            <ProtectedRoute allowedRoles={["owner"]}>
+                                <StoreMenuRegister/>
+                            </ProtectedRoute>
+                        }/>
                         <Route path="/owner/:storeId/menu/:menuId" element={
                             <ProtectedRoute allowedRoles={["owner"]}>
                                 <StoreMenuDetail/>
