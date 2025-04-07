@@ -76,7 +76,7 @@ const AdminLoginNomal = () => {
                     navigate("/updaterole");
                     break;
                 case "admin":
-                    window.location.href = "/adminpage";
+                    navigate("/adminpage");
                     break;
                 default:
                     navigate("/");
