@@ -92,6 +92,10 @@ const AdminAlarmList = () => {
             )
     }
 
+    const getUserInfo = () => {
+
+    }
+
     return (
         <div className="AlarmListcontainer">
             {AlarmList.length > 0 && (

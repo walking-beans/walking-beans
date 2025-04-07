@@ -9,9 +9,6 @@ import naverLoginButton from "../../images/naverLoginButton.png"
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>아이디 비밀번호 로그인
-            {/*<AdminLoginSocial/>/!*소셜 로그인*!/*/}
-
             <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
             {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
         </div>
@@ -77,6 +74,9 @@ const AdminLoginNomal = () => {
                     break;
                 case "noRole":
                     navigate("/updaterole");
+                    break;
+                case "admin":
+                    window.location.href = "/adminpage";
                     break;
                 default:
                     navigate("/");
@@ -204,6 +204,9 @@ const AdminLoginSocial = () => {
                     break;
                 case "noRole":
                     navigate("/updaterole");
+                    break;
+                case "admin":
+                    navigate("/adminpage");
                     break;
                 default:
                     navigate("/");
