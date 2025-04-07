@@ -3,7 +3,6 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import OrderDetailCard from "../../components/owner/OrderDetailCard";
 import MsgToast from "../../components/owner/MsgToast";
-import OrderTime from "../../components/owner/OrderTime";
 import "./StoreOrderCss.css";
 
 
@@ -15,6 +14,23 @@ const StoreOrder= () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
     const [toastMsg, setToastMsg] = useState("");// 안내 메세지
     const [storeCookTime, setStoreCookTime] = useState(5); // 가게 기본 조리시간
+
+    // 시간 변환하기 함수
+    const parseDateString = (dateString) => {
+        return new Date(dateString.replace(" ", "T")); // '2025-03-25 15:25:40' → '2025-03-25T15:25:40'
+    };
+    // 예상 시간 계산 함수 minutes 만큼 현재시간에서 더해서 표시!
+    const estimatedCookTime = (orderCreateDate, cookTime) => {
+        if (!orderCreateDate) return "시간 없음"; // 예외 처리
+        const orderTime = parseDateString(orderCreateDate);
+        if (!orderTime || isNaN(orderTime.getTime())) return "잘못된 시간";
+        orderTime.setMinutes(orderTime.getMinutes() + cookTime);
+        return orderTime.toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+    };
 
     const connectWebSocket = () =>{
         // 웹소켓 상태값 2이상시 표시
@@ -34,7 +50,13 @@ const StoreOrder= () => {
                         (order) => order.orderId === newOrder.orderId);
                     if (orderIndex === -1 ) { // 인덱스가 없으면 새 주문 추가
                         console.log("새 주문이 들어왔어요", newOrder);
-                        return [newOrder, ...prevOrders];// 새 주문이 위쪽으로 오개
+                        return [
+                            {
+                                newOrder,
+                                estimatedTime: estimatedCookTime(newOrder.orderCreateDate, storeCookTime),// 시간 갱신 방지
+                            },
+                                ...prevOrders
+                        ];// 새 주문이 위쪽으로 오개
                     }
                     // 기존 주문 상태만 업데이트
                     console.log("주문상태가 변경되었어요", newOrder);
@@ -67,14 +89,17 @@ const StoreOrder= () => {
         axios
             .get(`http://localhost:7070/api/orders/store/${id}`)
             .then( (res)=>{
-                setOrders(res.data)
+                const initialOrders = res.data.map((order) => ({ // 시간추가를 위한 추가 로직
+                    ...order,
+                estimatedTime: estimatedCookTime(order.orderCreateDate, storeCookTime), // 초기 주문에도 시간 추가
+                }));
+                setOrders(initialOrders)
                 console.log("전체리스트 로딩 성공 : ",res.data);
             })
             .catch((err)=>{
                 console.log("주문정보리스트 전체 조회 로딩에러발생 : ",err);
             })
         connectWebSocket();
-        console.log("렌더링 후 orders:", orders);
     }, []);
 
     useEffect(() => {
@@ -137,12 +162,14 @@ const StoreOrder= () => {
     }
 
     // 시간 설정
-    const setMinutesToAdd = () => {
-        axios
-            .get(``)
-            .then(()=>{})
-            .catch(()=>{})
+    const handleCookTimeChange = (e) => {
+        const newCooktime = parseInt(e.target.value) || 0;
+        setStoreCookTime(newCooktime);
     }
+
+
+
+
 
     return(
         <>
@@ -175,7 +202,7 @@ const StoreOrder= () => {
                         <div className="order-card">
                             {/* 주문 정보 (시간, 주문번호) */}
                             <div className="order-info">
-                                <OrderTime minutesToAdd={15}/>
+                                <span>{order.estimatedTime}</span>
                                 <span className="order-number">{order.orderNumber}</span>
 
                             </div>
@@ -228,7 +255,6 @@ const StoreOrder= () => {
                 {toastMsg && (
                     <MsgToast
                         message={toastMsg}
-                        duration={3000}
                         onClose={() => setToastMsg("")}/>
                 )}
             </div>

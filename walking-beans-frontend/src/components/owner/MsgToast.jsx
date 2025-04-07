@@ -1,17 +1,22 @@
 import { useEffect } from "react";
 
+// 기본 5초. 필요시 부모에서 관리
 const MsgToast = ({ message, duration = 5000, onClose }) => {
     useEffect(() => {
         const timer = setTimeout(onClose, duration);
         return () => clearTimeout(timer);
     }, [duration, onClose]);
 
+    if(!message) return null;
+
     return (
         <>
         {/*임시 스타일*/}
         <div style={{
-            position: "absolute",
-            bottom: "20px",
+            position: "fixed",
+            bottom: "100px",
+            left: "50%",
+            transform: "translateX(-50%)", // X축 기준 중앙 정렬
             backgroundColor: "#333",
             color: "white",
             padding: "10px 20px",

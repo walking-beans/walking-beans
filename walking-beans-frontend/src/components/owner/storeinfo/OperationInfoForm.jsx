@@ -35,8 +35,8 @@ const OperationInfoForm = ({ formData, handleChange, isEditing }) => {
                             type="radio"
                             name="storeStatus"
                             id="status-open"
-                            value="운영중"
-                            checked={formData.storeStatus === "운영중"}
+                            value="운영 중"
+                            checked={formData.storeStatus === "운영 중"}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />
@@ -50,8 +50,8 @@ const OperationInfoForm = ({ formData, handleChange, isEditing }) => {
                             type="radio"
                             name="storeStatus"
                             id="status-ready"
-                            value="준비중"
-                            checked={formData.storeStatus === "준비중"}
+                            value="준비 중"
+                            checked={formData.storeStatus === "준비 중"}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />
@@ -65,8 +65,8 @@ const OperationInfoForm = ({ formData, handleChange, isEditing }) => {
                             type="radio"
                             name="storeStatus"
                             id="status-closed"
-                            value="휴무일"
-                            checked={formData.storeStatus === "휴무일"}
+                            value="휴무"
+                            checked={formData.storeStatus === "휴무"}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />

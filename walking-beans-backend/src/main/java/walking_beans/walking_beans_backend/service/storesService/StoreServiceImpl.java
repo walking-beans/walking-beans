@@ -95,7 +95,7 @@ public class StoreServiceImpl implements StoreService {
         return storeMapper.getStoreIdByUserId(userId);
     }
 
-    // 매장정보 삭제하기
+    // 매장정보 삭제하기 - 관리자만 사용 가능
     @Override
     public void deleteStores(long storeId) {
         storeMapper.deleteStores(storeId);
