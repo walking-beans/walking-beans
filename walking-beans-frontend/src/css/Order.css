@@ -557,7 +557,7 @@
 }
 
 .order-store-logo {
-    max-width: 130px;
+    min-width: 130px;
     height: 130px;
     object-fit: cover;
     object-position: center;
