@@ -86,12 +86,13 @@ const StoreMenuDetail = () => {
         submitData.append("menuDescription", formData.menuDescription);
         if (imgRef.current?.files[0]) {
             submitData.append("menuPictureUrl", imgRef.current.files[0]);
-        }
-        console.log(submitData);
+        } // 기존 URL 유지시 값을 보내지 않음. patch
+
+        console.log("전송 데이터:", [...submitData.entries()]); // 디버깅용
 
         // 권한 확인 및 반응에 따라서 페이지 이동 기능 포함.
         axios
-            .put(`http://localhost:7070/api/menu/owner/${storeId}/menu/${menuId}`,
+            .patch(`http://localhost:7070/api/menu/owner/${storeId}/menu/${menuId}`,
                 submitData,
                 {
                     headers: {

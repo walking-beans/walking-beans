@@ -74,6 +74,7 @@ const AdminPage = () => {
         }
     }
 
+
     const cancelLoginCut = () => {
         const toDate = new Date().toISOString().split('T')[0];
 
@@ -99,6 +100,7 @@ const AdminPage = () => {
                     alert("백엔드 오류");
                 }
             )
+
     }
 
     return (
