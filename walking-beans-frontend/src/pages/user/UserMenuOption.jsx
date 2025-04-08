@@ -1,15 +1,8 @@
 import "../../css/Order.css";
 import { useState } from "react";
 
+// 메뉴 옵션 컴포넌트
 const UserMenuOption = ({optionContent, optionPrice, onChange, checked, type="checkbox", name}) => {
-    const [isSelected, setIsSelected] = useState(checked);
-
-    const handleClick = () => {
-        const newState = !isSelected;
-        setIsSelected(newState);
-        onChange(newState);
-    };
-
     return (
         <div className="user-menu-option-container">
             <div className="user-order-option-info">
@@ -20,7 +13,6 @@ const UserMenuOption = ({optionContent, optionPrice, onChange, checked, type="ch
                         className="user-order-option-select"
                         checked={checked || false}
                         onChange={onChange}
-                        onClick={type === "radio" ? handleClick : undefined}
                     />
                     <div className="user-order-optioncontent">{optionContent}</div>
                 </label>
