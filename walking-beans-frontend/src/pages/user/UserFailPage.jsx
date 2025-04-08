@@ -3,8 +3,6 @@ import failIcon from "../../assert/images/user/failIcon.svg"
 
 export function UserFailPage() {
     const [searchParams] = useSearchParams();
-    const errorCode = searchParams.get("code");
-    const errorMessage = searchParams.get("message");
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;

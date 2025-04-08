@@ -19,31 +19,35 @@ const StoreMain = () => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
             const userData = JSON.parse(storedUser);
-        console.log(storedUser)
+            console.log(storedUser)
+            console.log("User 정보:", userData);
+
             setOwnerName(userData.user_name || "사장님");
             setUserId(userData.user_id) // 가게 정보 확인을 위한 id가져오기 , 이동할 페이지마다 storeId 파라미터가 있기 때문에 필요
-                console.log(userData.user_id)
+            console.log(userData.user_id)
+
             // 가게id 가져오기 > userid가 있으면 그떄 비동기 시작
-            if(userId) {
+
+            const currentUserId = userData.user_id;
+
+            if (currentUserId) {
                 axios
-                    .get(`http://localhost:7070/api/store/valid/${userId}`)
+                    .get(`http://localhost:7070/api/store/valid/${currentUserId}`)
                     .then((res) => {
                         setStoreId(res.data)
-                        console.log("유저소유 가게 아이디 : " + res)
+                        console.log("유저소유 가게 아이디 : ", res)
                         setIsLoading(false); // 데이터 로드 완료
                     })
                     .catch((err) => {
-                        console.log("아이디 확인 실패 : " + err)
+                        console.log("아이디 확인 실패 : ", err)
                         setIsLoading(false); // 에러 시에도 로딩 해제
                         alert("등록된 매장이 없습니다.")
                     })
             }
         } else {
             alert("회원가입 후 사용가능한 페이지 입니다.")
-            navigate("/") // 메인으로 돌아가기
+            navigate("/login") // 메인으로 돌아가기
         }
-
-
     }, [userId]);
 
     if (isLoading) {
