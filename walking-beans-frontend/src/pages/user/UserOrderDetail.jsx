@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import UserSelectMenu from "./UserSelectMenu";
 
 const UserOrderDetail = () => {
     const {orderNumber} = useParams();
@@ -78,20 +77,20 @@ const UserOrderDetail = () => {
                         const itemTotal = (basePrice + optionPrices) * qty;
 
                         console.log(`
-        메뉴: ${item.menuName}, 
-        기본가격: ${basePrice}, 
-        옵션: ${optionDisplay}, 
-        옵션가격: ${optionPrices}, 
-        수량: ${qty}, 
-        항목 총액: ${itemTotal}
-    `);
-
+                            메뉴: ${item.menuName}, 
+                            기본가격: ${basePrice}, 
+                            옵션: ${optionDisplay}, 
+                            옵션가격: ${optionPrices}, 
+                            수량: ${qty}, 
+                            항목 총액: ${itemTotal}
+                        `);
                         return sum + itemTotal;
                     }, 0);
                     setTotalMenuPrice(menuTotal);
 
                     console.log('총 메뉴 금액:', menuTotal);
 
+                    // 배달팁 계산
                     const deliveryTip = parseInt(baseOrderInfo.storeDeliveryTip) || 0;
                     const totalPrice = menuTotal + deliveryTip;
                     setTotalPrice(totalPrice);
@@ -108,6 +107,7 @@ const UserOrderDetail = () => {
             .finally(() => setLoading(false));
     }, [orderNumber]);
 
+    // 주문 삭제 (상태 6일 때만 삭제가능)
     const handleDeleteOrder = () => {
         console.log("현재 주문 상태:", order.orderStatus);  // 상태 확인용 로그
 
@@ -178,10 +178,10 @@ const UserOrderDetail = () => {
                 <div className="user-order-hr"></div>
                 <div className="user-order-bordtext">상세 내역</div>
 
-
                 <div className="user-order-mt">
                     {orderItems.length > 0 ? (
                         orderItems.map((item, index) => {
+                            // 마지막 선 없애기
                             const isLastItem = index === orderItems.length - 1;
                             return (
                                 <div key={index}>

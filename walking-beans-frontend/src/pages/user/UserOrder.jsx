@@ -1,35 +1,21 @@
 import React, {useEffect, useRef, useState} from "react";
-import apiUserOrderService from "../../service/apiUserOrderService";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
+import apiUserOrderService from "../../service/apiUserOrderService";
 import UserCart from "../user/UserCart";
+import UserMenuOptionModal from "../user/UserMenuOptionModal";
+import UserMenuCategory from "../user/UserMenuCategory";
 import "../../css/Order.css";
 import "../../css/Cart.css";
 import "../../css/Owner.css";
-import UserMenuOptionModal from "../user/UserMenuOptionModal";
 import oneStar from "../../assert/svg/starNav/oneStar.svg";
-import detailBtn from "../../images/user/detailbtn.svg";
-import UserMenuCategory from "../user/UserMenuCategory";
-import axios from "axios";
+import detailBtn from "../../assert/images/user/detailbtn.svg";
 
 const UserOrder = () => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : "";
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log("UserMenuOptionModal userId:", userId);
-    }, []);
-
-    useEffect(() => {
-        if (!userId) {
-            alert("로그인 후 주문 가능합니다.");
-            setTimeout(() => {
-                navigate("/login", {replace: true}); // 뒤로가기 방지
-            }, 500);
-        }
-    }, [userId, navigate]);
-
     const [carts, setCarts] = useState([]);
     const {storeId} = useParams();
     const [totalAmount, setTotalAmount] = useState(0);
@@ -48,6 +34,20 @@ const UserOrder = () => {
     const [storeRating, setStoreRating] = useState("0.0");
     const [reviewCount, setReviewCount] = useState(0);
 
+    // userId 확인
+    useEffect(() => {
+        console.log("UserMenuOptionModal userId:", userId);
+    }, []);
+
+    // 로그인 확인
+    useEffect(() => {
+        if (!userId) {
+            alert("로그인 후 주문 가능합니다.");
+            setTimeout(() => {
+                navigate("/login", {replace: true}); // 뒤로가기 방지
+            }, 500);
+        }
+    }, [userId, navigate]);
 
     // 메뉴 클릭 시 메뉴 옵션 모달 열기
     const handleMenuClick = (menu) => {
@@ -119,7 +119,7 @@ const UserOrder = () => {
             .then((res) => {
                 const reviewsData = res.data;
                 const totalScore = reviewsData.reduce((sum, review) => sum + review.reviewStarRating, 0);
-                const average = reviewsData.length > 0 ? (totalScore / reviewsData.length).toFixed(1) : "0.0";
+                const average = reviewsData.length > 0 ?(totalScore / reviewsData.length).toFixed(1) : "0.0";
                 const reviewCount = reviewsData.length; // 리뷰 개수 계산
                 callback(average, reviewCount); // 평균 별점과 리뷰 개수를 함께 반환
             })

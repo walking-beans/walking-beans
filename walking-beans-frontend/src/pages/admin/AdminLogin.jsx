@@ -3,17 +3,14 @@ import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
 import "../../css/admin/AdminLogin.css";
-import kakaoLoginButton from "../../images/kakaoLoginButton.png"
-import naverLoginButton from "../../images/naverLoginButton.png"
+import kakaoLoginButton from "../../assert/images/kakaoLoginButton.png"
+import naverLoginButton from "../../assert/images/naverLoginButton.png"
 
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>아이디 비밀번호 로그인
-            {/*<AdminLoginSocial/>/!*소셜 로그인*!/*/}
-
-            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginNomal/>*/}{/*아이디 비밀번호 로그인*/}
+            <AdminLoginSocial/>{/*소셜 로그인*/}
         </div>
     )
 
@@ -67,19 +64,22 @@ const AdminLoginNomal = () => {
         if (role !== null) {
             switch (role) {
                 case "user":
-                    window.location.href = "/"; // 새로고침해서 맞는 헤더로 변경
+                    navigate("/");
                     break;
                 case "rider":
-                    window.location.href = "/rider";
+                    navigate("/rider");
                     break;
                 case "owner":
-                    window.location.href = "/owner";
+                    navigate("/owner");
                     break;
                 case "noRole":
-                    window.location.href = "/updaterole";
+                    navigate("/updaterole");
+                    break;
+                case "admin":
+                    navigate("/adminpage");
                     break;
                 default:
-                    window.location.href = "/";
+                    navigate("/");
                     break;
             }
         }
@@ -205,6 +205,9 @@ const AdminLoginSocial = () => {
                 case "noRole":
                     navigate("/updaterole");
                     break;
+                case "admin":
+                    navigate("/adminpage");
+                    break;
                 default:
                     navigate("/");
                     break;
@@ -224,10 +227,10 @@ const AdminLoginSocial = () => {
                 <div className="login-text-mini">가입된 정보가 없을 경우 자동으로 가입됩니다</div>
                 <div className="social-login">
                     <button className="kakao-login">
-                        <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                        <img src={require('../../assert/images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
                     </button>
                     <button className="naver-login">
-                        <img src={require('../../images/naverLoginButton.png')} onClick={naverLogin}/>
+                        <img src={require('../../assert/images/naverLoginButton.png')} onClick={naverLogin}/>
                     </button>
                 </div>
             </div>

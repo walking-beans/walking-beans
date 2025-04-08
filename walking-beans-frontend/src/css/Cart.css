@@ -28,6 +28,7 @@
     font-size: 17px;
     color: #5A3D21;
     font-weight: bold;
+    text-align: left;
 }
 
 .user-cart-big-pricetext {
@@ -77,7 +78,7 @@
 }
 
 .user-cart-remove img:hover {
-    content: url("../images/user/orderCartDeleteBtnHoverMini.svg");
+    content: url("../assert/images/user/orderCartDeleteBtnHoverMini.svg");
 }
 
 .user-cart-options {
@@ -144,4 +145,5 @@
     display: flex;
     justify-content: space-between;
     align-items: end;
+    text-align: left;
 }

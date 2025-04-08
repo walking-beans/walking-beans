@@ -7,37 +7,20 @@ import OwnerHeader from "../pages/layout/OwnerHeader";
 
 const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation(); // 현재 URL 확인
-    const [currentHeader, setCurrentHeader] = useState(null);
+    const [currentHeader, setCurrentHeader] = useState(<UserHeader user={user}/>);
 
     useEffect(() => {
-        /*const path = location.pathname;
+        //   console.log("현재 로그인된 사용자:", user);
+        //   console.log("현재 경로:", location.pathname);
 
-        if (path.startsWith("/rider")) {
-            setCurrentHeader(
-                <RiderHeader
-                    user={user}
-                    riderOnDuty={riderOnDuty}
-                    setRiderOnDuty={setRiderOnDuty}
-                />
-            );
-        } else if (path.startsWith("/owner")) {
-            setCurrentHeader(<UserHeader user={user} />);
-        } else if (path.startsWith("/user/search/map")) {
-            setCurrentHeader(<SearchHeader user={user} />);
-        } else if (path.startsWith("/mypage")) {
-            if (user?.user_role === "rider") {
-                setCurrentHeader(
-                    <RiderHeader
-                        user={user}
-                        riderOnDuty={riderOnDuty}
-                        setRiderOnDuty={setRiderOnDuty}
-                    />
-                );
-            } else {
-                setCurrentHeader(<UserHeader user={user} />);
-            }
-        } else {
-            setCurrentHeader(<UserHeader user={user} />);
+        /*if (location.pathname.startsWith("/rider")) {
+            setCurrentHeader(<RiderHeader user={user}/>);
+        } else if (location.pathname.startsWith("/user/search/map")){
+            setCurrentHeader(<SearchHeader user={user}  />);
+        }
+        // 2. `/`로 돌아오면 UserHeader로 변경
+        else {
+            setCurrentHeader(<UserHeader user={user}/>);
         }*/
         if (location.pathname.startsWith("/rider")) {
             setCurrentHeader(<RiderHeader user={user}
@@ -46,7 +29,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
             // /owner
         } else if (location.pathname.startsWith("/owner")) {
             /** 추후 변경 요망 **/
-            setCurrentHeader(<OwnerHeader user={user}/>);
+            setCurrentHeader(<UserHeader user={user}/>);
             // /user/search/map
         } else if (location.pathname.startsWith("/user/search/map")) {
             setCurrentHeader(<SearchHeader user={user}/>);
@@ -66,7 +49,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
                                               setRiderOnDuty={setRiderOnDuty}/>);
             } else if (user.user_role === "owner") {
                 /** 추후 변경 요망 **/
-                setCurrentHeader(<OwnerHeader user={user}/>);
+                setCurrentHeader(<UserHeader user={user}/>);
             } else {
                 // admin or default
                 setCurrentHeader(<UserHeader user={user}/>);
@@ -75,6 +58,7 @@ const HeaderRoute = ({user, riderOnDuty, setRiderOnDuty}) => {
             setCurrentHeader(<UserHeader user={user}/>);
         }
     }, [location.pathname, user]); // URL 변경될 때마다 실행
+
 
     return currentHeader;
 };

@@ -30,7 +30,7 @@ public class FileStorageService {
             File desk = new File(filePath);
             desk.getParentFile().mkdirs(); // 디렉토리 없으면 생성
             file.transferTo(desk); // 파일 저장
-            return "/uploads/" + uniqueFileName; // 저장된 경로 반환
+            return "/upload/" + uniqueFileName; // 저장된 경로 반환
         } catch (IOException e) {
             throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
         }

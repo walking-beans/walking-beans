@@ -2,7 +2,9 @@ import "../../css/Order.css"
 import UserMenuOption from "./UserMenuOption";
 import { useState } from "react";
 
+// 옵션 카테고리별 조회 컴포넌트
 const UserMenuOptionGroup = ({optionName, options, selectedOptions, onOptionChange}) => {
+    // 처음에 옵션 선택이 안된채로 보임
     const [selectedOptionId, setSelectedOptionId] = useState(
         selectedOptions && selectedOptions.length > 0 ? selectedOptions[0].optionId : null
     );

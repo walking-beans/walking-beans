@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminChangeRole.css"
-import signupSuccess from "../../images/user/signupSuccess.svg"
+import signupSuccess from "../../assert/images/user/signupSuccess.svg"
 
 const AdminChangeRole = () => {
     // 선택된 롤을 관리하는 상태
@@ -32,9 +32,10 @@ const AdminChangeRole = () => {
     const reLogin = () => {
         // 기존 user 정보를 삭제
         localStorage.removeItem("user");
-
         // 새 롤을 반영한 로그인 요청
         apiUserService.login(userEmail, "0000", (status) => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const userId = user.user_id
             if (status === "success") {
                 // 역할에 맞는 페이지로 이동
                 switch (selectedRole) {
@@ -45,7 +46,7 @@ const AdminChangeRole = () => {
                         navigate("/rider"); // 라이더
                         break;
                     case 3:
-                        navigate("/owner"); // 매장 사장님
+                        navigate(`/user/${userId}/storeregister/`); // 매장 사장님
                         break;
                     default:
                         navigate("/"); // 기본값

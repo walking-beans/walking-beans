@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
+
 
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
@@ -52,12 +52,12 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     public int checkEmailExists(String email) {
         return userMapper.checkEmailExists(email);
     }
-    
 
-*/
-    /******************** 카카오 로그인 *******************************/
 
-   /* @Override
+
+/******************** 카카오 로그인 *******************************/
+
+    @Override
     public Map<String, Object> KakaoCallback(String code){
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -113,11 +113,11 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
 
     }
-    */
+
 
     /********************* 네이버 로그인 *************************/
 
-   /* @Override
+    @Override
     public Map<String, Object> NaverCallback(String code, String state) {
         String tokenUrl = "https://nid.naver.com/oauth2.0/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -175,4 +175,3 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
 }
-*/

@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom"
 import {useState} from "react";
 
-const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
+const MenuCard = ({storeId,menuId,menuName,price,menuPictureUrl,handleDelete,barrel}) => {
 
     //id,name,price,
     //handleDelete 삭제버튼용 핸들러
@@ -38,7 +38,7 @@ const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,ba
                                         <button className="btn btn-outline-success">옵션관리</button>
                                     </Link>
                                     {/* ✅ 삭제 버튼 */}
-                                        <button className="btn btn-outline-danger">삭제하기</button>
+                                        <button className="btn btn-outline-danger" onClick={() => handleDelete(menuId)} >삭제하기</button>
                                 </div>
                             </div>
                         </div>
@@ -48,30 +48,29 @@ const MenuCard = ({storeId, menuId,menuName,price,menuPictureUrl,handleDelete,ba
                 :
                 <div class={"col-4 mb-5"} key={menuId}>
                     {/* false 일때, 3열뷰 */}
-                    <Link to={`/clothes/${menuId}`}>
-
                         <div class="card h-100">
+                    <Link to={`/owner/${storeId}/menu/${menuId}`}>
                             <img class="card-img-top" src={menuPictureUrl}
                                  alt="Fancy Product"/>
+                    </Link>
                             <div class="card-body p-4 text-center">
                                 <h5 class="fw-bolder">
 
                                     <p class="text-decoration-none">{menuName}</p>
                                 </h5>
-                                {price}원
-                            </div>
-                        </div>
-                    </Link>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <p>{price}원</p>
                         <div class="text-center">
                             <Link to={`/owner/${storeId}/menu/${menuId}`}>
-                                <button class="btn btn-outline-warning">수정</button>
+                                <button class="btn btn-outline-warning" style={{ width: "120px", height: "40px", textAlign: "center" }}>수정</button>
                             </Link>
                             <Link to={`/owner/${storeId}/${menuId}/menuoption`}>
-                            <button className="btn btn-outline-success">옵션관리</button>
+                            <button className="btn btn-outline-success" style={{ width: "120px", height: "40px", textAlign: "center" }}>옵션관리</button>
                             </Link>
-                            <button class="btn btn-outline-danger" onClick={handleDelete}>삭제</button>
+                            <button class="btn btn-outline-danger" onClick={() => handleDelete(menuId)} style={{ width: "120px", height: "40px", textAlign: "center" }}>삭제</button>
                         </div>
+                            </div>
+                        </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                     </div>
                 </div>
             }

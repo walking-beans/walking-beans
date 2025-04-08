@@ -2,14 +2,35 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import OrderDetailCard from "../../components/owner/OrderDetailCard";
+import MsgToast from "../../components/owner/MsgToast";
+import "./StoreOrderCss.css";
 
 
 const StoreOrder= () => {
-    const {id} = useParams();
+    const {id} = useParams(); // 가게 아이디
     const [orders, setOrders] = useState([]);
     const [activeTab, setActiveTab] = useState("progress"); // 탭 상태: "progress" 또는 "completed"
     const [selectedOrder, setSelectedOrder] = useState(null); // 모달에 보여줄 주문
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
+    const [toastMsg, setToastMsg] = useState("");// 안내 메세지
+    const [storeCookTime, setStoreCookTime] = useState(5); // 가게 기본 조리시간
+
+    // 시간 변환하기 함수
+    const parseDateString = (dateString) => {
+        return new Date(dateString.replace(" ", "T")); // '2025-03-25 15:25:40' → '2025-03-25T15:25:40'
+    };
+    // 예상 시간 계산 함수 minutes 만큼 현재시간에서 더해서 표시!
+    const estimatedCookTime = (orderCreateDate, cookTime) => {
+        if (!orderCreateDate) return "시간 없음"; // 예외 처리
+        const orderTime = parseDateString(orderCreateDate);
+        if (!orderTime || isNaN(orderTime.getTime())) return "잘못된 시간";
+        orderTime.setMinutes(orderTime.getMinutes() + cookTime);
+        return orderTime.toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+    };
 
     const connectWebSocket = () =>{
         // 웹소켓 상태값 2이상시 표시
@@ -29,7 +50,13 @@ const StoreOrder= () => {
                         (order) => order.orderId === newOrder.orderId);
                     if (orderIndex === -1 ) { // 인덱스가 없으면 새 주문 추가
                         console.log("새 주문이 들어왔어요", newOrder);
-                        return [newOrder, ...prevOrders];// 새 주문이 위쪽으로 오개
+                        return [
+                            {
+                                newOrder,
+                                estimatedTime: estimatedCookTime(newOrder.orderCreateDate, storeCookTime),// 시간 갱신 방지
+                            },
+                                ...prevOrders
+                        ];// 새 주문이 위쪽으로 오개
                     }
                     // 기존 주문 상태만 업데이트
                     console.log("주문상태가 변경되었어요", newOrder);
@@ -62,14 +89,17 @@ const StoreOrder= () => {
         axios
             .get(`http://localhost:7070/api/orders/store/${id}`)
             .then( (res)=>{
-                setOrders(res.data)
+                const initialOrders = res.data.map((order) => ({ // 시간추가를 위한 추가 로직
+                    ...order,
+                estimatedTime: estimatedCookTime(order.orderCreateDate, storeCookTime), // 초기 주문에도 시간 추가
+                }));
+                setOrders(initialOrders)
                 console.log("전체리스트 로딩 성공 : ",res.data);
             })
             .catch((err)=>{
                 console.log("주문정보리스트 전체 조회 로딩에러발생 : ",err);
             })
         connectWebSocket();
-        console.log("렌더링 후 orders:", orders);
     }, []);
 
     useEffect(() => {
@@ -96,13 +126,57 @@ const StoreOrder= () => {
         setIsModalOpen(false);
     };
 
+    //주문 상태 텍스트로 변환
+    const getStatusText = (status) => {
+        switch (status) {
+            case 2: return "주문 요청";
+            case 3: return "주문 조리중";
+            case 4: return "조리 완료";
+            case 5: return "라이더 픽업 완료";
+            case 6: return "배달 완료";
+            default: return "알 수 없음";
+        }
+    };
+
+    // 주문상태 변경, 안내 메세지 포함
+    const handleOrderStatus = (orderId,orderStatus) => {
+        axios
+            .patch(`http://localhost:7070/api/orders/${orderId}/store/${id}`,
+                orderStatus,
+                {withCredentials: true,
+                    headers: { "Content-Type": "application/json" }},
+                )
+            .then((res)=>{
+                console.log("주문상태 업데이트 완료:", res)
+                if(orderStatus === 3){
+                    setToastMsg("주문이 수락되었습니다.");
+                } else if(orderStatus === 4) {
+                    setToastMsg("조리완료 확인되었습니다. 주문번호 확인 후 라이더님에게 전달해주세요.");
+                } else {// 다른값이 들어갔을 경우 예외처리
+                    setToastMsg("주문상태 변경중 문제가 발생했습니다. 고객센터로 문의주세요.");
+                }
+            })
+            .catch((err)=>{
+                console.log("상태 업데이트 실패 :",err)
+            })
+    }
+
+    // 시간 설정
+    const handleCookTimeChange = (e) => {
+        const newCooktime = parseInt(e.target.value) || 0;
+        setStoreCookTime(newCooktime);
+    }
+
+
+
 
 
     return(
         <>
             {/* 탭 UI */}
-            <div>
+            <div className="tab-container">
                 <button
+                    className={`tab-button ${activeTab === "progress" ? "active" : ""}`}
                     onClick={() => setActiveTab("progress")}
                     style={{
                         fontWeight: activeTab === "progress" ? "bold" : "normal",
@@ -111,6 +185,7 @@ const StoreOrder= () => {
                     진행 중인 주문
                 </button>
                 <button
+                    className={`tab-button ${activeTab === "completed" ? "active" : ""}`}
                     onClick={() => setActiveTab("completed")}
                     style={{
                         fontWeight: activeTab === "completed" ? "bold" : "normal",
@@ -124,24 +199,105 @@ const StoreOrder= () => {
             {activeTab === "progress" ? (
                 progressOrders.map((order) => (
                     <div key={order.orderId}>
-                        <p>{order.orderNumber}</p>
-                        <p>{order.orderStatus}</p>
-                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                        <div className="order-card">
+                            {/* 주문 정보 (시간, 주문번호) */}
+                            <div className="order-info">
+                                <span>{order.estimatedTime}</span>
+                                <span className="order-number">{order.orderNumber}</span>
+
+                            </div>
+
+                            {/* 주문 상세 정보 */}
+                            <div className="order-details">
+                                {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
+                                <p>상태 : {getStatusText(order.orderStatus)}</p>
+                            </div>
+
+                            {/* 액션 버튼 */}
+                            <div className="order-actions">
+                                <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                                {order.orderStatus === 2 && (
+                                    <button className="storeOrder-accept-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 3)}>접수하기</button>
+                                )}
+                                {order.orderStatus === 3 && (
+                                    <button className="storeOrder-complete-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 4)}>조리완료</button>
+                                )}
+                                {order.orderStatus === 4 && (
+                                    <button className="storeOrder-complete-btn"
+                                            >배차 중</button>
+                                )}
+                                {order.orderStatus === 5 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >픽업완료</button>
+                                )}
+                                {order.orderStatus === 6 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >배달완료</button>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 ))
             ) : (
                 completedOrders.map((order) => (
                     <div key={order.orderId}>
-                        <p>{order.orderNumber}</p>
-                        <p>{order.orderStatus}</p>
-                        <button onClick={() => openModal(order)}>자세히 보기</button>
+                        <div className="order-card">
+                            {/* 주문 정보 (시간, 주문번호) */}
+                            <div className="order-info">
+                                <span>{order.estimatedTime}</span>
+                                <span className="order-number">{order.orderNumber}</span>
+
+                            </div>
+
+                            {/* 주문 상세 정보 */}
+                            <div className="order-details">
+                                {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
+                                <p>상태 : {getStatusText(order.orderStatus)}</p>
+                            </div>
+
+                            {/* 액션 버튼 */}
+                            <div className="order-actions">
+                                <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                                {order.orderStatus === 2 && (
+                                    <button className="storeOrder-accept-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 3)}>접수하기</button>
+                                )}
+                                {order.orderStatus === 3 && (
+                                    <button className="storeOrder-complete-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 4)}>조리완료</button>
+                                )}
+                                {order.orderStatus === 4 && (
+                                    <button className="storeOrder-complete-btn"
+                                    >배차 중</button>
+                                )}
+                                {order.orderStatus === 5 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >픽업완료</button>
+                                )}
+                                {order.orderStatus === 6 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >배달완료</button>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 ))
             )}
-
+            {/* 상태변경 메세지 */}
+            <div style={{position: "relative", maxWidth: "800px", margin: "0 auto"}}>
+                {toastMsg && (
+                    <MsgToast
+                        message={toastMsg}
+                        onClose={() => setToastMsg("")}/>
+                )}
+            </div>
             {/* 모달 컴포넌트 */}
             {isModalOpen && (
-                <OrderDetailCard order={selectedOrder} onClose={closeModal} />
+                <OrderDetailCard order={selectedOrder} onClose={closeModal} handleOrderStatus={handleOrderStatus}/>
             )}
         </>
     )

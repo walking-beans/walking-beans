@@ -1,16 +1,16 @@
 import UserMenuOptionGroup from "./UserMenuOptionGroup";
-import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
+import defaultDetailImage from "../../assert/images/user/defaultDetailImage.svg";
 import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 
+// 옵션 모달 컴포넌트
 const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}) => {
-
     const [selectedOptions, setSelectedOptions] = useState({});
     const [options, setOptions] = useState([]);
     const [grouped, setGrouped] = useState({});
     const modalBodyRef = useRef(null);
 
-
+    // 메뉴옵션 가져오기
     useEffect(() => {
         if (userId && menu?.menuId) {
             apiUserOrderService.getOptionsByMenuId(menu.menuId, (data) => {
@@ -19,6 +19,7 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
         }
     }, [menu]);
 
+    // 옵션 카테고리별로 정리
     useEffect(() => {
         if (options.length > 0) {
             const groupedOptions = options.reduce((acc, option) => {
@@ -30,23 +31,22 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
         }
     }, [options]);
 
+    // 옵션 선택 버튼
     const handleOptionChange = (optionName, option) => {
         setSelectedOptions((prev) => {
             // 해당 옵션 그룹에 대한 현재 선택 상태 가져오기
             const newSelectedOptions = {...prev};
 
             if (option === null) {
-                // 옵션 선택 해제 시 해당 카테고리 삭제
                 delete newSelectedOptions[optionName];
             } else {
-                // 해당 카테고리(optionName)의 옵션을 항상 배열로 초기화하고, 선택된 옵션만 포함시킴
                 newSelectedOptions[optionName] = [option];
             }
-
             return newSelectedOptions;
         });
     };
 
+    // 장바구니 담기
     const handleAddToCart = async () => {
         if (!userId || userId === 'undefined') {
             alert("사용자 인증이 필요합니다.");
@@ -57,6 +57,7 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
         const optionIds = allSelectedOptions.map(option => option.optionId);
         const optionIdsString = optionIds.join(",");
 
+        // 주문(order)이 아직 생성되지 않았기 때문에 cartId, orderId는 기본값으로 설정하고, 메뉴와 옵션 정보를 포함시킴
         const cartData = {
             cartId: 0,
             menuId: menu.menuId,
@@ -69,10 +70,8 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
 
         try {
             await apiUserOrderService.addToCart(cartData);
-
             const updatedCart = await apiUserOrderService.getUserCartByUserId(userId);
             updateCart(updatedCart);
-
             onClose();
         } catch (error) {
             alert("장바구니 추가에 실패했습니다.");
@@ -108,7 +107,7 @@ const UserMenuOptionModal = ({menu, userId, onClose, updateCart, handleOrderNow}
                     <div className="user-order-description">옵션이 없는 메뉴입니다.</div>
                 )}
             </div>
-            {/* 기존 담겨있는 stored_id 와 일치하지 않으면 장바구니 비우고 새로 담기*/}
+
             <div className="user-order-click-btn">
                 <button type="submit" className="user-mini-btn" onClick={handleAddToCart}>장바구니추가</button>
                 <button type="submit" className="user-mini-btn" onClick={handleOrderNow}>주문하기</button>

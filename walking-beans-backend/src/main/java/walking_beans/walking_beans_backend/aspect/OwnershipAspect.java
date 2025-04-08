@@ -26,11 +26,41 @@ public class OwnershipAspect {
         HttpSession session = null;
         Long storeId = null;
 
+        //파라미터 탐색 방법들
+        /* 파라미터 배열 순서에 따라서 가져오는 코드를 썼지만, 너무 에러나기 쉬운 조건이라서 약간의 여유가 있어보이는
+        파라미터 종류로 탐색 기능을 작성 하지만 메뉴 추가시에 파라미터 혼동 에러가 발생.
+        에러의 이유가 long 값이 두개여서 탐색이 바로 종료되는줄알았지만,
+        그러지 않고 후순위 long값으로 덮어씌워져서 가게아이디 값에, 유저아이디 값이 덮어씌여져서 인증이 정상작동하지 않았음.
+        간단하게 가게 아이디를 뒤로 옮기면 되지 않나 싶지만, 덮어쓰기가일어나는 함수에 권한인증을 맏기엔 정상작동을 담보를 할수 없음.
         // 동적으로 파라미터 탐색기능 각 타입별로 검색
         for (Object arg : args) {
-            if (arg instanceof HttpSession) {
+            if (arg instanceof HttpSession) {// 세션 정보 가져오기
                 session = (HttpSession) arg;
-            } else if (arg instanceof Long) {
+            } else if (arg instanceof Long) {// 페이지에 있는 가게 번호 가져오기
+                storeId = (Long) arg;
+            }
+        }
+        */
+        /* 직접 탐색용 코드 aspectj 라이브러리를 이용해서 파라미터 객체의 이름을 직접 탐색
+        org.aspectj.lang.Signature signature = joinPoint.getSignature();
+        String[] parameterNames = ((org.aspectj.lang.reflect.MethodSignature)signature).getParameterNames();
+
+        for (int i = 0; i < args.length; i++) {
+            String paramName = parameterNames[i];
+            Object arg = args[i];
+            if ("session".equals(paramName) && arg instanceof HttpSession) {
+                session = (HttpSession) arg;
+            } else if ("storeId".equals(paramName) && arg instanceof Long) {
+                storeId = (Long) arg;
+            }
+        }
+        */
+        // session == null, storeId == null 일때만 탐색하도록 진행. 배열의 순서보다는 좀더 여유로우면서 쓸만한것 같다,
+        // 파라미터의 순서는 컨트롤러에 작성된 파라미터 순서 위에서 아래 혹은 왼쪽에서 오른쪽순서대로 index0 부터 시작
+        for (Object arg : args) {
+            if (session == null && arg instanceof HttpSession) {
+                session = (HttpSession) arg;
+            } else if (storeId == null && arg instanceof Long) {
                 storeId = (Long) arg;
             }
         }

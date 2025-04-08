@@ -1,16 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
+
 .unlink-container {
-    background: #F4EDDF;
-    width: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 30px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    min-height: 100vh;
 }
 
 /* 배경 및 텍스트 색상 - role 분기 */
 .unlink-container.user,
 .unlink-container.owner {
-    background-color: #F4EDDF;
+    background-color: #fef6ea;
     color: #5a3d21;
 }
 
@@ -26,14 +29,15 @@
 }
 
 /* 약관 박스 */
-.withdrawal-policy {
+.Withdrawal.Policy {
     background-color: white;
+    border-radius: 10px;
     padding: 20px;
     margin-bottom: 16px;
     text-align: left;
     font-size: 15px;
     line-height: 1.8;
-    border: 1px solid #5A3D21;
+
 }
 
 
@@ -47,81 +51,34 @@
 
 /* 버튼 공통 */
 .unlink-container button {
-    width: 411px;
-    height: 60px;
-    border-radius: 30px;
-    background: #5A3D21;
-    color: #F4EDDF;
+    width: 100%;
+    padding: 12px;
+
+
+
     border: none;
-    font-size: 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: white;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration-line: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+
 }
 
 /* 역할별 버튼 색상 */
 .unlink-container.user button,
 .unlink-container.owner button {
-    background-color: #5A3D21;
+    background-color: #8d5d2c;
 }
 
 .unlink-container.rider button {
-    background-color: #010C22;
+    background-color: #1f3f66;
 }
 
 /* 비활성화 버튼 */
 .unlink-container button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-}
-
-.unlink-container.user .unlink-title-text,
-.unlink-container.owner .unlink-title-text {
-    color: #5a3d21;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 30px;
-}
-
-.unlink-container.rider .unlink-title-text {
-    color: #010C22;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 30px;
-}
-
-.unlink-container.user .unlink-text,
-.unlink-container.owner .unlink-text {
-    color: #5a3d21;
-    font-size: 14px;
-}
-
-.unlink-container.rider .unlink-text {
-    color: #010C22;
-    font-size: 14px;
-}
-
-.unlink-container.user .agree-text,
-.unlink-container.owner .agree-text {
-    color: #5a3d21;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0 10px;
-}
-
-.unlink-container.rider .agree-text {
-    color: #010C22;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0 10px;
-}
-
-.unlink-container.rider .mypage-title-center {
-    color: #010C22;
-}
-
-.unlink-container.rider .mypage-hr {
-    border: 1px solid #010C22;
 }

@@ -267,8 +267,8 @@
 }
 
 .MarkAllAsReadBtn {
-    background-color: #010C22;
-    color: white;
+        background-color: #F4EDDF;
+    color: black;
 }
 
 @media (max-width: 768px) {

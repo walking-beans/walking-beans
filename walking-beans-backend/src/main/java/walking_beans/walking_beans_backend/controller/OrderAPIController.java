@@ -1,6 +1,6 @@
 package walking_beans.walking_beans_backend.controller;
 
-import jakarta.mail.Store;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,15 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-import walking_beans.walking_beans_backend.mapper.OrderMapper;
+import walking_beans.walking_beans_backend.aspect.OwnershipCheck;
 import walking_beans.walking_beans_backend.model.dto.Alarms;
 import walking_beans.walking_beans_backend.model.dto.OrderStoreDTO;
 import walking_beans.walking_beans_backend.model.dto.Orders;
 import walking_beans.walking_beans_backend.model.dto.Stores;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
-import walking_beans.walking_beans_backend.model.vo.OrderRequest;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderRequest;
+import walking_beans.walking_beans_backend.model.dto.order.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 import walking_beans.walking_beans_backend.service.orderService.OrderServiceImpl;
@@ -36,7 +36,6 @@ public class OrderAPIController {
     @Autowired
     private AlarmNotificationService alarmNotificationService;
 
-    /**************************************** LEO ****************************************/
     /**
      * 주문 번호에 따른 주문 정보
      * @param orderId : order Id
@@ -71,8 +70,7 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.updateRiderIdOnDutyOfOrders(riderId, orderId));
     }
 
-    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 조리중 3: 조리완료 4: 라이더픽업(배달중) 5: 배달완료 6: 주문취소)
-    // 상태2 이상 변경시 업주에게 자동 업데이트
+    // 주문 상태 변경 ( 0:결제전 1: 결제완료 2: 주문접수대기(가게에서 확인전) 3: 조리중 4: 조리완료 5: 라이더픽업(배달중) 6: 배달완료 9: 주문취소)
     /**
      * 상태 변경 orderId && orderStatus
      * @param orderId : order Id
@@ -120,9 +118,11 @@ public class OrderAPIController {
         return ResponseEntity.ok(orderService.checkingRiderIdOnDuty(orderId, riderIdOnDuty));
     }
 
-    /****************************************  ****************************************/
-
-    // 주문 저장
+    /**
+     * 주문 저장
+     * @param request
+     * @return
+     */
     @PostMapping("/create")
     public ResponseEntity<String> insertOrder(@RequestBody OrderRequest request) {
         try {
@@ -138,13 +138,21 @@ public class OrderAPIController {
         }
     }
 
-    // 주문 정보 가져오기
+    /**
+     * 주문 정보 가져오기
+     * @param orderId
+     * @return
+     */
     @GetMapping("/{orderId}")
     public Orders findOrderById(@PathVariable long orderId) {
         return orderService.findOrderById(orderId);
     }
 
-    // 주문한 유저 정보 가져오기
+    /**
+     * 주문한 유저 정보 가져오기
+     * @param userId
+     * @return
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<UserOrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
         List<UserOrderDTO> orders = orderService.getOrdersByUserId(userId);
@@ -154,18 +162,31 @@ public class OrderAPIController {
         return ResponseEntity.ok(orders);
     }
 
-    // 주문한 가게 정보 가져오기
+    /**
+     * 주문한 가게 정보 가져오기
+     * @param orderId
+     * @return
+     */
     @GetMapping("/storeInfo/{orderId}")
     public Stores findStoreByOrderId(@PathVariable("orderId") long orderId) {
         return orderService.findStoreByOrderId(orderId);
     }
 
-    // 주문내역 내 오더 정보 가져오기
+    /**
+     * 주문내역 내 오더 정보 가져오기
+     * @param orderId
+     * @return
+     */
     @GetMapping("/info/{orderId}")
     public Orders getOrderStatus(@PathVariable("orderId") long orderId) {
         return orderService.getOrderStatus(orderId);
     }
 
+    /**
+     * 오더넘버로 주문내역 가져오기
+     * @param orderNumber
+     * @return
+     */
     @GetMapping("/orderNumber/{orderNumber}")
     public ResponseEntity<UserOrderDTO> getOrder(@PathVariable("orderNumber") String orderNumber) {
         UserOrderDTO order = orderService.getOrderByOrderNumber(orderNumber);
@@ -175,9 +196,40 @@ public class OrderAPIController {
         return ResponseEntity.ok(order);
     }
 
+    /**
+     * 주문 상세 내역 정보 가져오기
+     * @param orderNumber
+     * @return
+     */
+    @GetMapping("/detail/orderNumber/{orderNumber}")
+    public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
+        List<OrderDetailDTO> orderDetails = orderService.getOrderDetailsByOrderNumber(orderNumber);
+        log.info("orderDetails: {}", orderDetails);
+        System.out.println("orderDetails = " + orderDetails);
+        if (orderDetails.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(orderDetails);
+    }
 
-    /****************************mochoping********************************/
-
+    /**
+     * 주문 삭제
+     * @param orderId
+     * @return
+     */
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<?> deleteOrderById(@PathVariable long orderId) {
+        try {
+            orderService.deleteOrderById(orderId);
+            return ResponseEntity.ok("주문 내역이 성공적으로 삭제되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("주문 삭제 중 예상치 못한 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류로 인해 주문 삭제에 실패했습니다.");
+        }
+    }
 
     // 가게 id로 주문정보, 주문상태만 가져오기
     @GetMapping("/store/{storeId}")
@@ -191,31 +243,22 @@ public class OrderAPIController {
         return orderService.getOrderForStore(orderNumber);
     }
 
-    // 주문 상세 내역 정보 가져오기
-    @GetMapping("/detail/orderNumber/{orderNumber}")
-    public ResponseEntity<List<OrderDetailDTO>> getOrderDetailsByOrderNumber(@PathVariable String orderNumber) {
-        List<OrderDetailDTO> orderDetails = orderService.getOrderDetailsByOrderNumber(orderNumber);
-        log.info("orderDetails: {}", orderDetails);
-        System.out.println("orderDetails = " + orderDetails);
-        if (orderDetails.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(orderDetails);
-    }
-
-    // 주문 삭제
-    @DeleteMapping("/delete/{orderId}")
-    public ResponseEntity<?> deleteOrderById(@PathVariable long orderId) {
-        try {
-            orderService.deleteOrderById(orderId);
-            return ResponseEntity.ok("주문 내역이 성공적으로 삭제되었습니다.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            log.error("주문 삭제 중 예상치 못한 오류 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("서버 오류로 인해 주문 삭제에 실패했습니다.");
-        }
+    /** 주문번호로 주문상태 업데이트 권한인증때문에 url 다름
+     *  상태2 이상 변경시 업주에게 자동 업데이트, updateOrderStatus 서비스에 웹소켓 연결되어있음.
+     * @param session 권한검증
+     * @param storeId 권한검증
+     * @param orderId 목표주문아이디
+     * @param orderStatus 변경상태( 0:결제전 1: 결제완료 2: 주문접수대기(가게에서 확인전) 3: 조리중 4: 조리완료 5: 라이더픽업(배달중) 6: 배달완료 9: 주문취소)
+     * @return 권한 검증 확인 200 성공, 401,402,403
+     */
+    @PatchMapping("{orderId}/store/{storeId}")
+    @OwnershipCheck
+    public ResponseEntity<?> storeUpdateOrderStatus(HttpSession session,
+                                                    @PathVariable("storeId") long storeId,
+                                                    @PathVariable("orderId") long orderId,
+                                                    @RequestBody int orderStatus){
+        orderService.updateOrderStatus(orderId, orderStatus);
+        return ResponseEntity.ok().build();
     }
 }
 

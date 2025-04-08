@@ -47,7 +47,6 @@ import {UserFailPage} from "../pages/user/UserFailPage";
 import UserCheckoutPage from "../pages/user/UserCheckoutPage";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
-import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
 
@@ -56,6 +55,7 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+import StoreMenuRegister from "../pages/owner/StoreMenuRegister";
 
 import UserProtectedRoute from './UserProtectedRoute';
 import AdminLoginRequiredPage from "../pages/admin/AdminLoginRequiredPage";
@@ -106,6 +106,7 @@ function PathRoute() {
                              setRiderOnDuty={setRiderOnDuty}
                 />
                 <div className="content-wrapper">
+
                     {/* <div className="col-md-8 col-12">*/}
 
                     <Routes>
@@ -213,6 +214,11 @@ function PathRoute() {
                                 <StoreMenu/>
                             </ProtectedRoute>
                         }/>
+                        <Route path="/owner/:storeId/menuresister" element={
+                            <ProtectedRoute allowedRoles={["owner"]}>
+                                <StoreMenuRegister/>
+                            </ProtectedRoute>
+                        }/>
                         <Route path="/owner/:storeId/menu/:menuId" element={
                             <ProtectedRoute allowedRoles={["owner"]}>
                                 <StoreMenuDetail/>
@@ -225,7 +231,7 @@ function PathRoute() {
                         }/>
                         {/* id = userId 유저 id, 유저만 신규 가게 등록이 가능하도록 제한*/}
                         <Route path="/user/:id/storeregister/" element={
-                            <ProtectedRoute allowedRoles={["user"]}>
+                            <ProtectedRoute allowedRoles={["owner"]}>
                                 <StoreRegister/>
                             </ProtectedRoute>
                         }/>
@@ -267,6 +273,7 @@ function PathRoute() {
                             </ProtectedRoute>
                         }/>
                     </Routes>
+
 
                 </div>
                 {user?.user_role !== "rider" && <Footer/>}

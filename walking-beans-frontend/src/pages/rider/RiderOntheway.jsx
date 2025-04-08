@@ -55,14 +55,29 @@ const RiderOntheway = ({user}) => {
     useEffect(() => {
         console.log("ros orderId : " + orderId);
 
-        apiRiderService.checkingRiderIdOnDuty(orderId, user.user_id,
-            (result) => {
-                console.log(result);
-                if (result !== 1) {
-                    alert("접근 권한이 없습니다.");
-                    navigate("/rider");
-                }
-            })
+        const  intervalId = setInterval(() => {
+            // apiOrdersStoresService.getOrdersByRiderIdOnDuty(riderLocation.lat, riderLocation.lng, setStores, setOrders);
+            apiRiderService.checkingRiderIdOnDuty(orderId, user.user_id,
+                (result) => {
+                    if (result === null) {
+                        alert("잠시만 기다려주세요.");
+                        return;
+                    }
+
+                    console.log(result);
+                    if (result !== 1) {
+                        alert("접근 권한이 없습니다.");
+                        navigate("/rider");
+                    }
+                })
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    })
+
+
+
+    useEffect(() => {
 
         apiRiderService.getOrderStatusWithRemainingTime(orderId, (no) => {
             setOrderInfo(no);
