@@ -135,13 +135,11 @@ public class MenuAPIController {
     /**
      * 관리자만 가능하게 구현 필수
      * @param session
-     * @param storeId
      * @param menuId
      * @return
      */
-    @PatchMapping
+    @PatchMapping("/admin/menu/{menuId}")
     public ResponseEntity<?> softRecoveryMenu(HttpSession session,
-                                            @PathVariable("storeId") long storeId,
                                             @PathVariable("menuId") long menuId ){
         menuService.softRecoveryMenu(menuId);
         return ResponseEntity.ok().build();

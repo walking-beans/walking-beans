@@ -18,6 +18,7 @@ const StoreMenuOption = () => {
     // 자식컴포넌트에 작성된 모든 데이터 저장
     const [allOptions, setAllOptions] = useState({})
 
+
     // 새로운 그룹 추가
     const handleAddGroup = () => {
         if (!newGroupName) {
@@ -75,6 +76,7 @@ const StoreMenuOption = () => {
             .then((res) => {
                 console.log("성공로그:" + res)
                 alert("옵션 그룹이 성공적으로 저장되었습니다.")
+                window.location.reload(); // 새로고침. 상태업데이트가 자연스럽지만 시간이 없어서 사용
             })
             .catch((err) => {
                 console.log("업로드에러: " + err)
@@ -125,6 +127,7 @@ const StoreMenuOption = () => {
             .delete(`http://localhost:7070/api/option/${optionId}`)
             .then(() => {
                 alert("메뉴옵션 삭제에 성공했습니다.")
+                window.location.reload(); // 새로고침. 상태업데이트가 자연스럽지만 시간이 없어서 사용
             })
             .catch((err) => {
                 console.log(err)
