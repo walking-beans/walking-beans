@@ -61,9 +61,9 @@ public class ChatController {
         System.out.println("메세지 받을 아이디:" + infoUser.getReceiverId());
 
         if (message.getRoomId() == infoUser.getSenderId()) {
-            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(), 2, infoUser.getSenderName() +" : "+ message.getMessageContent(), infoUser.getSenderId(), "/chat/message/"+message.getRoomId())); //알람 저장 및 송신
+            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(), 2,  message.getMessageContent(), infoUser.getSenderId(), "/chat/message/"+message.getRoomId())); //알람 저장 및 송신
         } else {
-            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(),2,infoUser.getSenderName() +" : "+ message.getMessageContent(),infoUser.getSenderId(),"/chat/message/"+message.getRoomId()));
+            alarmNotificationService.sendOrderNotification(Alarms.create(infoUser.getReceiverId(),2, message.getMessageContent(),infoUser.getSenderId(),"/chat/message/"+message.getRoomId()));
         }
 
 
