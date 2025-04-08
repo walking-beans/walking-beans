@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import detailbtn from "../../assert/images/user/detailbtn.svg";
 import apiRiderService from "../../service/apiRiderService";
-import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
+import detailbtn from "../../assert/images/user/detailbtn.svg";
 
 const UserOrderList = () => {
     const [orders, setOrders] = useState([]);
     const navigate = useNavigate();
-
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const userId = user ? user.user_id : null;
@@ -38,6 +36,7 @@ const UserOrderList = () => {
         '6': '배달 완료'
     };
 
+    // 로그인 확인
     useEffect(() => {
         if (!userId) {
             console.warn("유저 정보 없음. 로그인 필요.");
@@ -45,6 +44,7 @@ const UserOrderList = () => {
             return;
         }
 
+        // 주문 목록 불러오기
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(`http://localhost:7070/api/orders/user/${userId}`);
@@ -54,7 +54,6 @@ const UserOrderList = () => {
                 console.error("주문 목록을 불러오는 중 오류 발생:", error);
             }
         };
-
         fetchOrders();
     }, [userId, navigate]);
 

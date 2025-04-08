@@ -44,6 +44,7 @@ const UserSuccessPage = () => {
                 const cartItemsRaw = await apiUserOrderService.getUserCartByUserId(userId);
                 console.log("원본 장바구니 데이터:", cartItemsRaw);
 
+                // 장바구니 아이템 정리
                 const cartItems = cartItemsRaw.map(cart => {
                     const menuIdArray = cart.menuIds ? cart.menuIds.split(",") : [];
                     return {
@@ -74,7 +75,7 @@ const UserSuccessPage = () => {
 
                 console.log("가공된 장바구니 데이터:", cartItems);
 
-
+                // 결제 승인 데이터 전달
                 const response = await axios.post("http://localhost:7070/api/payment/confirm", {
                     paymentKey,
                     orderNumber: orderId,
@@ -103,6 +104,7 @@ const UserSuccessPage = () => {
             }
         };
 
+        // 필수정보 확인 후 실행
         if (!isConfirmed && paymentKey && orderId && orderTotalPrice) {
             confirmPayment();
         }

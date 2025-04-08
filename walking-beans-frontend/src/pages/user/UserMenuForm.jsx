@@ -1,7 +1,7 @@
 import React from "react";
-import defaultImage from "../../assert/images/user/defaultimage.svg";
 import "../../css/Owner.css"
 
+// 메뉴 컴포넌트
 const UserMenuForm = ({ menuName, menuPrice, onClick, menuPictureUrl }) => {
     return (
         <div onClick={onClick} className="user-menu-form-container">

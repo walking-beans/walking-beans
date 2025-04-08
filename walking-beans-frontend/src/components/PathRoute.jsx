@@ -47,7 +47,6 @@ import {UserFailPage} from "../pages/user/UserFailPage";
 import UserCheckoutPage from "../pages/user/UserCheckoutPage";
 import UserOrderList from "../pages/user/UserOrderList";
 import UserOrderDetail from "../pages/user/UserOrderDetail";
-import UserPayment from "../pages/user/UserPayment";
 import UserStoreReview from "../pages/user/UserStoreReview";
 import RiderOrderStatus from "./rider/RiderOrderStatus";
 
