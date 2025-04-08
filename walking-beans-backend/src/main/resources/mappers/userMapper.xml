@@ -6,7 +6,7 @@
 
     <!-- 로그인해서 세션에 넣을 데이터 가져오기-->
     <select id="loginUser">
-        SELECT user_role, user_name, user_email, user_id
+        SELECT user_role, user_name, user_email, user_id, user_date
         FROM users
         WHERE user_email = #{userEmail}
           AND user_password = #{userPassword}
@@ -28,11 +28,25 @@
           AND user_phone = #{userPhone}
     </select>
 
-    <!--  소셜 회원가입 -->
+    <!--  소셜 회원가입 (userDate추가)-->
     <insert id="insertSocialUser">
-        INSERT INTO users (user_role,user_email,user_password,user_name, user_phone)
-        VALUES (#{userRole}, #{userEmail}, #{userPassword}, #{userName}, #{userPhone})
+        INSERT INTO users (user_role,user_email,user_password,user_name, user_phone, user_date)
+        VALUES (#{userRole}, #{userEmail}, #{userPassword}, #{userName}, #{userPhone}, #{userDate})
     </insert>
+
+    <!-- 유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)-->
+    <select id="getUserInfoByIdForAlarms">
+        SELECT user_role, user_name, user_date
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 유저 Date 업데이트 -->
+    <update id="changeUserDate">
+        UPDATE users
+        SET user_date = #{userDate}
+        WHERE user_email = #{userEmail}
+    </update>
 
     <!-- 회원 가입 유무 확인 -->
     <select id="checkEmailExists">

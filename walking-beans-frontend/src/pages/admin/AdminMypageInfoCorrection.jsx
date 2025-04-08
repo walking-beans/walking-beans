@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom"; // 또는 다른 HTTP 클라이언트 라이브러리
@@ -28,7 +27,6 @@ function InfoCorrectionPage() {
         });
     }, [navigate]);
 
-
     useEffect(() => {
         if (Update && userId)
             apiUserService.infoCorrection(
@@ -45,12 +43,9 @@ function InfoCorrectionPage() {
             );
     }, [Update, userId, userPhone]);
 
-
-
-
     return (
         <div className={`info-correction-container  ${userRole}`}>
-            <form >
+            <form>
                 <div className="info-correction">
                     <label htmlFor="userPhone">변경할 전화번호를 작성해 주세요.</label>
                     <input
@@ -62,7 +57,6 @@ function InfoCorrectionPage() {
                         pattern="[0-9]{3}[0-9]{3,4}[0-9]{4}"
                         required
                     />
-
                 </div>
                 <button type="submit" className="submit-btn" onClick={() => setUpdate(true)}>수정하기</button>
             </form>

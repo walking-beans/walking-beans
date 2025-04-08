@@ -18,6 +18,7 @@ import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificatio
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +82,21 @@ public class UserAPIController {
         userService.updateUserRole(userEmail, userRole);
     }
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    @GetMapping("/getuserdata/{userId}")
+    public Users getUserData(@PathVariable("userId") long userId) {
+        return userService.getUserInfoByIdForAlarms(userId);
+    }
+
+    // 유저 Date 업데이트
+    @PutMapping("/updateuserdate")
+    public void updateUserDate(@RequestParam("userEmail") String userEmail,
+                               @RequestParam("userDate") String userDate) {
+        LocalDate localDate = LocalDate.parse(userDate);
+
+        userService.changeUserDate(userEmail, localDate);
+    }
+
     /************************* 이메일 인증 ****************************/
 
     @PostMapping("/sendCode")
@@ -94,6 +110,7 @@ public class UserAPIController {
 
     @PostMapping("/checkCode")
     public String checkCode(@RequestBody Vertification vr) {
+        vr.setEmail(vr.getEmail().trim());
         boolean isValid = userService.verifyCodeWithVo(vr);
         return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
     }

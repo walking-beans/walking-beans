@@ -1,7 +1,7 @@
 .rider-main-selected-store-container {
     position : absolute;
-    top: 50%;
-    left: 1070px;
+    top: 300px;
+    left: 1300px;
     z-index : 1;
 
     font-size: 12px;
@@ -20,14 +20,23 @@
 }
 
 .rider-main-selected-store-container-store-address {
-    padding-left: 10px;
+    font-size : 16px;
+    text-align: center;
+    padding : 5px;
+}
+
+.rider-main-selected-store-li-div {
+    margin : 0;
+    padding : 0 5px 0 5px;
 }
 
 
-.rider-main-selected-store-li-delivery-title {
+.rider-main-selected-store-li-delivery-number {
+    font-size : 16px;
     font-weight: bold;
 }
 
 .rider-main-selected-store-li-delivery-address {
+    padding-left : 5px;
     color: #C8C8C8;
 }

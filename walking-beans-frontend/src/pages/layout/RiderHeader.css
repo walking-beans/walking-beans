@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@500;700&display=swap');
-
 .rider-header-wrapper {
     display: flex;
     flex-direction: column;
@@ -11,7 +9,7 @@
 }
 
 .rider-header-wrapper .rider-header {
-    background-color: #dbe9ff;
+    background-color: #99D6F0;
     border-bottom: 1px solid #4682B4;
     padding: 20px 16px;
     min-height: 120px;
@@ -200,15 +198,14 @@
 
 .rider-header-wrapper .rider-nav-logout-btn {
     background-color: #90CAF9;
-    color: white;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 30px;
     width: 100%;
-    padding: 12px 0;
+    height: 50px;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 0;
     text-align: center;
 }
 
@@ -252,7 +249,7 @@
     top: 30px;
     right: 0;
     width: 250px;
-    background: #EEE4D8;
+    background: #E2F2FA;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     padding: 15px;
@@ -260,12 +257,18 @@
 }
 
 .AlarmNotificationItem {
-    border: 1px solid #ab7a44;
+    border: 1px solid #010C22;
     border-radius : 3%;
     margin-top : 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     padding : 10px;
-    background-color :#F4EDDF;
+    background-color :#FCFBF7;
+    color: #010C22;
+}
+
+.MarkAllAsReadBtn {
+    background-color: #010C22;
+    color: white;
 }
 
 @media (max-width: 768px) {

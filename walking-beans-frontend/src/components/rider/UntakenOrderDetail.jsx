@@ -12,11 +12,16 @@ const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
         console.log("UntakenOrder selected Store : " + selectedOrder);
     }, []);
 
-    const goToDetail = () => {
+   /* const goToDetail = () => {
         apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
         apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
-    }
+    }*/
+    const goToDetail = async () => {
+        await apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
+        await apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
+        navigate(`/rider/ontheway/${selectedOrder.orderId}`);
+    };
 
 
     // 거리 계산 함수 (Haversine 공식 사용)  https://kayuse88.github.io/haversine/ 참조

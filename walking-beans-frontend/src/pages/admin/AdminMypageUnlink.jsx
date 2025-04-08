@@ -5,12 +5,11 @@ import '../../css/admin/AdminMypageUnlink.css';
 
 
 function AdminMypageUnlink() {
-    const[userId, setuserId] = useState('');
-    const[isCheck, setCheck] = useState(false);
-    const[isDelete, setDelete] = useState(false);
+    const [userId, setuserId] = useState('');
+    const [isCheck, setCheck] = useState(false);
+    const [isDelete, setDelete] = useState(false);
     const navigate = useNavigate();
     const [userRole, setUserRole] = useState("user");
-
 
 
     useEffect(() => {
@@ -26,26 +25,26 @@ function AdminMypageUnlink() {
     }, [navigate]);
 
 
-
     useEffect(() => {
         console.log("현재 userId:", userId); // ✅ userId 값 확인용 로그
-        if(isDelete && userId) {
+        if (isDelete && userId) {
             apiUserService.delete(userId,
-                (msg) => {alert(msg)
-                        setDelete(false);
-                        navigate("/")
-            },
+                (msg) => {
+                    alert(msg)
+                    setDelete(false);
+                    navigate("/")
+                },
+
+
                 (err) => {
-                console.log("회원탈퇴 실패",err)
-                alert("회원탈퇴에 실패하였습니다.");
-                setDelete(false);
-                navigate("/unlink.success")
+                    console.log("회원탈퇴 실패", err)
+                    alert("회원탈퇴에 실패하였습니다.");
+                    setDelete(false);
+                    navigate("/unlink.success")
                 }
             )
         }
     }, [isDelete, userId, navigate]);
-
-
 
 
     const deleteUser = () => {
@@ -55,8 +54,6 @@ function AdminMypageUnlink() {
         }
         setDelete(true);
     };
-
-
 
 
     return (
@@ -79,6 +76,7 @@ function AdminMypageUnlink() {
                 {isDelete ? "탈퇴 진행 중..." : "탈퇴"}
             </button>
         </div>
+
     );
 };
 

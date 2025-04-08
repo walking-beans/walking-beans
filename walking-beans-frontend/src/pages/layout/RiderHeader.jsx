@@ -20,7 +20,6 @@ import bellIcon from "../../assert/svg/riderBell.svg";
 import searchIcon from "../../assert/svg/userNav/search.svg";
 import HeaderAlarm from "../../components/admin/HeaderAlarm";
 
-
 const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -159,12 +158,16 @@ const RiderHeader = ({user, riderOnDuty, setRiderOnDuty}) => {
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        apiRiderService.getRiderStarRating(2, (newStar) => {
+        if (!user) {
+            console.log("Rider Header no user data!");
+            return;
+        }
+
+        apiRiderService.getRiderStarRating(user.user_id, (newStar) => {
             setStar(newStar);
             starRatingPath.getStarPath(newStar, setStarPath);
         });
-    }, []);
+    }, [user]);
 
     //알람 토글
     const toggleAlarm = () => {

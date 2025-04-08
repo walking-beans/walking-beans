@@ -1,4 +1,39 @@
-.AlarmList {
+.AlarmListRead .AlarmImgAndDate , .AlarmListUnread .AlarmImgAndDate{
+    display: grid;
+    grid-template-columns: 100px auto 200px;
+    /*justify-content: space-between;*/ /* 아이콘과 날짜를 양쪽 끝에 배치 */
+    /*align-items: center; *//* 세로 중앙 정렬 */
+    padding: 10px;
+}
+
+.AlarmListRead { /*읽은 알람*/
+    border:  1px solid #5A3D21 ;
+    border-radius: 35px;
+    margin: 20px;
+    text-align: center;
+    background-color: #B0A8A0;
+    padding: 8px;
+}
+
+.AlarmListRead .AlarmDate {
+    text-align: right;
+}
+
+.AlarmListRead .AlarmImgContainer {
+    text-align: left;
+    display: inline;
+}
+
+.AlarmListRead .AlarmDate {
+    text-align: right;
+}
+
+.AlarmListcontainer p {
+    text-align: left;
+    margin-left: 50px;
+}
+
+.AlarmListUnread { /*읽지 않은 알람*/
     border:  1px solid #5A3D21 ;
     border-radius: 35px;
     margin: 20px;
@@ -8,34 +43,54 @@
 
 }
 
-.AlarmList:hover {
+.AlarmListRead:hover { /*알람 마우스 올릴 때 css*/
     cursor: pointer;
     background-color: #D2B595;
     border: 1px solid #D2B595;
 }
 
-.NoAlarmList {
+.AlarmListUnread:hover { /*알람 마우스 올릴 때 css*/
+    cursor: pointer;
+    background-color: #D2B595;
+    border: 1px solid #D2B595;
+}
+
+.NoAlarmList { /*알람 없을 때*/
     text-align: center;
     min-height: 70vh;
 }
 
-.AlarmDeleteContainer {
+.AlarmDeleteContainer { /*버튼 위치*/
     text-align: right;
 }
 
-.AlarmDeleteBtn {
-    border-radius: 10px;
-    background-color: #F6B8A1;
+.AlarmDeleteBtn { /*전체 삭제 버튼*/
+    border-radius: 30px;
+    width: 102px;
+    height: 30px;
+    background-color: #EE5A4C;
     border: none;
-    padding: 5px;
+    margin-right: 5px;
 }
 
-.AlarmListcontainer {
+.AlarmListcontainer { /*알람 컨테이너*/
+    background-color: #f8f1e4;
+
+    /*
     max-width: 600px;
     width: 100%;
     margin: auto;
-    background-color: #f8f1e4;
-    padding: 16px;
+    padding: 30px;
     min-height: 70vh;
-    height: auto;
+    height: auto;*/
+}
+
+.AllReadBtn { /* 모두 읽음 처리 버튼*/
+    width: 101px;
+    height: 30px;
+    color: white;
+    border-radius: 30px;
+    background-color: #5A3D21;
+    border: none;
+    margin-right: 15px;
 }

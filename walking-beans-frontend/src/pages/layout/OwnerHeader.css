@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     max-width: 600px;
-    background-color: #f8f1e4;
+    background-color: #F4EDDF;
     width: 100%;
     margin: 0 auto;
     position: relative;
@@ -112,25 +112,25 @@
 
 .user-header-wrapper .nav-menu li a {
     text-decoration: none;
-    color: #3a2d22;
+    color: #5A3D21;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .user-header-wrapper .nav-logout-btn {
     background-color: #AB7A44;
     color: white;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 30px;
     width: 100%;
-    padding: 12px 0;
+    height: 50px;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 0;
     text-align: center;
 }
 

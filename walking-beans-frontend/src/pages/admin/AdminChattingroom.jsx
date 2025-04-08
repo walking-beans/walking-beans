@@ -186,30 +186,6 @@ const AdminChattingroom = ({user}) => {
         }
     }
 
-    // chattingroom update
-    /*function updateChattingRoom(IsLeftClicked) {
-        console.log("updateChattingRoom IsLeftClicked : " + IsLeftClicked);
-        if (user.user_role === "user") {
-            console.log("user");
-            if (IsLeftClicked) {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
-            } else {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
-            }
-        } else if (user.user_role === "rider") {
-            if (IsLeftClicked) {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 3, setChattingRoom);
-            } else {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
-            }
-        } else {
-            if (IsLeftClicked) {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 2, setChattingRoom);
-            } else {
-                apiRiderService.getUserChattingRoomByUserId(user.user_id, 1, setChattingRoom);
-            }
-        }
-    }*/
     function updateChattingInfo() {
         apiChattingInfo.getChattingInfoBySenderId(user.user_id, setChattingInfo);
     }
@@ -295,7 +271,7 @@ const AdminChattingroom = ({user}) => {
                                         <p><img className="admin-chattingroom-list-chat-img" src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
                                         <p className="admin-chattingroom-list-chat-name">{room.receiverName}</p>
                                         <p className="admin-chattingroom-list-chat-lastmessage">{room.lastMessage}</p>
-                                        <p className="admin-chattingroom-list-chat-date">{room.modifiedDate}</p>
+                                        <p className="admin-chattingroom-list-chat-date">{room.timeDifference}</p>
                                     </div>
                                 </Link>
                             ))
@@ -309,7 +285,7 @@ const AdminChattingroom = ({user}) => {
                                         <p><img className="admin-chattingroom-list-chat-img" src={(room.receiverPictureUrl)? (`${room.receiverPictureUrl}`) : (`${UserDefaultIcon}`)}/></p>
                                         <p className="admin-chattingroom-list-chat-name">{room.receiverName}</p>
                                         <p className="admin-chattingroom-list-chat-lastmessage">{room.lastMessage}</p>
-                                        <p className="admin-chattingroom-list-chat-date">{room.modifiedDate}</p>
+                                        <p className="admin-chattingroom-list-chat-date">{room.timeDifference}</p>
                                     </div>
                                 </Link>
                             ))

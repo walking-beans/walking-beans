@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import apiUserService from "../../service/apiUserService";
 import '../../css/admin/AdminMypageCertification.css';
 
-
 function AdminMypageCertification() {
     const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
@@ -18,6 +17,7 @@ function AdminMypageCertification() {
             email,
             (data) => setMessage(data),
             () => setMessage("인증 이메일 전송 실패")
+
         );
     }
 
@@ -67,10 +67,10 @@ function AdminMypageCertification() {
 
             <p>{message}</p>
             {isVerified && (
-            <div className="Cerification-nav">
-                <div onClick={() => navigate("/infoCorrection")}>회원정보 수정</div>
-                <div onClick={() => navigate("/unlink")}>회원 탈퇴</div>
-            </div>
+                <div className="Cerification-nav">
+                    <div onClick={() => navigate("/infoCorrection")}>회원정보 수정</div>
+                    <div onClick={() => navigate("/unlink")}>회원 탈퇴</div>
+                </div>
             )}
         </div>
     );
