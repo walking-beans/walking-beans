@@ -1,0 +1,110 @@
+/* ModalCss.css */
+
+/* 모달 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 반투명 검정 */
+    z-index: 999;
+}
+
+/* 모달 컨텐츠 */
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff; /* 흰색 배경 */
+    padding: 20px;
+    border-radius: 8px; /* 둥근 모서리 (StoreOrderCss와 맞춤) */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    z-index: 1000;
+    width: 550px; /* 고정 너비 */
+    max-width: 90%; /* 반응형 */
+}
+
+/* 모달 내부 스타일 */
+.modal-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333; /* 텍스트 색상 통일 */
+}
+
+.modal-content p {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* 버튼 컨테이너 */
+.modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* StoreOrderCss의 order-actions와 동일 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-top: 15px;
+}
+
+/* 버튼 스타일 (StoreOrderCss 참고) */
+.modal-close-btn {
+    background: #ddd; /* detail-btn과 유사 */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 90px;
+}
+
+.modal-close-btn:hover {
+    background: #ccc; /* 호버 효과 추가 */
+}
+
+.storeOrder-accept-btn {
+    background: #FFD700; /* StoreOrderCss와 동일 */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.storeOrder-accept-btn:hover {
+    background: #e6c200; /* 살짝 어두운 호버 */
+}
+
+.storeOrder-complete-btn {
+    background: #4CAF50; /* StoreOrderCss와 동일 */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.storeOrder-complete-btn:hover {
+    background: #45a049; /* 살짝 어두운 호버 */
+}
+
+.storeOrder-finished-btn {
+    background: #6495ED; /* StoreOrderCss와 동일 */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.storeOrder-finished-btn:hover {
+    background: #5a87d8; /* 살짝 어두운 호버 */
+}

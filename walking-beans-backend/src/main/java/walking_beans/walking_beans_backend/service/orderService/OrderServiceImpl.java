@@ -107,7 +107,10 @@ public class OrderServiceImpl implements OrderService {
                 if (order != null) {
                     String message = "{\"orderId\": " + orderId +
                             ", \"orderNumber\": \"" + order.getOrderNumber() +
-                            "\", \"orderStatus\": " + orderStatus + "}";
+                            "\", \"orderStatus\": " + orderStatus +
+                            ", \"orderCreateDate\": \"" + order.getOrderCreateDate() + "\"" +
+                            "}";
+
                     webSocketHandler.sendOrderUpdate(message);
                 }
             } catch (Exception e) {

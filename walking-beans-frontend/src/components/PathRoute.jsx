@@ -56,6 +56,7 @@ import StoreRegister from "../pages/owner/StoreRegister";
 import UserCart from "../pages/user/UserCart";
 import ErrorPage from "../pages/layout/ErrorPage";
 import AdminPage from "../pages/admin/AdminPage";
+import StoreMenuRegister from "../pages/owner/StoreMenuRegister";
 
 import UserProtectedRoute from './UserProtectedRoute';
 import AdminLoginRequiredPage from "../pages/admin/AdminLoginRequiredPage";
@@ -106,6 +107,7 @@ function PathRoute() {
                              setRiderOnDuty={setRiderOnDuty}
                 />
                 <div className="content-wrapper">
+
                     {/* <div className="col-md-8 col-12">*/}
 
                     <Routes>
@@ -213,6 +215,11 @@ function PathRoute() {
                                 <StoreMenu/>
                             </ProtectedRoute>
                         }/>
+                        <Route path="/owner/:storeId/menuresister" element={
+                            <ProtectedRoute allowedRoles={["owner"]}>
+                                <StoreMenuRegister/>
+                            </ProtectedRoute>
+                        }/>
                         <Route path="/owner/:storeId/menu/:menuId" element={
                             <ProtectedRoute allowedRoles={["owner"]}>
                                 <StoreMenuDetail/>
@@ -267,6 +274,7 @@ function PathRoute() {
                             </ProtectedRoute>
                         }/>
                     </Routes>
+
 
                 </div>
                 {user?.user_role !== "rider" && <Footer/>}

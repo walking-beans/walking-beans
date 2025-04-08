@@ -33,7 +33,6 @@
     <select id="findStoresByuserId">
         SELECT *
         FROM stores
-        WHERE
         WHERE user_id = #{userId}
     </select>
 
@@ -62,7 +61,7 @@ PRIMARY KEY (`store_id`),
 CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`)
      -->
     <insert id="addStore">
-        INSERT INTO Stores (store_id,
+        INSERT INTO Stores
                             user_id,
                             store_name,
                             store_description,
@@ -73,18 +72,15 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
                             store_operation_hours,
                             store_closed_dates,
                             store_status,
-                            store_review_count,
-                            store_rating,
                             store_min_delivery_time,
                             store_max_delivery_time,
                             store_delivery_tip,
                             store_delivery_address,
                             store_address,
                             store_latitude,
-                            store_longitude)
+                            store_longitude
         VALUES
-            (
-             #{storeId},
+
              #{userId},
              #{storeName},
              #{storeDescription},
@@ -95,8 +91,6 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
              #{storeOperationHours},
              #{storeClosedDates},
              #{storeStatus},
-             #{storeReviewCount},
-             #{storeRating},
              #{storeMinDeliveryTime},
              #{storeMaxDeliveryTime},
              #{storeDeliveryTip},
@@ -105,32 +99,32 @@ CONSTRAINT `FK_Stores_Users` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id
              #{storeLatitude},
              #{storeLongitude}
 
-            )
     </insert>
 
     <!--매장정보 수정하기 -->
     <update id="updateStore">
         UPDATE stores
-        SET (
-                store_name = #{storeName}
-                store_description = #{storeDescription}
-                store_main_menu = #{storeMainMenu}
-                store_business_number = #{storeBusinessNumber}
-                store_phone = #{storePhone}
+        SET
+
+                store_name = #{storeName},
+                store_description = #{storeDescription},
+                store_main_menu = #{storeMainMenu},
+                store_business_number = #{storeBusinessNumber},
+                store_phone = #{storePhone},
+
+                store_operation_hours = #{storeOperationHours},
+                store_closed_dates = #{storeClosedDates},
+
+                store_min_delivery_time = #{storeMinDeliveryTime},
+                store_max_delivery_time = #{storeMaxDeliveryTime},
+                store_delivery_tip = #{storeDeliveryTip},
+                store_delivery_address = #{storeDeliveryAddress},
+                store_address = #{storeAddress},
+                store_latitude = #{storeLatitude},
+                store_longitude = #{storeLongitude},
+
                 store_picture_url = #{storePictureUrl}
-                store_operation_hours = #{storeOperationHours}
-                store_closed_dates = #{storeClosedDates}
-                store_status = #{storeStatus}
-                store_review_count = #{storeReviewCount}
-                store_rating = #{storeRating}
-                store_min_delivery_time = #{storeMinDeliveryTime}
-                store_max_delivery_time = #{storeMaxDeliveryTime}
-                store_delivery_tip = #{storeDeliveryTip}
-                store_delivery_address = #{storeDeliveryAddress}
-                store_address = #{storeAddress}
-                store_latitude = #{storeLatitude}
-                store_longitude = #{storeLongitude}
-                )
+
         WHERE store_id = #{storeId}
 
     </update>

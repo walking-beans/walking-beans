@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminAlarmList.css";
@@ -144,11 +144,12 @@ const AdminAlarmList = () => {
     return (
         <div className="AlarmListcontainer">
             <div className="user-order-menu-container">
-                <h1 className="user-title-center">알림</h1>
-                <hr className="user-order-hr"/>
+                <div className="user-title-center">알림</div>
+                <div className="user-order-hr" alt="구분선"></div>
 
-            {AlarmList.length > 0 && (
-                <div className="AlarmDeleteContainer">
+                <div className="mb-3">
+                {AlarmList.length > 0 && (
+                    <div className="AlarmDeleteContainer">
                     <button className="AllReadBtn" onClick={AllReadAlrms}>
                         모두 읽음
                     </button>
@@ -158,7 +159,7 @@ const AdminAlarmList = () => {
                     </button>
                 </div>
             )}
-
+                </div>
             {/* 알림 리스트가 없을 경우 / 알림 리스트가 있을 경우*/}
             {AlarmList.length === 0 ? (
                 <h3 className="NoAlarmList">알람이 없습니다</h3>
@@ -184,7 +185,7 @@ const AdminAlarmList = () => {
                                         </div>
                                     )}
 
-                                    <span>
+                                    <span className="alarm-text-b">
                                         {value.alarmRole === 2 ? value.userName : "알림"}
                                         </span>
                                     <span className="AlarmDate">
@@ -205,7 +206,7 @@ const AdminAlarmList = () => {
                             </span>
                                 </div>
                             </div>
-                            <p>{value.alarmContent}</p>
+                            <div className="alarm-text">{value.alarmContent}</div>
                         </div>
                     </div>
                 ))

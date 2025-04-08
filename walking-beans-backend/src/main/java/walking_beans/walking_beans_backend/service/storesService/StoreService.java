@@ -24,7 +24,7 @@ public interface StoreService {
     void addStore(Stores stores);
 
     // 매장정보 수정하기
-    void updateStore(Stores stores);
+    void updateStore(Stores stores, MultipartFile storePictureUrl);
 
     // 매장정보 삭제하기
     void deleteStores(long storeId);

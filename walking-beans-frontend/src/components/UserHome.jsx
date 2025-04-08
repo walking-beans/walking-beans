@@ -28,7 +28,7 @@ const UserHome = ({user: initialUser}) => {
     const [userLng, setUserLng] = useState(null);
     const [ratingStats, setRatingStats] = useState({average: 0, counts: [0, 0, 0, 0, 0]});
     const [reviews, setReviews] = useState([]);
-    const [storeMenus, setStoreMenus] = useState([]);
+    const [storeMenus, setStoreMenus] = useState({});
 
     // 로컬스토리지에서 사용자 정보 불러오기
     useEffect(() => {
@@ -332,14 +332,15 @@ const UserHome = ({user: initialUser}) => {
 
 // 특정 매장의 메뉴 가져오기 함수
     const fetchStoreMenus = (storeId) => {
-        axios
-            .get(`http://localhost:7070/api/menu/storemenu/${storeId}`)
+        axios.get(`http://localhost:7070/api/menu/storemenu/${storeId}`)
             .then((res) => {
-                console.log("매장 메뉴 데이터:", res.data);
-                setStoreMenus(res.data);
+                setStoreMenus(prev => ({
+                    ...prev,
+                    [storeId]: res.data // 👈 매장 ID를 키로 저장!
+                }));
             })
             .catch((err) => {
-                console.error("매장 메뉴를 불러오는 중 오류가 발생했습니다:", err);
+                console.error("매장 메뉴를 불러오는 중 오류:", err);
             });
     };
 
@@ -411,9 +412,8 @@ const UserHome = ({user: initialUser}) => {
                     {displayStores.map((store, index) => {
                         const isLastItem = index === displayStores.length - 1;
                         // 이 매장의 메뉴 이미지 URL 가져오기
-                        const menuImages = storeMenus
-                            .filter(menu => menu.storeId === store.storeId)
-                            .map(menu => menu.menuPictureUrl)
+                        const menuImages = (storeMenus[store.storeId] || [])
+                            .map((menu) => menu.menuPictureUrl)
                             .slice(0, 2);
                         return (
                             <div key={index} onClick={() => handleStore(store.storeId)}>
