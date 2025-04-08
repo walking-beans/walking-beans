@@ -18,8 +18,8 @@ public class AlarmAPIController {
     @Autowired
     private AlarmNotificationService alarmNotificationService;
 
-    // 사장님이 특정 알림을 읽음 처리
-    @PutMapping("/read/{alarmId}")
+    // 특정 알림을 읽음 처리
+    @PutMapping("/api/read/{alarmId}")
     public ResponseEntity<String> markAsRead(@PathVariable Long alarmId) {
         alarmService.markNotificationAsRead(alarmId);
         return ResponseEntity.ok("알림이 읽음 처리되었습니다.");

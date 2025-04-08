@@ -13,13 +13,15 @@ import org.springframework.web.client.RestTemplate;
 import walking_beans.walking_beans_backend.mapper.UserMapper;
 import walking_beans.walking_beans_backend.model.dto.Users;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
 
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
-/*
+
     @Autowired
     private UserMapper userMapper;
 
@@ -51,10 +53,11 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return userMapper.checkEmailExists(email);
     }
     
+
 */
     /******************** 카카오 로그인 *******************************/
-/*
-    @Override
+
+   /* @Override
     public Map<String, Object> KakaoCallback(String code){
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -110,11 +113,11 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
 
     }
-    
-*/
+    */
+
     /********************* 네이버 로그인 *************************/
-/*
-    @Override
+
+   /* @Override
     public Map<String, Object> NaverCallback(String code, String state) {
         String tokenUrl = "https://nid.naver.com/oauth2.0/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -170,5 +173,6 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
     }
 
-*/
+
 }
+*/

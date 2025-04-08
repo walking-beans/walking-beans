@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 
+/*
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,12 +15,15 @@ import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Map;
+*/
 
-
+/*
 @RestController
 public class SocialLoginAPIController {
-/*
+
     @Autowired
     SocialLoginServiceImpl socialLoginService;
 
@@ -39,12 +43,12 @@ public class SocialLoginAPIController {
     private String naverClientSecret;
 
     @Value("${naver.redirect-url}")
-    private String naverRedirectUrl;
+    private String naverRedirectUrl;*/
 
-*/
+
     /******************** 카카오 로그인 **************************/
-/*
-    @GetMapping("/oauth/kakao/login")
+
+   /* @GetMapping("/oauth/kakao/login")
     public ResponseEntity<?> getKakaoLoginUrl() {
         String url = "https://kauth.kakao.com/oauth/authorize?response_type=code" +
                 "&client_id=" + kakaoClientId + "&redirect_uri=" + redirectUrl;
@@ -73,6 +77,8 @@ public class SocialLoginAPIController {
             } else {
                 users.setUserPhone(phone);
             }
+            LocalDate today = LocalDate.now();
+            users.setUserDate(Date.valueOf(today));
 
             socialLoginService.insertSocialUser(users); // DB에 정보 저장
         }
@@ -87,11 +93,11 @@ public class SocialLoginAPIController {
             System.out.println("오류");
             throw new RuntimeException(e);
         }
-    }
-*/
+    }*/
+
     /**************** 네이버 로그인 *******************************/
-/*
-    @GetMapping("/oauth/naver/login")
+
+   /* @GetMapping("/oauth/naver/login")
     public ResponseEntity<?> getNaverLoginUrl() {
         String url = "https://nid.naver.com/oauth2.0/authorize?response_type=code" +
                 "&client_id=" + naverClientId + "&redirect_uri=" + naverRedirectUrl +
@@ -134,5 +140,6 @@ public class SocialLoginAPIController {
             e.printStackTrace();
         }
     }
-*/
+
 }
+*/
