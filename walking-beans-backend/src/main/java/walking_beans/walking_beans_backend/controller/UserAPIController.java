@@ -149,10 +149,6 @@ public class UserAPIController {
              // String filePath = "C:/uploaded/" + fileName;
             String filePath = uploadPath + "/" + fileName;
 
-
-
-
-
             file.transferTo(new File(filePath));
             String profileUrl = "http://localhost:7070/upload/" + fileName;
             userService.updateUserProfile(userId, profileUrl);
