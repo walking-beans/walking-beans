@@ -5,7 +5,6 @@ import "../../css/rider/RiderOrderStatus.css";
 import apiRiderService from "../../service/apiRiderService";
 
 const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
-
     const navigate = useNavigate();
 
     useEffect(() => {
