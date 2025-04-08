@@ -1,5 +1,5 @@
 import {useNavigate, useSearchParams} from "react-router-dom";
-import failIcon from "../../images/user/failIcon.svg"
+import failIcon from "../../assert/images/user/failIcon.svg"
 
 export function UserFailPage() {
     const [searchParams] = useSearchParams();

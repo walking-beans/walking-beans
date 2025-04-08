@@ -9,8 +9,8 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.dto.order.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
@@ -79,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
     /**********************************************mochoping**********************************************/
     // 가게 id로 주문정보, 주문상태만 가져오기
     @Override
@@ -139,12 +140,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderByOrderNumber(orderNumber);
     }
 
+    // 주문한 유저 정보 조회
     @Override
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
     }
-
-
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long createOrder(Map<String, Object> requestData) {
+    public Map<String, Object> createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
@@ -324,7 +324,12 @@ public class OrderServiceImpl implements OrderService {
             // 매장에 주문수락 요청 알림 보내기
             OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
             alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
-            return userId;
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("userId", userId);
+            result.put("orderNumber", orderNumber);
+            result.put("orderId", orderId);
+            return result;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");

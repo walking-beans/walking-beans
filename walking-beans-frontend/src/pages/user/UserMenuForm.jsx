@@ -1,5 +1,5 @@
 import React from "react";
-import defaultImage from "../../images/user/defaultimage.svg";
+import defaultImage from "../../assert/images/user/defaultimage.svg";
 import "../../css/Owner.css"
 
 const UserMenuForm = ({ menuName, menuPrice, onClick, menuPictureUrl }) => {

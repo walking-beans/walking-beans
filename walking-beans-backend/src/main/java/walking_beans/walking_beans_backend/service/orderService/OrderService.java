@@ -3,9 +3,8 @@ package walking_beans.walking_beans_backend.service.orderService;
 import org.apache.ibatis.annotations.Param;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.DeliveryStatus;
-import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.dto.order.UserOrderDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,7 @@ public interface OrderService {
 
     Integer checkingRiderIdOnDuty(@Param("orderId") long orderId, @Param("riderIdOnDuty") long riderIdOnDuty);
 
+
     /****************************************************************************************/
 
 
@@ -45,7 +45,7 @@ public interface OrderService {
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
 
-    Long createOrder(Map<String, Object> requestData);
+    Map<String, Object> createOrder(Map<String, Object> requestData);
 
     UserOrderDTO getOrderByOrderNumber(String orderNumber);
 

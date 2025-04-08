@@ -1,10 +1,10 @@
 import "../../css/Order.css"
 import React, {useState} from "react";
-import tossPayLogo from "../../images/user/tossPay_Logo.svg";
-import detailBtn from "../../images/user/detailbtn.svg";
+import tossPayLogo from "../../assert/images/user/tossPay_Logo.svg";
+import detailBtn from "../../assert/images/user/detailbtn.svg";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import checkBtnW from "../../images/user/checkBtnW.svg";
-import checkBtnB from "../../images/user/checkBtnB.svg";
+import checkBtnW from "../../assert/images/user/checkBtnW.svg";
+import checkBtnB from "../../assert/images/user/checkBtnB.svg";
 
 const UserPayment = () => {
     const [isClicked, setIsClicked] = useState(false);

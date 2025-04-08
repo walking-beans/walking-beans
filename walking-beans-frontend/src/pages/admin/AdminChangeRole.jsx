@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import apiUserService from "../../service/apiUserService";
 import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminChangeRole.css"
-import signupSuccess from "../../images/user/signupSuccess.svg"
+import signupSuccess from "../../assert/images/user/signupSuccess.svg"
 
 const AdminChangeRole = () => {
     // 선택된 롤을 관리하는 상태
