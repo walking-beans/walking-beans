@@ -78,10 +78,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.checkingRiderIdOnDuty(orderId, riderIdOnDuty);
     }
 
-    @Override
-    public Long getOrderIdByOrderNumber(String orderNumber) {
-        return orderMapper.getOrderIdByOrderNumber(orderNumber);
-    }
 
 
     /**********************************************mochoping**********************************************/

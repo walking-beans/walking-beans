@@ -26,8 +26,6 @@ public interface OrderService {
 
     Integer checkingRiderIdOnDuty(@Param("orderId") long orderId, @Param("riderIdOnDuty") long riderIdOnDuty);
 
-    Long getOrderIdByOrderNumber(String orderNumber);
-
 
     /****************************************************************************************/
 
