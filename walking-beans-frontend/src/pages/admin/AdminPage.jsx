@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import "../../css/admin/AdminPage.css"
+import MsgToast from "../../components/owner/MsgToast";
 
 const AdminPage = () => {
 
