@@ -25,6 +25,7 @@ const UserDeliveryStatus = () => {
     const [riderRoomId, setRiderRoomId] = useState(0);
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
+    const [storeRoomId, setStoreRoomId] = useState(null);
 
     // 로그인 확인
     useEffect(() => {
@@ -98,7 +99,7 @@ const UserDeliveryStatus = () => {
                 console.log("getUserAndStoreRoomId", roomData);
                 console.log(roomData["3"] + ", " + roomData["2"]);
                 setStoreRoomId(roomData["3"]); // 첫 번째 룸 ID 사용
-                setRiderRoomId(roomData["2"]);
+                setRiderRoomId(roomData["2"] ? roomData["2"] : 0);
             }
         });
 
@@ -174,7 +175,6 @@ const UserDeliveryStatus = () => {
             navigate(`/chat/message/${riderRoomId}`);
             return;
         }
-
         alert("아직 배정된 라이더가 없습니다.");
     };
 
