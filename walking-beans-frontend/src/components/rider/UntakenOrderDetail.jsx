@@ -5,21 +5,29 @@ import "../../css/rider/RiderOrderStatus.css";
 import apiRiderService from "../../service/apiRiderService";
 
 const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
-
     const navigate = useNavigate();
 
     useEffect(() => {
         console.log("UntakenOrder selected Store : " + selectedOrder);
     }, []);
 
-   /* const goToDetail = () => {
-        apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
-        apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
-        navigate(`/rider/ontheway/${selectedOrder.orderId}`);
-    }*/
+    /* const goToDetail = () => {
+         apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
+         apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
+         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
+     }*/
+
+    async function updateOrderByRiderIdAndOrderId() {
+        return apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
+    }
+
+    async function createChattingRoomForRider() {
+        return apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
+    }
+
     const goToDetail = async () => {
-        await apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
-        await apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
+        await updateOrderByRiderIdAndOrderId();
+        await createChattingRoomForRider();
         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
     };
 
