@@ -1,5 +1,5 @@
 import UserMenuOptionGroup from "./UserMenuOptionGroup";
-import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
+import defaultDetailImage from "../../assert/images/user/defaultDetailImage.svg";
 import React, {useEffect, useRef, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 

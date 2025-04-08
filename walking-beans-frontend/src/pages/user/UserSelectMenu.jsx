@@ -1,5 +1,5 @@
 import apiUserOrderService from "../../service/apiUserOrderService";
-import orderCartDeleteBtnIconMini from "../../images/user/orderCartDeleteBtnIconMini.svg";
+import orderCartDeleteBtnIconMini from "../../assert/images/user/orderCartDeleteBtnIconMini.svg";
 
 const UserSelectMenu = ({
                             cartId,

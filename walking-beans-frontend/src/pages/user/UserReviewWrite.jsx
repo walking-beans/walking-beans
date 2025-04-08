@@ -4,7 +4,7 @@ import "../../css/User.css";
 import "../../css/Order.css";
 import groupIcon from "../../assert/svg/Group.svg"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import XIcon from "../../images/user/XIcon.svg"
+import XIcon from "../../assert/images/user/XIcon.svg"
 
 const UserReviewWrite = () => {
     const [reviews, setReviews] = useState([]);

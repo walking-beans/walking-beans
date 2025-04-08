@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import apiUserOrderService from "../../service/apiUserOrderService"
-import loadingIcon from "../../images/user/loadingIcon.png"
+import loadingIcon from "../../assert/images/user/loadingIcon.png"
 
 const UserSuccessPage = () => {
     const location = useLocation();

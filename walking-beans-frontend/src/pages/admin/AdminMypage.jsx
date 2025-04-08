@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import apiUserService from "../../service/apiUserService";
-import defaultProfileImage from '../../images/user/defaultProfileImage.jpeg'
+import defaultProfileImage from '../../assert/images/user/defaultProfileImage.jpeg'
 import '../../css/admin/AdminMypage.css'
 import "../../css/Order.css"
-import detailbtn from "../../images/user/detailbtn.svg"
-import detailbtnB from "../../images/user/detailbtnB.svg"
+import detailbtn from "../../assert/images/user/detailbtn.svg"
+import detailbtnB from "../../assert/images/user/detailbtnB.svg"
 
 const AdminMypage = () => {
     const navigate = useNavigate();

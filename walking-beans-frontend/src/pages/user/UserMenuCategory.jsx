@@ -1,6 +1,6 @@
 import React from "react";
 import UserMenuForm from "./UserMenuForm";
-import defaultDetailImage from "../../images/user/defaultDetailImage.svg";
+import defaultDetailImage from "../../assert/images/user/defaultDetailImage.svg";
 
 const UserMenuCategory = ({ categoryName, menus, onMenuClick }) => {
     return (

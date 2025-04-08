@@ -7,7 +7,7 @@ import "../../css/Cart.css";
 import "../../css/Owner.css";
 import UserMenuOptionModal from "../user/UserMenuOptionModal";
 import oneStar from "../../assert/svg/starNav/oneStar.svg";
-import detailBtn from "../../images/user/detailbtn.svg";
+import detailBtn from "../../assert/images/user/detailbtn.svg";
 import UserMenuCategory from "../user/UserMenuCategory";
 import axios from "axios";
 
