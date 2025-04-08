@@ -46,6 +46,13 @@
     font-size: 32px;
     width: 100%;
     box-sizing: border-box;
+
+
+
+
+
+
+
 }
 
 /* 버튼 공통 스타일 */
@@ -59,6 +66,9 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+
+
+
 }
 
 /* 역할별 버튼 배경색 */

@@ -1,6 +1,7 @@
 package walking_beans.walking_beans_backend.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,11 @@ import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificatio
 import walking_beans.walking_beans_backend.service.userService.UserServiceImpl;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequestMapping("/api/users")
 @RestController
 public class UserAPIController {
@@ -41,9 +44,8 @@ public class UserAPIController {
         // 전체 알림 테스트용 코드 ↓
         //alarmNotificationService.sendAdminNotification(Alarms.create(0,1,"전체공지입니다.",4,"testUrl"));
         if ("success".equals(loginResult.get("status"))) {
-            session.setAttribute("user", loginResult.get("user"));
-
-            Map<String, Object> response = new HashMap<>();
+            session.setAttribute("user", loginResult.get("user")); // 세션에 값을 user키로 저장. 없는 세션 호출시 스프링에서 자동생성.
+            Map<String, Object> response = new HashMap<>(); // 리스폰스생성
             response.put("status", "success");
             response.put("user", loginResult.get("user"));
             return ResponseEntity.ok(response);
@@ -80,6 +82,21 @@ public class UserAPIController {
         userService.updateUserRole(userEmail, userRole);
     }
 
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    @GetMapping("/getuserdata/{userId}")
+    public Users getUserData(@PathVariable("userId") long userId) {
+        return userService.getUserInfoByIdForAlarms(userId);
+    }
+
+    // 유저 Date 업데이트
+    @PutMapping("/updateuserdate")
+    public void updateUserDate(@RequestParam("userEmail") String userEmail,
+                               @RequestParam("userDate") String userDate) {
+        LocalDate localDate = LocalDate.parse(userDate);
+
+        userService.changeUserDate(userEmail, localDate);
+    }
+
     /************************* 이메일 인증 ****************************/
 
     @PostMapping("/sendCode")
@@ -93,6 +110,7 @@ public class UserAPIController {
 
     @PostMapping("/checkCode")
     public String checkCode(@RequestBody Vertification vr) {
+        vr.setEmail(vr.getEmail().trim());
         boolean isValid = userService.verifyCodeWithVo(vr);
         return isValid ? "인증번호가 일치합니다." : "인증번호가 일치하지 않습니다.";
     }
@@ -131,10 +149,6 @@ public class UserAPIController {
              // String filePath = "C:/uploaded/" + fileName;
             String filePath = uploadPath + "/" + fileName;
 
-
-
-
-
             file.transferTo(new File(filePath));
             String profileUrl = "http://localhost:7070/upload/" + fileName;
             userService.updateUserProfile(userId, profileUrl);
@@ -164,6 +178,12 @@ public class UserAPIController {
         return ResponseEntity.ok("회원탈퇴가 성공적으로 이루어졌습니다.");
     }
 
+    // user_role update
+    @PatchMapping("/updateRole")
+    public ResponseEntity<Integer> updateUserRoleByUserId(@RequestParam("userId") long userId, @RequestParam("userRole") byte userRole) {
+        log.info("=== /users/updateRole&userId={}&userRole={} ===", userId, userRole);
 
+        return ResponseEntity.ok(userService.updateUserRoleByUserId(userId, userRole));
+    }
 }
 

@@ -25,15 +25,18 @@ const RiderMainSelectedStore = ({orders, storeId, setSelectedOrder, setCheckingS
                 <div className="rider-main-selected-store-container-store-address">
                     {selectedStore[0]?.storeAddress}
                 </div>
+                <hr />
+
                 {
                     selectedStore?.map(order => (
                         <li key={order.orderId}>
-                            <div onClick={() => {handleSelectedOrder(order.orderId)}}
+                            <div className="rider-main-selected-store-li-div"
+                                 onClick={() => {handleSelectedOrder(order.orderId)}}
                             >
-                                <p><strong>{order.orderNumber}</strong></p>
-                                <p className="rider-main-selected-store-li-delivery-title">배달 주소</p>
+                                <p className="rider-main-selected-store-li-delivery-number"><strong>{order.orderNumber}</strong></p>
                                 <p className="rider-main-selected-store-li-delivery-address">{order.orderAddress} {order.orderDetailedAddress}</p>
                             </div>
+                            <hr />
                         </li>
                     ))
                 }

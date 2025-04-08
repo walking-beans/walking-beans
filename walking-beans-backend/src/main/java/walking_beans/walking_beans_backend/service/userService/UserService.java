@@ -3,6 +3,7 @@ package walking_beans.walking_beans_backend.service.userService;
 import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.model.vo.Vertification;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public interface UserService {
@@ -16,6 +17,12 @@ public interface UserService {
 
     // 비밀번호 변경하기
     void updatePw(String userEmail, String userPassword);
+
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    Users getUserInfoByIdForAlarms(long userId);
+
+    // 유저 날짜 변경
+    void changeUserDate(String userEmail, LocalDate userDate);
 
     //유저 롤 변경
     void updateUserRole(String email, byte userRole);
@@ -43,4 +50,12 @@ public interface UserService {
 
     // 마이페이지 사용자 회원 탈퇴
     void deleteUserAccount(Long userId);
+
+
+    // 가게 등록시 유저 역활 업데이트
+    void updateUserRoleStore(long userId, byte userRole);
+
+    int updateUserRoleByUserId(Long userId, byte userRole);
+
+
 }

@@ -65,6 +65,14 @@
         WHERE O.order_id = #{orderId}
     </select>
 
+    <select id="checkingRiderIdOnDuty">
+        SELECT EXISTS (
+            SELECT 1
+            FROM orders
+            WHERE order_id = #{orderId} AND rider_id_on_duty = #{riderIdOnDuty}
+        ) AS result
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
 
@@ -158,6 +166,43 @@
         WHERE order_number = #{orderNumber}
     </select>
 
+    <!--store 확인용-->
+    <!-- 가게 id로 주문번호, 주문상태만 가져오기 storeOrder -->
+    <select id="getLatestOrderForStore">
+        SELECT order_number, order_status, order_id, order_create_date, order_modified_date
+        FROM orders
+        WHERE store_id = #{storeId}
+        ORDER BY order_modified_date DESC
+    </select>
+    <!-- 주문리스트 클릭시 주문정보 로딩용-->
+    <select id="getOrderForStore">
+        SELECT order_id,
+               user_id,
+               customer_name,
+               store_name,
+               order_date,
+               order_number,
+               order_status,
+               delivery_address,
+               detailed_address,
+               total_payment,
+               order_requests,
+               order_list,
+               quantity
+        FROM user_orders_view
+        WHERE order_number = #{orderNumber}
+    </select>
+
+    <!-- 주문 상태 변경 -->
+    <update id="storeUpdateOrderStatus">
+        UPDATE orders
+        SET order_status = #{orderStatus}
+        WHERE order_number = #{orderNumber}
+    </update>
+
+
+
+
     <!-- 주문 번호로 상세 정보 조회-->
     <select id="getOrderDetailsByOrderNumber">
         SELECT * FROM order_detail_view
@@ -170,4 +215,5 @@
         WHERE order_id = #{orderId}
           AND order_status = 6
     </delete>
+
 </mapper>

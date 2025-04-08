@@ -7,16 +7,17 @@ import MenuOptionGroup from "../../components/owner/MenuOptionGroup";
 
 
 const StoreMenuOption = () => {
-    const {id} = useParams();
+    const {menuId} = useParams();
     const [optionData, setOptionData] = useState({});
     // 상태관리
     // 이름저장
     const [optionGroups, setOptionGroups] = useState([
-        {option_content: ""}
+        {option_name: ""} // option_name : 그룹이름, option_content : 옵션설명 혹은 이름
     ]);
     const [newGroupName, setNewGroupName] = useState("");
     // 자식컴포넌트에 작성된 모든 데이터 저장
     const [allOptions, setAllOptions] = useState({})
+
 
     // 새로운 그룹 추가
     const handleAddGroup = () => {
@@ -24,7 +25,7 @@ const StoreMenuOption = () => {
             alert("그룹이름은 공란이 될 수 없습니다.");
             return;
         }
-        setOptionGroups([...optionGroups, {option_content: newGroupName}]);
+        setOptionGroups([...optionGroups, {option_name: newGroupName}]);
         setAllOptions({...allOptions, [newGroupName]: []}); // 새로운 그룹의 빈데이터 추가
         setNewGroupName("");// 추가 후 초기화
     };
@@ -35,7 +36,7 @@ const StoreMenuOption = () => {
             alert("최소한 하나의 그룹은 남아있어야 합니다.");
             return;
         }*/
-        const groupToRemove = optionGroups[index].option_content;
+        const groupToRemove = optionGroups[index].option_name;
         const updatedGroups = optionGroups.filter((_, i) => i !== index);// 해당인덱스만 제거
         const updatedOptions = {...allOptions};
         setOptionGroups(updatedGroups);
@@ -59,10 +60,10 @@ const StoreMenuOption = () => {
     const handelSubmitTotal = () => {
         // entries 객체를 배열로 변환해주는 메소드
         // flatMap 중첩된 배열구조를 평탄화 하기 위해서 사용하는 함수 -괄호없애기
-        const totalOptions = Object.entries(allOptions).flatMap(([option_content, options]) => {
+        const totalOptions = Object.entries(allOptions).flatMap(([option_name, options]) => {
             return options.map(option => ({
                 ...option,
-                option_content: option_content,
+                option_name: option_name,
             }))
         })
         if (totalOptions === 0) {
@@ -75,6 +76,7 @@ const StoreMenuOption = () => {
             .then((res) => {
                 console.log("성공로그:" + res)
                 alert("옵션 그룹이 성공적으로 저장되었습니다.")
+                window.location.reload(); // 새로고침. 상태업데이트가 자연스럽지만 시간이 없어서 사용
             })
             .catch((err) => {
                 console.log("업로드에러: " + err)
@@ -85,7 +87,7 @@ const StoreMenuOption = () => {
     useEffect(() => {
 
         axios
-            .get(`http://localhost:7070/api/option/optionmenu/${id}`)
+            .get(`http://localhost:7070/api/option/optionmenu/${menuId}`)
             .then((res) => {
                 const rawData = res.data; // 그룹화 전 받은 데이터
                 // forEach 방법과, reduce로 배열을 각 그룹컨텐츠 기준으로 정렬되는 객체로 변환 코드.
@@ -94,7 +96,7 @@ const StoreMenuOption = () => {
                 /*
                 const groupedData = {}; // 객체선언
                 rawData.forEach( (item)=>{
-                    const groupName = item.optionContent; // 그룹이름 설정
+                    const groupName = item.option_name; // 그룹이름 설정
                     if (!groupedData[groupName]) groupedData[groupName] = []; //해당 그룹이름이 없으면 배열생성
                     groupedData[groupName].push(item);
                 })
@@ -102,7 +104,7 @@ const StoreMenuOption = () => {
                 */
 
                 const groupedData = rawData.reduce((acc, item) => {
-                    const group = item.optionContent; // 그룹 이름 결정, 그룹이름은 not null로 널값이 없음. 있는 경우 || 사용해서 기본값 구현
+                    const group = item.optionName; // 그룹 이름 결정, 그룹이름은 not null로 널값이 없음. 있는 경우 || 사용해서 기본값 구현
                     if (!acc[group]) acc[group] = []; // 그룹이 없다면 배열 생성 <- 그룹이름을 딴 배열생성
                     acc[group].push(item);  // 그룹에 항목 추가
                     return acc; // 누적된 값 반환하기
@@ -125,6 +127,7 @@ const StoreMenuOption = () => {
             .delete(`http://localhost:7070/api/option/${optionId}`)
             .then(() => {
                 alert("메뉴옵션 삭제에 성공했습니다.")
+                window.location.reload(); // 새로고침. 상태업데이트가 자연스럽지만 시간이 없어서 사용
             })
             .catch((err) => {
                 console.log(err)
@@ -132,20 +135,19 @@ const StoreMenuOption = () => {
 
     }
 
-
     return (
         <div style={{padding: "20px"}}>
-            <h2>메뉴 옵션 관리 (Menu ID: {id})</h2>
+            <h2>메뉴 옵션 관리 (Menu ID: {menuId})</h2>
             {/* 기존 메뉴 옵션 보기 UI */}
-            {Object.entries(optionData).map(([optionContent, opts]) => (
-                <div key={optionContent} className="menu-group">
-                    <h4>{optionContent}</h4>
+            {Object.entries(optionData).map(([option_name, opts]) => (
+                <div key={option_name} className="menu-group">
+                    <h4>{option_name}</h4>
 
                     {opts.map((opt) => (
-                        <MenuOptionGroup key={opt.optionContent}
+                        <MenuOptionGroup key={opt.option_name}
                                          {...opt}
                                          optionId={opt.optionId}
-                                         name={opt.optionName}
+                                         name={opt.optionContent}
                                          modifiedDate={opt.optionModifiedDate}
                                          price={opt.optionPrice}
                                          handleDelete={handleDelete}
@@ -159,7 +161,7 @@ const StoreMenuOption = () => {
             <div>
                 <input
                     type="text"
-                    placeholder="새로운 그룹 이름 (예: 사이즈, 토핑)"
+                    placeholder="그룹 이름(예: 사이즈, 토핑)"
                     value={newGroupName}
                     onChange={(e) => setNewGroupName(e.target.value)}
                 />
@@ -172,7 +174,7 @@ const StoreMenuOption = () => {
             {optionGroups.map((group, index) => (
                 <div key={index}>
 
-                    {group.option_content}{" "}
+                    {group.option_name}{" "} {/* */}
                     <button
                         type="button"
                         onClick={() => handleRemoveGroup(index)}
@@ -181,9 +183,9 @@ const StoreMenuOption = () => {
                     </button>
 
                     <MenuOptionForm
-                        menuId={id}
-                        option_content={group.option_content}
-                        onUpdate={(options) => handleOptionsUpdate(group.option_content, options)} // 실시간 업데이트
+                        menuId={menuId}
+                        optionName={group.option_name}
+                        onUpdate={(options) => handleOptionsUpdate(group.option_name, options)} // 실시간 업데이트
                     />
                 </div>
             ))}

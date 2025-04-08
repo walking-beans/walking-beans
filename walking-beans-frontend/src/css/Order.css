@@ -59,6 +59,7 @@
 .user-order-address-detail-text {
     font-size: 18px;
     color: #5A3D21;
+    text-align: left;
 }
 
 .user-order-requests {
@@ -449,6 +450,7 @@
 .user-order-loading {
     display: block;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .user-order-loading img {
@@ -555,7 +557,7 @@
 }
 
 .order-store-logo {
-    max-width: 130px;
+    min-width: 130px;
     height: 130px;
     object-fit: cover;
     object-position: center;

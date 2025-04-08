@@ -18,11 +18,17 @@ public class AlarmAPIController {
     @Autowired
     private AlarmNotificationService alarmNotificationService;
 
-    // 사장님이 특정 알림을 읽음 처리
-    @PutMapping("/read/{alarmId}")
+    // 특정 알림을 읽음 처리
+    @PutMapping("/api/read/{alarmId}")
     public ResponseEntity<String> markAsRead(@PathVariable Long alarmId) {
         alarmService.markNotificationAsRead(alarmId);
         return ResponseEntity.ok("알림이 읽음 처리되었습니다.");
+    }
+
+    // 전체 알람 읽음 처리
+    @PutMapping("/api/allreadalarms/{userId}")
+    public void markAllReadAlarms(@PathVariable Long userId) {
+        alarmService.markAllNotificationsAsRead(userId);
     }
 
     // 알림 리스트 가져오기
@@ -44,6 +50,7 @@ public class AlarmAPIController {
         alarmService.deleteAllAlarm(userId);
     }
 
+    //전체 공지 보내는 api
     @PostMapping("/api/alarm/announcementAlarm")
     public void announcementAlarm(@RequestBody String announcement) {
         alarmNotificationService.sendAdminNotification(Alarms.create(0,1,announcement,4,"testUrl"));

@@ -8,7 +8,7 @@ function AdminMypageUnlinkSuccess() {
     const [userRole, setUserRole] = useState("user");
 
     useEffect(() => {
-        apiUserService.logout(); // 로그아웃 처리
+        apiUserService.logout(undefined, {silent: true});
         apiUserService.sessionData((res) => {
             if (res?.user_role) {
                 setUserRole(res.user_role);

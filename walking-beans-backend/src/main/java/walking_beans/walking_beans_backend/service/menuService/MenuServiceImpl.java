@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import walking_beans.walking_beans_backend.mapper.MenuMapper;
 import walking_beans.walking_beans_backend.model.dto.Menu;
+import walking_beans.walking_beans_backend.service.FileStorageService;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
     @Override
@@ -48,6 +52,24 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.findMenuByStoreId(storeId);
     }
 
+    @Override
+    public void addMenu(String menuName, long storeId, long userId,int menuPrice ,String menuDescription, String menuCategory, MultipartFile menuPictureUrl) {
+        System.out.println("서비스 도달 요청 받음");
+        Menu menu = new Menu();
+        menu.setMenuName(menuName);
+        menu.setStoreId(storeId);
+        menu.setUserId(userId);
+        menu.setMenuDescription(menuDescription);
+        menu.setMenuCategory(menuCategory);
+        menu.setMenuPrice(menuPrice);
+        // 이미지 등록시 변경
+        menu.setMenuPictureUrl(menuPictureUrl != null && !menuPictureUrl.isEmpty()
+                ? fileStorageService.saveFile(menuPictureUrl) // 파일 저장 서비스
+                : menu.getMenuPictureUrl());
+        // null이면 기본값 유지(아무 작업 안 함)
+
+        menuMapper.addMenu(menu);
+    }
 
     @Override
     public void updateMenu(String menuName,
@@ -57,48 +79,39 @@ public class MenuServiceImpl implements MenuService {
                            String menuCategory,
                            MultipartFile menuPictureUrl) {
 
-        String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
-
-        try{
-            File file = new File(uploadImg+uniqueFileName);
-            menuPictureUrl.transferTo(file);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+        // 기존 메뉴 데이터 조회
+        Menu existingMenu = menuMapper.findMenuById(menuId);
+        if (existingMenu == null) {
+            throw new RuntimeException("메뉴를 찾을 수 없습니다.");
         }
-        Menu menu = new Menu();
-        menu.setMenuName(menuName);
-        menu.setMenuId(menuId);
-        menu.setMenuDescription(menuDescription);
-        menu.setMenuCategory(menuCategory);
-        menu.setMenuPrice(menuPrice);
-        menu.setMenuPictureUrl("/upload/"+ uniqueFileName);
 
-        menuMapper.updateMenu(menu);
+        Menu updatedMenu = new Menu();
+        updatedMenu.setMenuId(menuId);
+        updatedMenu.setMenuName(menuName);
+        updatedMenu.setMenuDescription(menuDescription);
+        updatedMenu.setMenuCategory(menuCategory);
+        updatedMenu.setMenuPrice(menuPrice);
+
+        // 이미지 파일이 수정되었을 경우에만 변경
+        updatedMenu.setMenuPictureUrl(menuPictureUrl != null && !menuPictureUrl.isEmpty()
+                ? fileStorageService.saveFile(menuPictureUrl) // 파일 저장 서비스
+                : existingMenu.getMenuPictureUrl());
+            // null이면 기본값 유지(아무 작업 안 함)
+
+        menuMapper.updateMenu(updatedMenu);
+    }
+
+
+    @Override
+    public void softDeleteMenu(long menuId) {
+        menuMapper.softDeleteMenu(menuId);
     }
 
     @Override
-    public void addMenu(String menuName, long menuId, int menuPrice ,String menuDescription, String menuCategory, MultipartFile menuPictureUrl) {
-
-        String uniqueFileName = System.currentTimeMillis() + menuPictureUrl.getOriginalFilename();
-
-        try{
-            File file = new File(uploadImg+uniqueFileName);
-            menuPictureUrl.transferTo(file);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        Menu menu = new Menu();
-        menu.setMenuName(menuName);
-        menu.setMenuId(menuId);
-        menu.setMenuDescription(menuDescription);
-        menu.setMenuCategory(menuCategory);
-        menu.setMenuPrice(menuPrice);
-        menu.setMenuPictureUrl("/upload/"+uniqueFileName);
-
-        menuMapper.addMenu(menu);
+    public void softRecoveryMenu(long menuId) {
+        menuMapper.softRecoveryMenu(menuId);
     }
+
 
     @Override
     public void deleteMenu(long menuId) {

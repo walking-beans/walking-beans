@@ -3,13 +3,14 @@ package walking_beans.walking_beans_backend.service.orderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import walking_beans.walking_beans_backend.config.WebSocketHandlerOrder;
 import walking_beans.walking_beans_backend.mapper.OrderMapper;
 import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.dto.order.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
@@ -24,6 +25,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    // 웹소켓 가게에서 주문정보리스트 자동 업데이트
+    @Autowired
+    private WebSocketHandlerOrder webSocketHandler;
 
     @Autowired
     private AlarmServiceImpl alarmService;
@@ -42,11 +47,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer updateRiderIdOnDutyOfOrders(long riderId, long orderId) {
         return orderMapper.updateRiderIdOnDutyOfOrders(riderId, orderId);
-    }
-
-    @Override
-    public Integer updateOrderStatus(long orderId, int orderStatus) {
-        return orderMapper.updateOrderStatus(orderId, orderStatus);
     }
 
     @Override
@@ -73,6 +73,55 @@ public class OrderServiceImpl implements OrderService {
         return orderStatusDTO;
     }
 
+    @Override
+    public Integer checkingRiderIdOnDuty(long orderId, long riderIdOnDuty) {
+        return orderMapper.checkingRiderIdOnDuty(orderId, riderIdOnDuty);
+    }
+
+
+
+    /**********************************************mochoping**********************************************/
+    // 가게 id로 주문정보, 주문상태만 가져오기
+    @Override
+    public List<Orders> getLatestOrderForStore(long storeId) {
+        return orderMapper.getLatestOrderForStore(storeId);
+    }
+    // 주문번호로 뷰 테이블에서 전체 정보 가져오기
+    @Override
+    public UserOrderDTO getOrderForStore(String orderNumber) {
+        return orderMapper.getOrderForStore(orderNumber);
+    }
+
+    // 웹소켓 통신용 메서드
+    // 주문상태 2 이상 업데이트시 업주에게 자동 업데이트
+    @Override
+    public Integer updateOrderStatus(long orderId, int orderStatus) {
+        Integer updatedRows = orderMapper.updateOrderStatus(orderId, orderStatus);
+        System.out.println("업데이트된 행 수: " + updatedRows + ", 상태: " + orderStatus); // 로그
+        //알림받을 조건
+        System.out.println("if 블록 진입 직전");
+        if (orderStatus > 1 ) { // 주문상태 2이상인 주문들만 필터
+            System.out.println("if 블록 진입 성공");
+            try {
+                // 주문 정보 조회 (알림에 필요한 데이터)
+                Orders order = orderMapper.findOrderById(orderId);
+                if (order != null) {
+                    String message = "{\"orderId\": " + orderId +
+                            ", \"orderNumber\": \"" + order.getOrderNumber() +
+                            "\", \"orderStatus\": " + orderStatus +
+                            ", \"orderCreateDate\": \"" + order.getOrderCreateDate() + "\"" +
+                            "}";
+
+                    webSocketHandler.sendOrderUpdate(message);
+                }
+            } catch (Exception e) {
+                System.out.println("예외처리 : "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return updatedRows;
+    }
+
     /****************************************  ****************************************/
 
 
@@ -91,6 +140,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderByOrderNumber(orderNumber);
     }
 
+    // 주문한 유저 정보 조회
     @Override
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
@@ -157,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long createOrder(Map<String, Object> requestData) {
+    public Map<String, Object> createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
@@ -274,12 +324,18 @@ public class OrderServiceImpl implements OrderService {
             // 매장에 주문수락 요청 알림 보내기
             OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
             alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
-            return userId;
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("userId", userId);
+            result.put("orderNumber", orderNumber);
+            result.put("orderId", orderId);
+            return result;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");
         }
     }
+
 
     // 주문 상세 내역 정보 가져오기
     @Override
@@ -320,4 +376,5 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("주문 삭제 성공: orderId={}", orderId);
     }
+
 }

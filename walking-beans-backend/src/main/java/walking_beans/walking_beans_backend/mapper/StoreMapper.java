@@ -26,7 +26,10 @@ public interface StoreMapper {
     void addStore(Stores stores);
 
     // 매장정보 수정하기
-    void updateStores(Stores stores);
+    void updateStore(Stores stores);
+
+    // 조작 권한 검증
+    long getStoreIdByUserId(long userId);
 
     // 매장정보 삭제하기
     void deleteStores(long storeId);

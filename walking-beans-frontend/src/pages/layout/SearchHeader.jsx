@@ -103,13 +103,13 @@ const SearchHeader = ({setSearchResults}) => {
                     <ul className="nav-menu list-unstyled">
                         {[
                             { icon: person, text: "마이페이지", path: "/mypage" },
-                            { icon: shoppingBasket, text: "장바구니", path: "/cart" },
-                            { icon: packages, text: "주문현황", path: "/orders" },
-                            { icon: receipt, text: "주문내역", path: "/history" },
-                            { icon: chatBubble, text: "채팅", path: "/chat" }
+                            { icon: receipt, text: "주문내역", path: "/order" },
+                            { icon: chatBubble, text: "채팅", path: "/chat/chattingroom" }
                         ].map(({ icon, text, path }) => (
                             <li key={text} onClick={() => navigate(path)}>
+                                <a>
                                 <img src={icon} alt={text} /> {text}
+                                </a>
                             </li>
                         ))}
                     </ul>

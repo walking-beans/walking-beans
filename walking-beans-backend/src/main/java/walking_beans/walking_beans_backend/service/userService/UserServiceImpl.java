@@ -8,6 +8,7 @@ import walking_beans.walking_beans_backend.mapper.UserMapper;
 import walking_beans.walking_beans_backend.model.dto.Users;
 import walking_beans.walking_beans_backend.model.vo.Vertification;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -77,6 +78,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePw(String userEmail, String userPassword) {
         userMapper.updatePw(userEmail, userPassword);
+    }
+
+    //유저 아이디로 정보 조회(로그인 차단 페이지, 알림리스트 사용)
+    @Override
+    public Users getUserInfoByIdForAlarms(long userId) {
+        return userMapper.getUserInfoByIdForAlarms(userId);
+    }
+
+    // 유저 날짜 수정
+    @Override
+    public void changeUserDate(String userEmail, LocalDate userDate) {
+        userMapper.changeUserDate(userEmail, userDate);
     }
 
     @Override
@@ -150,5 +163,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserAccount(Long userId) {
         userMapper.deleteUserAccount(userId); // DB에서 유저 삭제
+    }
+
+
+    /****************** 가게 등록시 역활 업데이트 ********************/
+    @Override
+    public void updateUserRoleStore(long userId, byte userRole) {
+        userMapper.updateUserRoleStore(userId, userRole);
+    }
+
+    @Override
+    public int updateUserRoleByUserId(Long userId, byte userRole) {
+        return userMapper.updateUserRoleByUserId(userId, userRole);
+
     }
 }

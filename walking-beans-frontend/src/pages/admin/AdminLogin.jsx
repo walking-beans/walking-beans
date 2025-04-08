@@ -3,14 +3,14 @@ import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
 import "../../css/admin/AdminLogin.css";
-import kakaoLoginButton from "../../images/kakaoLoginButton.png"
-import naverLoginButton from "../../images/naverLoginButton.png"
+import kakaoLoginButton from "../../assert/images/kakaoLoginButton.png"
+import naverLoginButton from "../../assert/images/naverLoginButton.png"
 
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginNomal/>*/}{/*아이디 비밀번호 로그인*/}
+            <AdminLoginSocial/>{/*소셜 로그인*/}
         </div>
     )
 
@@ -33,6 +33,7 @@ const AdminLoginNomal = () => {
         apiUserService.login(userEmail, userPassword, (response => {
             if (response === "success") { // 로그인 결과에 따른 값
                 setLoginresult("success");
+                window.dispatchEvent(new Event("userChanged"));
             } else {
                 setLoginresult("fail");
             }
@@ -73,6 +74,9 @@ const AdminLoginNomal = () => {
                     break;
                 case "noRole":
                     navigate("/updaterole");
+                    break;
+                case "admin":
+                    navigate("/adminpage");
                     break;
                 default:
                     navigate("/");
@@ -153,6 +157,7 @@ const AdminLoginSocial = () => {
                 if (status === "success") {
                     // 로그인 성공 후 로컬 스토리지에 저장된 사용자 정보 출력
                     const user = JSON.parse(localStorage.getItem("user"));
+                    window.dispatchEvent(new Event("userChanged"));
                     console.log("로그인 성공! 로컬 스토리지의 사용자 정보: ", user);
 
                     setRole(user.user_role);
@@ -200,6 +205,9 @@ const AdminLoginSocial = () => {
                 case "noRole":
                     navigate("/updaterole");
                     break;
+                case "admin":
+                    navigate("/adminpage");
+                    break;
                 default:
                     navigate("/");
                     break;
@@ -208,18 +216,23 @@ const AdminLoginSocial = () => {
     }, [role]); // role이 변경될 때마다 실행
 
     return (
-        <div>
-            <div className="login-container">
-                <h3>로그인</h3>
+        <div className="login-container">
+            <div className="login-box">
+                <div className="login-header">
+                    <div className="user-title-center">로그인</div>
+                    <div className="user-order-hr" alt="구분선"></div>
+                </div>
+
+                <div className="login-text">소셜 계정으로 로그인 하기</div>
+                <div className="login-text-mini">가입된 정보가 없을 경우 자동으로 가입됩니다</div>
                 <div className="social-login">
                     <button className="kakao-login">
-                        <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                        <img src={require('../../assert/images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
                     </button>
                     <button className="naver-login">
-                        <img src={require('../../images/naverLoginButton.png')} onClick={naverLogin}/>
+                        <img src={require('../../assert/images/naverLoginButton.png')} onClick={naverLogin}/>
                     </button>
                 </div>
-                <p>* 가입된 정보가 없을 경우 자동으로 가입됩니다! *</p>
             </div>
         </div>
     )

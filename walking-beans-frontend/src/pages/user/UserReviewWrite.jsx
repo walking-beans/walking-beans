@@ -1,19 +1,24 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/User.css";
+import "../../css/Order.css";
 import groupIcon from "../../assert/svg/Group.svg"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import XIcon from "../../assert/images/user/XIcon.svg"
 
 const UserReviewWrite = () => {
     const [reviews, setReviews] = useState([]);
     const [riderReview, setRiderReview] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
     const location = useLocation();
-    const { orderId } = useParams();
+    const {orderId} = useParams();
     const [userId, setUserId] = useState(null);
     const [storeId, setStoreId] = useState(location.state?.storeId || null);
     const [riderId, setRiderId] = useState(location.state?.riderId || null);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [storeName, setStoreName] = useState('');
+
 
     /*  const [newReview, setNewReview] = useState({
           orderId: orderId,
@@ -23,25 +28,25 @@ const UserReviewWrite = () => {
           reviewContent: "",
       }); 연결되면 storeId,orderId 작성*/
     const [newReview, setNewReview] = useState({
-      orderId: orderId, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
+        orderId: orderId, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
         userId: userId, // 🛠 테스트용 유저 ID
         storeId: storeId, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)
-      /*  orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
-        userId: 1, // 🛠 테스트용 유저 ID
-        storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)*/
+        /*  orderId: 5, // 🛠 테스트용 주문 ID (실제 존재하는 order_id로 설정)
+          userId: 1, // 🛠 테스트용 유저 ID
+          storeId: 2, // 🛠 테스트용 매장 ID (실제 존재하는 store_id로 설정)*/
         reviewStarRating: 5, // 기본값 5점
         reviewContent: "",
     });
-    const [newRiderReview,setNewRiderReview] = useState({
+    const [newRiderReview, setNewRiderReview] = useState({
         orderId: orderId,
         riderId: riderId,
         riderReviewRating: 5,
     })
-  /*  const [newRiderReview,setNewRiderReview] = useState({
-        orderId: 123,
-        riderId: 1,
-        riderReviewRating: 5,
-    })*/
+    /*  const [newRiderReview,setNewRiderReview] = useState({
+          orderId: 123,
+          riderId: 1,
+          riderReviewRating: 5,
+      })*/
 
 
     useEffect(() => {
@@ -98,6 +103,8 @@ const UserReviewWrite = () => {
             return;
         }
 
+        setIsLoading(true);
+
         const formData = new FormData();
         formData.append("userId", newReview.userId);
         formData.append("storeId", newReview.storeId);
@@ -105,39 +112,37 @@ const UserReviewWrite = () => {
         formData.append("reviewStarRating", newReview.reviewStarRating);
         formData.append("reviewContent", newReview.reviewContent);
 
-        selectedImages.forEach((img, index) => {
-            formData.append(`file${index}`, img.file);
+        //  이미지 파일 올바르게 추가
+        selectedImages.forEach((img) => {
+            formData.append("file", img.file);
         });
 
-        // 🖼 여러 개의 이미지 추가
-        selectedImages.forEach((file) => {
-            formData.append("file", file); // 백엔드에서 `@RequestParam("file") MultipartFile file`으로 받음
-        });
 
-        axios
-            .post("http://localhost:7070/api/reviews", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
+
+        axios.post("http://localhost:7070/api/reviews", formData)
+            .then(() => {
+                return axios.post("http://localhost:7070/api/riderReview", newRiderReview);
             })
-            .then((res) => {
+            .then(() => {
                 alert("리뷰가 성공적으로 등록되었습니다!");
-                navigate("/order")
+                navigate("/order");
                 setNewReview((prevReview) => ({
                     ...prevReview,
                     reviewStarRating: 5,
                     reviewContent: "",
                 }));
-                setSelectedImages([]); // 이미지 초기화
+                setNewRiderReview((prevReview) => ({
+                    ...prevReview,
+                    riderReviewRating: 5,
+                }));
+                setSelectedImages([]);
             })
             .catch((err) => {
                 console.error("리뷰 저장 실패", err);
                 alert("백엔드에 리뷰를 저장하지 못했습니다.");
-            });
-
-        axios.post("http://localhost:7070/api/riderReview", newRiderReview, {
-            headers: { "Content-Type": "application/json" },
-        })
-            .catch(() => {
-                alert("백엔드에서 라이더 별점을 저장하지 못했습니다.");
+            })
+            .finally(() => {
+                setIsLoading(false); //모든 요청 완료 후 로딩 종료
             });
     };
 
@@ -149,87 +154,119 @@ const UserReviewWrite = () => {
                     setNewReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        storeId: res.data.storeId, // ✅ storeId 추가
+                        storeId: res.data.storeId, // storeId 추가
                     }));
                     setNewRiderReview(prevReview => ({
                         ...prevReview,
                         orderId: orderId,
-                        riderId: res.data.RiderIdOnDuty || null // ✅ riderId 추가 (없으면 null)
+                        riderId: res.data.RiderIdOnDuty || null //  riderId 추가 (없으면 null)
                     }));
                 })
                 .catch(err => console.error("주문 정보 조회 실패:", err));
         }
     }, [orderId]);
 
+    // 가게 정보 가져오기
+    useEffect(() => {
+        if (storeId) {
+            axios.get(`http://localhost:7070/api/store/${storeId}`)
+                .then(res => {
+                    setStoreName(res.data.storeName); // 가게 이름 상태 저장
+                })
+                .catch(err => console.error("가게 정보 조회 실패:", err));
+        }
+    }, [storeId]);
+
     return (
         <div className="user-review-container">
-            <form onSubmit={handleReviewSubmit}>
-                {/* 매장 별점 */}
-                <div className="star-rating">
-                    <p>매장 별점</p>
-                    <div className="star-container">
-                        {[...Array(5)].map((_, index) => (
-                            <span
-                                key={index}
-                                className={index < newReview.reviewStarRating ? "star filled" : "star"}
-                                onClick={() => handleStarClick(index + 1)}
-                            >
-                                ★
-                            </span>
-                        ))}
-                    </div>
-                </div>
+            <div className="review-all">
+                <div className="review-info">
+                    <div className="user-title-center">리뷰 작성하기</div>
+                    <div className="user-order-hr"></div>
 
-                {/* 리뷰 입력 */}
-                <textarea
-                    placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요."
-                    value={newReview.reviewContent}
-                    onChange={(e) =>
-                        setNewReview((prevReview) => ({
-                            ...prevReview,
-                            reviewContent: e.target.value,
-                        }))
-                    }
-                />
-
-                {/*  파일 업로드 */}
-                <div className="file-upload">
-                    <label htmlFor="file-input">
-                        <img src={groupIcon} alt="업로드" className="upload-icon" />
-                    </label>
-                    <input id="file-input" type="file" accept="image/*" multiple onChange={handleFileChange} />
-
-                    {/* 이미지 미리보기 */}
-                    <div className="image-preview-container">
-                        {selectedImages.map((img, index) => (
-                            <div key={index} className="image-preview-wrapper">
-                                <div className="remove-image" onClick={() => removeImage(index)}>
-                                    ❌
+                    {isLoading ? (
+                        <div className="loading-container">
+                            <div className="loading-spinner"></div>
+                            <p>리뷰를 등록하는 중입니다...</p>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleReviewSubmit}>
+                            <div className="star-rating">
+                                <div className="user-order-bordtext">매장 별점 및 리뷰</div>
+                                <div className="user-order-address-text">{storeName}</div>
+                                <div className="star-container">
+                                    {[...Array(5)].map((_, index) => (
+                                        <span
+                                            key={index}
+                                            className={index < newReview.reviewStarRating ? "star filled" : "star"}
+                                            onClick={() => handleStarClick(index + 1)}
+                                        >
+                                    ★
+                                </span>
+                                    ))}
                                 </div>
-                                <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview" />
                             </div>
-                        ))}
-                    </div>
-                </div>
 
-                {/* 라이더 별점 */}
-                <div className="star-rating">
-                    <p>라이더 별점</p>
-                    <div className="star-container">
-                        {[...Array(5)].map((_, index) => (
-                            <span
-                                key={index}
-                                className={index < newRiderReview.riderReviewRating ? "star filled" : "star"}
-                                onClick={() => handleRiderStarClick(index + 1)}
-                            >
+                        {/* 리뷰 입력 */}
+                        <textarea
+                            placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요."
+                            value={newReview.reviewContent}
+                            onChange={(e) =>
+                                setNewReview((prevReview) => ({
+                                    ...prevReview,
+                                    reviewContent: e.target.value,
+                                }))
+                            }
+                        />
+
+                        <div className="file-upload-wrapper">
+                            {/* 사진 추가 버튼 */}
+                            <div className="file-upload">
+                                <label htmlFor="file-input">
+                                    <img src={groupIcon} alt="업로드" className="upload-icon"/>
+                                </label>
+                                <div className="btn-text">사진 추가</div>
+                                <input id="file-input" type="file" accept="image/*" multiple
+                                       onChange={handleFileChange}/>
+                            </div>
+
+                            {/* 이미지 미리보기 */}
+                            <div className="image-preview-container">
+                                {selectedImages.map((img, index) => (
+                                    <div key={index} className="image-preview-wrapper">
+                                        <div className="remove-image" onClick={() => removeImage(index)}>
+                                            <img src={XIcon} alt="삭제 아이콘" className="remove-icon"/>
+                                        </div>
+                                        <img src={img.preview} alt={`미리보기 ${index}`} className="image-preview"/>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="review-divider"></div>
+
+                        {/* 라이더 별점 */}
+                        <div className="star-rating">
+                            <div className="user-order-bordtext">라이더 별점</div>
+                            <div className="star-container">
+                                {[...Array(5)].map((_, index) => (
+                                    <span
+                                        key={index}
+                                        className={index < newRiderReview.riderReviewRating ? "star filled" : "star"}
+                                        onClick={() => handleRiderStarClick(index + 1)}
+                                    >
                                 ★
                             </span>
-                        ))}
-                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="button-center-wrapper">
+                            <button type="submit" className="submit-button">작성하기</button>
+                        </div>
+                    </form>
+                    )}
                 </div>
-
-                <button type="submit" className="submit-button">작성하기</button>
-            </form>
+            </div>
         </div>
     );
 };

@@ -54,7 +54,31 @@ const RiderOntheway = ({user}) => {
 
     useEffect(() => {
         console.log("ros orderId : " + orderId);
-;
+
+        const  intervalId = setInterval(() => {
+            // apiOrdersStoresService.getOrdersByRiderIdOnDuty(riderLocation.lat, riderLocation.lng, setStores, setOrders);
+            apiRiderService.checkingRiderIdOnDuty(orderId, user.user_id,
+                (result) => {
+                    if (result === null) {
+                        alert("잠시만 기다려주세요.");
+                        return;
+                    }
+
+                    console.log(result);
+                    if (result !== 1) {
+                        alert("접근 권한이 없습니다.");
+                        navigate("/rider");
+                    }
+                })
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    })
+
+
+
+    useEffect(() => {
+
         apiRiderService.getOrderStatusWithRemainingTime(orderId, (no) => {
             setOrderInfo(no);
             if (no.orderStatus === 6) {
@@ -146,7 +170,7 @@ const RiderOntheway = ({user}) => {
                     { offset: new window.kakao.maps.Point(20, 42) }
                 );
 
-                if (!onDelivery) {
+                if (orderStatus !== 5 && !onDelivery) {
                     setStoreMarker(new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(order.storeLatitude, order.storeLongitude),
                         map: map,

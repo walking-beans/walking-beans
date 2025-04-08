@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../../css/User.css";
-import searchIcon from "../../images/user/searchIcon.svg"
+import searchIcon from "../../assert/images/user/searchIcon.svg"
 
 
 const UserInsertAddress = ({user}) => {
@@ -237,12 +237,14 @@ const UserInsertAddress = ({user}) => {
                             <div onClick={() => handleSetPrimaryAddress(addr.addressId)}
                                  className="p-3 d-flex justify-content-between">
                                 <div>
+                                    <div className="address-grid">
                                     <div className="user-order-bordtext">{addr.addressName}</div>
-                                    <p className="user-order-address-text">{addr.address} {addr.detailedAddress}</p>
                                     {addr.addressRole === 1 && <button className="btn-mini">기본 주소</button>}
+                                    </div>
+                                    <p className="user-order-address-text">{addr.address} {addr.detailedAddress}</p>
                                 </div>
                                 <button
-                                    className="btn btn-sm"
+                                    className="btn user-order-bordtext"
                                     onClick={(e) => {
                                         e.stopPropagation(); // 부모 이벤트 전파 방지
                                         handleDeleteAddress(addr.addressId);

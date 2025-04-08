@@ -1,11 +1,10 @@
 package walking_beans.walking_beans_backend.service.userCartService;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.Carts;
-import walking_beans.walking_beans_backend.model.vo.UserCartDTO;
+import walking_beans.walking_beans_backend.model.dto.order.UserCartDTO;
 
 import java.util.List;
 import java.util.Optional;

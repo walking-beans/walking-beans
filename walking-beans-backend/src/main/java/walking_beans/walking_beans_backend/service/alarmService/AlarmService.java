@@ -24,6 +24,9 @@ public interface AlarmService {
     // 알림 읽음 표시
     void markNotificationAsRead(Long notificationId);
 
+    // 전체 알람 읽음 처리
+    void markAllNotificationsAsRead(long userId);
+
     // 채팅 유저들 정보 가져오기
     ChattingInfoDTO getChattingUserInfo (long roomId, long senderId);
 

@@ -7,8 +7,9 @@ import "../../css/Cart.css";
 import "../../css/Owner.css";
 import UserMenuOptionModal from "../user/UserMenuOptionModal";
 import oneStar from "../../assert/svg/starNav/oneStar.svg";
-import detailBtn from "../../images/user/detailbtn.svg";
+import detailBtn from "../../assert/images/user/detailbtn.svg";
 import UserMenuCategory from "../user/UserMenuCategory";
+import axios from "axios";
 
 const UserOrder = () => {
     const storedUser = localStorage.getItem("user");
@@ -42,6 +43,11 @@ const UserOrder = () => {
     const [orderId, setOrderId] = useState(null);
     const validCarts = carts.filter(cart => cart.cartId !== null);
     const [orderNumber, setOrderNumber] = useState(0);
+    const [stores, setStores] = useState([]);
+    const [displayStores, setDisplayStores] = useState([]);
+    const [storeRating, setStoreRating] = useState("0.0");
+    const [reviewCount, setReviewCount] = useState(0);
+
 
     // 메뉴 클릭 시 메뉴 옵션 모달 열기
     const handleMenuClick = (menu) => {
@@ -107,12 +113,38 @@ const UserOrder = () => {
             .catch(err => console.error("장바구니 삭제 오류:", err));
     };
 
+    // 리뷰 리스트 가져오기
+    const fetchReviews = (storeId, callback) => {
+        axios.get(`http://localhost:7070/api/reviews/${storeId}`)
+            .then((res) => {
+                const reviewsData = res.data;
+                const totalScore = reviewsData.reduce((sum, review) => sum + review.reviewStarRating, 0);
+                const average = reviewsData.length > 0 ? (totalScore / reviewsData.length).toFixed(1) : "0.0";
+                const reviewCount = reviewsData.length; // 리뷰 개수 계산
+                callback(average, reviewCount); // 평균 별점과 리뷰 개수를 함께 반환
+            })
+            .catch((err) => {
+                console.error(`리뷰 정보를 불러오지 못했습니다. storeId: ${storeId}`, err);
+                callback("0.0");
+            });
+    };
+
+
+    // 가게 정보 가져오기
     useEffect(() => {
         if (storeId) {
+            // 가게 정보 가져오기
             apiUserOrderService.getStoreByOrderId(storeId)
                 .then((data) => {
                     if (data) {
                         setStore(data);
+
+                        // 리뷰 정보 가져오기
+                        fetchReviews(storeId, (rating, count) => {
+                            setStoreRating(rating);
+                            setReviewCount(count);
+                            console.log(`가게 별점: ${rating}, 리뷰 수: ${count}`);
+                        });
                     }
                 })
                 .catch((err) => console.error("가게 정보 오류:", err));
@@ -165,6 +197,14 @@ const UserOrder = () => {
             console.log("카트", carts)
             return;
         }
+
+        // 사용자 권한 체크
+        const userRole = user?.user_role;
+        if (userRole !== 'user' && userRole !== 1) {
+            alert("해당 페이지는 일반으로 가입해야 이용할 수 있습니다.\n 일반이용자로 가입하여 이용해 주세요.");
+            return;
+        }
+
         apiUserOrderService.insertOrder()
         navigate(`/order/checkout/${userId}?totalAmount=${totalAmount}`);
     }
@@ -180,6 +220,7 @@ const UserOrder = () => {
         prevCartLength.current = carts.length;
     }, [carts]);
 
+
     return (
         <div className="user-order-container">
             <div className="user-order-background">
@@ -188,7 +229,7 @@ const UserOrder = () => {
                     <div>
                         <img src={oneStar} alt="별점 아이콘"/>
                         <span className="store-menu-title">
-                            {store?.storeRating}({store?.storeReviewCount})
+                            {storeRating}({reviewCount})
                         </span>
                         <Link to={`/user/review/${storeId}`}>
                             <img src={detailBtn} alt="가게 평점 자세히보기"/>
@@ -208,7 +249,9 @@ const UserOrder = () => {
                                              className="menu-image"/>
                                     </div>
                                     <div className="store-menu-title">{mainMenu.menuName}</div>
-                                    <div className="store-menu-price">{Number(mainMenu.menuPrice).toLocaleString()}원</div>
+                                    <div
+                                        className="store-menu-price">{Number(mainMenu.menuPrice).toLocaleString()}원
+                                    </div>
                                 </div>
                             </div>
                         </>

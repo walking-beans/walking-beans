@@ -13,6 +13,14 @@ const apiUserService = {
                 .then(
                     (res) => {
                         if (res.data.status === "success") {
+                            const currentDate = new Date(); // 현재 날짜
+                            const userDate = new Date(res.data.user.user_date); // 문자열을 Date 객체로 변환
+                            if (userDate > currentDate){ // 현재 날짜와 비교
+                                const sendUserId = res.data.user.user_id;
+                                navigate("/loginrequired" , {state: {data:sendUserId}}); //로그인 거부 페이지로 이동
+                                return;
+                            }
+
                             localStorage.setItem("user", JSON.stringify(res.data.user));
                             callback("success");
                         } else {
@@ -29,23 +37,22 @@ const apiUserService = {
         },
 
     //로그아웃 api
-    logout:
-        function (navigate) {
-            axios
-                .post(`${USER_API_URL}/logout`, {withCredentials: true})
-                .then(
-                    (res) => {
-                        alert("로그아웃 완료");
-                        localStorage.removeItem("user");
-                    }
-                )
-                .catch(
-                    (err) => {
-                        console.log("백엔드에서 오류가 발생했습니다.(로그아웃)" + err);
-                        navigate("/error");
-                    }
-                )
-        },
+    logout: function (navigate, options = {}) {
+        axios
+            .post(`${USER_API_URL}/logout`, { withCredentials: true })
+            .then((res) => {
+                if (!options.silent) {
+                    alert("로그아웃 완료");
+                }
+                localStorage.removeItem("user");
+            })
+            .catch((err) => {
+                console.log("백엔드에서 오류가 발생했습니다.(로그아웃)" + err);
+                if (navigate) {
+                    navigate("/error");
+                }
+            });
+    },
 
     //세션 데이터를 가져오는 api
     sessionData:
