@@ -159,19 +159,7 @@ const UserDeliveryStatus = () => {
             axios.get(`http://localhost:7070/api/orders?orderId=${orderId}`)
                 .then(res => {
                     const riderId = res.data.riderIdOnDuty;
-                    if (riderId) {
-                        axios.get(`http://localhost:7070/api/chattingroom/insert?riderId=${riderId}&userId=${userId}&ownerId=${store.userId}&orderId=${orderId}`)
-                            .then(() => {
-                                alert("라이더 채팅방이 생성되었습니다. 다시 시도해주세요.");
-                                // 채팅방 ID 다시 가져오기
-                                apiRiderService.getUserAndStoreRoomId(orderId, userId, (data) => {
-                                    if (data["2"]) {
-                                        setRiderRoomId(data["2"]);
-                                        navigate(`/chat/message/${data["2"]}`);
-                                    }
-                                });
-                            });
-                    } else {
+                    if (!riderId) {
                         alert("아직 배정된 라이더가 없습니다.");
                     }
                 });
