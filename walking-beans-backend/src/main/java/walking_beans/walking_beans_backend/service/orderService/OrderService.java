@@ -25,6 +25,7 @@ public interface OrderService {
 
     Integer checkingRiderIdOnDuty(@Param("orderId") long orderId, @Param("riderIdOnDuty") long riderIdOnDuty);
 
+
     /****************************************************************************************/
 
 
@@ -44,7 +45,7 @@ public interface OrderService {
     // 주문내역 내 오더 정보 가져오기
     Orders getOrderStatus(long orderId);
 
-    Long createOrder(Map<String, Object> requestData);
+    Map<String, Object> createOrder(Map<String, Object> requestData);
 
     UserOrderDTO getOrderByOrderNumber(String orderNumber);
 
