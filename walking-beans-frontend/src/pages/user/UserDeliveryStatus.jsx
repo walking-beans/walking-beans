@@ -25,6 +25,7 @@ const UserDeliveryStatus = () => {
     const [riderRoomId, setRiderRoomId] = useState(0);
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
+    const [storeRoomId, setStoreRoomId] = useState(null);
 
     // 로그인 확인
     useEffect(() => {
