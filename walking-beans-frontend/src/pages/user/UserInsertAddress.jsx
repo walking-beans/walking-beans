@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../../css/User.css";
-import searchIcon from "../../images/user/searchIcon.svg"
+import searchIcon from "../../assert/images/user/searchIcon.svg"
 
 
 const UserInsertAddress = ({user}) => {

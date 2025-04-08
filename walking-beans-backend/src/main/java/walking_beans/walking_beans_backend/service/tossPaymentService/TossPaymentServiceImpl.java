@@ -21,6 +21,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class TossPaymentServiceImpl implements TossPaymentService {
+    //toss API 실행
     private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
     private static final String API_SECRET_KEY = "test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R";
 
@@ -95,15 +96,15 @@ public class TossPaymentServiceImpl implements TossPaymentService {
     @Autowired
     private PaymentMapper paymentMapper;
 
+    // 결제 정보 저장
     @Override
     public void insertPayments(Payments payments) {
         paymentMapper.insertPayments(payments);
     }
 
+    // 결제 정보 조회
     @Override
     public Payments getPaymentByOrderId(long orderId) {
         return paymentMapper.getPaymentByOrderId(orderId);
-
-
     }
 }

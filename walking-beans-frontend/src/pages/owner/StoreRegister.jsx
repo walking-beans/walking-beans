@@ -6,7 +6,7 @@ import {useRef, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import BasicInfoRegisterForm from "../../components/owner/storeinfo/BasicInfoRegisterForm";
-import basicImg from "../../images/menu/default-menu-img.png"
+import basicImg from "../../assert/images/menu/default-menu-img.png"
 
 const StoreRegister = () => {
     // 폼 초기상태 설정

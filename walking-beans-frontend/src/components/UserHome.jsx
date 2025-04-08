@@ -4,11 +4,11 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import apiStoreService from "../service/apiStoreService";
 import apiUserService from "../service/apiUserService";
-import sequence from "../images/user/sequence.svg"
-import searchIcon from "../images/user/searchIcon.svg";
+import sequence from "../assert/images/user/sequence.svg"
+import searchIcon from "../assert/images/user/searchIcon.svg";
 import oneStar from "../assert/svg/starNav/oneStar.svg";
-import addressIcon from "../images/user/addressIcon.svg";
-import defaultimage from "../images/user/defaultimage.svg"
+import addressIcon from "../assert/images/user/addressIcon.svg";
+import defaultimage from "../assert/images/user/defaultimage.svg"
 
 const KAKAO_MAP_API_KEY = "1cfadb6831a47f77795a00c42017b581";
 

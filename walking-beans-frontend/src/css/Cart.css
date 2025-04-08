@@ -78,7 +78,7 @@
 }
 
 .user-cart-remove img:hover {
-    content: url("../images/user/orderCartDeleteBtnHoverMini.svg");
+    content: url("../assert/images/user/orderCartDeleteBtnHoverMini.svg");
 }
 
 .user-cart-options {

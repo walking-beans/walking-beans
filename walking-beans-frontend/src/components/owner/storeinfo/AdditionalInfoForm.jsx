@@ -1,6 +1,6 @@
 import MenuInputTag from "../MenuInputTag";
 import {useEffect, useState} from "react";
-import basicImg from "../../../images/menu/default-menu-img.png"
+import basicImg from "../../../assert/images/menu/default-menu-img.png"
 
 // handleFileChange 파일 입력 핸들러
 const AdditionalInfoForm = ({ formData, handleChange, handleFileChange ,isEditing }) => {

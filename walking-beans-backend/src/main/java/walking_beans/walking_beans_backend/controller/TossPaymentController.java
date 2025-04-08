@@ -37,6 +37,11 @@ public class TossPaymentController {
     private final StoreServiceImpl storeService;
     private final ChattingRoomServiceImpl chattingRoomService;
 
+    /**
+     * 결제 요청
+     * @param requestData
+     * @return
+     */
     @PostMapping("/request")
     public ResponseEntity<Map<String, Object>> requestPayment(@RequestBody Map<String, Object> requestData) {
         try {
@@ -53,7 +58,6 @@ public class TossPaymentController {
      *  기존 Cart 데이터 비우기
      *  다시 react 로 전송
      * @param requestData = Carts 테이블
-     * @param requestData
      * @return
      */
     private void validatePaymentData(Map<String, Object> requestData) {
@@ -87,6 +91,12 @@ public class TossPaymentController {
         }
     }
 
+    /**
+     * 결제 승인
+     * @param requestData
+     * @param request
+     * @return
+     */
     @PostMapping("/confirm")
     @Transactional
     public ResponseEntity<Map<String, Object>> confirmPayment(
@@ -170,7 +180,10 @@ public class TossPaymentController {
         }
     }
 
-    // ✅ 채팅방 자동 생성 메서드 추가
+    /**
+     * 채팅방 자동 생성
+     * @param orderId
+     */
     private void createChattingRoomForOrder(Long orderId) {
         try {
             // 주문 정보 조회
@@ -194,42 +207,11 @@ public class TossPaymentController {
         }
     }
 
-    @PostMapping("/confirm-billing")
-    public ResponseEntity<Map<String, Object>> confirmBilling(@RequestBody Map<String, Object> requestData) {
-        try {
-            log.info("자동 결제 승인 요청: {}", requestData);
-            Map<String, Object> response = tossPaymentService.confirmBilling(requestData);
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            log.error("자동 결제 승인 실패:", e);
-            return ResponseEntity.badRequest().body(Map.of("error", "자동 결제 승인 실패"));
-        }
-    }
-
-    @PostMapping("/issue-billing-key")
-    public ResponseEntity<Map<String, Object>> issueBillingKey(@RequestBody Map<String, Object> requestData) {
-        try {
-            log.info("자동결제 빌링키 발급 요청: {}", requestData);
-            Map<String, Object> response = tossPaymentService.issueBillingKey(requestData);
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            log.error("빌링키 발급 실패:", e);
-            return ResponseEntity.badRequest().body(Map.of("error", "빌링키 발급 실패"));
-        }
-    }
-
-    @GetMapping("/callback-auth")
-    public ResponseEntity<Map<String, Object>> callbackAuth(@RequestParam String customerKey, @RequestParam String code) {
-        try {
-            log.info("브랜드페이 인증 요청: customerKey={}, code={}", customerKey, code);
-            Map<String, Object> response = tossPaymentService.callbackAuth(customerKey, code);
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            log.error("브랜드페이 인증 실패:", e);
-            return ResponseEntity.badRequest().body(Map.of("error", "브랜드페이 인증 실패"));
-        }
-    }
-
+    /**
+     * 결제방식 불러오기
+     * @param orderId
+     * @return
+     */
     @GetMapping("/method/{orderId}")
     public Payments getPaymentByOrderId(@PathVariable Long orderId) {
         return tossPaymentService.getPaymentByOrderId(orderId);

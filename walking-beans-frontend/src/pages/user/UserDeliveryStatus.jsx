@@ -1,12 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
-import "../../css/User.css";
-import storeMapMarker from "../../images/user/storeMapMarker.svg"
-import userMapMarker from "../../images/user/UserMapMarker.svg"
-import axios from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
+import axios from "axios";
 import apiRiderService from "../../service/apiRiderService";
+import "../../css/User.css";
+import RiderOrderStatus from "../../components/rider/RiderOrderStatus";
+import storeMapMarker from "../../assert/images/user/storeMapMarker.svg"
+import userMapMarker from "../../assert/images/user/UserMapMarker.svg"
 
+// 카카오톡 맵 키
 const KAKAO_MAP_API_KEY = "65165b1e9d69958de8f764a08f2787ad";
 
 const UserDeliveryStatus = () => {
@@ -21,16 +22,9 @@ const UserDeliveryStatus = () => {
     const [order, setOrder] = useState([]);
     const [orderId, setOrderId] = useState(null);
     const [payments, setPayments] = useState([]);
-
-    const [storeRoomId, setStoreRoomId] = useState(0);
     const [riderRoomId, setRiderRoomId] = useState(0);
-
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
-
-    const location = useLocation();
-    const chatSectionRef = useRef(null);
-    const [highlight, setHighlight] = useState(false);
 
     // 로그인 확인
     useEffect(() => {
@@ -44,20 +38,24 @@ const UserDeliveryStatus = () => {
 
     // 주문 정보 가져오기
     useEffect(() => {
-        if (!orderNumber) return;
+        if (!orderNumber) return; // 오더 넘버 없으면 실행 안함
 
+        // 오더 넘버로 상세 데이터 조회(비동기)
         const fetchOrderDetails = async () => {
             try {
+                // 주문데이터 가져오기
                 const orderResponse = await axios.get(`http://localhost:7070/api/orders/orderNumber/${orderNumber}`);
                 const orderData = orderResponse.data;
                 setOrder(orderData);
                 setOrderId(orderData.orderId);
 
-                const [addressResponse, storeResponse] = await Promise.all([
+                // 유저주소, 매장주소 가져오기
+                const [addressResponse, storeResponse] = await Promise.all([ // Promise.all 두가지 요청을 동시에 함(병렬실행, 빠름)
                     axios.get(`http://localhost:7070/api/addresses/user/order/${orderData.orderId}`),
                     axios.get(`http://localhost:7070/api/orders/storeInfo/${orderData.orderId}`)
                 ]);
 
+                // 유저 주소가 있으면 위도, 경도 저장
                 if (addressResponse.data) {
                     setAddress(addressResponse.data);
                     setUserCoords({
@@ -66,6 +64,7 @@ const UserDeliveryStatus = () => {
                     });
                 }
 
+                // 매장 주소 있으면 위도, 경도 저장
                 if (storeResponse.data) {
                     setStore(storeResponse.data);
                     setStoreCoords({
@@ -77,13 +76,12 @@ const UserDeliveryStatus = () => {
                 console.error("데이터 조회 오류:", err);
             }
         };
-
         fetchOrderDetails();
     }, [orderNumber]);
 
     // 결제 정보 조회
     useEffect(() => {
-        if (!orderId) return;
+        if (!orderId) return; // 오더 아이디 없으면 실행 안함
 
         axios.get(`http://localhost:7070/api/payment/method/${orderId}`)
             .then(res => {
@@ -108,11 +106,13 @@ const UserDeliveryStatus = () => {
 
     // 카카오 맵 설정
     useEffect(() => {
+        // 카카오 맵 데이터 없으면 실행 안함
         if (window.kakao && window.kakao.maps) {
             setIsLoaded(true);
             return;
         }
 
+        // 맵 생성
         const script = document.createElement("script");
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
@@ -124,8 +124,10 @@ const UserDeliveryStatus = () => {
 
     // 지도에 마커 표시
     useEffect(() => {
+        // 맵 로딩, 위도, 경도가 없으면 실행 안함
         if (!isLoaded || !userCoords.lat || !storeCoords.lat) return;
 
+        // 맵 기본 노출 크기 자동 조절 (유저와 매장 중앙 기준으로 전체 보여주기)
         const mapContainer = document.getElementById("user-delivery-status-map");
         const mapOption = {
             center: new window.kakao.maps.LatLng(
@@ -137,24 +139,28 @@ const UserDeliveryStatus = () => {
 
         const newMap = new window.kakao.maps.Map(mapContainer, mapOption);
 
+        // 유저 마커 커스텀
         const userMarker = new window.kakao.maps.Marker({
             position: new window.kakao.maps.LatLng(userCoords.lat, userCoords.lng),
             map: newMap,
             image: new window.kakao.maps.MarkerImage(userMapMarker, new window.kakao.maps.Size(80, 60))
         });
 
+        // 매장 마커 커스텀
         const storeMarker = new window.kakao.maps.Marker({
             position: new window.kakao.maps.LatLng(storeCoords.lat, storeCoords.lng),
             map: newMap,
             image: new window.kakao.maps.MarkerImage(storeMapMarker, new window.kakao.maps.Size(80, 60))
         });
 
+        // 화면에 보여주기
         const bounds = new window.kakao.maps.LatLngBounds();
         bounds.extend(userMarker.getPosition());
         bounds.extend(storeMarker.getPosition());
         newMap.setBounds(bounds);
     }, [isLoaded, userCoords, storeCoords]);
-
+    
+    // 만나서 결제 클릭 시 상태 6번으로 변경
     const handleMeet = () => {
         apiRiderService.updateOrderStatus(orderId, 6);
         // 짧은 지연 후 페이지 이동
