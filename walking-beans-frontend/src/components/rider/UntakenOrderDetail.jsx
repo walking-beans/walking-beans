@@ -5,18 +5,17 @@ import "../../css/rider/RiderOrderStatus.css";
 import apiRiderService from "../../service/apiRiderService";
 
 const UntakenOrderDetail = ({riderId, selectedOrder, riderLocation}) => {
-
     const navigate = useNavigate();
 
     useEffect(() => {
         console.log("UntakenOrder selected Store : " + selectedOrder);
     }, []);
 
-   /* const goToDetail = () => {
-        apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
-        apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
-        navigate(`/rider/ontheway/${selectedOrder.orderId}`);
-    }*/
+    /* const goToDetail = () => {
+         apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
+         apiRiderService.createChattingRoomForRider(riderId, selectedOrder.customerId, selectedOrder.storeOwnerId, selectedOrder.orderId);
+         navigate(`/rider/ontheway/${selectedOrder.orderId}`);
+     }*/
 
     async function updateOrderByRiderIdAndOrderId() {
         return apiRiderService.updateOrdersByRiderIdAndOrderId(riderId, selectedOrder.orderId);
