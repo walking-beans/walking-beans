@@ -3,14 +3,14 @@ import apiUserService from "../../service/apiUserService";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {call} from "axios";
 import "../../css/admin/AdminLogin.css";
-import kakaoLoginButton from "../../images/kakaoLoginButton.png"
-import naverLoginButton from "../../images/naverLoginButton.png"
+import kakaoLoginButton from "../../assert/images/kakaoLoginButton.png"
+import naverLoginButton from "../../assert/images/naverLoginButton.png"
 
 const AdminLogin = () => {
     return (
         <div>
-            <AdminLoginNomal/>{/*아이디 비밀번호 로그인*/}
-            {/*<AdminLoginSocial/>*/}{/*소셜 로그인*/}
+            {/*<AdminLoginNomal/>*/}{/*아이디 비밀번호 로그인*/}
+            <AdminLoginSocial/>{/*소셜 로그인*/}
         </div>
     )
 
@@ -227,10 +227,10 @@ const AdminLoginSocial = () => {
                 <div className="login-text-mini">가입된 정보가 없을 경우 자동으로 가입됩니다</div>
                 <div className="social-login">
                     <button className="kakao-login">
-                        <img src={require('../../images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
+                        <img src={require('../../assert/images/kakaoLoginButton.png')} onClick={kakaoLogin}/>
                     </button>
                     <button className="naver-login">
-                        <img src={require('../../images/naverLoginButton.png')} onClick={naverLogin}/>
+                        <img src={require('../../assert/images/naverLoginButton.png')} onClick={naverLogin}/>
                     </button>
                 </div>
             </div>

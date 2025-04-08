@@ -71,7 +71,7 @@ const OperationInfoForm = ({ formData, handleChange, isEditing }) => {
                             disabled={!isEditing}
                         />
                         <label className="form-check-label" htmlFor="status-closed">
-                            휴무일
+                            휴무
                         </label>
                     </div>
                 </div>

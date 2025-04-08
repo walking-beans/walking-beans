@@ -1,4 +1,4 @@
-package walking_beans.walking_beans_backend.model.vo;
+package walking_beans.walking_beans_backend.model.dto.order;
 
 import lombok.*;
 import java.time.LocalDateTime;

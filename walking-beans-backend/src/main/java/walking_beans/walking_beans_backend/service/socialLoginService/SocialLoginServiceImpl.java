@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
-/*
+
     @Autowired
     private UserMapper userMapper;
 
@@ -52,11 +52,11 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     public int checkEmailExists(String email) {
         return userMapper.checkEmailExists(email);
     }
-    */
+
 
 
 /******************** 카카오 로그인 *******************************/
-/*
+
     @Override
     public Map<String, Object> KakaoCallback(String code){
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
@@ -114,9 +114,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
     }
 
-*/
+
     /********************* 네이버 로그인 *************************/
-/*
+
     @Override
     public Map<String, Object> NaverCallback(String code, String state) {
         String tokenUrl = "https://nid.naver.com/oauth2.0/token";
@@ -173,5 +173,5 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         return resultMap;
     }
 
-*/
+
 }

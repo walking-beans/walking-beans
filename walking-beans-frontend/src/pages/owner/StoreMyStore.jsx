@@ -80,7 +80,8 @@ const StoreMyStore = () => {
     const toggleEditMode = () => setIsEditing(!isEditing);
 
     // 수정점 저장 요청
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault()
         const uploadData = new FormData();
         // Store 데이터 추가
         uploadData.append("storeId", id);
@@ -94,6 +95,7 @@ const StoreMyStore = () => {
         uploadData.append("storeClosedDates", formData.storeClosedDates);
         //uploadData.append("storeReviewCount", formData.storeReviewCount);
         //uploadData.append("storeRating", formData.storeRating);
+        uploadData.append("storeStatus", formData.storeStatus)
         uploadData.append("storeMinDeliveryTime", formData.storeMinDeliveryTime);
         uploadData.append("storeMaxDeliveryTime", formData.storeMaxDeliveryTime);
         uploadData.append("storeDeliveryTip", formData.storeDeliveryTip);

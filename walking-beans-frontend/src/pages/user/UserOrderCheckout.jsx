@@ -1,5 +1,5 @@
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import detailBtn from "../../images/user/detailbtn.svg";
+import detailBtn from "../../assert/images/user/detailbtn.svg";
 import React, {use, useEffect, useState} from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
 import "../../css/Cart.css";
