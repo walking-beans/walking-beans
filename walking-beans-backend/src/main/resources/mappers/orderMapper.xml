@@ -73,6 +73,12 @@
         ) AS result
     </select>
 
+    <select id="getOrderIdByOrderNumber">
+        SELECT order_id
+        FROM orders
+        WHERE order_number = #{orderNumber};
+    </select>
+
     <!-- ****************************************  **************************************** -->
 
 

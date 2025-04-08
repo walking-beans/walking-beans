@@ -31,6 +31,8 @@ public interface OrderMapper {
 
     Integer checkingRiderIdOnDuty(@Param("orderId") long orderId, @Param("riderIdOnDuty") long riderIdOnDuty);
 
+    Long getOrderIdByOrderNumber(String orderNumber);
+
     /****************************************  ****************************************/
 
     // 주문 등록하기

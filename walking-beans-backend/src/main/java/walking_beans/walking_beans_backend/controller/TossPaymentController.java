@@ -110,10 +110,13 @@ public class TossPaymentController {
                 log.info("만나서 결제 선택됨. 결제 승인 과정 생략");
 
                 // 주문 생성
-                Long orderId = orderService.createOrder(requestData);
+                Map<String, Object> result = orderService.createOrder(requestData);
+                Long orderId = (Long)result.get("userId");
                 long userId = Long.parseLong(requestData.get("userId").toString());
                 response.put("orderId", orderId);
-                log.info("주문 생성 완료! 주문 ID: {}", orderId);
+
+                log.info("주문 생성 완료! 주문 ID: {}", result.get("orderId"));
+                log.info("주문 생성 완료! 주문 NUMBER: {}", result.get("orderNumber"));
 
                 Payments payment = new Payments();
                 payment.setOrderId(orderId);
@@ -122,7 +125,8 @@ public class TossPaymentController {
                 tossPaymentService.insertPayments(payment);
 
                 // ✅ 주문 생성 후 채팅방 자동 생성 추가
-                chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);
+                // long newOrderId = orderService.getOrderIdByOrderNumber()
+                chattingRoomService.createChattingRoomForUserAndOwner(userId, (long) result.get("orderId"));
 
             } else {
                 boolean isApiPayment = request.getRequestURI().contains("/confirm/payment");
@@ -130,15 +134,18 @@ public class TossPaymentController {
 
 
                 if (response.get("error") == null) {
-                    Long orderId = orderService.createOrder(requestData);
+                    // Long orderId = orderService.createOrder(requestData);
+                    Map<String, Object> result = orderService.createOrder(requestData);
+                    Long orderId = (Long)result.get("userId");
                     Long userId = Long.valueOf(requestData.get("userId").toString());
                     response.put("orderId", orderId);
 
 
-                    log.info("주문 생성 완료! 주문 ID: {}", orderId);
+                    log.info("주문 생성 완료! 주문 ID: {}", result.get("orderId"));
+                    log.info("주문 생성 완료! 주문 NUMBER: {}", result.get("orderNumber"));
 
                     // ✅ 주문 생성 후 채팅방 자동 생성 추가
-                    chattingRoomService.createChattingRoomForUserAndOwner(userId, orderId);
+                    chattingRoomService.createChattingRoomForUserAndOwner(userId, (long) result.get("orderId"));
                 }
             }
 

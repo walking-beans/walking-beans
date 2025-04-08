@@ -78,6 +78,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.checkingRiderIdOnDuty(orderId, riderIdOnDuty);
     }
 
+    @Override
+    public Long getOrderIdByOrderNumber(String orderNumber) {
+        return orderMapper.getOrderIdByOrderNumber(orderNumber);
+    }
+
 
     /**********************************************mochoping**********************************************/
     // 가게 id로 주문정보, 주문상태만 가져오기
@@ -207,7 +212,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long createOrder(Map<String, Object> requestData) {
+    public Map<String, Object> createOrder(Map<String, Object> requestData) {
         log.info("주문 정보 저장 요청: {}", requestData);
 
         try {
@@ -324,7 +329,12 @@ public class OrderServiceImpl implements OrderService {
             // 매장에 주문수락 요청 알림 보내기
             OrderStoreDTO storedUserId = alarmService.getUserIdForOrderAlarm(orderNumber);
             alarmNotificationService.sendOrderNotification(Alarms.create(storedUserId.getStoreOwnerId(), 1, "새로운 주문이 들어왔습니다.", 0, "/user/delivery/status/" + orderNumber));
-            return userId;
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("userId", userId);
+            result.put("orderNumber", orderNumber);
+            result.put("orderId", orderId);
+            return result;
         } catch (Exception e) {
             log.error("❌ 주문 저장 중 오류 발생: ", e);
             throw new RuntimeException("주문 저장 실패");

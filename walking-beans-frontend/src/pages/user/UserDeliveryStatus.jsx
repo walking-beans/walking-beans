@@ -98,9 +98,9 @@ const UserDeliveryStatus = () => {
                 // 채팅방이 존재하면 해당 채팅방으로 이동
                 // roomData는 {receiverRelation: roomId} 형태의 맵
                 console.log("getUserAndStoreRoomId", roomData);
-                console.log(Object.values(roomData)["3"] + ", " + Object.values(roomData)["2"]);
-                setStoreRoomId(Object.values(roomData)["3"] ?? "0"); // 첫 번째 룸 ID 사용
-                setRiderRoomId(Object.values(roomData)["2"] ?? "0");
+                console.log(roomData["3"] + ", " + roomData["2"]);
+                setStoreRoomId(roomData["3"]); // 첫 번째 룸 ID 사용
+                setRiderRoomId(roomData["2"]);
             }
         });
 
