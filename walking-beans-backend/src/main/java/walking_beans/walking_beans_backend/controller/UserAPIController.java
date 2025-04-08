@@ -91,11 +91,13 @@ public class UserAPIController {
     @GetMapping("/getuserdata/{userId}")
     public Map<String, Object> getUserData(@PathVariable("userId") long userId) {
         Users users = userService.getUserInfoByIdForAlarms(userId);
+        System.out.println(users);
 
         String storeName = alarmService.getStoreName(userId);
         Map<String, Object> result = new HashMap<>();
-        result.put("user", users);         // Users 객체
-        result.put("storeName", storeName); // store_name 값
+        result.put("userRole", users.getUserRole());
+        result.put("userName", users.getUserName());
+        result.put("storeName", storeName);
 
         return result;
     }
