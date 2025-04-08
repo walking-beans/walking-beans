@@ -135,7 +135,6 @@ const StoreMenuOption = () => {
 
     }
 
-
     return (
         <div style={{padding: "20px"}}>
             <h2>메뉴 옵션 관리 (Menu ID: {menuId})</h2>
