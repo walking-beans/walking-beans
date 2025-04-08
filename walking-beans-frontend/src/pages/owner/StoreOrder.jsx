@@ -230,11 +230,11 @@ const StoreOrder= () => {
                                 )}
                                 {order.orderStatus === 5 && (
                                     <button className="storeOrder-finished-btn"
-                                    >배차 중</button>
+                                    >픽업완료</button>
                                 )}
                                 {order.orderStatus === 6 && (
                                     <button className="storeOrder-finished-btn"
-                                    >배차 중</button>
+                                    >배달완료</button>
                                 )}
 
                             </div>
@@ -244,9 +244,46 @@ const StoreOrder= () => {
             ) : (
                 completedOrders.map((order) => (
                     <div key={order.orderId}>
-                        <h3>주문 번호: {order.orderNumber}</h3>
-                        <p>상태: {getStatusText(order.orderStatus)}</p>
-                        <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                        <div className="order-card">
+                            {/* 주문 정보 (시간, 주문번호) */}
+                            <div className="order-info">
+                                <span>{order.estimatedTime}</span>
+                                <span className="order-number">{order.orderNumber}</span>
+
+                            </div>
+
+                            {/* 주문 상세 정보 */}
+                            <div className="order-details">
+                                {order.orderStatus === 2 && (<h3>새로운 주문!</h3>)}
+                                <p>상태 : {getStatusText(order.orderStatus)}</p>
+                            </div>
+
+                            {/* 액션 버튼 */}
+                            <div className="order-actions">
+                                <button className="detail-btn" onClick={() => openModal(order)}>자세히 보기</button>
+                                {order.orderStatus === 2 && (
+                                    <button className="storeOrder-accept-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 3)}>접수하기</button>
+                                )}
+                                {order.orderStatus === 3 && (
+                                    <button className="storeOrder-complete-btn"
+                                            onClick={() => handleOrderStatus(order.orderId, 4)}>조리완료</button>
+                                )}
+                                {order.orderStatus === 4 && (
+                                    <button className="storeOrder-complete-btn"
+                                    >배차 중</button>
+                                )}
+                                {order.orderStatus === 5 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >픽업완료</button>
+                                )}
+                                {order.orderStatus === 6 && (
+                                    <button className="storeOrder-finished-btn"
+                                    >배달완료</button>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 ))
             )}
