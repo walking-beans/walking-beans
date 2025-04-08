@@ -174,7 +174,6 @@ const UserDeliveryStatus = () => {
             navigate(`/chat/message/${riderRoomId}`);
             return;
         }
-
         alert("아직 배정된 라이더가 없습니다.");
     };
 
