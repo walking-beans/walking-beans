@@ -3,10 +3,10 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import "../../css/admin/AdminAlarmList.css";
 import "../../css/Order.css"
-import alarm from "../../../src/images/user/alarm.svg"
-import chatUser from "../../../src/images/user/chatUser.svg"
-import chatRider from "../../../src/images/user/chatRider.svg"
-import chatOwner from "../../../src/images/user/chatOwner.svg"
+import alarm from "../../assert/images/user/alarm.svg"
+import chatUser from "../../assert/images/user/chatUser.svg"
+import chatRider from "../../assert/images/user/chatRider.svg"
+import chatOwner from "../../assert/images/user/chatOwner.svg"
 
 
 const AdminAlarmList = () => {

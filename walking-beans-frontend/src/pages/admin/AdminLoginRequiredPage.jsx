@@ -1,5 +1,5 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import failIcon from "../../images/user/failIcon.svg";
+import failIcon from "../../assert/images/user/failIcon.svg";
 import {useEffect, useState} from "react";
 import axios from "axios";
 

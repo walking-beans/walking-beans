@@ -1,6 +1,6 @@
 import React from "react";
 import apiUserOrderService from "../../service/apiUserOrderService";
-import orderCartDeleteBtnIconMini from "../../images/user/orderCartDeleteBtnIconMini.svg";
+import orderCartDeleteBtnIconMini from "../../assert/images/user/orderCartDeleteBtnIconMini.svg";
 
 const UserCart = ({
                       cartId,
@@ -12,20 +12,20 @@ const UserCart = ({
                       optionContents,
                       handleDelete,
                       userId,
-                      optionIds,
                       updateCart,
                   }) => {
+    // , 붙여서 데이터 조회
     const menuList = menuNames ? menuNames.split(",") : [];
     const priceList = menuPrices ? menuPrices.split(",").map(Number) : [];
     const optionList = optionNames ? optionNames.split(",") : [];
     const optionContentList = optionContents ? optionContents.split(",") : [];
     const optionPriceList = optionPrices ? optionPrices.split(",").map(Number) : [];
     const quantityList = totalQuantities ? totalQuantities.split(",").map(Number) : [];
-    const optionIdsList = optionIds ? optionIds.split(",") : [];
 
     const handleQuantityChange = async (newQuantity, itemIndex) => {
         const currentQuantity = quantityList[itemIndex];
 
+        // 메뉴 삭제
         if (newQuantity < 1) {
             if (currentQuantity === 1) {
                 const shouldDelete = window.confirm("메뉴를 삭제하시겠습니까?");
@@ -36,6 +36,7 @@ const UserCart = ({
             return;
         }
 
+        // 메뉴 수량 변경
         try {
             await apiUserOrderService.updateCartQuantity(cartId, newQuantity);
 
@@ -86,6 +87,7 @@ const UserCart = ({
                             </div>
 
                             <div className="user-cart-quantity-line">
+                                {/* 수량 버튼 1개일 때 휴지통 아이콘 생성 */}
                                 {quantity === 1 ? (
                                         <div className="user-cart-quantity">
                                             <button

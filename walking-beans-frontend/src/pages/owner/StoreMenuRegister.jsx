@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import MenuInputTag from "../../components/owner/MenuInputTag";
-import blankImg from "../../images/menu/default-menu-img.png";
+import blankImg from "../../assert/images/menu/default-menu-img.png";
 import axios from "axios";
 
 

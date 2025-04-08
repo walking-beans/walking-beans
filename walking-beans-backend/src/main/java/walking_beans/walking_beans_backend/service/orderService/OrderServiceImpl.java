@@ -9,8 +9,8 @@ import walking_beans.walking_beans_backend.mapper.PaymentMapper;
 import walking_beans.walking_beans_backend.mapper.UserCartMapper;
 import walking_beans.walking_beans_backend.model.dto.*;
 import walking_beans.walking_beans_backend.model.dto.rider.RiderOrderStatusDTO;
-import walking_beans.walking_beans_backend.model.vo.OrderDetailDTO;
-import walking_beans.walking_beans_backend.model.vo.UserOrderDTO;
+import walking_beans.walking_beans_backend.model.dto.order.OrderDetailDTO;
+import walking_beans.walking_beans_backend.model.dto.order.UserOrderDTO;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmNotificationService;
 import walking_beans.walking_beans_backend.service.alarmService.AlarmServiceImpl;
 
@@ -139,12 +139,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.getOrderByOrderNumber(orderNumber);
     }
 
+    // 주문한 유저 정보 조회
     @Override
     public List<UserOrderDTO> getOrdersByUserId(Long userId) {
         return orderMapper.getOrdersByUserId(userId);
     }
-
-
 
     // 주문과 장바구니 데이터를 처리하는 메소드
     @Override
