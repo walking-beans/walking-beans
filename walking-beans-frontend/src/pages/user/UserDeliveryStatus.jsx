@@ -100,7 +100,7 @@ const UserDeliveryStatus = () => {
                 console.log("getUserAndStoreRoomId", roomData);
                 console.log(roomData["3"] + ", " + roomData["2"]);
                 setStoreRoomId(roomData["3"]); // 첫 번째 룸 ID 사용
-                setRiderRoomId(roomData["2"]);
+                setRiderRoomId(roomData["2"] ? roomData["2"] : 0);
             }
         });
 
