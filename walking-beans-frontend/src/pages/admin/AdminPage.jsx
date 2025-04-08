@@ -11,11 +11,6 @@ const AdminPage = () => {
     const [menuId,setMenuId] = useState(); // 복구할 메뉴 아이디
     const [toastMsg,setToastMsg] = useState(null); // 안내문구
 
-
-    const [menuId,setMenuId] = useState(); // 복구할 메뉴 아이디
-    const [toastMsg,setToastMsg] = useState(null); // 안내문구
-
-
     // 복구인풋제어
     const handelInput = (e) => {
         const value = e.target.value;
