@@ -1,7 +1,7 @@
-import React, {use, useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import "../../css/admin/AdminPage.css"
-import "../../css/Order.css"
+import MsgToast from "../../components/owner/MsgToast";
 
 const AdminPage = () => {
 
@@ -10,6 +10,11 @@ const AdminPage = () => {
     const [loginCutDate, setLoginCutDate] = useState("");
     const [menuId,setMenuId] = useState(); // 복구할 메뉴 아이디
     const [toastMsg,setToastMsg] = useState(null); // 안내문구
+
+
+    const [menuId,setMenuId] = useState(); // 복구할 메뉴 아이디
+    const [toastMsg,setToastMsg] = useState(null); // 안내문구
+
 
     // 복구인풋제어
     const handelInput = (e) => {
@@ -167,7 +172,9 @@ const AdminPage = () => {
                             </button>
                         </div>
                     </div>
-                     {/*복구기능*/}
+
+                    {/*복구기능*/}
+
                     <div className="user-order-hr" alt="구분선"></div>
                     <div>
                         <input className="insert-address"
@@ -180,12 +187,13 @@ const AdminPage = () => {
                         <button onClick={() => handleRecovery(menuId)} className="user-sequence-from-select">복구하기</button>
                         {/*토스트메세지*/}
                     </div>
-                        <MsgToast
-                            message={toastMsg}
-                            duration={3000}
-                            onClose={() => setToastMsg(null)}
-                        />
-                    </div>
+
+                    <MsgToast
+                        message={toastMsg}
+                        duration={3000}
+                        onClose={() => setToastMsg(null)}
+                    />
+
                 </div>
             </div>
         </div>
