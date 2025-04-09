@@ -1,16 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
-
-.certification-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 24px 16px;
-    font-family: 'Noto Sans KR', sans-serif;
-    text-align: center;
-    min-height: 100vh;
-}
-
 /* 역할별 배경 + 글자색 */
+
+.certification-container{
+    background: #F4EDDF;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30px;
+}
 .certification-container.user,
 .certification-container.owner {
     background-color: #fef6ea;
@@ -18,51 +15,134 @@
 }
 
 .certification-container.rider {
-    background-color: #f9fdff;
-    color: #1f3f66;
+    background: #E2F2FA;
+    color: #010C22;
 }
 
 /* 입력 필드 */
 .certification-container input[type="email"],
 .certification-container input[type="text"] {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    margin: 20px auto;
+    padding: 12px;
+    margin: 12px auto;
     font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
     display: block;
     box-sizing: border-box;
+    border: 1px solid #5A3D21;
+    height: 60px;
+    width: 100%;
+}
+
+.certification-container.user input[type="email"]::placeholder,
+.certification-container.user input[type="text"]::placeholder {
+    color: #D2B595;
+}
+
+.certification-container.rider input[type="email"]::placeholder,
+.certification-container.rider input[type="text"]::placeholder {
+    color: #99D6F0;
 }
 
 /* 버튼 공통 */
 .certification-container button {
-    width: 100%;
-    max-width: 500px;
-    padding: 15px;
-    margin: 8px auto 16px;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
+
+}
+
+.certification-container .click-btn {
+    background: #5A3D21;
+    width: 184px;
+    min-width: 184px;
+    height: 60px;
+    color: #fff;
+    font-size: 25px;
     font-weight: bold;
-    color: white;
-    cursor: pointer;
-    display: block;
+    text-align: center;
+    border-radius: 30px;
+    border: none;
+    text-decoration-line: none;
+}
+
+.certification-container .click-btn-b {
+    width: 411px;
+    height: 60px;
+    border-radius: 30px;
+    background: #5A3D21;
+    color: #fff;
+    border: none;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration-line: none;
+}
+
+.certification-container .certification-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 0 10PX;
+    align-items: center;
 }
 
 /* 역할별 버튼 색상 */
 .certification-container.user button,
 .certification-container.owner button {
-    background-color: #8d5d2c;
+    background-color: #5A3D21;
 }
 
 .certification-container.rider button {
-    background-color: #3694dc;
+    background-color: #010C22;
+}
+
+.certification-container.user button:hover,
+.certification-container.owner button:hover {
+    background-color: #6A5036;
+}
+
+.certification-container.rider button:hover {
+    background-color: #041C4D;
 }
 
 /* 메시지 텍스트 */
-.certification-container p {
-    margin-top: 12px;
-    font-size: 14px;
+.certification-container .error-text {
+    font-size: 15px;
+    color: #EE5A4C;
+    font-weight: bold;
+}
+
+.certification-container.user .info-text,
+.certification-container.owner .info-text {
+    color: #5A3D21;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 17px;
+    margin-top: -10px;
+}
+
+.certification-container.rider .info-text  {
+    color: #010C22;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 17px;
+    margin-top: -10px;
+}
+
+.certification-container.user .title-text,
+.certification-container.owner .title-text {
+    color: #5A3D21;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.certification-container.rider .title-text {
+    color: #010C22;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.certification-container.rider .mypage-title-center {
+    color: #010C22;
+}
+
+.certification-container.rider .mypage-hr {
+    border: 1px solid #010C22;
 }
