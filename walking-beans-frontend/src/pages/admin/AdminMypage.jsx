@@ -1,3 +1,12 @@
+// import React, {useState, useEffect} from "react";
+// import {useNavigate} from "react-router-dom";
+// import apiUserService from "../../service/apiUserService";
+// import defaultProfileImage from '../../images/user/defaultProfileImage.jpeg'
+// import '../../css/admin/AdminMypage.css'
+// import "../../css/Order.css"
+// import detailbtn from "../../images/user/detailbtn.svg"
+// import detailbtnB from "../../images/user/detailbtnB.svg"
+
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import apiUserService from "../../service/apiUserService";
@@ -143,7 +152,7 @@ const AdminMypage = () => {
                     </div>
                     <div className="user-order-hr"></div>
                     <div className="mypage-grid" onClick={() => navigate("/certification", { state: { redirectTo: "/unlink" } })}>
-                    <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
+                        <div className="mypage-text" style={{color: textColor}}>회원 탈퇴</div>
                         <img src={userRole === "rider" || userRole === "3" ? detailbtnB : detailbtn} alt="회원 탈퇴 버튼"/>
                     </div>
                 </div>
