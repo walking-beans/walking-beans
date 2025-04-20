@@ -11,6 +11,7 @@ const AdminLogin = () => {
         <div>
             {/*<AdminLoginNomal/>*/}{/*아이디 비밀번호 로그인*/}
             <AdminLoginSocial/>{/*소셜 로그인*/}
+            <AdminLoginAllinOne /> {/*일반 소셜 로그인 통합*/}
         </div>
     )
 
@@ -236,6 +237,10 @@ const AdminLoginSocial = () => {
             </div>
         </div>
     )
+}
+
+const AdminLoginAllinOne = () => {
+
 }
 
 
